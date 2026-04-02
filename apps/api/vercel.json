@@ -1,0 +1,3 @@
+{
+  "buildCommand": "pip install -e . && alembic upgrade head"
+}

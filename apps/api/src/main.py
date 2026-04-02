@@ -31,8 +31,13 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     logger.info("Starting application", env=settings.PROJECT_ENV)
     configure_telemetry()
     instrument_app(app)
+
     yield
     # Shutdown
+    from src.lib.rate_limit import RedisRateLimiter, _rate_limiter
+
+    if isinstance(_rate_limiter, RedisRateLimiter):
+        await _rate_limiter.close()
     logger.info("Shutting down application")
 
 
@@ -153,8 +158,9 @@ async def check_database() -> ServiceStatus:
         return ServiceStatus(status="healthy", latency_ms=round(latency, 2))
     except Exception as e:
         latency = (time.perf_counter() - start) * 1000
+        error_msg = str(e) if settings.PROJECT_ENV != "prod" else "connection failed"
         return ServiceStatus(
-            status="unhealthy", latency_ms=round(latency, 2), error=str(e)
+            status="unhealthy", latency_ms=round(latency, 2), error=error_msg
         )
 
 
@@ -169,7 +175,15 @@ async def check_redis() -> ServiceStatus | None:
     try:
         import redis.asyncio as redis
 
-        client = cast(redis_module.Redis, redis.from_url(settings.REDIS_URL))  # type: ignore[no-untyped-call]
+        url = settings.REDIS_URL
+        # rediss:// (TLS) is handled natively by redis.asyncio, but Upstash
+        # requires ssl_cert_reqs=None to skip certificate verification in
+        # environments where the managed TLS cert cannot be verified locally.
+        kwargs: dict[str, object] = {}
+        if url and url.startswith("rediss://"):
+            kwargs["ssl_cert_reqs"] = None
+
+        client = cast(redis_module.Redis, redis.from_url(url, **kwargs))  # type: ignore[no-untyped-call]
         await client.ping()  # type: ignore[misc]
         await client.aclose()
         latency = (time.perf_counter() - start) * 1000
@@ -178,8 +192,9 @@ async def check_redis() -> ServiceStatus | None:
         return ServiceStatus(status="unhealthy", error="redis package not installed")
     except Exception as e:
         latency = (time.perf_counter() - start) * 1000
+        error_msg = str(e) if settings.PROJECT_ENV != "prod" else "connection failed"
         return ServiceStatus(
-            status="unhealthy", latency_ms=round(latency, 2), error=str(e)
+            status="unhealthy", latency_ms=round(latency, 2), error=error_msg
         )
 
 

@@ -1,3 +1,4 @@
+import ssl
 from collections.abc import AsyncGenerator
 
 from sqlalchemy import MetaData
@@ -7,6 +8,7 @@ from sqlalchemy.ext.asyncio import (
     create_async_engine,
 )
 from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.pool import NullPool
 
 from src.lib.config import settings
 
@@ -26,12 +28,25 @@ class Base(DeclarativeBase):
     metadata = MetaData(naming_convention=convention)
 
 
+# SSL context for non-local environments (asyncpg ignores sslmode in URL)
+_connect_args: dict = {}
+if "localhost" not in settings.DATABASE_URL and "127.0.0.1" not in settings.DATABASE_URL:
+    _ssl_ctx = ssl.create_default_context()
+    _connect_args["ssl"] = _ssl_ctx
+
+# Use NullPool for serverless/non-local to avoid stale connections
+_pool_class = NullPool if settings.PROJECT_ENV != "local" else None
+
 # Async engine
-engine = create_async_engine(
-    settings.DATABASE_URL,
-    echo=settings.PROJECT_ENV == "local",
-    pool_pre_ping=True,
-)
+_engine_kwargs: dict = {
+    "echo": settings.PROJECT_ENV == "local",
+    "pool_pre_ping": True,
+    "connect_args": _connect_args,
+}
+if _pool_class is not None:
+    _engine_kwargs["poolclass"] = _pool_class
+
+engine = create_async_engine(settings.DATABASE_URL, **_engine_kwargs)
 
 # Async session factory
 async_session_factory = async_sessionmaker(

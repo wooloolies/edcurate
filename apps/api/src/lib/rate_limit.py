@@ -86,9 +86,17 @@ class RedisRateLimiter:
         if self._redis is None:
             import redis.asyncio as redis
 
+            url = settings.REDIS_URL
+            # rediss:// (TLS) is handled natively by redis.asyncio, but Upstash
+            # requires ssl_cert_reqs=None to skip certificate verification in
+            # environments where the managed TLS cert cannot be verified locally.
+            kwargs: dict[str, object] = {}
+            if url and url.startswith("rediss://"):
+                kwargs["ssl_cert_reqs"] = None
+
             self._redis = cast(
                 redis_module.Redis,
-                redis.from_url(settings.REDIS_URL),  # type: ignore[no-untyped-call]
+                redis.from_url(url, **kwargs),  # type: ignore[no-untyped-call]
             )
         return self._redis
 
@@ -142,7 +150,12 @@ def get_rate_limiter(config: RateLimitConfig) -> InMemoryRateLimiter | RedisRate
             logger.info("Using Redis rate limiter")
             _rate_limiter = RedisRateLimiter(config.requests, config.window)
         else:
-            logger.info("Using in-memory rate limiter")
+            if settings.PROJECT_ENV != "local":
+                logger.warning(
+                    "Redis not configured in non-local environment — rate limiting is per-process only"
+                )
+            else:
+                logger.info("Using in-memory rate limiter")
             _rate_limiter = InMemoryRateLimiter(config.requests, config.window)
 
     return _rate_limiter

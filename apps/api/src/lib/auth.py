@@ -2,6 +2,7 @@ import json
 from collections.abc import Callable
 from datetime import UTC, datetime, timedelta
 from functools import wraps
+from hashlib import sha256
 from typing import Annotated, Any, Literal
 
 import httpx
@@ -72,12 +73,8 @@ class CurrentUserInfo(BaseModel):
 
 
 def _get_jwe_key() -> jwk.JWK:
-    """Get JWK key for JWE encryption/decryption."""
-    key_bytes = settings.JWE_SECRET_KEY.encode("utf-8")
-    if len(key_bytes) < 32:
-        key_bytes = key_bytes.ljust(32, b"\0")
-    elif len(key_bytes) > 32:
-        key_bytes = key_bytes[:32]
+    """Get JWK key for JWE encryption/decryption using HKDF-like derivation."""
+    key_bytes = sha256(settings.JWE_SECRET_KEY.encode("utf-8")).digest()[:32]
     return jwk.JWK(kty="oct", k=jwk.base64url_encode(key_bytes))
 
 
@@ -127,7 +124,14 @@ def decode_token(token: str) -> TokenPayload:
         jwe_token.deserialize(token)
         jwe_token.decrypt(key)
         payload = json.loads(jwe_token.payload.decode("utf-8"))
-        return TokenPayload(**payload)
+        token_payload = TokenPayload(**payload)
+        if datetime.now(UTC).timestamp() > token_payload.exp:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Token expired",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+        return token_payload
     except JWException:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -179,9 +183,21 @@ async def verify_github_token(access_token: str) -> OAuthUserInfo:
                 detail="Invalid GitHub access token",
             )
         data = response.json()
+        email = data.get("email")
+        if not email:
+            emails_response = await client.get(
+                "https://api.github.com/user/emails",
+                headers={"Authorization": f"Bearer {access_token}"},
+                timeout=5.0,
+            )
+            if emails_response.status_code == 200:
+                for e in emails_response.json():
+                    if e.get("primary") and e.get("verified"):
+                        email = e["email"]
+                        break
         return OAuthUserInfo(
             id=str(data["id"]),
-            email=data.get("email"),
+            email=email,
             name=data.get("name"),
             image=data.get("avatar_url"),
         )
@@ -225,6 +241,12 @@ async def verify_session_token(session_token: str) -> OAuthUserInfo:
             )
         data = response.json()
         user = data.get("user", {})
+        user_id = user.get("id", "")
+        if not user_id:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid session: no user ID",
+            )
         email = user.get("email")
         if not email:
             raise HTTPException(
@@ -232,7 +254,7 @@ async def verify_session_token(session_token: str) -> OAuthUserInfo:
                 detail="Invalid session: no email",
             )
         return OAuthUserInfo(
-            id=user.get("id", ""),
+            id=user_id,
             email=email,
             name=user.get("name"),
             image=user.get("image"),
@@ -272,13 +294,6 @@ async def get_current_user(request: Request) -> CurrentUserInfo:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid token type",
-        )
-
-    if datetime.now(UTC).timestamp() > payload.exp:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Token expired",
-            headers={"WWW-Authenticate": "Bearer"},
         )
 
     return CurrentUserInfo(id=payload.user_id)
