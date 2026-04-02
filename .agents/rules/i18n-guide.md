@@ -1,6 +1,9 @@
 ---
 trigger: model_decision
 description: when working for internationalization or localization.
+paths:
+  - "packages/i18n/**"
+  - "apps/web/src/config/messages/**"
 ---
 
 # I18n Workflow
