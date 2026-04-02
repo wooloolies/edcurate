@@ -31,5 +31,81 @@
   "delete": "Delete",
   "@delete": {
     "description": "Delete button text"
+  },
+  "login__title": "Sign in to Edcurate",
+  "@login__title": {
+    "description": "Login page heading"
+  },
+  "login__subtitle": "Enter your email to receive a magic link",
+  "@login__subtitle": {
+    "description": "Login page subheading describing magic link flow"
+  },
+  "login__emailLabel": "Email",
+  "@login__emailLabel": {
+    "description": "Label for the email input field on the login page"
+  },
+  "login__emailPlaceholder": "your@email.com",
+  "@login__emailPlaceholder": {
+    "description": "Placeholder for the email input field on the login page"
+  },
+  "login__confirmEmailLabel": "Confirm email",
+  "@login__confirmEmailLabel": {
+    "description": "Label for the confirm email input field on the login page"
+  },
+  "login__confirmEmailPlaceholder": "Re-enter your email",
+  "@login__confirmEmailPlaceholder": {
+    "description": "Placeholder for the confirm email input field on the login page"
+  },
+  "login__sendMagicLink": "Send magic link",
+  "@login__sendMagicLink": {
+    "description": "Submit button text on the login page"
+  },
+  "login__sending": "Sending...",
+  "@login__sending": {
+    "description": "Submit button text while the magic link is being sent"
+  },
+  "login__checkEmail": "Check your email",
+  "@login__checkEmail": {
+    "description": "Heading shown after the magic link has been sent"
+  },
+  "login__checkEmailDescription": "We sent a login link to {email}. Click the link in your email to sign in.",
+  "@login__checkEmailDescription": {
+    "description": "Description shown after the magic link has been sent",
+    "placeholders": {
+      "email": {
+        "type": "String",
+        "description": "The email address the link was sent to"
+      }
+    }
+  },
+  "login__emailMismatch": "Emails do not match",
+  "@login__emailMismatch": {
+    "description": "Validation error shown when the two email fields do not match"
+  },
+  "login__invalidEmail": "Please enter a valid email address",
+  "@login__invalidEmail": {
+    "description": "Validation error shown when the email address is invalid"
+  },
+  "login__tryAgain": "Try again",
+  "@login__tryAgain": {
+    "description": "Button to go back and try sending another magic link"
+  },
+  "login__resend": "Didn't receive it? Send again",
+  "@login__resend": {
+    "description": "Link or button to resend the magic link email"
+  },
+  "login__resendCooldown": "You can resend in {seconds}s",
+  "@login__resendCooldown": {
+    "description": "Cooldown timer text shown after sending a magic link",
+    "placeholders": {
+      "seconds": {
+        "type": "int",
+        "description": "Remaining seconds before resend is allowed"
+      }
+    }
+  },
+  "login__checkSpam": "Don't see it? Check your spam or junk folder.",
+  "@login__checkSpam": {
+    "description": "Guide text suggesting to check the spam folder for the magic link email"
   }
 }

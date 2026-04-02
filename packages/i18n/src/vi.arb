@@ -7,5 +7,81 @@
   "save": "Lưu",
   "cancel": "Hủy",
   "confirm": "Xác nhận",
-  "delete": "Xóa"
+  "delete": "Xóa",
+  "login__title": "Đăng nhập vào Edcurate",
+  "@login__title": {
+    "description": "Tiêu đề trang đăng nhập"
+  },
+  "login__subtitle": "Nhập email của bạn để nhận liên kết đăng nhập",
+  "@login__subtitle": {
+    "description": "Tiêu đề phụ mô tả luồng magic link của trang đăng nhập"
+  },
+  "login__emailLabel": "Email",
+  "@login__emailLabel": {
+    "description": "Nhãn trường nhập email trên trang đăng nhập"
+  },
+  "login__emailPlaceholder": "your@email.com",
+  "@login__emailPlaceholder": {
+    "description": "Placeholder trường nhập email trên trang đăng nhập"
+  },
+  "login__confirmEmailLabel": "Xác nhận email",
+  "@login__confirmEmailLabel": {
+    "description": "Nhãn trường xác nhận email trên trang đăng nhập"
+  },
+  "login__confirmEmailPlaceholder": "Nhập lại email của bạn",
+  "@login__confirmEmailPlaceholder": {
+    "description": "Placeholder trường xác nhận email trên trang đăng nhập"
+  },
+  "login__sendMagicLink": "Gửi liên kết đăng nhập",
+  "@login__sendMagicLink": {
+    "description": "Văn bản nút gửi trên trang đăng nhập"
+  },
+  "login__sending": "Đang gửi...",
+  "@login__sending": {
+    "description": "Văn bản nút gửi trong khi magic link đang được gửi"
+  },
+  "login__checkEmail": "Kiểm tra email của bạn",
+  "@login__checkEmail": {
+    "description": "Tiêu đề hiển thị sau khi magic link đã được gửi"
+  },
+  "login__checkEmailDescription": "Chúng tôi đã gửi liên kết đăng nhập đến {email}. Nhấp vào liên kết trong email để đăng nhập.",
+  "@login__checkEmailDescription": {
+    "description": "Mô tả hiển thị sau khi magic link đã được gửi",
+    "placeholders": {
+      "email": {
+        "type": "String",
+        "description": "Địa chỉ email mà liên kết được gửi đến"
+      }
+    }
+  },
+  "login__emailMismatch": "Email không khớp",
+  "@login__emailMismatch": {
+    "description": "Lỗi xác thực hiển thị khi hai trường email không khớp nhau"
+  },
+  "login__invalidEmail": "Vui lòng nhập địa chỉ email hợp lệ",
+  "@login__invalidEmail": {
+    "description": "Lỗi xác thực hiển thị khi địa chỉ email không hợp lệ"
+  },
+  "login__tryAgain": "Thử lại",
+  "@login__tryAgain": {
+    "description": "Nút để quay lại và gửi magic link khác"
+  },
+  "login__resend": "Không nhận được email? Gửi lại",
+  "@login__resend": {
+    "description": "Liên kết hoặc nút để gửi lại email magic link"
+  },
+  "login__resendCooldown": "Bạn có thể gửi lại sau {seconds} giây",
+  "@login__resendCooldown": {
+    "description": "Văn bản đếm ngược sau khi gửi magic link",
+    "placeholders": {
+      "seconds": {
+        "type": "int",
+        "description": "Số giây còn lại trước khi có thể gửi lại"
+      }
+    }
+  },
+  "login__checkSpam": "Không thấy email? Hãy kiểm tra thư mục spam hoặc rác.",
+  "@login__checkSpam": {
+    "description": "Văn bản hướng dẫn kiểm tra thư mục spam để tìm email magic link"
+  }
 }

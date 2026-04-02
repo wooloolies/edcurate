@@ -1,5 +1,6 @@
 "use client";
 
+import { magicLinkClient } from "better-auth/client/plugins";
 import { createAuthClient } from "better-auth/react";
 import { env } from "@/config/env";
 import { apiClient } from "@/lib/api-client";
@@ -22,10 +23,15 @@ type BackendTokenResponse = {
 
 export const authClient = createAuthClient({
   baseURL: env.NEXT_PUBLIC_BETTER_AUTH_URL,
+  plugins: [magicLinkClient()],
 });
 
 export const { useSession, signIn, signUp } = authClient;
 export const signOut = authClient.signOut;
+
+export async function sendMagicLink(email: string) {
+  return authClient.signIn.magicLink({ email, callbackURL: "/" });
+}
 
 export async function signUpWithEmail(email: string, password: string, name: string) {
   return authClient.signUp.email({ email, password, name, callbackURL: "/" });

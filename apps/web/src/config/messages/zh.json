@@ -9,9 +9,20 @@
     "confirm": "确认",
     "delete": "删除"
   },
-  "loginWelcome": "欢迎使用 Edcurate",
-  "loginSubtitle": "使用社交账号快速开始",
-  "continueWithGoogle": "使用 Google 继续",
-  "continueWithFacebook": "使用 Facebook 继续",
-  "continueWithGithub": "使用 GitHub 继续"
+  "login__title": "登录 Edcurate",
+  "login__subtitle": "输入您的邮箱以接收魔法链接",
+  "login__emailLabel": "邮箱",
+  "login__emailPlaceholder": "your@email.com",
+  "login__confirmEmailLabel": "确认邮箱",
+  "login__confirmEmailPlaceholder": "请再次输入邮箱",
+  "login__sendMagicLink": "发送魔法链接",
+  "login__sending": "发送中...",
+  "login__checkEmail": "请查看您的邮箱",
+  "login__checkEmailDescription": "我们已向 {email} 发送了登录链接。点击邮件中的链接即可登录。",
+  "login__emailMismatch": "两次输入的邮箱不一致",
+  "login__invalidEmail": "请输入有效的邮箱地址",
+  "login__tryAgain": "重新尝试",
+  "login__resend": "未收到邮件？重新发送",
+  "login__resendCooldown": "{seconds}秒后可重新发送",
+  "login__checkSpam": "没有看到邮件？请检查垃圾邮件文件夹。"
 }

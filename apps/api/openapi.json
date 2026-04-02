@@ -112,6 +112,48 @@
         }
       }
     },
+    "/api/auth/session-exchange": {
+      "post": {
+        "tags": [
+          "authentication"
+        ],
+        "summary": "Session Exchange",
+        "description": "Exchange better-auth session token for backend JWE tokens.\n\nUsed by email/password auth users who have no OAuth provider token.\nVerifies session with better-auth server, then issues backend tokens.",
+        "operationId": "session_exchange_api_auth_session_exchange_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SessionExchangeRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/auth/refresh": {
       "post": {
         "tags": [
@@ -270,6 +312,20 @@
         ],
         "title": "RefreshTokenRequest",
         "description": "Refresh token request."
+      },
+      "SessionExchangeRequest": {
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "title": "Session Token"
+          }
+        },
+        "type": "object",
+        "required": [
+          "session_token"
+        ],
+        "title": "SessionExchangeRequest",
+        "description": "Exchange better-auth session token for backend JWE tokens."
       },
       "ServiceStatus": {
         "properties": {

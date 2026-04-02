@@ -7,5 +7,81 @@
   "save": "บันทึก",
   "cancel": "ยกเลิก",
   "confirm": "ยืนยัน",
-  "delete": "ลบ"
+  "delete": "ลบ",
+  "login__title": "เข้าสู่ระบบ Edcurate",
+  "@login__title": {
+    "description": "หัวข้อหน้าเข้าสู่ระบบ"
+  },
+  "login__subtitle": "กรอกอีเมลเพื่อรับลิงก์เข้าสู่ระบบ",
+  "@login__subtitle": {
+    "description": "หัวข้อรองของหน้าเข้าสู่ระบบที่อธิบายขั้นตอน magic link"
+  },
+  "login__emailLabel": "อีเมล",
+  "@login__emailLabel": {
+    "description": "ป้ายกำกับช่องกรอกอีเมลในหน้าเข้าสู่ระบบ"
+  },
+  "login__emailPlaceholder": "your@email.com",
+  "@login__emailPlaceholder": {
+    "description": "ข้อความตัวอย่างในช่องกรอกอีเมลในหน้าเข้าสู่ระบบ"
+  },
+  "login__confirmEmailLabel": "ยืนยันอีเมล",
+  "@login__confirmEmailLabel": {
+    "description": "ป้ายกำกับช่องยืนยันอีเมลในหน้าเข้าสู่ระบบ"
+  },
+  "login__confirmEmailPlaceholder": "กรอกอีเมลอีกครั้ง",
+  "@login__confirmEmailPlaceholder": {
+    "description": "ข้อความตัวอย่างในช่องยืนยันอีเมลในหน้าเข้าสู่ระบบ"
+  },
+  "login__sendMagicLink": "ส่ง Magic Link",
+  "@login__sendMagicLink": {
+    "description": "ข้อความปุ่มส่งในหน้าเข้าสู่ระบบ"
+  },
+  "login__sending": "กำลังส่ง...",
+  "@login__sending": {
+    "description": "ข้อความปุ่มส่งขณะกำลังส่ง magic link"
+  },
+  "login__checkEmail": "ตรวจสอบอีเมลของคุณ",
+  "@login__checkEmail": {
+    "description": "หัวข้อที่แสดงหลังจากส่ง magic link แล้ว"
+  },
+  "login__checkEmailDescription": "เราได้ส่งลิงก์เข้าสู่ระบบไปที่ {email} แล้ว คลิกลิงก์ในอีเมลเพื่อเข้าสู่ระบบ",
+  "@login__checkEmailDescription": {
+    "description": "คำอธิบายที่แสดงหลังจากส่ง magic link แล้ว",
+    "placeholders": {
+      "email": {
+        "type": "String",
+        "description": "ที่อยู่อีเมลที่ส่งลิงก์ไปถึง"
+      }
+    }
+  },
+  "login__emailMismatch": "อีเมลไม่ตรงกัน",
+  "@login__emailMismatch": {
+    "description": "ข้อผิดพลาดการตรวจสอบที่แสดงเมื่อช่องอีเมลทั้งสองไม่ตรงกัน"
+  },
+  "login__invalidEmail": "กรุณากรอกที่อยู่อีเมลที่ถูกต้อง",
+  "@login__invalidEmail": {
+    "description": "ข้อผิดพลาดการตรวจสอบที่แสดงเมื่อที่อยู่อีเมลไม่ถูกต้อง"
+  },
+  "login__tryAgain": "ลองใหม่",
+  "@login__tryAgain": {
+    "description": "ปุ่มเพื่อกลับไปส่ง magic link อีกครั้ง"
+  },
+  "login__resend": "ไม่ได้รับอีเมลใช่ไหม? ส่งอีกครั้ง",
+  "@login__resend": {
+    "description": "ลิงก์หรือปุ่มสำหรับส่ง magic link อีกครั้ง"
+  },
+  "login__resendCooldown": "สามารถส่งอีกครั้งได้ใน {seconds} วินาที",
+  "@login__resendCooldown": {
+    "description": "ข้อความนับถอยหลังหลังจากส่ง magic link",
+    "placeholders": {
+      "seconds": {
+        "type": "int",
+        "description": "จำนวนวินาทีที่เหลือก่อนจะส่งได้อีกครั้ง"
+      }
+    }
+  },
+  "login__checkSpam": "ไม่เห็นอีเมลใช่ไหม? ตรวจสอบโฟลเดอร์สแปมหรือขยะ",
+  "@login__checkSpam": {
+    "description": "ข้อความแนะนำให้ตรวจสอบโฟลเดอร์สแปมสำหรับอีเมล magic link"
+  }
 }

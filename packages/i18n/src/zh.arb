@@ -7,5 +7,81 @@
   "save": "保存",
   "cancel": "取消",
   "confirm": "确认",
-  "delete": "删除"
+  "delete": "删除",
+  "login__title": "登录 Edcurate",
+  "@login__title": {
+    "description": "登录页面标题"
+  },
+  "login__subtitle": "输入您的邮箱以接收魔法链接",
+  "@login__subtitle": {
+    "description": "描述魔法链接流程的登录页面副标题"
+  },
+  "login__emailLabel": "邮箱",
+  "@login__emailLabel": {
+    "description": "登录页面邮箱输入框标签"
+  },
+  "login__emailPlaceholder": "your@email.com",
+  "@login__emailPlaceholder": {
+    "description": "登录页面邮箱输入框占位符"
+  },
+  "login__confirmEmailLabel": "确认邮箱",
+  "@login__confirmEmailLabel": {
+    "description": "登录页面确认邮箱输入框标签"
+  },
+  "login__confirmEmailPlaceholder": "请再次输入邮箱",
+  "@login__confirmEmailPlaceholder": {
+    "description": "登录页面确认邮箱输入框占位符"
+  },
+  "login__sendMagicLink": "发送魔法链接",
+  "@login__sendMagicLink": {
+    "description": "登录页面提交按钮文字"
+  },
+  "login__sending": "发送中...",
+  "@login__sending": {
+    "description": "魔法链接发送中时的提交按钮文字"
+  },
+  "login__checkEmail": "请查看您的邮箱",
+  "@login__checkEmail": {
+    "description": "魔法链接发送后显示的标题"
+  },
+  "login__checkEmailDescription": "我们已向 {email} 发送了登录链接。点击邮件中的链接即可登录。",
+  "@login__checkEmailDescription": {
+    "description": "魔法链接发送后显示的说明",
+    "placeholders": {
+      "email": {
+        "type": "String",
+        "description": "链接发送至的邮箱地址"
+      }
+    }
+  },
+  "login__emailMismatch": "两次输入的邮箱不一致",
+  "@login__emailMismatch": {
+    "description": "两个邮箱字段不匹配时显示的验证错误"
+  },
+  "login__invalidEmail": "请输入有效的邮箱地址",
+  "@login__invalidEmail": {
+    "description": "邮箱地址无效时显示的验证错误"
+  },
+  "login__tryAgain": "重新尝试",
+  "@login__tryAgain": {
+    "description": "返回重新发送魔法链接的按钮"
+  },
+  "login__resend": "未收到邮件？重新发送",
+  "@login__resend": {
+    "description": "重新发送魔法链接邮件的链接或按钮"
+  },
+  "login__resendCooldown": "{seconds}秒后可重新发送",
+  "@login__resendCooldown": {
+    "description": "发送魔法链接后显示的倒计时文本",
+    "placeholders": {
+      "seconds": {
+        "type": "int",
+        "description": "可重新发送前的剩余秒数"
+      }
+    }
+  },
+  "login__checkSpam": "没有看到邮件？请检查垃圾邮件文件夹。",
+  "@login__checkSpam": {
+    "description": "提示检查垃圾邮件文件夹中的魔法链接邮件的引导文本"
+  }
 }

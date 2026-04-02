@@ -1,5 +1,6 @@
 import { betterAuth } from "better-auth";
 import { nextCookies } from "better-auth/next-js";
+import { magicLink } from "better-auth/plugins";
 import { Resend } from "resend";
 import { env } from "@/config/env";
 
@@ -53,7 +54,20 @@ export const auth = betterAuth({
         }
       : undefined,
   },
-  plugins: [nextCookies()],
+  plugins: [
+    nextCookies(),
+    magicLink({
+      sendMagicLink: async ({ email, url }) => {
+        if (!resend) return;
+        void resend.emails.send({
+          from: env.EMAIL_FROM,
+          to: email,
+          subject: "Your Edcurate login link",
+          html: `<p>Click the link below to sign in to Edcurate:</p><p><a href="${url}">Sign in</a></p><p>This link expires in 10 minutes. If you did not request this, you can ignore this email.</p>`,
+        });
+      },
+    }),
+  ],
   session: {
     expiresIn: 60 * 60 * 24 * 7,
     cookieCache: {
