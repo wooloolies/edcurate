@@ -69,3 +69,4 @@ htmlcov/
 !.serena/memories/.gitkeep
 
 .omc/
+.vercel

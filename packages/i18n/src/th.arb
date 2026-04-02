@@ -8,80 +8,132 @@
   "cancel": "ยกเลิก",
   "confirm": "ยืนยัน",
   "delete": "ลบ",
-  "login__title": "เข้าสู่ระบบ Edcurate",
-  "@login__title": {
-    "description": "หัวข้อหน้าเข้าสู่ระบบ"
+  "login__signIn": "เข้าสู่ระบบ",
+  "@login__signIn": {
+    "description": "Sign in tab label"
   },
-  "login__subtitle": "กรอกอีเมลเพื่อรับลิงก์เข้าสู่ระบบ",
-  "@login__subtitle": {
-    "description": "หัวข้อรองของหน้าเข้าสู่ระบบที่อธิบายขั้นตอน magic link"
+  "login__signUp": "สมัครสมาชิก",
+  "@login__signUp": {
+    "description": "Sign up tab label"
+  },
+  "login__signInTitle": "ยินดีต้อนรับกลับมา",
+  "@login__signInTitle": {
+    "description": "Sign in form heading"
+  },
+  "login__signInSubtitle": "กรอกข้อมูลเพื่อเข้าสู่ระบบ",
+  "@login__signInSubtitle": {
+    "description": "Sign in form subheading"
+  },
+  "login__signUpTitle": "สร้างบัญชี",
+  "@login__signUpTitle": {
+    "description": "Sign up form heading"
+  },
+  "login__signUpSubtitle": "กรอกข้อมูลเพื่อเริ่มใช้งาน",
+  "@login__signUpSubtitle": {
+    "description": "Sign up form subheading"
+  },
+  "login__nameLabel": "ชื่อ",
+  "@login__nameLabel": {
+    "description": "Label for name input field"
+  },
+  "login__namePlaceholder": "ชื่อของคุณ",
+  "@login__namePlaceholder": {
+    "description": "Placeholder for name input field"
   },
   "login__emailLabel": "อีเมล",
   "@login__emailLabel": {
-    "description": "ป้ายกำกับช่องกรอกอีเมลในหน้าเข้าสู่ระบบ"
+    "description": "Label for the email input field"
   },
   "login__emailPlaceholder": "your@email.com",
   "@login__emailPlaceholder": {
-    "description": "ข้อความตัวอย่างในช่องกรอกอีเมลในหน้าเข้าสู่ระบบ"
+    "description": "Placeholder for the email input field"
   },
-  "login__confirmEmailLabel": "ยืนยันอีเมล",
-  "@login__confirmEmailLabel": {
-    "description": "ป้ายกำกับช่องยืนยันอีเมลในหน้าเข้าสู่ระบบ"
+  "login__passwordLabel": "รหัสผ่าน",
+  "@login__passwordLabel": {
+    "description": "Label for the password input field"
   },
-  "login__confirmEmailPlaceholder": "กรอกอีเมลอีกครั้ง",
-  "@login__confirmEmailPlaceholder": {
-    "description": "ข้อความตัวอย่างในช่องยืนยันอีเมลในหน้าเข้าสู่ระบบ"
+  "login__passwordPlaceholder": "กรอกรหัสผ่าน",
+  "@login__passwordPlaceholder": {
+    "description": "Placeholder for the password input field"
   },
-  "login__sendMagicLink": "ส่ง Magic Link",
-  "@login__sendMagicLink": {
-    "description": "ข้อความปุ่มส่งในหน้าเข้าสู่ระบบ"
+  "login__signInButton": "เข้าสู่ระบบ",
+  "@login__signInButton": {
+    "description": "Sign in submit button text"
   },
-  "login__sending": "กำลังส่ง...",
-  "@login__sending": {
-    "description": "ข้อความปุ่มส่งขณะกำลังส่ง magic link"
+  "login__signUpButton": "สมัครสมาชิก",
+  "@login__signUpButton": {
+    "description": "Sign up submit button text"
   },
-  "login__checkEmail": "ตรวจสอบอีเมลของคุณ",
-  "@login__checkEmail": {
-    "description": "หัวข้อที่แสดงหลังจากส่ง magic link แล้ว"
-  },
-  "login__checkEmailDescription": "เราได้ส่งลิงก์เข้าสู่ระบบไปที่ {email} แล้ว คลิกลิงก์ในอีเมลเพื่อเข้าสู่ระบบ",
-  "@login__checkEmailDescription": {
-    "description": "คำอธิบายที่แสดงหลังจากส่ง magic link แล้ว",
-    "placeholders": {
-      "email": {
-        "type": "String",
-        "description": "ที่อยู่อีเมลที่ส่งลิงก์ไปถึง"
-      }
-    }
-  },
-  "login__emailMismatch": "อีเมลไม่ตรงกัน",
-  "@login__emailMismatch": {
-    "description": "ข้อผิดพลาดการตรวจสอบที่แสดงเมื่อช่องอีเมลทั้งสองไม่ตรงกัน"
+  "login__submitting": "กรุณารอสักครู่...",
+  "@login__submitting": {
+    "description": "Submit button text while processing"
   },
   "login__invalidEmail": "กรุณากรอกที่อยู่อีเมลที่ถูกต้อง",
   "@login__invalidEmail": {
-    "description": "ข้อผิดพลาดการตรวจสอบที่แสดงเมื่อที่อยู่อีเมลไม่ถูกต้อง"
+    "description": "Validation error for invalid email"
   },
-  "login__tryAgain": "ลองใหม่",
-  "@login__tryAgain": {
-    "description": "ปุ่มเพื่อกลับไปส่ง magic link อีกครั้ง"
+  "login__passwordRequired": "กรุณากรอกรหัสผ่าน",
+  "@login__passwordRequired": {
+    "description": "Validation error when password is empty"
   },
-  "login__resend": "ไม่ได้รับอีเมลใช่ไหม? ส่งอีกครั้ง",
-  "@login__resend": {
-    "description": "ลิงก์หรือปุ่มสำหรับส่ง magic link อีกครั้ง"
+  "login__nameRequired": "กรุณากรอกชื่อ",
+  "@login__nameRequired": {
+    "description": "Validation error when name is empty"
   },
-  "login__resendCooldown": "สามารถส่งอีกครั้งได้ใน {seconds} วินาที",
-  "@login__resendCooldown": {
-    "description": "ข้อความนับถอยหลังหลังจากส่ง magic link",
+  "login__forgotPassword": "ลืมรหัสผ่าน?",
+  "@login__forgotPassword": {
+    "description": "Forgot password link text"
+  },
+  "login__noAccount": "ยังไม่มีบัญชีใช่ไหม?",
+  "@login__noAccount": {
+    "description": "Text before sign up link"
+  },
+  "login__hasAccount": "มีบัญชีอยู่แล้วใช่ไหม?",
+  "@login__hasAccount": {
+    "description": "Text before sign in link"
+  },
+  "login__verifyEmail": "ยืนยันอีเมลของคุณ",
+  "@login__verifyEmail": {
+    "description": "Heading shown when email verification is required"
+  },
+  "login__verifyEmailDescription": "เราได้ส่งลิงก์ยืนยันไปที่ {email} กรุณาตรวจสอบกล่องจดหมายและยืนยันอีเมลก่อนเข้าสู่ระบบ",
+  "@login__verifyEmailDescription": {
+    "description": "Description for email verification",
     "placeholders": {
-      "seconds": {
-        "type": "int",
-        "description": "จำนวนวินาทีที่เหลือก่อนจะส่งได้อีกครั้ง"
+      "email": {
+        "type": "String",
+        "description": "The email address"
       }
     }
   },
   "login__checkSpam": "ไม่เห็นอีเมลใช่ไหม? ตรวจสอบโฟลเดอร์สแปมหรือขยะ",
   "@login__checkSpam": {
-    "description": "ข้อความแนะนำให้ตรวจสอบโฟลเดอร์สแปมสำหรับอีเมล magic link"
+    "description": "Guide text for checking spam folder"
+  },
+  "login__resendVerification": "ส่งอีเมลยืนยันอีกครั้ง",
+  "@login__resendVerification": {
+    "description": "Button to resend verification email"
+  },
+  "login__resendCooldown": "ส่งอีกครั้งได้ใน {seconds} วินาที",
+  "@login__resendCooldown": {
+    "description": "Cooldown timer for resend",
+    "placeholders": {
+      "seconds": {
+        "type": "int",
+        "description": "Seconds remaining"
+      }
+    }
+  },
+  "login__backToSignIn": "กลับไปหน้าเข้าสู่ระบบ",
+  "@login__backToSignIn": {
+    "description": "Link to go back to sign in form"
+  },
+  "login__invalidCredentials": "อีเมลหรือรหัสผ่านไม่ถูกต้อง",
+  "@login__invalidCredentials": {
+    "description": "Error for wrong credentials"
+  },
+  "login__emailNotVerified": "กรุณายืนยันอีเมลก่อนเข้าสู่ระบบ",
+  "@login__emailNotVerified": {
+    "description": "Error when email is not verified"
   }
 }

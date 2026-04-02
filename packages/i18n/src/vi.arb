@@ -8,80 +8,132 @@
   "cancel": "Hủy",
   "confirm": "Xác nhận",
   "delete": "Xóa",
-  "login__title": "Đăng nhập vào Edcurate",
-  "@login__title": {
-    "description": "Tiêu đề trang đăng nhập"
+  "login__signIn": "Đăng nhập",
+  "@login__signIn": {
+    "description": "Sign in tab label"
   },
-  "login__subtitle": "Nhập email của bạn để nhận liên kết đăng nhập",
-  "@login__subtitle": {
-    "description": "Tiêu đề phụ mô tả luồng magic link của trang đăng nhập"
+  "login__signUp": "Đăng ký",
+  "@login__signUp": {
+    "description": "Sign up tab label"
+  },
+  "login__signInTitle": "Chào mừng trở lại",
+  "@login__signInTitle": {
+    "description": "Sign in form heading"
+  },
+  "login__signInSubtitle": "Nhập thông tin đăng nhập để tiếp tục",
+  "@login__signInSubtitle": {
+    "description": "Sign in form subheading"
+  },
+  "login__signUpTitle": "Tạo tài khoản",
+  "@login__signUpTitle": {
+    "description": "Sign up form heading"
+  },
+  "login__signUpSubtitle": "Nhập thông tin của bạn để bắt đầu",
+  "@login__signUpSubtitle": {
+    "description": "Sign up form subheading"
+  },
+  "login__nameLabel": "Tên",
+  "@login__nameLabel": {
+    "description": "Label for name input field"
+  },
+  "login__namePlaceholder": "Tên của bạn",
+  "@login__namePlaceholder": {
+    "description": "Placeholder for name input field"
   },
   "login__emailLabel": "Email",
   "@login__emailLabel": {
-    "description": "Nhãn trường nhập email trên trang đăng nhập"
+    "description": "Label for the email input field"
   },
   "login__emailPlaceholder": "your@email.com",
   "@login__emailPlaceholder": {
-    "description": "Placeholder trường nhập email trên trang đăng nhập"
+    "description": "Placeholder for the email input field"
   },
-  "login__confirmEmailLabel": "Xác nhận email",
-  "@login__confirmEmailLabel": {
-    "description": "Nhãn trường xác nhận email trên trang đăng nhập"
+  "login__passwordLabel": "Mật khẩu",
+  "@login__passwordLabel": {
+    "description": "Label for the password input field"
   },
-  "login__confirmEmailPlaceholder": "Nhập lại email của bạn",
-  "@login__confirmEmailPlaceholder": {
-    "description": "Placeholder trường xác nhận email trên trang đăng nhập"
+  "login__passwordPlaceholder": "Nhập mật khẩu",
+  "@login__passwordPlaceholder": {
+    "description": "Placeholder for the password input field"
   },
-  "login__sendMagicLink": "Gửi liên kết đăng nhập",
-  "@login__sendMagicLink": {
-    "description": "Văn bản nút gửi trên trang đăng nhập"
+  "login__signInButton": "Đăng nhập",
+  "@login__signInButton": {
+    "description": "Sign in submit button text"
   },
-  "login__sending": "Đang gửi...",
-  "@login__sending": {
-    "description": "Văn bản nút gửi trong khi magic link đang được gửi"
+  "login__signUpButton": "Đăng ký",
+  "@login__signUpButton": {
+    "description": "Sign up submit button text"
   },
-  "login__checkEmail": "Kiểm tra email của bạn",
-  "@login__checkEmail": {
-    "description": "Tiêu đề hiển thị sau khi magic link đã được gửi"
-  },
-  "login__checkEmailDescription": "Chúng tôi đã gửi liên kết đăng nhập đến {email}. Nhấp vào liên kết trong email để đăng nhập.",
-  "@login__checkEmailDescription": {
-    "description": "Mô tả hiển thị sau khi magic link đã được gửi",
-    "placeholders": {
-      "email": {
-        "type": "String",
-        "description": "Địa chỉ email mà liên kết được gửi đến"
-      }
-    }
-  },
-  "login__emailMismatch": "Email không khớp",
-  "@login__emailMismatch": {
-    "description": "Lỗi xác thực hiển thị khi hai trường email không khớp nhau"
+  "login__submitting": "Vui lòng chờ...",
+  "@login__submitting": {
+    "description": "Submit button text while processing"
   },
   "login__invalidEmail": "Vui lòng nhập địa chỉ email hợp lệ",
   "@login__invalidEmail": {
-    "description": "Lỗi xác thực hiển thị khi địa chỉ email không hợp lệ"
+    "description": "Validation error for invalid email"
   },
-  "login__tryAgain": "Thử lại",
-  "@login__tryAgain": {
-    "description": "Nút để quay lại và gửi magic link khác"
+  "login__passwordRequired": "Vui lòng nhập mật khẩu",
+  "@login__passwordRequired": {
+    "description": "Validation error when password is empty"
   },
-  "login__resend": "Không nhận được email? Gửi lại",
-  "@login__resend": {
-    "description": "Liên kết hoặc nút để gửi lại email magic link"
+  "login__nameRequired": "Vui lòng nhập tên",
+  "@login__nameRequired": {
+    "description": "Validation error when name is empty"
   },
-  "login__resendCooldown": "Bạn có thể gửi lại sau {seconds} giây",
-  "@login__resendCooldown": {
-    "description": "Văn bản đếm ngược sau khi gửi magic link",
+  "login__forgotPassword": "Quên mật khẩu?",
+  "@login__forgotPassword": {
+    "description": "Forgot password link text"
+  },
+  "login__noAccount": "Chưa có tài khoản?",
+  "@login__noAccount": {
+    "description": "Text before sign up link"
+  },
+  "login__hasAccount": "Đã có tài khoản?",
+  "@login__hasAccount": {
+    "description": "Text before sign in link"
+  },
+  "login__verifyEmail": "Xác minh email của bạn",
+  "@login__verifyEmail": {
+    "description": "Heading shown when email verification is required"
+  },
+  "login__verifyEmailDescription": "Chúng tôi đã gửi liên kết xác minh đến {email}. Vui lòng kiểm tra hộp thư và xác minh email trước khi đăng nhập.",
+  "@login__verifyEmailDescription": {
+    "description": "Description for email verification",
     "placeholders": {
-      "seconds": {
-        "type": "int",
-        "description": "Số giây còn lại trước khi có thể gửi lại"
+      "email": {
+        "type": "String",
+        "description": "The email address"
       }
     }
   },
   "login__checkSpam": "Không thấy email? Hãy kiểm tra thư mục spam hoặc rác.",
   "@login__checkSpam": {
-    "description": "Văn bản hướng dẫn kiểm tra thư mục spam để tìm email magic link"
+    "description": "Guide text for checking spam folder"
+  },
+  "login__resendVerification": "Gửi lại email xác minh",
+  "@login__resendVerification": {
+    "description": "Button to resend verification email"
+  },
+  "login__resendCooldown": "Gửi lại sau {seconds} giây",
+  "@login__resendCooldown": {
+    "description": "Cooldown timer for resend",
+    "placeholders": {
+      "seconds": {
+        "type": "int",
+        "description": "Seconds remaining"
+      }
+    }
+  },
+  "login__backToSignIn": "Quay lại đăng nhập",
+  "@login__backToSignIn": {
+    "description": "Link to go back to sign in form"
+  },
+  "login__invalidCredentials": "Email hoặc mật khẩu không đúng",
+  "@login__invalidCredentials": {
+    "description": "Error for wrong credentials"
+  },
+  "login__emailNotVerified": "Vui lòng xác minh email trước khi đăng nhập",
+  "@login__emailNotVerified": {
+    "description": "Error when email is not verified"
   }
 }

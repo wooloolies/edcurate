@@ -8,80 +8,132 @@
   "cancel": "取消",
   "confirm": "确认",
   "delete": "删除",
-  "login__title": "登录 Edcurate",
-  "@login__title": {
-    "description": "登录页面标题"
+  "login__signIn": "登录",
+  "@login__signIn": {
+    "description": "Sign in tab label"
   },
-  "login__subtitle": "输入您的邮箱以接收魔法链接",
-  "@login__subtitle": {
-    "description": "描述魔法链接流程的登录页面副标题"
+  "login__signUp": "注册",
+  "@login__signUp": {
+    "description": "Sign up tab label"
+  },
+  "login__signInTitle": "欢迎回来",
+  "@login__signInTitle": {
+    "description": "Sign in form heading"
+  },
+  "login__signInSubtitle": "请输入您的登录信息以继续",
+  "@login__signInSubtitle": {
+    "description": "Sign in form subheading"
+  },
+  "login__signUpTitle": "创建账户",
+  "@login__signUpTitle": {
+    "description": "Sign up form heading"
+  },
+  "login__signUpSubtitle": "请输入您的信息以开始使用",
+  "@login__signUpSubtitle": {
+    "description": "Sign up form subheading"
+  },
+  "login__nameLabel": "姓名",
+  "@login__nameLabel": {
+    "description": "Label for name input field"
+  },
+  "login__namePlaceholder": "请输入姓名",
+  "@login__namePlaceholder": {
+    "description": "Placeholder for name input field"
   },
   "login__emailLabel": "邮箱",
   "@login__emailLabel": {
-    "description": "登录页面邮箱输入框标签"
+    "description": "Label for the email input field"
   },
   "login__emailPlaceholder": "your@email.com",
   "@login__emailPlaceholder": {
-    "description": "登录页面邮箱输入框占位符"
+    "description": "Placeholder for the email input field"
   },
-  "login__confirmEmailLabel": "确认邮箱",
-  "@login__confirmEmailLabel": {
-    "description": "登录页面确认邮箱输入框标签"
+  "login__passwordLabel": "密码",
+  "@login__passwordLabel": {
+    "description": "Label for the password input field"
   },
-  "login__confirmEmailPlaceholder": "请再次输入邮箱",
-  "@login__confirmEmailPlaceholder": {
-    "description": "登录页面确认邮箱输入框占位符"
+  "login__passwordPlaceholder": "请输入密码",
+  "@login__passwordPlaceholder": {
+    "description": "Placeholder for the password input field"
   },
-  "login__sendMagicLink": "发送魔法链接",
-  "@login__sendMagicLink": {
-    "description": "登录页面提交按钮文字"
+  "login__signInButton": "登录",
+  "@login__signInButton": {
+    "description": "Sign in submit button text"
   },
-  "login__sending": "发送中...",
-  "@login__sending": {
-    "description": "魔法链接发送中时的提交按钮文字"
+  "login__signUpButton": "注册",
+  "@login__signUpButton": {
+    "description": "Sign up submit button text"
   },
-  "login__checkEmail": "请查看您的邮箱",
-  "@login__checkEmail": {
-    "description": "魔法链接发送后显示的标题"
-  },
-  "login__checkEmailDescription": "我们已向 {email} 发送了登录链接。点击邮件中的链接即可登录。",
-  "@login__checkEmailDescription": {
-    "description": "魔法链接发送后显示的说明",
-    "placeholders": {
-      "email": {
-        "type": "String",
-        "description": "链接发送至的邮箱地址"
-      }
-    }
-  },
-  "login__emailMismatch": "两次输入的邮箱不一致",
-  "@login__emailMismatch": {
-    "description": "两个邮箱字段不匹配时显示的验证错误"
+  "login__submitting": "请稍候...",
+  "@login__submitting": {
+    "description": "Submit button text while processing"
   },
   "login__invalidEmail": "请输入有效的邮箱地址",
   "@login__invalidEmail": {
-    "description": "邮箱地址无效时显示的验证错误"
+    "description": "Validation error for invalid email"
   },
-  "login__tryAgain": "重新尝试",
-  "@login__tryAgain": {
-    "description": "返回重新发送魔法链接的按钮"
+  "login__passwordRequired": "请输入密码",
+  "@login__passwordRequired": {
+    "description": "Validation error when password is empty"
   },
-  "login__resend": "未收到邮件？重新发送",
-  "@login__resend": {
-    "description": "重新发送魔法链接邮件的链接或按钮"
+  "login__nameRequired": "请输入姓名",
+  "@login__nameRequired": {
+    "description": "Validation error when name is empty"
   },
-  "login__resendCooldown": "{seconds}秒后可重新发送",
-  "@login__resendCooldown": {
-    "description": "发送魔法链接后显示的倒计时文本",
+  "login__forgotPassword": "忘记密码？",
+  "@login__forgotPassword": {
+    "description": "Forgot password link text"
+  },
+  "login__noAccount": "还没有账户？",
+  "@login__noAccount": {
+    "description": "Text before sign up link"
+  },
+  "login__hasAccount": "已有账户？",
+  "@login__hasAccount": {
+    "description": "Text before sign in link"
+  },
+  "login__verifyEmail": "验证您的邮箱",
+  "@login__verifyEmail": {
+    "description": "Heading shown when email verification is required"
+  },
+  "login__verifyEmailDescription": "我们已向 {email} 发送了验证链接。请查看收件箱并验证邮箱后再登录。",
+  "@login__verifyEmailDescription": {
+    "description": "Description for email verification",
     "placeholders": {
-      "seconds": {
-        "type": "int",
-        "description": "可重新发送前的剩余秒数"
+      "email": {
+        "type": "String",
+        "description": "The email address"
       }
     }
   },
   "login__checkSpam": "没有看到邮件？请检查垃圾邮件文件夹。",
   "@login__checkSpam": {
-    "description": "提示检查垃圾邮件文件夹中的魔法链接邮件的引导文本"
+    "description": "Guide text for checking spam folder"
+  },
+  "login__resendVerification": "重新发送验证邮件",
+  "@login__resendVerification": {
+    "description": "Button to resend verification email"
+  },
+  "login__resendCooldown": "{seconds}秒后可重新发送",
+  "@login__resendCooldown": {
+    "description": "Cooldown timer for resend",
+    "placeholders": {
+      "seconds": {
+        "type": "int",
+        "description": "Seconds remaining"
+      }
+    }
+  },
+  "login__backToSignIn": "返回登录",
+  "@login__backToSignIn": {
+    "description": "Link to go back to sign in form"
+  },
+  "login__invalidCredentials": "邮箱或密码不正确",
+  "@login__invalidCredentials": {
+    "description": "Error for wrong credentials"
+  },
+  "login__emailNotVerified": "请先验证您的邮箱",
+  "@login__emailNotVerified": {
+    "description": "Error when email is not verified"
   }
 }
