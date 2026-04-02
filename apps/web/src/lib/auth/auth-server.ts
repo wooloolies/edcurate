@@ -3,6 +3,7 @@ import { magicLink } from "better-auth/plugins";
 import { Resend } from "resend";
 import { env } from "@/config/env";
 
+const isProduction = process.env.NODE_ENV === "production";
 const resend = env.RESEND_API_KEY ? new Resend(env.RESEND_API_KEY) : null;
 
 export const auth = betterAuth({
@@ -10,7 +11,7 @@ export const auth = betterAuth({
   secret: env.BETTER_AUTH_SECRET,
   emailAndPassword: {
     enabled: true,
-    requireEmailVerification: true,
+    requireEmailVerification: isProduction && !!resend,
     sendResetPassword: async ({ user, url }) => {
       if (!resend) return;
       void resend.emails.send({
