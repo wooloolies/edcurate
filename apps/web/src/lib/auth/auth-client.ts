@@ -109,17 +109,10 @@ export async function exchangeOAuthForBackendJwt(providerId?: OAuthProviderId) {
 
 export async function exchangeSessionForBackendJwt() {
   const { data: session } = await authClient.getSession();
-  if (!session?.user?.email) return;
-
-  const sessionToken = document.cookie
-    .split("; ")
-    .find((row) => row.startsWith("better-auth.session_token="))
-    ?.split("=")[1];
-
-  if (!sessionToken) return;
+  if (!session?.session?.token) return;
 
   const { data } = await apiClient.post<BackendTokenResponse>("/api/auth/session-exchange", {
-    session_token: sessionToken,
+    session_token: session.session.token,
   });
 
   if (data?.access_token) setAccessToken(data.access_token);

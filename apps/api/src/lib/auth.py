@@ -215,7 +215,7 @@ async def verify_session_token(session_token: str) -> OAuthUserInfo:
     async with httpx.AsyncClient() as client:
         response = await client.get(
             f"{settings.BETTER_AUTH_URL}/api/auth/get-session",
-            headers={"Cookie": f"better-auth.session_token={session_token}"},
+            headers={"Authorization": f"Bearer {session_token}"},
             timeout=5.0,
         )
         if response.status_code != 200:

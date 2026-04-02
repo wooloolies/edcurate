@@ -1,4 +1,4 @@
-const STORAGE_PREFIX = "fullstack_";
+const STORAGE_PREFIX = "edcurate_";
 
 const STORAGE_KEYS = {
   ACCESS_TOKEN: `${STORAGE_PREFIX}access_token`,

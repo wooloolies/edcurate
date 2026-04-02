@@ -1,0 +1,25 @@
+---
+trigger: always_on
+description: Cookies are strictly prohibited in this project
+---
+
+# No Cookies Policy
+
+This project does NOT use cookies for any purpose. This is a hard rule.
+
+## Auth Architecture
+- Authentication: better-auth (frontend) → JWE token exchange (backend)
+- Token storage: `localStorage` only (`edcurate_access_token`, `edcurate_refresh_token`)
+- API authentication: `Authorization: Bearer <token>` header only
+- No `document.cookie`, no `Set-Cookie`, no `Cookie` header, no `nextCookies()`, no `cookieCache`
+
+## Prohibited
+- `request.cookies`, `response.cookies`
+- `document.cookie`
+- `Set-Cookie` / `Cookie` headers
+- `nextCookies()` or any cookie-based session plugin
+- `cookieCache` in better-auth config
+- `js-cookie` or any cookie library usage
+
+## If you need session state
+Use `localStorage` via `src/lib/auth/token.ts`.

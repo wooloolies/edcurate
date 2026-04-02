@@ -1,5 +1,4 @@
 import { betterAuth } from "better-auth";
-import { nextCookies } from "better-auth/next-js";
 import { magicLink } from "better-auth/plugins";
 import { Resend } from "resend";
 import { env } from "@/config/env";
@@ -55,7 +54,6 @@ export const auth = betterAuth({
       : undefined,
   },
   plugins: [
-    nextCookies(),
     magicLink({
       sendMagicLink: async ({ email, url }) => {
         if (!resend) return;
@@ -70,10 +68,6 @@ export const auth = betterAuth({
   ],
   session: {
     expiresIn: 60 * 60 * 24 * 7,
-    cookieCache: {
-      enabled: true,
-      strategy: "jwe",
-    },
   },
   trustedOrigins: [env.BETTER_AUTH_URL],
 });
