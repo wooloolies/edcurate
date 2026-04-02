@@ -75,3 +75,7 @@ mise db:migrate
 # Start development servers
 mise dev:web
 ```
+
+## License
+
+AGPL-3.0 — see [LICENSE](./LICENSE) for details.
