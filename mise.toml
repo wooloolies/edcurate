@@ -40,7 +40,6 @@ node = "24"
 python = "3.12"
 bun = "latest"
 uv = "latest"
-flutter = "3"
 terraform = "1"
 hadolint = "latest"
 "github:Infisical/cli" = "latest"
@@ -48,14 +47,13 @@ hadolint = "latest"
 [tasks]
 "db:migrate" = { depends = ["//apps/api:migrate"], description = "Run database migrations" }
 "dev:web" = { depends = ["//apps/api:dev", "//apps/web:dev"], description = "Start API and Web services" }
-"dev:mobile" = { depends = ["//apps/api:dev", "//apps/mobile:dev"], description = "Start API and Mobile services" }
 dev = { depends = ["//apps/api:dev", "//apps/web:dev", "//apps/worker:dev"], description = "Start all services" }
 format = { depends = ["//apps/api:format", "//apps/web:format", "//apps/worker:format"], description = "Format all apps" }
-"gen:api" = { depends = ["//apps/api:gen:openapi"], run = [{ tasks = ["//apps/web:gen:api", "//apps/mobile:gen:api"] }], description = "Generate OpenAPI schema and API clients" }
+"gen:api" = { depends = ["//apps/api:gen:openapi"], run = [{ tasks = ["//apps/web:gen:api"] }], description = "Generate OpenAPI schema and API clients" }
 "i18n:build" = { depends = ["//packages/i18n:build"], description = "Build i18n files" }
 "infra:down" = { depends = ["//apps/api:infra:down"], description = "Stop local infrastructure" }
 "infra:up" = { depends = ["//apps/api:infra:up"], description = "Start local infrastructure" }
-install = { depends = ["//apps/web:install", "//apps/api:install", "//apps/worker:install", "//apps/mobile:install", "//packages/design-tokens:install", "//packages/i18n:install"], description = "Install all dependencies" }
+install = { depends = ["//apps/web:install", "//apps/api:install", "//apps/worker:install", "//packages/design-tokens:install", "//packages/i18n:install"], description = "Install all dependencies" }
 lint = { depends = ["//apps/api:lint", "//apps/web:lint", "//apps/worker:lint"], description = "Lint all apps" }
 test = { depends = ["//apps/api:test", "//apps/web:test", "//apps/worker:test"], description = "Test all apps" }
 "tokens:build" = { depends = ["//packages/design-tokens:build"], description = "Build design tokens" }
@@ -84,11 +82,6 @@ fi
 if echo "$changed" | grep -q "^apps/worker/"; then
     echo "[pre-commit] apps/worker detected, running lint..."
     mise //apps/worker:lint || exit 1
-fi
-
-if echo "$changed" | grep -q "^apps/mobile/"; then
-    echo "[pre-commit] apps/mobile detected, running lint..."
-    mise //apps/mobile:lint || exit 1
 fi
 
 if echo "$changed" | grep -qE "Dockerfile$"; then
@@ -121,8 +114,4 @@ if echo "$changed" | grep -q "^apps/worker/"; then
     mise //apps/worker:test || exit 1
 fi
 
-if echo "$changed" | grep -q "^apps/mobile/"; then
-    echo "[pre-push] apps/mobile detected, running test..."
-    mise //apps/mobile:test || exit 1
-fi
 '''
