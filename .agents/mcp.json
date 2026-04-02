@@ -1,5 +1,14 @@
 {
   "mcpServers": {
+    "chrome-devtools": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "chrome-devtools-mcp@latest",
+        "--no-usage-statistics",
+        "--isolated"
+      ]
+    },
     "serena": {
       "command": "uvx",
       "args": [
@@ -48,6 +57,20 @@
       "insert_after_symbol",
       "insert_before_symbol",
       "rename_symbol"
+    ],
+    "browser": [
+      "navigate_page",
+      "take_screenshot",
+      "click",
+      "fill",
+      "fill_form",
+      "evaluate_script",
+      "list_network_requests",
+      "list_console_messages",
+      "lighthouse_audit",
+      "performance_start_trace",
+      "performance_stop_trace",
+      "performance_analyze_insight"
     ],
     "file-ops": ["list_dir", "find_file"],
     "project": [
