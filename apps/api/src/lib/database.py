@@ -1,4 +1,3 @@
-import ssl
 from collections.abc import AsyncGenerator
 
 from sqlalchemy import MetaData
@@ -28,12 +27,11 @@ class Base(DeclarativeBase):
     metadata = MetaData(naming_convention=convention)
 
 
-# SSL context and PgBouncer compat for non-local environments
+# SSL and PgBouncer/Supavisor compat for non-local environments
 _connect_args: dict = {}
 if "localhost" not in settings.DATABASE_URL and "127.0.0.1" not in settings.DATABASE_URL:
-    _ssl_ctx = ssl.create_default_context()
-    _connect_args["ssl"] = _ssl_ctx
-    _connect_args["statement_cache_size"] = 0  # Required for PgBouncer transaction mode
+    _connect_args["ssl"] = "require"
+    _connect_args["statement_cache_size"] = 0  # Required for transaction-mode pooling
 
 # Use NullPool for serverless/non-local to avoid stale connections
 _pool_class = NullPool if settings.PROJECT_ENV != "local" else None
