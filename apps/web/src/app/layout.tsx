@@ -5,7 +5,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Edcurate",
-  description: "AI-Powered Video Generation for Education Equality",
+  description: "Context-aware resource discovery and adaptation for teachers",
 };
 
 interface RootLayoutProps {

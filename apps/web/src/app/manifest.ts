@@ -2,9 +2,9 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Fullstack Starter",
-    short_name: "Fullstack",
-    description: "Modern fullstack monorepo template",
+    name: "Edcurate",
+    short_name: "Edcurate",
+    description: "Context-aware resource discovery and adaptation for teachers",
     start_url: "/",
     display: "standalone",
     background_color: "#ffffff",
