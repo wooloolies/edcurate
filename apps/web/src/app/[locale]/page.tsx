@@ -1,5 +1,7 @@
 import type { Locale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
+import { Button } from "@/components/ui/button";
+import { Link } from "@/lib/i18n/routing";
 
 interface HomePageProps {
   params: Promise<{ locale: string }>;
@@ -10,11 +12,21 @@ export default async function HomePage({ params }: HomePageProps) {
   setRequestLocale(locale as Locale);
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-24">
-      <h1 className="text-4xl font-bold">Fullstack Starter</h1>
-      <p className="mt-4 text-muted-foreground">
-        Modern monorepo template with Next.js, FastAPI, and Flutter
-      </p>
-    </main>
+    <>
+      <header className="fixed inset-x-0 top-0 z-50 border-b bg-background/80 backdrop-blur-sm">
+        <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-4">
+          <span className="text-lg font-bold">Edcurate</span>
+          <Button asChild size="sm">
+            <Link href="/login">Login</Link>
+          </Button>
+        </div>
+      </header>
+      <main className="flex min-h-screen flex-col items-center justify-center p-24">
+        <h1 className="text-4xl font-bold">Edcurate</h1>
+        <p className="mt-4 text-muted-foreground">
+          Context-aware resource discovery and adaptation for teachers
+        </p>
+      </main>
+    </>
   );
 }
