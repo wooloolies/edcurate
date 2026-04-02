@@ -32,80 +32,132 @@
   "@delete": {
     "description": "Delete button text"
   },
-  "login__title": "Sign in to Edcurate",
-  "@login__title": {
-    "description": "Login page heading"
+  "login__signIn": "Sign in",
+  "@login__signIn": {
+    "description": "Sign in tab label"
   },
-  "login__subtitle": "Enter your email to receive a magic link",
-  "@login__subtitle": {
-    "description": "Login page subheading describing magic link flow"
+  "login__signUp": "Sign up",
+  "@login__signUp": {
+    "description": "Sign up tab label"
+  },
+  "login__signInTitle": "Welcome back",
+  "@login__signInTitle": {
+    "description": "Sign in form heading"
+  },
+  "login__signInSubtitle": "Enter your credentials to continue",
+  "@login__signInSubtitle": {
+    "description": "Sign in form subheading"
+  },
+  "login__signUpTitle": "Create an account",
+  "@login__signUpTitle": {
+    "description": "Sign up form heading"
+  },
+  "login__signUpSubtitle": "Enter your details to get started",
+  "@login__signUpSubtitle": {
+    "description": "Sign up form subheading"
+  },
+  "login__nameLabel": "Name",
+  "@login__nameLabel": {
+    "description": "Label for name input field"
+  },
+  "login__namePlaceholder": "Your name",
+  "@login__namePlaceholder": {
+    "description": "Placeholder for name input field"
   },
   "login__emailLabel": "Email",
   "@login__emailLabel": {
-    "description": "Label for the email input field on the login page"
+    "description": "Label for the email input field"
   },
   "login__emailPlaceholder": "your@email.com",
   "@login__emailPlaceholder": {
-    "description": "Placeholder for the email input field on the login page"
+    "description": "Placeholder for the email input field"
   },
-  "login__confirmEmailLabel": "Confirm email",
-  "@login__confirmEmailLabel": {
-    "description": "Label for the confirm email input field on the login page"
+  "login__passwordLabel": "Password",
+  "@login__passwordLabel": {
+    "description": "Label for the password input field"
   },
-  "login__confirmEmailPlaceholder": "Re-enter your email",
-  "@login__confirmEmailPlaceholder": {
-    "description": "Placeholder for the confirm email input field on the login page"
+  "login__passwordPlaceholder": "Enter your password",
+  "@login__passwordPlaceholder": {
+    "description": "Placeholder for the password input field"
   },
-  "login__sendMagicLink": "Send magic link",
-  "@login__sendMagicLink": {
-    "description": "Submit button text on the login page"
+  "login__signInButton": "Sign in",
+  "@login__signInButton": {
+    "description": "Sign in submit button text"
   },
-  "login__sending": "Sending...",
-  "@login__sending": {
-    "description": "Submit button text while the magic link is being sent"
+  "login__signUpButton": "Sign up",
+  "@login__signUpButton": {
+    "description": "Sign up submit button text"
   },
-  "login__checkEmail": "Check your email",
-  "@login__checkEmail": {
-    "description": "Heading shown after the magic link has been sent"
-  },
-  "login__checkEmailDescription": "We sent a login link to {email}. Click the link in your email to sign in.",
-  "@login__checkEmailDescription": {
-    "description": "Description shown after the magic link has been sent",
-    "placeholders": {
-      "email": {
-        "type": "String",
-        "description": "The email address the link was sent to"
-      }
-    }
-  },
-  "login__emailMismatch": "Emails do not match",
-  "@login__emailMismatch": {
-    "description": "Validation error shown when the two email fields do not match"
+  "login__submitting": "Please wait...",
+  "@login__submitting": {
+    "description": "Submit button text while processing"
   },
   "login__invalidEmail": "Please enter a valid email address",
   "@login__invalidEmail": {
-    "description": "Validation error shown when the email address is invalid"
+    "description": "Validation error for invalid email"
   },
-  "login__tryAgain": "Try again",
-  "@login__tryAgain": {
-    "description": "Button to go back and try sending another magic link"
+  "login__passwordRequired": "Password is required",
+  "@login__passwordRequired": {
+    "description": "Validation error when password is empty"
   },
-  "login__resend": "Didn't receive it? Send again",
-  "@login__resend": {
-    "description": "Link or button to resend the magic link email"
+  "login__nameRequired": "Name is required",
+  "@login__nameRequired": {
+    "description": "Validation error when name is empty"
   },
-  "login__resendCooldown": "You can resend in {seconds}s",
-  "@login__resendCooldown": {
-    "description": "Cooldown timer text shown after sending a magic link",
+  "login__forgotPassword": "Forgot password?",
+  "@login__forgotPassword": {
+    "description": "Forgot password link text"
+  },
+  "login__noAccount": "Don't have an account?",
+  "@login__noAccount": {
+    "description": "Text before sign up link"
+  },
+  "login__hasAccount": "Already have an account?",
+  "@login__hasAccount": {
+    "description": "Text before sign in link"
+  },
+  "login__verifyEmail": "Verify your email",
+  "@login__verifyEmail": {
+    "description": "Heading shown when email verification is required"
+  },
+  "login__verifyEmailDescription": "We sent a verification link to {email}. Please check your inbox and verify your email before signing in.",
+  "@login__verifyEmailDescription": {
+    "description": "Description for email verification",
     "placeholders": {
-      "seconds": {
-        "type": "int",
-        "description": "Remaining seconds before resend is allowed"
+      "email": {
+        "type": "String",
+        "description": "The email address"
       }
     }
   },
   "login__checkSpam": "Don't see it? Check your spam or junk folder.",
   "@login__checkSpam": {
-    "description": "Guide text suggesting to check the spam folder for the magic link email"
+    "description": "Guide text for checking spam folder"
+  },
+  "login__resendVerification": "Resend verification email",
+  "@login__resendVerification": {
+    "description": "Button to resend verification email"
+  },
+  "login__resendCooldown": "Resend in {seconds}s",
+  "@login__resendCooldown": {
+    "description": "Cooldown timer for resend",
+    "placeholders": {
+      "seconds": {
+        "type": "int",
+        "description": "Seconds remaining"
+      }
+    }
+  },
+  "login__backToSignIn": "Back to sign in",
+  "@login__backToSignIn": {
+    "description": "Link to go back to sign in form"
+  },
+  "login__invalidCredentials": "Invalid email or password",
+  "@login__invalidCredentials": {
+    "description": "Error for wrong credentials"
+  },
+  "login__emailNotVerified": "Please verify your email first",
+  "@login__emailNotVerified": {
+    "description": "Error when email is not verified"
   }
 }
