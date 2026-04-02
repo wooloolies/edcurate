@@ -18,7 +18,7 @@ variable "environment" {
 variable "app_name" {
   description = "Application name prefix for resources"
   type        = string
-  default     = "fullstack-starter"
+  default     = "edcurate"
 }
 
 # Network

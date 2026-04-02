@@ -1,5 +1,5 @@
 project:
-  name: fullstack-starter
+  name: edcurate
   description: Modern fullstack monorepo template with Next.js 16, FastAPI, 
     Flutter, and GCP infrastructure
 
@@ -416,7 +416,7 @@ initial_prompt: ""
 # For a list of possible encodings, see https://docs.python.org/3.11/library/codecs.html#standard-encodings
 encoding: utf-8
 # the name by which the project can be referenced within Serena
-project_name: fullstack-starter
+project_name: edcurate
 
 # override of the corresponding setting in serena_config.yml, see the documentation there.
 # If null or missing, the value from the global config is used.

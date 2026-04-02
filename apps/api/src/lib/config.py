@@ -15,7 +15,7 @@ class Settings(BaseSettings):
     )
 
     # Project
-    PROJECT_NAME: str = "fullstack-starter-api"
+    PROJECT_NAME: str = "edcurate-api"
     PROJECT_ENV: Literal["local", "staging", "prod"] = "local"
 
     # Database

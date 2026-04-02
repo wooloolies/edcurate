@@ -5,7 +5,7 @@ github_repository = "your-org/your-repo"
 # Optional - customize as needed
 region      = "asia-northeast3"
 environment = "dev"
-app_name    = "fullstack-starter"
+app_name    = "edcurate"
 
 # Network
 vpc_cidr = "10.0.0.0/16"

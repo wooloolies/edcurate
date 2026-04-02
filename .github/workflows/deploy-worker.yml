@@ -11,7 +11,7 @@ on:
 env:
   PROJECT_ID: ${{ vars.GCP_PROJECT_ID }}
   REGION: ${{ vars.GCP_REGION }}
-  SERVICE_NAME: fullstack-starter-worker
+  SERVICE_NAME: edcurate-worker
   WORKLOAD_IDENTITY_PROVIDER: ${{ vars.WORKLOAD_IDENTITY_PROVIDER }}
   SERVICE_ACCOUNT: ${{ vars.GCP_SERVICE_ACCOUNT }}
 
@@ -69,7 +69,7 @@ jobs:
 
       - name: Build and push image
         run: |
-          IMAGE="${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/fullstack-starter-images/worker:${{ github.sha }}"
+          IMAGE="${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/edcurate-images/worker:${{ github.sha }}"
           docker build -t $IMAGE apps/worker
           docker push $IMAGE
           echo "IMAGE=$IMAGE" >> $GITHUB_ENV

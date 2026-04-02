@@ -56,7 +56,7 @@ Modern fullstack monorepo template with Next.js 16, FastAPI, Flutter, and GCP in
 
 ## Project Structure
 ```
-fullstack-starter/
+edcurate/
 ├── apps/
 │   ├── api/          # FastAPI backend
 │   │   └── src/

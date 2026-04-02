@@ -12,7 +12,7 @@ class Settings(BaseSettings):
         extra="ignore",
     )
 
-    PROJECT_NAME: str = "fullstack-starter"
+    PROJECT_NAME: str = "edcurate"
     PROJECT_ENV: Literal["local", "staging", "prod"] = "local"
 
     GOOGLE_CLOUD_PROJECT: str | None = None
