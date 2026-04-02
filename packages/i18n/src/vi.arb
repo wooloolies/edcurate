@@ -1,0 +1,11 @@
+{
+  "@@locale": "vi",
+  "appTitle": "Edcurate",
+  "loading": "Đang tải...",
+  "error": "Đã xảy ra lỗi",
+  "retry": "Thử lại",
+  "save": "Lưu",
+  "cancel": "Hủy",
+  "confirm": "Xác nhận",
+  "delete": "Xóa"
+}

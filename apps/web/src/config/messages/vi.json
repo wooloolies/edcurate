@@ -1,0 +1,17 @@
+{
+  "title": "Edcurate",
+  "common": {
+    "loading": "Đang tải...",
+    "error": "Đã xảy ra lỗi",
+    "retry": "Thử lại",
+    "save": "Lưu",
+    "cancel": "Hủy",
+    "confirm": "Xác nhận",
+    "delete": "Xóa"
+  },
+  "loginWelcome": "Chào mừng đến với Edcurate",
+  "loginSubtitle": "Bắt đầu với tài khoản mạng xã hội",
+  "continueWithGoogle": "Tiếp tục với Google",
+  "continueWithFacebook": "Tiếp tục với Facebook",
+  "continueWithGithub": "Tiếp tục với GitHub"
+}

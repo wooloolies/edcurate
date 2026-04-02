@@ -1,0 +1,17 @@
+{
+  "title": "Edcurate",
+  "common": {
+    "loading": "加载中...",
+    "error": "发生错误",
+    "retry": "重试",
+    "save": "保存",
+    "cancel": "取消",
+    "confirm": "确认",
+    "delete": "删除"
+  },
+  "loginWelcome": "欢迎使用 Edcurate",
+  "loginSubtitle": "使用社交账号快速开始",
+  "continueWithGoogle": "使用 Google 继续",
+  "continueWithFacebook": "使用 Facebook 继续",
+  "continueWithGithub": "使用 GitHub 继续"
+}

@@ -1,0 +1,17 @@
+{
+  "title": "Edcurate",
+  "common": {
+    "loading": "กำลังโหลด...",
+    "error": "เกิดข้อผิดพลาด",
+    "retry": "ลองใหม่",
+    "save": "บันทึก",
+    "cancel": "ยกเลิก",
+    "confirm": "ยืนยัน",
+    "delete": "ลบ"
+  },
+  "loginWelcome": "ยินดีต้อนรับสู่ Edcurate",
+  "loginSubtitle": "เริ่มต้นด้วยบัญชีโซเชียลของคุณ",
+  "continueWithGoogle": "ดำเนินการต่อด้วย Google",
+  "continueWithFacebook": "ดำเนินการต่อด้วย Facebook",
+  "continueWithGithub": "ดำเนินการต่อด้วย GitHub"
+}

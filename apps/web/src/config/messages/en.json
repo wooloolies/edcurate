@@ -1,5 +1,5 @@
 {
-  "title": "Fullstack Starter",
+  "title": "Edcurate",
   "common": {
     "loading": "Loading...",
     "error": "An error occurred",
@@ -9,7 +9,7 @@
     "confirm": "Confirm",
     "delete": "Delete"
   },
-  "loginWelcome": "Welcome to Fullstack Starter",
+  "loginWelcome": "Welcome to Edcurate",
   "loginSubtitle": "Get started with your social account",
   "continueWithGoogle": "Continue with Google",
   "continueWithFacebook": "Continue with Facebook",

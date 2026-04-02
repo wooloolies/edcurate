@@ -1,0 +1,11 @@
+{
+  "@@locale": "th",
+  "appTitle": "Edcurate",
+  "loading": "กำลังโหลด...",
+  "error": "เกิดข้อผิดพลาด",
+  "retry": "ลองใหม่",
+  "save": "บันทึก",
+  "cancel": "ยกเลิก",
+  "confirm": "ยืนยัน",
+  "delete": "ลบ"
+}
