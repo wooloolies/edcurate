@@ -55,7 +55,7 @@ Learners in under-resourced schools, rural communities, and low-bandwidth enviro
 ### Prerequisites
 
 - [mise](https://mise.jdx.dev/) — Runtime version manager
-- [Docker](https://www.docker.com/) or [Podman Desktop](https://podman-desktop.io/downloads) — Local infrastructure
+- [Docker](https://www.docker.com/), [OrbStack](https://orbstack.dev/), or [Podman Desktop](https://podman-desktop.io/downloads) — Local infrastructure
 
 ### Setup
 
