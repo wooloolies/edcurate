@@ -60,6 +60,9 @@ Learners in under-resourced schools, rural communities, and low-bandwidth enviro
 ### Setup
 
 ```bash
+# Trust mise config (required on first clone)
+mise trust
+
 # Install runtimes
 mise install
 
