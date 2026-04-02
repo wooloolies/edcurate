@@ -1,5 +1,39 @@
 # System Architecture
 
+## Production Infrastructure
+
+```mermaid
+graph TB
+    subgraph Vercel
+        WEB[Next.js 16<br/>edcurate-2026]
+        API[FastAPI<br/>edcurate-2026-api]
+    end
+
+    subgraph Supabase
+        PG[(PostgreSQL)]
+    end
+
+    subgraph Upstash
+        REDIS[(Redis)]
+    end
+
+    USER([User]) -->|Browser| WEB
+    WEB -->|better-auth<br/>JWT/JWE| WEB
+    WEB -->|Authorization: Bearer| API
+    API -->|asyncpg + SSL| PG
+    API -->|rediss:// TLS| REDIS
+    API -->|Alembic migrate<br/>on build| PG
+
+    style WEB fill:#0070f3,color:#fff
+    style API fill:#009688,color:#fff
+    style PG fill:#3ecf8e,color:#fff
+    style REDIS fill:#dc382c,color:#fff
+```
+
+**Auth flow:** better-auth (Web) → localStorage JWT/JWE → `Authorization: Bearer` header → FastAPI validates JWE
+
+---
+
 ## Pipeline Overview
 
 ```
