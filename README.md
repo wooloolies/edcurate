@@ -75,7 +75,3 @@ mise db:migrate
 # Start development servers
 mise dev:web
 ```
-
-## License
-
-MIT
