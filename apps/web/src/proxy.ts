@@ -6,7 +6,13 @@ import { routing } from "./lib/i18n/routing";
 
 const intlMiddleware = createMiddleware(routing);
 
-const PUBLIC_PATHS = [/^\/login$/, /^\/[a-z]{2}\/login$/, /^\/api\/auth\/.*/];
+const PUBLIC_PATHS = [
+  /^\/$/,
+  /^\/[a-z]{2}\/?$/,
+  /^\/login$/,
+  /^\/[a-z]{2}\/login$/,
+  /^\/api\/auth\/.*/,
+];
 const LOCALE_PATTERN = /^\/([a-z]{2})(\/|$)/;
 
 function isPublicPath(pathname: string): boolean {

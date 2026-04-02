@@ -30,7 +30,7 @@ export const { useSession, signIn, signUp } = authClient;
 export const signOut = authClient.signOut;
 
 export async function sendMagicLink(email: string) {
-  return authClient.signIn.magicLink({ email, callbackURL: "/" });
+  return authClient.signIn.magicLink({ email, callbackURL: "/dashboard" });
 }
 
 export async function signUpWithEmail(email: string, password: string, name: string) {

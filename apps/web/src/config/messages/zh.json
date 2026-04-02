@@ -9,20 +9,22 @@
     "confirm": "确认",
     "delete": "删除"
   },
-  "login__title": "登录 Edcurate",
-  "login__subtitle": "输入您的邮箱以接收魔法链接",
-  "login__emailLabel": "邮箱",
-  "login__emailPlaceholder": "your@email.com",
-  "login__confirmEmailLabel": "确认邮箱",
-  "login__confirmEmailPlaceholder": "请再次输入邮箱",
-  "login__sendMagicLink": "发送魔法链接",
-  "login__sending": "发送中...",
-  "login__checkEmail": "请查看您的邮箱",
-  "login__checkEmailDescription": "我们已向 {email} 发送了登录链接。点击邮件中的链接即可登录。",
-  "login__emailMismatch": "两次输入的邮箱不一致",
-  "login__invalidEmail": "请输入有效的邮箱地址",
-  "login__tryAgain": "重新尝试",
-  "login__resend": "未收到邮件？重新发送",
-  "login__resendCooldown": "{seconds}秒后可重新发送",
-  "login__checkSpam": "没有看到邮件？请检查垃圾邮件文件夹。"
+  "login": {
+    "title": "登录 Edcurate",
+    "subtitle": "输入您的邮箱以接收魔法链接",
+    "emailLabel": "邮箱",
+    "emailPlaceholder": "your@email.com",
+    "confirmEmailLabel": "确认邮箱",
+    "confirmEmailPlaceholder": "请再次输入邮箱",
+    "sendMagicLink": "发送魔法链接",
+    "sending": "发送中...",
+    "checkEmail": "请查看您的邮箱",
+    "checkEmailDescription": "我们已向 {email} 发送了登录链接。点击邮件中的链接即可登录。",
+    "emailMismatch": "两次输入的邮箱不一致",
+    "invalidEmail": "请输入有效的邮箱地址",
+    "tryAgain": "重新尝试",
+    "resend": "未收到邮件？重新发送",
+    "resendCooldown": "{seconds}秒后可重新发送",
+    "checkSpam": "没有看到邮件？请检查垃圾邮件文件夹。"
+  }
 }

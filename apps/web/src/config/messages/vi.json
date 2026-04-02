@@ -9,20 +9,22 @@
     "confirm": "Xác nhận",
     "delete": "Xóa"
   },
-  "login__title": "Đăng nhập vào Edcurate",
-  "login__subtitle": "Nhập email của bạn để nhận liên kết đăng nhập",
-  "login__emailLabel": "Email",
-  "login__emailPlaceholder": "your@email.com",
-  "login__confirmEmailLabel": "Xác nhận email",
-  "login__confirmEmailPlaceholder": "Nhập lại email của bạn",
-  "login__sendMagicLink": "Gửi liên kết đăng nhập",
-  "login__sending": "Đang gửi...",
-  "login__checkEmail": "Kiểm tra email của bạn",
-  "login__checkEmailDescription": "Chúng tôi đã gửi liên kết đăng nhập đến {email}. Nhấp vào liên kết trong email để đăng nhập.",
-  "login__emailMismatch": "Email không khớp",
-  "login__invalidEmail": "Vui lòng nhập địa chỉ email hợp lệ",
-  "login__tryAgain": "Thử lại",
-  "login__resend": "Không nhận được email? Gửi lại",
-  "login__resendCooldown": "Bạn có thể gửi lại sau {seconds} giây",
-  "login__checkSpam": "Không thấy email? Hãy kiểm tra thư mục spam hoặc rác."
+  "login": {
+    "title": "Đăng nhập vào Edcurate",
+    "subtitle": "Nhập email của bạn để nhận liên kết đăng nhập",
+    "emailLabel": "Email",
+    "emailPlaceholder": "your@email.com",
+    "confirmEmailLabel": "Xác nhận email",
+    "confirmEmailPlaceholder": "Nhập lại email của bạn",
+    "sendMagicLink": "Gửi liên kết đăng nhập",
+    "sending": "Đang gửi...",
+    "checkEmail": "Kiểm tra email của bạn",
+    "checkEmailDescription": "Chúng tôi đã gửi liên kết đăng nhập đến {email}. Nhấp vào liên kết trong email để đăng nhập.",
+    "emailMismatch": "Email không khớp",
+    "invalidEmail": "Vui lòng nhập địa chỉ email hợp lệ",
+    "tryAgain": "Thử lại",
+    "resend": "Không nhận được email? Gửi lại",
+    "resendCooldown": "Bạn có thể gửi lại sau {seconds} giây",
+    "checkSpam": "Không thấy email? Hãy kiểm tra thư mục spam hoặc rác."
+  }
 }

@@ -14,7 +14,7 @@ const RESEND_COOLDOWN = 60;
 const emailSchema = z.string().email();
 
 export default function LoginPage() {
-  const t = useTranslations();
+  const t = useTranslations("login");
   const [sent, setSent] = useState(false);
   const [sentEmail, setSentEmail] = useState("");
   const [cooldown, setCooldown] = useState(0);
@@ -60,13 +60,11 @@ export default function LoginPage() {
       <main className="flex min-h-screen items-center justify-center p-4">
         <Card className="w-full max-w-sm">
           <CardHeader className="text-center">
-            <CardTitle>{t("login.checkEmail")}</CardTitle>
-            <CardDescription>
-              {t("login.checkEmailDescription", { email: sentEmail })}
-            </CardDescription>
+            <CardTitle>{t("checkEmail")}</CardTitle>
+            <CardDescription>{t("checkEmailDescription", { email: sentEmail })}</CardDescription>
           </CardHeader>
           <CardContent className="flex flex-col gap-3">
-            <p className="text-muted-foreground text-center text-sm">{t("login.checkSpam")}</p>
+            <p className="text-muted-foreground text-center text-sm">{t("checkSpam")}</p>
             <Button
               variant="outline"
               className="w-full"
@@ -78,7 +76,7 @@ export default function LoginPage() {
                 }
               }}
             >
-              {cooldown > 0 ? t("login.resendCooldown", { seconds: cooldown }) : t("login.resend")}
+              {cooldown > 0 ? t("resendCooldown", { seconds: cooldown }) : t("resend")}
             </Button>
             <Button
               variant="ghost"
@@ -89,7 +87,7 @@ export default function LoginPage() {
                 form.reset();
               }}
             >
-              {t("login.tryAgain")}
+              {t("tryAgain")}
             </Button>
           </CardContent>
         </Card>
@@ -101,8 +99,8 @@ export default function LoginPage() {
     <main className="flex min-h-screen items-center justify-center p-4">
       <Card className="w-full max-w-sm">
         <CardHeader className="text-center">
-          <CardTitle>{t("login.title")}</CardTitle>
-          <CardDescription>{t("login.subtitle")}</CardDescription>
+          <CardTitle>{t("title")}</CardTitle>
+          <CardDescription>{t("subtitle")}</CardDescription>
         </CardHeader>
         <CardContent>
           <form
@@ -119,7 +117,7 @@ export default function LoginPage() {
                   onBlur: ({ value }) => {
                     const result = emailSchema.safeParse(value);
                     if (!result.success) {
-                      return t("login.invalidEmail");
+                      return t("invalidEmail");
                     }
                     return undefined;
                   },
@@ -127,11 +125,11 @@ export default function LoginPage() {
               >
                 {(field) => (
                   <div className="flex flex-col gap-1.5">
-                    <Label htmlFor="email">{t("login.emailLabel")}</Label>
+                    <Label htmlFor="email">{t("emailLabel")}</Label>
                     <Input
                       id="email"
                       type="email"
-                      placeholder={t("login.emailPlaceholder")}
+                      placeholder={t("emailPlaceholder")}
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
                       onBlur={field.handleBlur}
@@ -156,7 +154,7 @@ export default function LoginPage() {
                   onBlur: ({ value, fieldApi }) => {
                     const email = fieldApi.form.getFieldValue("email");
                     if (value !== email) {
-                      return t("login.emailMismatch");
+                      return t("emailMismatch");
                     }
                     return undefined;
                   },
@@ -164,11 +162,11 @@ export default function LoginPage() {
               >
                 {(field) => (
                   <div className="flex flex-col gap-1.5">
-                    <Label htmlFor="confirmEmail">{t("login.confirmEmailLabel")}</Label>
+                    <Label htmlFor="confirmEmail">{t("confirmEmailLabel")}</Label>
                     <Input
                       id="confirmEmail"
                       type="email"
-                      placeholder={t("login.confirmEmailPlaceholder")}
+                      placeholder={t("confirmEmailPlaceholder")}
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
                       onBlur={field.handleBlur}
@@ -195,7 +193,7 @@ export default function LoginPage() {
                     disabled={!canSubmit || isSubmitting}
                     aria-busy={isSubmitting}
                   >
-                    {isSubmitting ? t("login.sending") : t("login.sendMagicLink")}
+                    {isSubmitting ? t("sending") : t("sendMagicLink")}
                   </Button>
                 )}
               </form.Subscribe>

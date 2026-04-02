@@ -47,6 +47,17 @@ function isArbMetadataKey(key: string): boolean {
   return key.startsWith("@@") || key.startsWith("@");
 }
 
+function setNestedValue(obj: NestedJson, parts: string[], value: string): void {
+  let current = obj;
+  for (let i = 0; i < parts.length - 1; i++) {
+    if (!current[parts[i]]) {
+      current[parts[i]] = {};
+    }
+    current = current[parts[i]] as NestedJson;
+  }
+  current[parts[parts.length - 1]] = value;
+}
+
 function arbToNestedJson(arb: ArbFile): NestedJson {
   const result: NestedJson = {};
 
@@ -62,6 +73,8 @@ function arbToNestedJson(arb: ArbFile): NestedJson {
       (result.common as NestedJson)[key] = value as string;
     } else if (key === "appTitle") {
       result.title = value as string;
+    } else if (key.includes("__")) {
+      setNestedValue(result, key.split("__"), value as string);
     } else {
       result[key] = value as string;
     }

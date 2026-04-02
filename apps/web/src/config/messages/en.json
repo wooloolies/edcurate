@@ -9,20 +9,22 @@
     "confirm": "Confirm",
     "delete": "Delete"
   },
-  "login__title": "Sign in to Edcurate",
-  "login__subtitle": "Enter your email to receive a magic link",
-  "login__emailLabel": "Email",
-  "login__emailPlaceholder": "your@email.com",
-  "login__confirmEmailLabel": "Confirm email",
-  "login__confirmEmailPlaceholder": "Re-enter your email",
-  "login__sendMagicLink": "Send magic link",
-  "login__sending": "Sending...",
-  "login__checkEmail": "Check your email",
-  "login__checkEmailDescription": "We sent a login link to {email}. Click the link in your email to sign in.",
-  "login__emailMismatch": "Emails do not match",
-  "login__invalidEmail": "Please enter a valid email address",
-  "login__tryAgain": "Try again",
-  "login__resend": "Didn't receive it? Send again",
-  "login__resendCooldown": "You can resend in {seconds}s",
-  "login__checkSpam": "Don't see it? Check your spam or junk folder."
+  "login": {
+    "title": "Sign in to Edcurate",
+    "subtitle": "Enter your email to receive a magic link",
+    "emailLabel": "Email",
+    "emailPlaceholder": "your@email.com",
+    "confirmEmailLabel": "Confirm email",
+    "confirmEmailPlaceholder": "Re-enter your email",
+    "sendMagicLink": "Send magic link",
+    "sending": "Sending...",
+    "checkEmail": "Check your email",
+    "checkEmailDescription": "We sent a login link to {email}. Click the link in your email to sign in.",
+    "emailMismatch": "Emails do not match",
+    "invalidEmail": "Please enter a valid email address",
+    "tryAgain": "Try again",
+    "resend": "Didn't receive it? Send again",
+    "resendCooldown": "You can resend in {seconds}s",
+    "checkSpam": "Don't see it? Check your spam or junk folder."
+  }
 }
