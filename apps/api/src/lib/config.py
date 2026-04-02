@@ -35,8 +35,8 @@ class Settings(BaseSettings):
     # Redis (optional)
     REDIS_URL: str | None = None
 
-    # Weaviate (vector DB)
-    WEAVIATE_URL: str = "http://localhost:8080"
+    # Weaviate (optional — pgvector via Supabase is the default)
+    WEAVIATE_URL: str | None = None
     WEAVIATE_API_KEY: str | None = None
 
     # OpenTelemetry (optional)
