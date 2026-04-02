@@ -1,6 +1,6 @@
 from collections.abc import AsyncIterator, Awaitable, Callable
 from contextlib import asynccontextmanager
-from typing import TYPE_CHECKING, Literal, cast
+from typing import Literal
 from uuid import uuid4
 
 import structlog
@@ -15,9 +15,6 @@ from src.lib.config import settings
 from src.lib.database import async_session_factory
 from src.lib.logging import configure_logging, get_logger
 from src.lib.telemetry import configure_telemetry, instrument_app
-
-if TYPE_CHECKING:
-    import redis.asyncio as redis_module
 
 # Configure logging first
 configure_logging()
@@ -176,16 +173,13 @@ async def check_redis() -> ServiceStatus | None:
         import redis.asyncio as redis
 
         url = settings.REDIS_URL
-        # rediss:// (TLS) is handled natively by redis.asyncio, but Upstash
-        # requires ssl_cert_reqs=None to skip certificate verification in
-        # environments where the managed TLS cert cannot be verified locally.
         kwargs: dict[str, object] = {}
         if url and url.startswith("rediss://"):
             kwargs["ssl_cert_reqs"] = None
 
-        client = cast(redis_module.Redis, redis.from_url(url, **kwargs))  # type: ignore[no-untyped-call]
+        client = redis.from_url(url, **kwargs)  # type: ignore[no-untyped-call]
         await client.ping()  # type: ignore[misc]
-        await client.aclose()
+        await client.aclose()  # type: ignore[misc]
         latency = (time.perf_counter() - start) * 1000
         return ServiceStatus(status="healthy", latency_ms=round(latency, 2))
     except ImportError:
