@@ -192,6 +192,37 @@ async def check_redis() -> ServiceStatus | None:
         )
 
 
+async def check_weaviate() -> ServiceStatus | None:
+    """Check Weaviate connectivity if configured."""
+    import time
+
+    if not settings.WEAVIATE_URL:
+        return None
+
+    start = time.perf_counter()
+    try:
+        import httpx
+
+        headers: dict[str, str] = {}
+        if settings.WEAVIATE_API_KEY:
+            headers["Authorization"] = f"Bearer {settings.WEAVIATE_API_KEY}"
+
+        async with httpx.AsyncClient(timeout=5.0) as client:
+            resp = await client.get(
+                f"{settings.WEAVIATE_URL}/v1/.well-known/ready", headers=headers
+            )
+            resp.raise_for_status()
+
+        latency = (time.perf_counter() - start) * 1000
+        return ServiceStatus(status="healthy", latency_ms=round(latency, 2))
+    except Exception as e:
+        latency = (time.perf_counter() - start) * 1000
+        error_msg = str(e) if settings.PROJECT_ENV != "prod" else "connection failed"
+        return ServiceStatus(
+            status="unhealthy", latency_ms=round(latency, 2), error=error_msg
+        )
+
+
 @app.get("/health")
 async def health_check() -> HealthResponse:
     """Detailed health check endpoint with service statuses."""
@@ -204,6 +235,11 @@ async def health_check() -> HealthResponse:
     redis_status = await check_redis()
     if redis_status:
         services["redis"] = redis_status
+
+    # Check Weaviate (if configured)
+    weaviate_status = await check_weaviate()
+    if weaviate_status:
+        services["weaviate"] = weaviate_status
 
     # Determine overall status
     statuses = [s.status for s in services.values()]
