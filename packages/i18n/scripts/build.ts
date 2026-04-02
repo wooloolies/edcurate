@@ -25,7 +25,7 @@ function parseArgs(): { target: "all" | "web" | "mobile" } {
       return { target };
     }
   }
-  return { target: "all" };
+  return { target: "web" };
 }
 
 function readArbFiles(): Map<string, ArbFile> {
