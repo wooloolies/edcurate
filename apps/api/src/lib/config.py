@@ -35,6 +35,10 @@ class Settings(BaseSettings):
     # Redis (optional)
     REDIS_URL: str | None = None
 
+    # Weaviate (vector DB)
+    WEAVIATE_URL: str = "http://localhost:8080"
+    WEAVIATE_API_KEY: str | None = None
+
     # OpenTelemetry (optional)
     OTEL_EXPORTER_OTLP_ENDPOINT: str | None = None
     OTEL_SERVICE_NAME: str | None = None
