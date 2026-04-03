@@ -26,9 +26,8 @@ graph TB
     end
 
     USER([User]) -->|Browser| WEB
-    WEB -->|session token| API
-    API -->|validate + issue JWE| WEB
-    API -->|asyncpg + SSL<br/>PgBouncer :6543| PG
+    WEB -->|Bearer JWE| API
+    API -->|asyncpg + SSL| PG
     API -->|rediss:// TLS| REDIS
     API -->|S3 API| B2
     API -.->|optional| VDB
