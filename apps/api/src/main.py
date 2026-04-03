@@ -223,6 +223,31 @@ async def check_weaviate() -> ServiceStatus | None:
         )
 
 
+async def check_storage() -> ServiceStatus:
+    """Check S3-compatible storage connectivity."""
+    import time
+
+    start = time.perf_counter()
+    try:
+        import httpx
+
+        endpoint = settings.MINIO_ENDPOINT
+        scheme = "https" if settings.STORAGE_BACKEND == "s3" else "http"
+        url = f"{scheme}://{endpoint}"
+
+        async with httpx.AsyncClient(timeout=5.0) as client:
+            resp = await client.head(url)
+            # B2/S3 returns 400/403 for unauthenticated HEAD, but that means it's reachable
+            latency = (time.perf_counter() - start) * 1000
+            return ServiceStatus(status="healthy", latency_ms=round(latency, 2))
+    except Exception as e:
+        latency = (time.perf_counter() - start) * 1000
+        error_msg = str(e) if settings.PROJECT_ENV != "prod" else "connection failed"
+        return ServiceStatus(
+            status="unhealthy", latency_ms=round(latency, 2), error=error_msg
+        )
+
+
 @app.get("/health")
 async def health_check() -> HealthResponse:
     """Detailed health check endpoint with service statuses."""
@@ -235,6 +260,9 @@ async def health_check() -> HealthResponse:
     redis_status = await check_redis()
     if redis_status:
         services["redis"] = redis_status
+
+    # Check storage
+    services["storage"] = await check_storage()
 
     # Check Weaviate (if configured)
     weaviate_status = await check_weaviate()
