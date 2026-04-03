@@ -10,27 +10,42 @@ graph TB
     end
 
     subgraph Supabase
-        PG[(PostgreSQL)]
+        PG[(PostgreSQL<br/>+ pgvector)]
     end
 
     subgraph Upstash
         REDIS[(Redis)]
     end
 
+    subgraph Backblaze
+        B2[(B2 Storage)]
+    end
+
+    subgraph Weaviate["Weaviate (optional)"]
+        VDB[(Vector DB)]
+    end
+
     USER([User]) -->|Browser| WEB
     WEB -->|better-auth<br/>JWT/JWE| WEB
     WEB -->|Authorization: Bearer| API
-    API -->|asyncpg + SSL| PG
+    API -->|asyncpg + SSL<br/>PgBouncer :6543| PG
     API -->|rediss:// TLS| REDIS
-    API -->|Alembic migrate<br/>on build| PG
+    API -->|S3 API| B2
+    API -.->|optional| VDB
 
     style WEB fill:#0070f3,color:#fff
     style API fill:#009688,color:#fff
     style PG fill:#3ecf8e,color:#fff
     style REDIS fill:#dc382c,color:#fff
+    style B2 fill:#e21e29,color:#fff
+    style VDB fill:#6a4cff,color:#fff
 ```
 
 **Auth flow:** better-auth (Web) → localStorage JWT/JWE → `Authorization: Bearer` header → FastAPI validates JWE
+
+**Storage:** Teacher uploads → Backblaze B2 (S3-compatible, local: MinIO)
+
+**Vector search:** pgvector (Supabase) by default, Weaviate optional for scale
 
 ---
 
