@@ -5,8 +5,8 @@
 ```mermaid
 graph TB
     subgraph Vercel
-        WEB[Next.js 16<br/>edcurate-2026]
-        API[FastAPI<br/>edcurate-2026-api]
+        WEB[Next.js 16]
+        API[FastAPI]
     end
 
     subgraph Supabase
@@ -26,8 +26,8 @@ graph TB
     end
 
     USER([User]) -->|Browser| WEB
-    WEB -->|better-auth<br/>JWT/JWE| WEB
-    WEB -->|Authorization: Bearer| API
+    WEB -->|session token| API
+    API -->|validate + issue JWE| WEB
     API -->|asyncpg + SSL<br/>PgBouncer :6543| PG
     API -->|rediss:// TLS| REDIS
     API -->|S3 API| B2
@@ -41,7 +41,7 @@ graph TB
     style VDB fill:#6a4cff,color:#fff
 ```
 
-**Auth flow:** better-auth (Web) → localStorage JWT/JWE → `Authorization: Bearer` header → FastAPI validates JWE
+**Auth flow:** better-auth (Web) → login → session token → FastAPI session exchange → JWE issued → localStorage → `Authorization: Bearer` for API calls
 
 **Storage:** Teacher uploads → Backblaze B2 (S3-compatible, local: MinIO)
 
