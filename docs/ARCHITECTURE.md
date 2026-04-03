@@ -5,7 +5,7 @@
 ```mermaid
 graph TB
     subgraph Vercel
-        WEB[Next.js 16]
+        WEB[Next.js]
         API[FastAPI]
     end
 
