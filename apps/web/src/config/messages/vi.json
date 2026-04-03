@@ -39,5 +39,11 @@
     "backToSignIn": "Quay lại đăng nhập",
     "invalidCredentials": "Email hoặc mật khẩu không đúng",
     "emailNotVerified": "Vui lòng xác minh email trước khi đăng nhập"
+  },
+  "team": {
+    "title": "Đội ngũ của chúng tôi",
+    "subtitle": "Gặp gỡ những người đứng sau Edcurate",
+    "description": "Chúng tôi là nhóm sinh viên đến từ Đại học Công nghệ Sydney (UTS), xây dựng công cụ khám phá và điều chỉnh tài nguyên giáo dục theo ngữ cảnh dành cho giáo viên.",
+    "backToHome": "Quay lại trang chủ"
   }
 }

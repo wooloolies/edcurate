@@ -135,5 +135,21 @@
   "login__emailNotVerified": "กรุณายืนยันอีเมลก่อนเข้าสู่ระบบ",
   "@login__emailNotVerified": {
     "description": "Error when email is not verified"
+  },
+  "team__title": "ทีมของเรา",
+  "@team__title": {
+    "description": "Team page heading"
+  },
+  "team__subtitle": "พบกับผู้คนเบื้องหลัง Edcurate",
+  "@team__subtitle": {
+    "description": "Team page subheading"
+  },
+  "team__description": "เราเป็นทีมนักศึกษาจากมหาวิทยาลัยเทคโนโลยีซิดนีย์ (UTS) ที่สร้างเครื่องมือค้นหาและปรับใช้ทรัพยากรการศึกษาตามบริบทสำหรับครูผู้สอน",
+  "@team__description": {
+    "description": "Team page description"
+  },
+  "team__backToHome": "กลับหน้าหลัก",
+  "@team__backToHome": {
+    "description": "Link to go back to home page"
   }
 }

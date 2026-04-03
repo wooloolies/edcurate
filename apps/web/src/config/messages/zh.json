@@ -39,5 +39,11 @@
     "backToSignIn": "返回登录",
     "invalidCredentials": "邮箱或密码不正确",
     "emailNotVerified": "请先验证您的邮箱"
+  },
+  "team": {
+    "title": "我们的团队",
+    "subtitle": "认识 Edcurate 背后的成员",
+    "description": "我们是一支来自悉尼科技大学（UTS）的学生团队，致力于为教育工作者构建情境感知的教育资源发现与适配工具。",
+    "backToHome": "返回首页"
   }
 }

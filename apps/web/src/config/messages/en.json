@@ -39,5 +39,11 @@
     "backToSignIn": "Back to sign in",
     "invalidCredentials": "Invalid email or password",
     "emailNotVerified": "Please verify your email first"
+  },
+  "team": {
+    "title": "Our Team",
+    "subtitle": "Meet the people behind Edcurate",
+    "description": "We are a team of students from the University of Technology Sydney (UTS), building context-aware resource discovery and adaptation tools for educators.",
+    "backToHome": "Back to home"
   }
 }

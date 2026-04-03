@@ -135,5 +135,21 @@
   "login__emailNotVerified": "먼저 이메일을 인증해 주세요",
   "@login__emailNotVerified": {
     "description": "Error when email is not verified"
+  },
+  "team__title": "팀 소개",
+  "@team__title": {
+    "description": "Team page heading"
+  },
+  "team__subtitle": "Edcurate를 만드는 사람들",
+  "@team__subtitle": {
+    "description": "Team page subheading"
+  },
+  "team__description": "우리는 시드니 공과대학교(UTS) 학생들로 구성된 팀으로, 교육자를 위한 맥락 인식 기반 교육 자료 발굴 및 적용 도구를 개발하고 있습니다.",
+  "@team__description": {
+    "description": "Team page description"
+  },
+  "team__backToHome": "홈으로 돌아가기",
+  "@team__backToHome": {
+    "description": "Link to go back to home page"
   }
 }

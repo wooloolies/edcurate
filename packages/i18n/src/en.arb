@@ -159,5 +159,21 @@
   "login__emailNotVerified": "Please verify your email first",
   "@login__emailNotVerified": {
     "description": "Error when email is not verified"
+  },
+  "team__title": "Our Team",
+  "@team__title": {
+    "description": "Team page heading"
+  },
+  "team__subtitle": "Meet the people behind Edcurate",
+  "@team__subtitle": {
+    "description": "Team page subheading"
+  },
+  "team__description": "We are a team of students from the University of Technology Sydney (UTS), building context-aware resource discovery and adaptation tools for educators.",
+  "@team__description": {
+    "description": "Team page description"
+  },
+  "team__backToHome": "Back to home",
+  "@team__backToHome": {
+    "description": "Link to go back to home page"
   }
 }

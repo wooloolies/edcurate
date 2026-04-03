@@ -135,5 +135,21 @@
   "login__emailNotVerified": "请先验证您的邮箱",
   "@login__emailNotVerified": {
     "description": "Error when email is not verified"
+  },
+  "team__title": "我们的团队",
+  "@team__title": {
+    "description": "Team page heading"
+  },
+  "team__subtitle": "认识 Edcurate 背后的成员",
+  "@team__subtitle": {
+    "description": "Team page subheading"
+  },
+  "team__description": "我们是一支来自悉尼科技大学（UTS）的学生团队，致力于为教育工作者构建情境感知的教育资源发现与适配工具。",
+  "@team__description": {
+    "description": "Team page description"
+  },
+  "team__backToHome": "返回首页",
+  "@team__backToHome": {
+    "description": "Link to go back to home page"
   }
 }

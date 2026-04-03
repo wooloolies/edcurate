@@ -135,5 +135,21 @@
   "login__emailNotVerified": "Vui lòng xác minh email trước khi đăng nhập",
   "@login__emailNotVerified": {
     "description": "Error when email is not verified"
+  },
+  "team__title": "Đội ngũ của chúng tôi",
+  "@team__title": {
+    "description": "Team page heading"
+  },
+  "team__subtitle": "Gặp gỡ những người đứng sau Edcurate",
+  "@team__subtitle": {
+    "description": "Team page subheading"
+  },
+  "team__description": "Chúng tôi là nhóm sinh viên đến từ Đại học Công nghệ Sydney (UTS), xây dựng công cụ khám phá và điều chỉnh tài nguyên giáo dục theo ngữ cảnh dành cho giáo viên.",
+  "@team__description": {
+    "description": "Team page description"
+  },
+  "team__backToHome": "Quay lại trang chủ",
+  "@team__backToHome": {
+    "description": "Link to go back to home page"
   }
 }

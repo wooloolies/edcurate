@@ -58,6 +58,11 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 Text(AppLocalizations.of(context)!.save)
 ```
 
+## Translation Quality
+- `en.arb` is the source language; other locales are translated via `/oma-translator` skill
+- New or updated translations MUST be reviewed by `/oma-translator` before commit
+- When adding i18n keys: write `en.arb` first, then invoke `/oma-translator` for the remaining locales
+
 ## Best Practices
 1. Always include descriptions (@key) for translators
 2. Keep keys descriptive

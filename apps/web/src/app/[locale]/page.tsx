@@ -16,9 +16,14 @@ export default async function HomePage({ params }: HomePageProps) {
       <header className="fixed inset-x-0 top-0 z-50 border-b bg-background/80 backdrop-blur-sm">
         <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-4">
           <span className="text-lg font-bold">Edcurate</span>
-          <Button asChild size="sm">
-            <Link href="/login">Login</Link>
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button asChild size="sm" variant="ghost">
+              <Link href="/team">Team</Link>
+            </Button>
+            <Button asChild size="sm">
+              <Link href="/login">Login</Link>
+            </Button>
+          </div>
         </div>
       </header>
       <main className="flex min-h-screen flex-col items-center justify-center p-24">
