@@ -21,7 +21,7 @@ graph TB
         B2[(B2 Storage)]
     end
 
-    subgraph Weaviate["Weaviate (optional)"]
+    subgraph Weaviate
         VDB[(Vector DB)]
     end
 
