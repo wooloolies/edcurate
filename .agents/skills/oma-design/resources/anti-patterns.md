@@ -1,9 +1,10 @@
 # Anti-Patterns — AI Design Slop Detection
 
 > "If you showed this interface to someone and said 'AI made this,'
->  would they believe you immediately? If yes, that's the problem."
+> would they believe you immediately? If yes, that's the problem."
 
 ## Typography
+
 - DON'T: Default to custom Google Fonts when system fonts suffice
 - DON'T: Use Inter or Geist alone without considering project context
 - DON'T: Load 3+ font families without clear justification
@@ -19,6 +20,7 @@
 - DO: Subset fonts to needed character ranges for performance
 
 ## Color & Gradient
+
 - DON'T: Purple-to-blue linear gradient backgrounds (strongest AI slop signal)
 - DON'T: Purple-to-pink gradient text
 - DON'T: Rainbow/multi-stop gradient borders
@@ -36,6 +38,7 @@
 - DO: Test with color blindness simulators before finalizing palette
 
 ## Layout & Space
+
 - DON'T: Nested cards inside nested cards
 - DON'T: Mix spacing values outside the 8px grid scale
 - DON'T: Hero sections with identical 3-metric stats layout (AI pattern)
@@ -50,6 +53,7 @@
 - DO: Use gap instead of margins for grid/flex children
 
 ## Motion & Animation
+
 - DON'T: Bounce easing on everything (strongest motion AI slop signal)
 - DON'T: Animation duration > 800ms for UI transitions
 - DON'T: Animate layout-triggering properties (width, height, top, left)
@@ -64,6 +68,7 @@
 - DO: Pause off-screen Canvas/WebGL renderers
 
 ## Components
+
 - DON'T: Glassmorphism on every element — reserve for badges, nav pills, accent cards
 - DON'T: Icon + Title + Description card grid as the only layout pattern
 - DON'T: Hover-only interactions without touch/keyboard alternatives

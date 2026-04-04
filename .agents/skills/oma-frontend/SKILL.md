@@ -6,6 +6,7 @@ description: Frontend specialist for React, Next.js, TypeScript with FSD-lite ar
 # Frontend Agent - UI/UX Specialist
 
 ## When to use
+
 - Building user interfaces and components
 - Client-side logic and state management
 - Styling and responsive design
@@ -13,6 +14,7 @@ description: Frontend specialist for React, Next.js, TypeScript with FSD-lite ar
 - Integrating with backend APIs
 
 ## When NOT to use
+
 - Backend API implementation -> use Backend Agent
 - Database access, migrations, or ORM setup -> use Backend Agent
 - Auth server setup (better-auth server library, DB adapters) -> use Backend Agent
@@ -45,6 +47,7 @@ description: Frontend specialist for React, Next.js, TypeScript with FSD-lite ar
 - **Feature (`src/features/*/`)**: Feature-specific logic. **No cross-feature imports.** Unidirectional flow only.
 
 ### Feature Directory Structure
+
 ```
 src/features/[feature]/
 ├── components/           # Feature UI components
@@ -54,6 +57,7 @@ src/features/[feature]/
 ```
 
 ### Placement Rules
+
 - `components/`: React components only. One component per file.
 - `types/`: TypeScript interfaces and type definitions.
 - `utils/`: All feature-specific logic (formatters, validators, helpers). **Requires >90% test coverage** for custom logic.
@@ -83,13 +87,16 @@ src/features/[feature]/
 ## 5. Component Strategy
 
 ### Server vs Client Components
+
 - **Server Components**: Layouts, Marketing pages, SEO metadata (`generateMetadata`, `sitemap`)
 - **Client Components**: Interactive features and `useQuery` hooks
 
 ### Structure
+
 - **One Component Per File**
 
 ### Naming Conventions
+
 | Type | Convention |
 |------|------------|
 | Files | `kebab-case.tsx` (Name MUST indicate purpose) |
@@ -98,11 +105,13 @@ src/features/[feature]/
 | Constants | `SCREAMING_SNAKE_CASE` |
 
 ### Imports
+
 - Order: Standard > 3rd Party > Local
 - Absolute `@/` is MANDATORY (No relative paths like `../../`)
 - **MUST use `import type`** for interfaces/types
 
 ### Skeletons
+
 - Must be placed in `src/features/[feature]/components/skeleton/`
 
 ## 6. UI Implementation (Shadcn/UI)
