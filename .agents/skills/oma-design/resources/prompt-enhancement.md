@@ -8,6 +8,7 @@ specifications that produce high-quality, specific output.
 ## When to Activate
 
 Activate when the user request is vague:
+
 - Less than 3 sentences
 - No section details specified
 - Generic terms like "make a landing page" or "design a website"
@@ -30,6 +31,7 @@ Identify what the user explicitly specified vs what needs inference:
 ### 2. Section-by-Section Enhancement
 
 For each section, specify:
+
 1. **Layout**: structure, columns, alignment, max-width
 2. **Background**: solid / gradient / video / animated shader
 3. **Typography**: heading font + size + weight, body style
@@ -53,6 +55,7 @@ SECTION: [Name]
 ## Example Enhancement
 
 ### User Input
+>
 > "Make a landing page for my SaaS product"
 
 ### Enhanced Output
@@ -138,6 +141,7 @@ SECTION: Footer
 ## Post-Enhancement
 
 After presenting the enhanced prompt:
+
 1. Ask the user for confirmation or adjustments
 2. Apply feedback
 3. Proceed to Phase 4 (Propose) with the refined specification
