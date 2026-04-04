@@ -210,10 +210,366 @@
           }
         }
       }
+    },
+    "/api/presets/": {
+      "post": {
+        "tags": [
+          "presets"
+        ],
+        "summary": "Create Preset",
+        "description": "Create a new classroom preset.",
+        "operationId": "create_preset_api_presets__post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PresetCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PresetResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "presets"
+        ],
+        "summary": "List Presets",
+        "description": "List classroom presets for the current user (paginated).",
+        "operationId": "list_presets_api_presets__get",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 20,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedResponse_PresetResponse_"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/presets/{preset_id}": {
+      "get": {
+        "tags": [
+          "presets"
+        ],
+        "summary": "Get Preset",
+        "description": "Get a single classroom preset by id.",
+        "operationId": "get_preset_api_presets__preset_id__get",
+        "parameters": [
+          {
+            "name": "preset_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Preset Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PresetResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "presets"
+        ],
+        "summary": "Update Preset",
+        "description": "Full update of a classroom preset.",
+        "operationId": "update_preset_api_presets__preset_id__put",
+        "parameters": [
+          {
+            "name": "preset_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Preset Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PresetUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PresetResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "presets"
+        ],
+        "summary": "Delete Preset",
+        "description": "Delete a classroom preset. Returns 409 if it is the default.",
+        "operationId": "delete_preset_api_presets__preset_id__delete",
+        "parameters": [
+          {
+            "name": "preset_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Preset Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/presets/{preset_id}/default": {
+      "patch": {
+        "tags": [
+          "presets"
+        ],
+        "summary": "Set Default Preset",
+        "description": "Set a classroom preset as the default (atomic swap).",
+        "operationId": "set_default_preset_api_presets__preset_id__default_patch",
+        "parameters": [
+          {
+            "name": "preset_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Preset Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PresetDefaultResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/discovery/search": {
+      "post": {
+        "tags": [
+          "discovery"
+        ],
+        "summary": "Search",
+        "description": "Federated search across DuckDuckGo, YouTube, and OpenAlex.\n\nRate limited to 20 requests per minute per user.\nSource labels: ddgs=DuckDuckGo, youtube=YouTube, openalex=OpenAlex",
+        "operationId": "search_api_discovery_search_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SearchResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
+      "DdgsMetadata": {
+        "properties": {
+          "source": {
+            "type": "string",
+            "const": "ddgs",
+            "title": "Source",
+            "default": "ddgs"
+          },
+          "domain": {
+            "type": "string",
+            "title": "Domain"
+          },
+          "published_date": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Published Date"
+          },
+          "language": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Language"
+          }
+        },
+        "type": "object",
+        "required": [
+          "domain"
+        ],
+        "title": "DdgsMetadata",
+        "description": "Metadata from DuckDuckGo search results."
+      },
       "HTTPValidationError": {
         "properties": {
           "detail": {
@@ -299,6 +655,726 @@
         "title": "OAuthLoginRequest",
         "description": "OAuth login request."
       },
+      "OpenAlexMetadata": {
+        "properties": {
+          "source": {
+            "type": "string",
+            "const": "openalex",
+            "title": "Source",
+            "default": "openalex"
+          },
+          "authors": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Authors"
+          },
+          "journal": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Journal"
+          },
+          "citation_count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Citation Count"
+          },
+          "doi": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Doi"
+          },
+          "published_date": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Published Date"
+          }
+        },
+        "type": "object",
+        "title": "OpenAlexMetadata",
+        "description": "Metadata from OpenAlex works results."
+      },
+      "PaginatedResponse_PresetResponse_": {
+        "properties": {
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/PresetResponse"
+            },
+            "type": "array",
+            "title": "Data"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/PaginationMeta"
+          }
+        },
+        "type": "object",
+        "required": [
+          "data",
+          "meta"
+        ],
+        "title": "PaginatedResponse[PresetResponse]"
+      },
+      "PaginationMeta": {
+        "properties": {
+          "page": {
+            "type": "integer",
+            "title": "Page",
+            "description": "Current page number"
+          },
+          "limit": {
+            "type": "integer",
+            "title": "Limit",
+            "description": "Items per page"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total",
+            "description": "Total number of items"
+          },
+          "total_pages": {
+            "type": "integer",
+            "title": "Total Pages",
+            "description": "Total number of pages"
+          },
+          "has_next": {
+            "type": "boolean",
+            "title": "Has Next",
+            "description": "Whether there is a next page"
+          },
+          "has_prev": {
+            "type": "boolean",
+            "title": "Has Prev",
+            "description": "Whether there is a previous page"
+          }
+        },
+        "type": "object",
+        "required": [
+          "page",
+          "limit",
+          "total",
+          "total_pages",
+          "has_next",
+          "has_prev"
+        ],
+        "title": "PaginationMeta",
+        "description": "Pagination metadata."
+      },
+      "PresetCreate": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1,
+            "title": "Name"
+          },
+          "is_default": {
+            "type": "boolean",
+            "title": "Is Default",
+            "default": false
+          },
+          "curriculum_framework": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 255
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Curriculum Framework"
+          },
+          "subject": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1,
+            "title": "Subject"
+          },
+          "year_level": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 1,
+            "title": "Year Level"
+          },
+          "topic": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 500
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Topic"
+          },
+          "country": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Country"
+          },
+          "state_region": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 100
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "State Region"
+          },
+          "city": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 100
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "City"
+          },
+          "teaching_language": {
+            "type": "string",
+            "maxLength": 10,
+            "minLength": 2,
+            "title": "Teaching Language",
+            "default": "en"
+          },
+          "class_size": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Class Size"
+          },
+          "eal_d_students": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Eal D Students"
+          },
+          "reading_support_students": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reading Support Students"
+          },
+          "extension_students": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Extension Students"
+          },
+          "student_interests": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Student Interests"
+          },
+          "language_backgrounds": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Language Backgrounds"
+          },
+          "average_reading_level": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 50
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Average Reading Level"
+          },
+          "source_weights": {
+            "$ref": "#/components/schemas/SourceWeights"
+          },
+          "additional_notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Additional Notes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "subject",
+          "year_level",
+          "country"
+        ],
+        "title": "PresetCreate",
+        "description": "Schema for creating a classroom preset."
+      },
+      "PresetDefaultResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "is_default": {
+            "type": "boolean",
+            "title": "Is Default"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "is_default"
+        ],
+        "title": "PresetDefaultResponse",
+        "description": "Minimal response after setting a preset as default."
+      },
+      "PresetResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "user_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "User Id"
+          },
+          "is_default": {
+            "type": "boolean",
+            "title": "Is Default"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "curriculum_framework": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Curriculum Framework"
+          },
+          "subject": {
+            "type": "string",
+            "title": "Subject"
+          },
+          "year_level": {
+            "type": "string",
+            "title": "Year Level"
+          },
+          "topic": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Topic"
+          },
+          "country": {
+            "type": "string",
+            "title": "Country"
+          },
+          "state_region": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "State Region"
+          },
+          "city": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "City"
+          },
+          "teaching_language": {
+            "type": "string",
+            "title": "Teaching Language"
+          },
+          "class_size": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Class Size"
+          },
+          "eal_d_students": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Eal D Students"
+          },
+          "reading_support_students": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reading Support Students"
+          },
+          "extension_students": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Extension Students"
+          },
+          "student_interests": {
+            "items": {},
+            "type": "array",
+            "title": "Student Interests"
+          },
+          "language_backgrounds": {
+            "items": {},
+            "type": "array",
+            "title": "Language Backgrounds"
+          },
+          "average_reading_level": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Average Reading Level"
+          },
+          "source_weights": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Source Weights"
+          },
+          "additional_notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Additional Notes"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "user_id",
+          "is_default",
+          "name",
+          "curriculum_framework",
+          "subject",
+          "year_level",
+          "topic",
+          "country",
+          "state_region",
+          "city",
+          "teaching_language",
+          "class_size",
+          "eal_d_students",
+          "reading_support_students",
+          "extension_students",
+          "student_interests",
+          "language_backgrounds",
+          "average_reading_level",
+          "source_weights",
+          "additional_notes",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "PresetResponse",
+        "description": "Schema for preset response including id and timestamps."
+      },
+      "PresetUpdate": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1,
+            "title": "Name"
+          },
+          "is_default": {
+            "type": "boolean",
+            "title": "Is Default",
+            "default": false
+          },
+          "curriculum_framework": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 255
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Curriculum Framework"
+          },
+          "subject": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1,
+            "title": "Subject"
+          },
+          "year_level": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 1,
+            "title": "Year Level"
+          },
+          "topic": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 500
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Topic"
+          },
+          "country": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Country"
+          },
+          "state_region": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 100
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "State Region"
+          },
+          "city": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 100
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "City"
+          },
+          "teaching_language": {
+            "type": "string",
+            "maxLength": 10,
+            "minLength": 2,
+            "title": "Teaching Language",
+            "default": "en"
+          },
+          "class_size": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Class Size"
+          },
+          "eal_d_students": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Eal D Students"
+          },
+          "reading_support_students": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reading Support Students"
+          },
+          "extension_students": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Extension Students"
+          },
+          "student_interests": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Student Interests"
+          },
+          "language_backgrounds": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Language Backgrounds"
+          },
+          "average_reading_level": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 50
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Average Reading Level"
+          },
+          "source_weights": {
+            "$ref": "#/components/schemas/SourceWeights"
+          },
+          "additional_notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Additional Notes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "subject",
+          "year_level",
+          "country"
+        ],
+        "title": "PresetUpdate",
+        "description": "Schema for updating a classroom preset (full replacement)."
+      },
       "RefreshTokenRequest": {
         "properties": {
           "refresh_token": {
@@ -313,19 +1389,146 @@
         "title": "RefreshTokenRequest",
         "description": "Refresh token request."
       },
-      "SessionExchangeRequest": {
+      "ResourceCard": {
         "properties": {
-          "session_token": {
+          "title": {
             "type": "string",
-            "title": "Session Token"
+            "title": "Title"
+          },
+          "url": {
+            "type": "string",
+            "title": "Url"
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "ddgs",
+              "youtube",
+              "openalex"
+            ],
+            "title": "Source"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "webpage",
+              "video",
+              "paper"
+            ],
+            "title": "Type"
+          },
+          "snippet": {
+            "type": "string",
+            "title": "Snippet"
+          },
+          "thumbnail_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Thumbnail Url"
+          },
+          "metadata": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/DdgsMetadata"
+              },
+              {
+                "$ref": "#/components/schemas/YoutubeMetadata"
+              },
+              {
+                "$ref": "#/components/schemas/OpenAlexMetadata"
+              }
+            ],
+            "title": "Metadata"
           }
         },
         "type": "object",
         "required": [
-          "session_token"
+          "title",
+          "url",
+          "source",
+          "type",
+          "snippet",
+          "metadata"
         ],
-        "title": "SessionExchangeRequest",
-        "description": "Exchange better-auth session token for backend JWE tokens."
+        "title": "ResourceCard",
+        "description": "Normalised resource card returned by all providers."
+      },
+      "SearchRequest": {
+        "properties": {
+          "preset_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Preset Id"
+          },
+          "query": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 1,
+            "title": "Query"
+          }
+        },
+        "type": "object",
+        "required": [
+          "preset_id",
+          "query"
+        ],
+        "title": "SearchRequest",
+        "description": "Request body for federated search."
+      },
+      "SearchResponse": {
+        "properties": {
+          "query": {
+            "type": "string",
+            "title": "Query"
+          },
+          "preset_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Preset Id"
+          },
+          "total_results": {
+            "type": "integer",
+            "title": "Total Results"
+          },
+          "counts_by_source": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Counts By Source"
+          },
+          "results": {
+            "items": {
+              "$ref": "#/components/schemas/ResourceCard"
+            },
+            "type": "array",
+            "title": "Results"
+          },
+          "errors": {
+            "items": {
+              "$ref": "#/components/schemas/SourceError"
+            },
+            "type": "array",
+            "title": "Errors"
+          }
+        },
+        "type": "object",
+        "required": [
+          "query",
+          "preset_id",
+          "total_results",
+          "counts_by_source",
+          "results",
+          "errors"
+        ],
+        "title": "SearchResponse",
+        "description": "Unified federated search response."
       },
       "ServiceStatus": {
         "properties": {
@@ -366,6 +1569,72 @@
         ],
         "title": "ServiceStatus",
         "description": "Individual service health status."
+      },
+      "SessionExchangeRequest": {
+        "properties": {
+          "session_token": {
+            "type": "string",
+            "title": "Session Token"
+          }
+        },
+        "type": "object",
+        "required": [
+          "session_token"
+        ],
+        "title": "SessionExchangeRequest",
+        "description": "Exchange better-auth session token for backend JWE tokens."
+      },
+      "SourceError": {
+        "properties": {
+          "source": {
+            "type": "string",
+            "enum": [
+              "ddgs",
+              "youtube",
+              "openalex"
+            ],
+            "title": "Source"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "source",
+          "message"
+        ],
+        "title": "SourceError",
+        "description": "Error from a single search provider."
+      },
+      "SourceWeights": {
+        "properties": {
+          "ddgs": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Ddgs",
+            "default": 0.34
+          },
+          "youtube": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Youtube",
+            "default": 0.33
+          },
+          "openalex": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Openalex",
+            "default": 0.33
+          }
+        },
+        "type": "object",
+        "title": "SourceWeights",
+        "description": "Source weights for federated search result distribution."
       },
       "TokenResponse": {
         "properties": {
@@ -423,6 +1692,53 @@
           "type"
         ],
         "title": "ValidationError"
+      },
+      "YoutubeMetadata": {
+        "properties": {
+          "source": {
+            "type": "string",
+            "const": "youtube",
+            "title": "Source",
+            "default": "youtube"
+          },
+          "channel": {
+            "type": "string",
+            "title": "Channel"
+          },
+          "duration": {
+            "type": "string",
+            "title": "Duration",
+            "default": ""
+          },
+          "view_count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "View Count"
+          },
+          "published_date": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Published Date"
+          }
+        },
+        "type": "object",
+        "required": [
+          "channel"
+        ],
+        "title": "YoutubeMetadata",
+        "description": "Metadata from YouTube Data API results."
       }
     }
   }

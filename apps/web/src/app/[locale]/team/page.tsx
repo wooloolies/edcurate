@@ -55,9 +55,7 @@ export default async function TeamPage({ params }: TeamPageProps) {
         <div className="text-center">
           <h1 className="text-4xl font-bold">{t("title")}</h1>
           <p className="mt-2 text-lg text-muted-foreground">{t("subtitle")}</p>
-          <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
-            {t("description")}
-          </p>
+          <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">{t("description")}</p>
         </div>
 
         <div className="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
@@ -77,9 +75,7 @@ export default async function TeamPage({ params }: TeamPageProps) {
                 className="rounded-full"
               />
               <h2 className="mt-4 text-lg font-semibold">{member.name}</h2>
-              <p className="mt-1 text-sm text-muted-foreground">
-                @{member.github}
-              </p>
+              <p className="mt-1 text-sm text-muted-foreground">@{member.github}</p>
             </a>
           ))}
         </div>

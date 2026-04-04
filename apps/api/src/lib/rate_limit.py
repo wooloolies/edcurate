@@ -1,5 +1,7 @@
 """Rate limiting middleware with Redis or in-memory backend."""
 
+from __future__ import annotations
+
 import time
 from collections import defaultdict
 from collections.abc import Awaitable, Callable
@@ -94,10 +96,7 @@ class RedisRateLimiter:
             if url and url.startswith("rediss://"):
                 kwargs["ssl_cert_reqs"] = None
 
-            self._redis = cast(
-                redis_module.Redis,
-                redis.from_url(url, **kwargs),  # type: ignore[no-untyped-call]
-            )
+            self._redis = redis.from_url(url, **kwargs)  # type: ignore[no-untyped-call]
         return self._redis
 
     async def is_allowed(self, key: str) -> tuple[bool, int, int]:
@@ -187,6 +186,9 @@ def rate_limit(
     def decorator(
         func: Callable[..., Awaitable[Response]],
     ) -> Callable[..., Awaitable[Response]]:
+        from functools import wraps
+
+        @wraps(func)
         async def wrapper(*args: object, **kwargs: object) -> Response:
             # Find request in args/kwargs
             request: Request | None = None
@@ -224,8 +226,6 @@ def rate_limit(
             response = await func(*args, **kwargs)
             return response
 
-        wrapper.__name__ = func.__name__
-        wrapper.__doc__ = func.__doc__
         return wrapper
 
     return decorator

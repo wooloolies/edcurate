@@ -49,6 +49,10 @@ class Settings(BaseSettings):
     GEMINI_API_KEY: str | None = None
     OPENAI_API_KEY: str | None = None
 
+    # Search providers (optional)
+    YOUTUBE_API_KEY: str | None = None
+    OPENALEX_API_KEY: str | None = None
+
     # Storage (optional)
     STORAGE_BACKEND: Literal["gcs", "s3", "minio"] = "minio"
     GCS_BUCKET_NAME: str | None = None

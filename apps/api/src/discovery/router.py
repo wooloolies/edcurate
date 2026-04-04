@@ -1,0 +1,66 @@
+"""Discovery router — federated search endpoint."""
+
+import uuid
+
+from fastapi import APIRouter, HTTPException, Request, status
+from sqlalchemy import select
+
+from src.discovery import service
+from src.discovery.schemas import SearchRequest, SearchResponse
+from src.lib.auth import decode_token
+from src.lib.dependencies import CurrentUser, DBSession
+from src.lib.rate_limit import rate_limit
+from src.presets.model import ClassroomPreset
+
+router = APIRouter()
+
+
+def _user_rate_limit_key(request: Request) -> str:
+    """Rate limit key scoped to authenticated user id from Authorization header."""
+    auth = request.headers.get("Authorization", "")
+    if auth.startswith("Bearer "):
+        try:
+            payload = decode_token(auth.removeprefix("Bearer ").strip())
+            return f"discovery:search:{payload.user_id}"
+        except Exception:  # noqa: S110
+            pass
+    # Fallback to IP
+    forwarded = request.headers.get("X-Forwarded-For")
+    if forwarded:
+        ip = forwarded.split(",")[0].strip()
+    else:
+        ip = request.client.host if request.client else "unknown"
+    return f"discovery:search:{ip}"
+
+
+@router.post("/search", response_model=SearchResponse)
+@rate_limit(requests=20, window=60, key_func=_user_rate_limit_key)
+async def search(
+    request: Request,
+    body: SearchRequest,
+    db: DBSession,
+    current_user: CurrentUser,
+) -> SearchResponse:
+    """
+    Federated search across DuckDuckGo, YouTube, and OpenAlex.
+
+    Rate limited to 20 requests per minute per user.
+    Source labels: ddgs=DuckDuckGo, youtube=YouTube, openalex=OpenAlex
+    """
+    user_id = uuid.UUID(current_user.id)
+
+    # Verify preset ownership
+    result = await db.execute(
+        select(ClassroomPreset).where(
+            ClassroomPreset.id == body.preset_id,
+            ClassroomPreset.user_id == user_id,
+        )
+    )
+    preset = result.scalar_one_or_none()
+    if preset is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Preset not found",
+        )
+
+    return await service.search_resources(preset, body.query)

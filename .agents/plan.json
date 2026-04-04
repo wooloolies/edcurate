@@ -1,0 +1,175 @@
+{
+  "name": "Federated Search & Classroom Presets",
+  "design_doc": "docs/plans/federated-search-design.md",
+  "created": "2026-04-04",
+  "assumptions": [
+    "DuckDuckGo search via duckduckgo-search Python library (no API key needed)",
+    "YouTube Data API v3 requires API key — env var YOUTUBE_API_KEY to be added",
+    "OpenAlex API uses OPENALEX_API_KEY already in .env",
+    "Existing PaginatedResponse model in src/common/models/pagination.py is compatible",
+    "Teacher profile timestamps follow User model pattern (inline, not mixin)",
+    "Source weights auto-normalize on frontend — DB CHECK enforces sum ≈ 1.0"
+  ],
+  "tasks": {
+    "backend": [
+      {
+        "id": "B1",
+        "title": "Create ClassroomPreset SQLAlchemy model + Alembic migration",
+        "priority": 1,
+        "files": [
+          "apps/api/src/presets/model.py",
+          "apps/api/alembic/versions/*_add_classroom_presets.py"
+        ],
+        "acceptance": "Migration runs, table created with all constraints"
+      },
+      {
+        "id": "B2",
+        "title": "Create presets Pydantic schemas (request/response)",
+        "priority": 1,
+        "files": ["apps/api/src/presets/schemas.py"],
+        "acceptance": "All fields validated, source_weights sum check"
+      },
+      {
+        "id": "B3",
+        "title": "Create presets service (CRUD + default swap)",
+        "priority": 1,
+        "files": ["apps/api/src/presets/service.py"],
+        "acceptance": "Create, list, get, update, delete, set_default — all scoped to user"
+      },
+      {
+        "id": "B4",
+        "title": "Create presets router with all endpoints",
+        "priority": 1,
+        "files": ["apps/api/src/presets/router.py"],
+        "acceptance": "POST, GET list, GET single, PUT, DELETE (409 if default), PATCH default"
+      },
+      {
+        "id": "B5",
+        "title": "Create abstract SearchProvider + 3 implementations",
+        "priority": 2,
+        "depends_on": ["B1"],
+        "files": [
+          "apps/api/src/discovery/providers/base.py",
+          "apps/api/src/discovery/providers/ddgs.py",
+          "apps/api/src/discovery/providers/youtube.py",
+          "apps/api/src/discovery/providers/openalex.py"
+        ],
+        "acceptance": "Each provider builds source-specific query from context, calls external API, returns ResourceCard[]"
+      },
+      {
+        "id": "B6",
+        "title": "Create discovery schemas (ResourceCard, SearchRequest/Response, metadata unions)",
+        "priority": 2,
+        "files": ["apps/api/src/discovery/schemas.py"],
+        "acceptance": "Discriminated union metadata, counts_by_source, errors array"
+      },
+      {
+        "id": "B7",
+        "title": "Create discovery service (orchestrator with asyncio.gather)",
+        "priority": 2,
+        "depends_on": ["B5", "B6"],
+        "files": ["apps/api/src/discovery/service.py"],
+        "acceptance": "Parallel search, weight-based proportioning, dedup by URL, graceful degradation"
+      },
+      {
+        "id": "B8",
+        "title": "Create discovery router (POST /api/discovery/search)",
+        "priority": 2,
+        "depends_on": ["B7"],
+        "files": ["apps/api/src/discovery/router.py"],
+        "acceptance": "Rate-limited, ownership check on preset_id, query length validated"
+      },
+      {
+        "id": "B9",
+        "title": "Register routers in main.py + add config vars + regenerate openapi.json",
+        "priority": 3,
+        "depends_on": ["B4", "B8"],
+        "files": [
+          "apps/api/src/main.py",
+          "apps/api/src/lib/config.py",
+          "apps/api/openapi.json"
+        ],
+        "acceptance": "Both routers mounted, YOUTUBE_API_KEY in config, openapi.json regenerated"
+      }
+    ],
+    "frontend": [
+      {
+        "id": "F1",
+        "title": "Run gen:api to generate Orval hooks from updated openapi.json",
+        "priority": 3,
+        "depends_on": ["B9"],
+        "files": ["apps/web/src/lib/api/**"],
+        "acceptance": "useGetPresets, useCreatePreset, useSearchDiscovery etc. generated"
+      },
+      {
+        "id": "F2",
+        "title": "Install required shadcn components",
+        "priority": 3,
+        "files": ["apps/web/src/components/ui/**"],
+        "acceptance": "select, tabs, slider, badge, skeleton, dropdown-menu, separator, toast, alert, dialog installed"
+      },
+      {
+        "id": "F3",
+        "title": "Create presets feature — list page + card + skeletons",
+        "priority": 4,
+        "depends_on": ["F1", "F2"],
+        "files": [
+          "apps/web/src/app/[locale]/dashboard/presets/page.tsx",
+          "apps/web/src/app/[locale]/dashboard/presets/loading.tsx",
+          "apps/web/src/features/presets/components/preset-list-client.tsx",
+          "apps/web/src/features/presets/components/preset-card.tsx",
+          "apps/web/src/features/presets/components/skeleton/preset-card-skeleton.tsx"
+        ],
+        "acceptance": "Grid of preset cards, actions (edit, search, set default, delete)"
+      },
+      {
+        "id": "F4",
+        "title": "Create presets feature — form page + tag input + weight sliders",
+        "priority": 4,
+        "depends_on": ["F1", "F2"],
+        "files": [
+          "apps/web/src/app/[locale]/dashboard/presets/new/page.tsx",
+          "apps/web/src/app/[locale]/dashboard/presets/[id]/edit/page.tsx",
+          "apps/web/src/features/presets/components/preset-form-client.tsx",
+          "apps/web/src/features/presets/components/tag-input.tsx",
+          "apps/web/src/features/presets/components/weight-sliders.tsx",
+          "apps/web/src/features/presets/components/skeleton/preset-form-skeleton.tsx",
+          "apps/web/src/features/presets/utils/normalize-weights.ts"
+        ],
+        "acceptance": "Multi-section form with TanStack Form + Zod, sliders auto-normalize"
+      },
+      {
+        "id": "F5",
+        "title": "Create search feature — page + result cards + tabs",
+        "priority": 5,
+        "depends_on": ["F1", "F2"],
+        "files": [
+          "apps/web/src/app/[locale]/dashboard/search/page.tsx",
+          "apps/web/src/app/[locale]/dashboard/search/loading.tsx",
+          "apps/web/src/features/search/components/search-page-client.tsx",
+          "apps/web/src/features/search/components/preset-selector.tsx",
+          "apps/web/src/features/search/components/search-bar.tsx",
+          "apps/web/src/features/search/components/source-tabs.tsx",
+          "apps/web/src/features/search/components/resource-card/index.tsx",
+          "apps/web/src/features/search/components/resource-card/ddgs-card.tsx",
+          "apps/web/src/features/search/components/resource-card/youtube-card.tsx",
+          "apps/web/src/features/search/components/resource-card/open-alex-card.tsx",
+          "apps/web/src/features/search/components/error-banner.tsx",
+          "apps/web/src/features/search/components/skeleton/resource-card-skeleton.tsx",
+          "apps/web/src/features/search/components/skeleton/source-tabs-skeleton.tsx"
+        ],
+        "acceptance": "Preset selector via nuqs, search bar, source tabs with counts, 3 card variants, error banner"
+      },
+      {
+        "id": "F6",
+        "title": "Add i18n translation keys + dashboard navigation entries",
+        "priority": 4,
+        "files": [
+          "packages/i18n/src/**",
+          "apps/web/src/app/[locale]/dashboard/layout.tsx"
+        ],
+        "acceptance": "presets and search namespaces in all 5 locales, nav links in dashboard"
+      }
+    ]
+  }
+}
