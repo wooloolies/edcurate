@@ -1,84 +1,97 @@
-# Edcurate
+# Indepth Search for Teaching Resources for Localised, Real Classroom Contexts
 
-> [EduX Challenge 4: AI-Powered Video Generation for Education Equality](https://cambridge-edtech-society.org/edux/edux-challenge-4.html)
+**Trusted and Context-Aware Resource Discovery for Teaching**
 
-Democratising access to high-quality educational content through contextually aware AI video systems.
+---
 
-## Problem
+## Problem Overview
 
-Learners in under-resourced schools, rural communities, and low-bandwidth environments lack rich multimedia instruction. AI-powered video generation offers democratization potential — but only if content is accurate, culturally relevant, pedagogically sound, and technically accessible across diverse devices and connectivity conditions.
+Teachers today operate in an environment of overwhelming resource abundance but limited time. Curriculum authorities and education publishers do their best to cater for teacher and student needs of a particular time and region, however they don’t always get it right. While vast amounts of educational sources and content are available online, much of it is not directly aligned with curriculum requirements, student interest, or local classroom contexts.
 
-## Challenge
+In practice, teachers spend significant time:
 
-> How might we design an AI-powered video generation system that produces accurate, engaging, and contextually appropriate educational content to support learners in resource-scarce environments?
+- Searching across fragmented platforms and websites
+- Evaluating the quality and appropriateness of materials
+- Adapting resources to suit different learner levels, backgrounds, and learning goals
+
+Authors, publishers and curriculum authorities do much of the same, collating and crafting relevant resources, attempting to save teachers some of their precious time. For both parties, this process is often inefficient, inconsistent, and cognitively demanding. Existing tools frequently provide generic outputs that lack contextual relevance, requiring further modification and verification.
+
+Additionally, concerns around accuracy, bias, safety, intellectual property, and trustworthiness of online and AI-generated content create an added layer of responsibility.
+
+This challenge focuses on reducing these burdens while supporting teachers, authors and curriculum writers in making informed, context-sensitive decisions.
+
+## Challenge Statement
+
+Design and create a teacher-facing solution that helps educators find, evaluate, and adapt safe, high-quality online resources tailored to their localised context and needs, while ensuring trust, reliability, and transparency.
 
 ## Target Users
 
-- Learners in low-resource and rural educational settings
-- Teachers with limited access to professional development materials
-- NGOs and government bodies working on educational equity
-- EdTech developers targeting emerging markets
+The primary users are educators across diverse contexts, including but not limited to:
 
-## Key Design Principles
+- 7–12 teachers
+- Education publishers and authors
+- Language and subject specialists
+- Curriculum designers
+- Instructional coaches and education professionals
 
-- **Content Accuracy** — Generated videos must be factually correct and reviewed against authoritative curriculum sources
-- **Cultural Relevance** — Adapt to local contexts, languages, and cultural norms rather than defaulting to Western or high-income country assumptions
-- **Accessibility** — Design for low-bandwidth environments, low-spec devices, and learners with sensory or cognitive differences
-- **Sustainability** — Maintainable, updatable, and scalable without requiring significant ongoing technical infrastructure
+Educators may work in a wide range of settings, such as public and private schools, international and bilingual programmes, higher education institutions, and informal or online learning environments.
 
-## Judging Criteria
+## Scope & Focus
 
-> Oceania EduX 2026 — each criterion scored out of 10
+Solutions should focus on teacher-facing workflows for years 7-12 and may address one or more of the following:
 
-| Criteria | What Judges Look For |
-|---|---|
-| **Human-centred Application & Challenge Relevance** | Clarity of the real user problem being solved; depth of understanding of target users and context; strong alignment with the set challenge. Demonstrates appropriate educational/psychological theories and shows how they are concretely translated into product or intervention design. |
-| **Technological Implementation & Feasibility** | Soundness of the technical approach and architecture; effective use of AI/tech to enable the proposed solution. Evidence that the prototype works (or is convincingly achievable) within realistic constraints of data, time, and resources. |
-| **Responsible AI & Ethics** | Proactive consideration of fairness, privacy, safety, transparency, and accountability. Identifies potential risks (e.g., bias, misuse, harm to vulnerable users) and includes credible mitigation strategies and governance practices. |
-| **Creativity & Innovation** | Originality of the idea and/or novel recombination of existing approaches; clear value added beyond standard or expected solutions, with attention to meaningful impact in real educational settings. |
+- Resource discovery and filtering
+- Adjustment of scope (e.g., country, state, town, class, individual)
+- Quality evaluation and verification (e.g., alignment, bias, safety)
+- Contextual adaptation (e.g., curriculum, regional, modern-day and cultural relevance, student interests)
+- Integration of multiple data sources (e.g., curriculum standards, classroom data, local organisations, government, history or media)
+- Transparency of intellectual property and source referencing
+- Supporting and informing teacher decision-making rather than replacing it
 
-## Deliverables
+Participants are encouraged to design solutions that are:
 
-1. A working prototype generating at least one educational video segment for a specific subject and target learner context
-2. A 5-minute video and pitch deck explaining how equity, accuracy, and accessibility are prioritised in the system design
+- Practical and usable for real classroom settings
+- Sensitive to diverse educational contexts (local, cultural, linguistic)
+- Aligned with ethical and responsible use of technology
 
-## Tech Stack
+## About Cambridge University Press & Assessment
 
-| Layer | Technology |
-|---|---|
-| **Frontend** | Next.js, React, TailwindCSS, shadcn/ui |
-| **Backend** | FastAPI, SQLAlchemy, PostgreSQL, Redis |
-| **Infrastructure** | Terraform, GCP (Cloud Run, Cloud SQL, Cloud Storage) |
+Cambridge University Press & Assessment is part of the University of Cambridge and is a global organisation dedicated to advancing learning, knowledge, and research. It provides educational resources, assessments, and qualifications used by learners and educators worldwide.
 
-## Getting Started
+With a strong focus on quality, academic rigour, and global relevance, Cambridge supports educators through curriculum-aligned materials, research-informed frameworks, and assessment systems that promote meaningful learning outcomes.
 
-### Prerequisites
+This challenge aligns with Cambridge’s mission to support teachers with trusted, high-quality educational resources and to explore how emerging technologies can enhance teaching and learning in real-world contexts.
 
-- [mise](https://mise.jdx.dev/) — Runtime version manager (`brew install mise`)
-- [Docker](https://www.docker.com/), [OrbStack](https://orbstack.dev/), or [Podman Desktop](https://podman-desktop.io/downloads) — Local infrastructure
+## Key Elements to Consider
 
-### Setup
+Your solution should support educators in real classroom workflows, including:
 
-```bash
-# Trust mise config (required on first clone)
-mise trust
+- **Planning and resource discovery:** identifying relevant, high-quality materials across fragmented sources
+- **Contextual adaptation and personalisation:** e.g., adjusting for learner level, location, language background, student interests, and scope from country → individual
+- **Curriculum alignment and structured output:** ensuring materials align with standards and are presented in clear, engaging, and usable formats
+- **Quality, safety, and trust evaluation:** assessing accuracy, bias, appropriateness, and ensuring proper citation and intellectual property transparency
+- **Localisation and contextual relevance:** e.g., integrating local data, geography, history, First Nations perspectives, communities, and cultural references
+- **Data-informed teaching decisions:** e.g., interpreting student performance or contextual data to guide adaptation
 
-# Install runtimes
-mise install
+Solutions should also account for:
 
-# Install dependencies
-mise run install
+- limited time and high workload
+- varying levels of digital and AI literacy
+- the need for practical, ready-to-use outputs
+- maintaining teacher judgement and professional agency
+- transparent and traceable sources
 
-# Start local infrastructure (PostgreSQL, Redis, MinIO)
-mise infra:up
+> [!TIP]
+> **For inspiration only:**
+>
+> Solutions may combine context-aware resource discovery, localisation, and evaluation, for example by:
+>
+> - embedding and selecting your contextualised localised content (e.g., statistics, maps, history, First Nations knowledge, community projects, cultural figures such as local sports teams, artists, or music)
+> - enabling smarter filtering, ranking, and contextualisation of resources (creating your search engine)
+> - supporting evaluation of quality, bias, and safety
+> - allowing teachers to input, store, and reuse classroom context to continuously refine outputs
 
-# Run database migrations
-mise db:migrate
+## Desired Outcomes
 
-# Start development servers
-mise dev:web
-```
-
-## License
-
-AGPL-3.0 — see [LICENSE](./LICENSE) for details.
+- A working prototype demonstrating the product or experience design (to be presented on Demo Day)
+- A pitch deck and 2–3-minute video explaining the concept and user experience and how the design addresses the challenge
