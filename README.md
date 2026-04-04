@@ -95,3 +95,32 @@ Solutions should also account for:
 
 - A working prototype demonstrating the product or experience design (to be presented on Demo Day)
 - A pitch deck and 2–3-minute video explaining the concept and user experience and how the design addresses the challenge
+
+## Getting Started
+
+### Prerequisites
+
+- [mise](https://mise.jdx.dev/) — Runtime version manager (`brew install mise`)
+- [Docker](https://www.docker.com/), [OrbStack](https://orbstack.dev/), or [Podman Desktop](https://podman-desktop.io/downloads) — Local infrastructure
+
+### Setup
+
+```bash
+# Trust mise config (required on first clone)
+mise trust
+
+# Install runtimes
+mise install
+
+# Install dependencies
+mise run install
+
+# Start local infrastructure (PostgreSQL, Redis, MinIO)
+mise infra:up
+
+# Run database migrations
+mise db:migrate
+
+# Start development servers
+mise dev:web
+```
