@@ -29,7 +29,11 @@ class Base(DeclarativeBase):
 
 # SSL and PgBouncer/Supavisor compat for non-local environments
 _connect_args: dict = {}
-if "localhost" not in settings.DATABASE_URL and "127.0.0.1" not in settings.DATABASE_URL:
+_is_remote = (
+    "localhost" not in settings.DATABASE_URL
+    and "127.0.0.1" not in settings.DATABASE_URL
+)
+if _is_remote:
     _connect_args["ssl"] = "require"
     _connect_args["statement_cache_size"] = 0  # Required for transaction-mode pooling
 

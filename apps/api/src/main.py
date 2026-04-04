@@ -236,8 +236,8 @@ async def check_storage() -> ServiceStatus:
         url = f"{scheme}://{endpoint}"
 
         async with httpx.AsyncClient(timeout=5.0) as client:
-            resp = await client.head(url)
-            # B2/S3 returns 400/403 for unauthenticated HEAD, but that means it's reachable
+            await client.head(url)
+            # B2/S3 returns 400/403 for HEAD — reachable
             latency = (time.perf_counter() - start) * 1000
             return ServiceStatus(status="healthy", latency_ms=round(latency, 2))
     except Exception as e:
