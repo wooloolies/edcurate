@@ -70,103 +70,103 @@
         }
       }
     },
+    "/api/auth/register": {
+      "post": {
+        "tags": [
+          "authentication"
+        ],
+        "summary": "Register",
+        "description": "Register a new user with email and password.",
+        "operationId": "register_api_auth_register_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/email-login": {
+      "post": {
+        "tags": [
+          "authentication"
+        ],
+        "summary": "Email Login",
+        "description": "Login with email and password.",
+        "operationId": "email_login_api_auth_email_login_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmailLoginRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/auth/login": {
       "post": {
         "tags": [
           "authentication"
         ],
-        "summary": "Login",
+        "summary": "Oauth Login",
         "description": "OAuth login endpoint.\n\nVerify OAuth token, create/update user, and issue JWE tokens.",
-        "operationId": "login_api_auth_login_post",
+        "operationId": "oauth_login_api_auth_login_post",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/OAuthLoginRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TokenResponse"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/auth/session-exchange": {
-      "post": {
-        "tags": [
-          "authentication"
-        ],
-        "summary": "Session Exchange",
-        "description": "Exchange better-auth session token for backend JWE tokens.\n\nUsed by email/password auth users who have no OAuth provider token.\nVerifies session with better-auth server, then issues backend tokens.",
-        "operationId": "session_exchange_api_auth_session_exchange_post",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/SessionExchangeRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TokenResponse"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/auth/internal-exchange": {
-      "post": {
-        "tags": [
-          "authentication"
-        ],
-        "summary": "Internal Exchange",
-        "description": "Internal token exchange for pre-verified sessions.\n\nCalled by Next.js API route after server-side session verification.\nCreates/finds user and issues backend JWE tokens.",
-        "operationId": "internal_exchange_api_auth_internal_exchange_post",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/InternalExchangeRequest"
               }
             }
           },
@@ -625,6 +625,25 @@
         "title": "DdgsMetadata",
         "description": "Metadata from DuckDuckGo search results."
       },
+      "EmailLoginRequest": {
+        "properties": {
+          "email": {
+            "type": "string",
+            "title": "Email"
+          },
+          "password": {
+            "type": "string",
+            "title": "Password"
+          }
+        },
+        "type": "object",
+        "required": [
+          "email",
+          "password"
+        ],
+        "title": "EmailLoginRequest",
+        "description": "Email/password login."
+      },
       "HTTPValidationError": {
         "properties": {
           "detail": {
@@ -669,31 +688,6 @@
         ],
         "title": "HealthResponse",
         "description": "Health check response with detailed service statuses."
-      },
-      "InternalExchangeRequest": {
-        "properties": {
-          "email": {
-            "type": "string",
-            "title": "Email"
-          },
-          "name": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Name"
-          }
-        },
-        "type": "object",
-        "required": [
-          "email"
-        ],
-        "title": "InternalExchangeRequest",
-        "description": "Internal token exchange — pre-verified by Next.js server."
       },
       "OAuthLoginRequest": {
         "properties": {
@@ -1469,6 +1463,36 @@
         "title": "RefreshTokenRequest",
         "description": "Refresh token request."
       },
+      "RegisterRequest": {
+        "properties": {
+          "email": {
+            "type": "string",
+            "title": "Email"
+          },
+          "password": {
+            "type": "string",
+            "title": "Password"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          }
+        },
+        "type": "object",
+        "required": [
+          "email",
+          "password"
+        ],
+        "title": "RegisterRequest",
+        "description": "Email/password registration."
+      },
       "ResourceCard": {
         "properties": {
           "title": {
@@ -1627,20 +1651,6 @@
         ],
         "title": "ServiceStatus",
         "description": "Individual service health status."
-      },
-      "SessionExchangeRequest": {
-        "properties": {
-          "session_token": {
-            "type": "string",
-            "title": "Session Token"
-          }
-        },
-        "type": "object",
-        "required": [
-          "session_token"
-        ],
-        "title": "SessionExchangeRequest",
-        "description": "Exchange better-auth session token for backend JWE tokens."
       },
       "SourceError": {
         "properties": {

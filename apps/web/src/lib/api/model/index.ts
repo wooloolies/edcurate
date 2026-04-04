@@ -6,11 +6,11 @@
  */
 
 export * from './ddgs-metadata';
+export * from './email-login-request';
 export * from './health-response-services';
 export * from './health-response-status';
 export * from './health-response';
 export * from './httpvalidation-error';
-export * from './internal-exchange-request';
 export * from './list-presets-api-presets-get-params';
 export * from './liveness-check-health-live-get200';
 export * from './oauth-login-request-provider';
@@ -25,6 +25,7 @@ export * from './preset-response';
 export * from './preset-update';
 export * from './readiness-check-health-ready-get200';
 export * from './refresh-token-request';
+export * from './register-request';
 export * from './resource-card-source';
 export * from './resource-card-type';
 export * from './resource-card';
@@ -33,7 +34,6 @@ export * from './search-response-counts-by-source';
 export * from './search-response';
 export * from './service-status-status';
 export * from './service-status';
-export * from './session-exchange-request';
 export * from './source-error-source';
 export * from './source-error';
 export * from './source-weights';

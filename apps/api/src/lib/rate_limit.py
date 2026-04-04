@@ -83,7 +83,7 @@ class RedisRateLimiter:
         self.window = window
         self._redis: redis_module.Redis | None = None
 
-    async def _get_redis(self) -> "redis_module.Redis":
+    async def _get_redis(self) -> redis_module.Redis:
         """Lazy Redis connection."""
         if self._redis is None:
             import redis.asyncio as redis

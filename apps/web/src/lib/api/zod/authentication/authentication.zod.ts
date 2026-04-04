@@ -8,63 +8,51 @@ import * as zod from 'zod';
 
 
 /**
+ * Register a new user with email and password.
+ * @summary Register
+ */
+export const RegisterApiAuthRegisterPostBody = zod.object({
+  "email": zod.string(),
+  "password": zod.string(),
+  "name": zod.union([zod.string(),zod.null()]).optional()
+}).describe('Email\/password registration.')
+
+/**
+ * Login with email and password.
+ * @summary Email Login
+ */
+export const EmailLoginApiAuthEmailLoginPostBody = zod.object({
+  "email": zod.string(),
+  "password": zod.string()
+}).describe('Email\/password login.')
+
+export const emailLoginApiAuthEmailLoginPostResponseTokenTypeDefault = `bearer`;
+
+export const EmailLoginApiAuthEmailLoginPostResponse = zod.object({
+  "access_token": zod.string(),
+  "refresh_token": zod.string(),
+  "token_type": zod.string().default(emailLoginApiAuthEmailLoginPostResponseTokenTypeDefault)
+}).describe('Token response.')
+
+/**
  * OAuth login endpoint.
 
 Verify OAuth token, create/update user, and issue JWE tokens.
- * @summary Login
+ * @summary Oauth Login
  */
-export const LoginApiAuthLoginPostBody = zod.object({
+export const OauthLoginApiAuthLoginPostBody = zod.object({
   "provider": zod.enum(['google', 'github', 'facebook']),
   "access_token": zod.string(),
   "email": zod.string(),
   "name": zod.union([zod.string(),zod.null()]).optional()
 }).describe('OAuth login request.')
 
-export const loginApiAuthLoginPostResponseTokenTypeDefault = `bearer`;
+export const oauthLoginApiAuthLoginPostResponseTokenTypeDefault = `bearer`;
 
-export const LoginApiAuthLoginPostResponse = zod.object({
+export const OauthLoginApiAuthLoginPostResponse = zod.object({
   "access_token": zod.string(),
   "refresh_token": zod.string(),
-  "token_type": zod.string().default(loginApiAuthLoginPostResponseTokenTypeDefault)
-}).describe('Token response.')
-
-/**
- * Exchange better-auth session token for backend JWE tokens.
-
-Used by email/password auth users who have no OAuth provider token.
-Verifies session with better-auth server, then issues backend tokens.
- * @summary Session Exchange
- */
-export const SessionExchangeApiAuthSessionExchangePostBody = zod.object({
-  "session_token": zod.string()
-}).describe('Exchange better-auth session token for backend JWE tokens.')
-
-export const sessionExchangeApiAuthSessionExchangePostResponseTokenTypeDefault = `bearer`;
-
-export const SessionExchangeApiAuthSessionExchangePostResponse = zod.object({
-  "access_token": zod.string(),
-  "refresh_token": zod.string(),
-  "token_type": zod.string().default(sessionExchangeApiAuthSessionExchangePostResponseTokenTypeDefault)
-}).describe('Token response.')
-
-/**
- * Internal token exchange for pre-verified sessions.
-
-Called by Next.js API route after server-side session verification.
-Creates/finds user and issues backend JWE tokens.
- * @summary Internal Exchange
- */
-export const InternalExchangeApiAuthInternalExchangePostBody = zod.object({
-  "email": zod.string(),
-  "name": zod.union([zod.string(),zod.null()]).optional()
-}).describe('Internal token exchange — pre-verified by Next.js server.')
-
-export const internalExchangeApiAuthInternalExchangePostResponseTokenTypeDefault = `bearer`;
-
-export const InternalExchangeApiAuthInternalExchangePostResponse = zod.object({
-  "access_token": zod.string(),
-  "refresh_token": zod.string(),
-  "token_type": zod.string().default(internalExchangeApiAuthInternalExchangePostResponseTokenTypeDefault)
+  "token_type": zod.string().default(oauthLoginApiAuthLoginPostResponseTokenTypeDefault)
 }).describe('Token response.')
 
 /**

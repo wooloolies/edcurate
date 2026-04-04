@@ -6,9 +6,10 @@
  */
 
 /**
- * Internal token exchange — pre-verified by Next.js server.
+ * Email/password registration.
  */
-export interface InternalExchangeRequest {
+export interface RegisterRequest {
   email: string;
+  password: string;
   name?: string | null;
 }

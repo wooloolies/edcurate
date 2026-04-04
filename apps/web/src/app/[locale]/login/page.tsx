@@ -2,70 +2,47 @@
 
 import { useForm } from "@tanstack/react-form";
 import { useTranslations } from "next-intl";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { z } from "zod";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  exchangeSessionForBackendJwt,
-  resendVerificationEmail,
-  signInWithEmail,
-  signUpWithEmail,
-} from "@/lib/auth/auth-client";
+import { apiClient } from "@/lib/api-client";
+import { setAccessToken, setRefreshToken } from "@/lib/auth/token";
 import { useRouter } from "@/lib/i18n/routing";
 
-const RESEND_COOLDOWN = 60;
 const emailSchema = z.string().email();
 
-type Mode = "signIn" | "signUp" | "verifyEmail";
+type Mode = "signIn" | "signUp";
+
+type TokenResponse = {
+  access_token: string;
+  refresh_token: string;
+};
 
 export default function LoginPage() {
   const t = useTranslations("login");
   const router = useRouter();
   const [mode, setMode] = useState<Mode>("signIn");
   const [error, setError] = useState("");
-  const [pendingEmail, setPendingEmail] = useState("");
-  const [cooldown, setCooldown] = useState(0);
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-
-  const startCooldown = useCallback(() => {
-    setCooldown(RESEND_COOLDOWN);
-    if (timerRef.current) clearInterval(timerRef.current);
-    timerRef.current = setInterval(() => {
-      setCooldown((prev) => {
-        if (prev <= 1) {
-          if (timerRef.current) clearInterval(timerRef.current);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-  }, []);
-
-  useEffect(() => {
-    return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
-    };
-  }, []);
 
   const signInForm = useForm({
     defaultValues: { email: "", password: "" },
     onSubmit: async ({ value }) => {
       setError("");
-      const result = await signInWithEmail(value.email, value.password);
-      if (result.error) {
-        if (result.error.status === 403) {
-          setPendingEmail(value.email);
-          setMode("verifyEmail");
-        } else {
-          setError(t("invalidCredentials"));
-        }
-        return;
+      try {
+        const { data } = await apiClient.post<TokenResponse>("/api/auth/email-login", {
+          email: value.email,
+          password: value.password,
+        });
+        setAccessToken(data.access_token);
+        setRefreshToken(data.refresh_token);
+        router.push("/dashboard");
+      } catch {
+        setError(t("invalidCredentials"));
       }
-      await exchangeSessionForBackendJwt().catch(() => {});
-      router.push("/dashboard");
     },
   });
 
@@ -73,62 +50,23 @@ export default function LoginPage() {
     defaultValues: { name: "", email: "", password: "" },
     onSubmit: async ({ value }) => {
       setError("");
-      const result = await signUpWithEmail(value.email, value.password, value.name);
-      if (result.error) {
-        setError(result.error.message ?? t("invalidCredentials"));
-        return;
-      }
-      // If token was returned, session created — verification not required
-      if (result.data?.token) {
-        await exchangeSessionForBackendJwt().catch(() => {});
+      try {
+        const { data } = await apiClient.post<TokenResponse>("/api/auth/register", {
+          email: value.email,
+          password: value.password,
+          name: value.name,
+        });
+        setAccessToken(data.access_token);
+        setRefreshToken(data.refresh_token);
         router.push("/dashboard");
-        return;
+      } catch (err: unknown) {
+        const msg =
+          (err as { response?: { data?: { detail?: string } } })?.response?.data?.detail ??
+          t("invalidCredentials");
+        setError(msg);
       }
-      // Otherwise show verification screen
-      setPendingEmail(value.email);
-      setMode("verifyEmail");
-      startCooldown();
     },
   });
-
-  if (mode === "verifyEmail") {
-    return (
-      <main className="flex min-h-screen items-center justify-center p-4">
-        <Card className="w-full max-w-sm">
-          <CardHeader className="text-center">
-            <CardTitle>{t("verifyEmail")}</CardTitle>
-            <CardDescription>
-              {t("verifyEmailDescription", { email: pendingEmail })}
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="flex flex-col gap-3">
-            <p className="text-muted-foreground text-center text-sm">{t("checkSpam")}</p>
-            <Button
-              variant="outline"
-              className="w-full"
-              disabled={cooldown > 0}
-              onClick={async () => {
-                await resendVerificationEmail(pendingEmail);
-                startCooldown();
-              }}
-            >
-              {cooldown > 0 ? t("resendCooldown", { seconds: cooldown }) : t("resendVerification")}
-            </Button>
-            <Button
-              variant="ghost"
-              className="w-full"
-              onClick={() => {
-                setMode("signIn");
-                setError("");
-              }}
-            >
-              {t("backToSignIn")}
-            </Button>
-          </CardContent>
-        </Card>
-      </main>
-    );
-  }
 
   return (
     <main className="flex min-h-screen items-center justify-center p-4">

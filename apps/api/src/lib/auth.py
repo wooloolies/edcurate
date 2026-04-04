@@ -53,6 +53,21 @@ class InternalExchangeRequest(BaseModel):
     name: str | None = None
 
 
+class RegisterRequest(BaseModel):
+    """Email/password registration."""
+
+    email: str
+    password: str
+    name: str | None = None
+
+
+class EmailLoginRequest(BaseModel):
+    """Email/password login."""
+
+    email: str
+    password: str
+
+
 class RefreshTokenRequest(BaseModel):
     """Refresh token request."""
 

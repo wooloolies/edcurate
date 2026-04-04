@@ -19,11 +19,11 @@ import {
 } from 'react';
 
 import type {
+  EmailLoginRequest,
   HTTPValidationError,
-  InternalExchangeRequest,
   OAuthLoginRequest,
   RefreshTokenRequest,
-  SessionExchangeRequest,
+  RegisterRequest,
   TokenResponse
 } from '../model';
 
@@ -33,47 +33,179 @@ import { useCustomInstance } from '../../../hooks/use-custom-instance';
 
 
 /**
+ * Register a new user with email and password.
+ * @summary Register
+ */
+export const useRegisterApiAuthRegisterPostHook = () => {
+        const registerApiAuthRegisterPost = useCustomInstance<TokenResponse>();
+
+        return useCallback((
+    registerRequest: RegisterRequest,
+ signal?: AbortSignal
+) => {
+        return registerApiAuthRegisterPost(
+          {url: `/api/auth/register`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: registerRequest, signal
+    },
+          );
+        }, [registerApiAuthRegisterPost])
+      }
+
+
+
+export const useRegisterApiAuthRegisterPostMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useRegisterApiAuthRegisterPostHook>>>, TError,{data: RegisterRequest}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useRegisterApiAuthRegisterPostHook>>>, TError,{data: RegisterRequest}, TContext> => {
+
+const mutationKey = ['registerApiAuthRegisterPost'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      const registerApiAuthRegisterPost =  useRegisterApiAuthRegisterPostHook()
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<ReturnType<typeof useRegisterApiAuthRegisterPostHook>>>, {data: RegisterRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  registerApiAuthRegisterPost(data,)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type RegisterApiAuthRegisterPostMutationResult = NonNullable<Awaited<ReturnType<ReturnType<typeof useRegisterApiAuthRegisterPostHook>>>>
+    export type RegisterApiAuthRegisterPostMutationBody = RegisterRequest
+    export type RegisterApiAuthRegisterPostMutationError = HTTPValidationError
+
+    /**
+ * @summary Register
+ */
+export const useRegisterApiAuthRegisterPost = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useRegisterApiAuthRegisterPostHook>>>, TError,{data: RegisterRequest}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<ReturnType<typeof useRegisterApiAuthRegisterPostHook>>>,
+        TError,
+        {data: RegisterRequest},
+        TContext
+      > => {
+      return useMutation(useRegisterApiAuthRegisterPostMutationOptions(options), queryClient);
+    }
+    /**
+ * Login with email and password.
+ * @summary Email Login
+ */
+export const useEmailLoginApiAuthEmailLoginPostHook = () => {
+        const emailLoginApiAuthEmailLoginPost = useCustomInstance<TokenResponse>();
+
+        return useCallback((
+    emailLoginRequest: EmailLoginRequest,
+ signal?: AbortSignal
+) => {
+        return emailLoginApiAuthEmailLoginPost(
+          {url: `/api/auth/email-login`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: emailLoginRequest, signal
+    },
+          );
+        }, [emailLoginApiAuthEmailLoginPost])
+      }
+
+
+
+export const useEmailLoginApiAuthEmailLoginPostMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useEmailLoginApiAuthEmailLoginPostHook>>>, TError,{data: EmailLoginRequest}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useEmailLoginApiAuthEmailLoginPostHook>>>, TError,{data: EmailLoginRequest}, TContext> => {
+
+const mutationKey = ['emailLoginApiAuthEmailLoginPost'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      const emailLoginApiAuthEmailLoginPost =  useEmailLoginApiAuthEmailLoginPostHook()
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<ReturnType<typeof useEmailLoginApiAuthEmailLoginPostHook>>>, {data: EmailLoginRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  emailLoginApiAuthEmailLoginPost(data,)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type EmailLoginApiAuthEmailLoginPostMutationResult = NonNullable<Awaited<ReturnType<ReturnType<typeof useEmailLoginApiAuthEmailLoginPostHook>>>>
+    export type EmailLoginApiAuthEmailLoginPostMutationBody = EmailLoginRequest
+    export type EmailLoginApiAuthEmailLoginPostMutationError = HTTPValidationError
+
+    /**
+ * @summary Email Login
+ */
+export const useEmailLoginApiAuthEmailLoginPost = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useEmailLoginApiAuthEmailLoginPostHook>>>, TError,{data: EmailLoginRequest}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<ReturnType<typeof useEmailLoginApiAuthEmailLoginPostHook>>>,
+        TError,
+        {data: EmailLoginRequest},
+        TContext
+      > => {
+      return useMutation(useEmailLoginApiAuthEmailLoginPostMutationOptions(options), queryClient);
+    }
+    /**
  * OAuth login endpoint.
 
 Verify OAuth token, create/update user, and issue JWE tokens.
- * @summary Login
+ * @summary Oauth Login
  */
-export const useLoginApiAuthLoginPostHook = () => {
-        const loginApiAuthLoginPost = useCustomInstance<TokenResponse>();
+export const useOauthLoginApiAuthLoginPostHook = () => {
+        const oauthLoginApiAuthLoginPost = useCustomInstance<TokenResponse>();
 
         return useCallback((
     oAuthLoginRequest: OAuthLoginRequest,
  signal?: AbortSignal
 ) => {
-        return loginApiAuthLoginPost(
+        return oauthLoginApiAuthLoginPost(
           {url: `/api/auth/login`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: oAuthLoginRequest, signal
     },
           );
-        }, [loginApiAuthLoginPost])
+        }, [oauthLoginApiAuthLoginPost])
       }
 
 
 
-export const useLoginApiAuthLoginPostMutationOptions = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useLoginApiAuthLoginPostHook>>>, TError,{data: OAuthLoginRequest}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useLoginApiAuthLoginPostHook>>>, TError,{data: OAuthLoginRequest}, TContext> => {
+export const useOauthLoginApiAuthLoginPostMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useOauthLoginApiAuthLoginPostHook>>>, TError,{data: OAuthLoginRequest}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useOauthLoginApiAuthLoginPostHook>>>, TError,{data: OAuthLoginRequest}, TContext> => {
 
-const mutationKey = ['loginApiAuthLoginPost'];
+const mutationKey = ['oauthLoginApiAuthLoginPost'];
 const {mutation: mutationOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
       : {mutation: { mutationKey, }};
 
-      const loginApiAuthLoginPost =  useLoginApiAuthLoginPostHook()
+      const oauthLoginApiAuthLoginPost =  useOauthLoginApiAuthLoginPostHook()
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<ReturnType<typeof useLoginApiAuthLoginPostHook>>>, {data: OAuthLoginRequest}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<ReturnType<typeof useOauthLoginApiAuthLoginPostHook>>>, {data: OAuthLoginRequest}> = (props) => {
           const {data} = props ?? {};
 
-          return  loginApiAuthLoginPost(data,)
+          return  oauthLoginApiAuthLoginPost(data,)
         }
 
 
@@ -83,160 +215,22 @@ const {mutation: mutationOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    export type LoginApiAuthLoginPostMutationResult = NonNullable<Awaited<ReturnType<ReturnType<typeof useLoginApiAuthLoginPostHook>>>>
-    export type LoginApiAuthLoginPostMutationBody = OAuthLoginRequest
-    export type LoginApiAuthLoginPostMutationError = HTTPValidationError
+    export type OauthLoginApiAuthLoginPostMutationResult = NonNullable<Awaited<ReturnType<ReturnType<typeof useOauthLoginApiAuthLoginPostHook>>>>
+    export type OauthLoginApiAuthLoginPostMutationBody = OAuthLoginRequest
+    export type OauthLoginApiAuthLoginPostMutationError = HTTPValidationError
 
     /**
- * @summary Login
+ * @summary Oauth Login
  */
-export const useLoginApiAuthLoginPost = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useLoginApiAuthLoginPostHook>>>, TError,{data: OAuthLoginRequest}, TContext>, }
+export const useOauthLoginApiAuthLoginPost = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useOauthLoginApiAuthLoginPostHook>>>, TError,{data: OAuthLoginRequest}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<ReturnType<typeof useLoginApiAuthLoginPostHook>>>,
+        Awaited<ReturnType<ReturnType<typeof useOauthLoginApiAuthLoginPostHook>>>,
         TError,
         {data: OAuthLoginRequest},
         TContext
       > => {
-      return useMutation(useLoginApiAuthLoginPostMutationOptions(options), queryClient);
-    }
-    /**
- * Exchange better-auth session token for backend JWE tokens.
-
-Used by email/password auth users who have no OAuth provider token.
-Verifies session with better-auth server, then issues backend tokens.
- * @summary Session Exchange
- */
-export const useSessionExchangeApiAuthSessionExchangePostHook = () => {
-        const sessionExchangeApiAuthSessionExchangePost = useCustomInstance<TokenResponse>();
-
-        return useCallback((
-    sessionExchangeRequest: SessionExchangeRequest,
- signal?: AbortSignal
-) => {
-        return sessionExchangeApiAuthSessionExchangePost(
-          {url: `/api/auth/session-exchange`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: sessionExchangeRequest, signal
-    },
-          );
-        }, [sessionExchangeApiAuthSessionExchangePost])
-      }
-
-
-
-export const useSessionExchangeApiAuthSessionExchangePostMutationOptions = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useSessionExchangeApiAuthSessionExchangePostHook>>>, TError,{data: SessionExchangeRequest}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useSessionExchangeApiAuthSessionExchangePostHook>>>, TError,{data: SessionExchangeRequest}, TContext> => {
-
-const mutationKey = ['sessionExchangeApiAuthSessionExchangePost'];
-const {mutation: mutationOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
-
-      const sessionExchangeApiAuthSessionExchangePost =  useSessionExchangeApiAuthSessionExchangePostHook()
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<ReturnType<typeof useSessionExchangeApiAuthSessionExchangePostHook>>>, {data: SessionExchangeRequest}> = (props) => {
-          const {data} = props ?? {};
-
-          return  sessionExchangeApiAuthSessionExchangePost(data,)
-        }
-
-
-
-
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type SessionExchangeApiAuthSessionExchangePostMutationResult = NonNullable<Awaited<ReturnType<ReturnType<typeof useSessionExchangeApiAuthSessionExchangePostHook>>>>
-    export type SessionExchangeApiAuthSessionExchangePostMutationBody = SessionExchangeRequest
-    export type SessionExchangeApiAuthSessionExchangePostMutationError = HTTPValidationError
-
-    /**
- * @summary Session Exchange
- */
-export const useSessionExchangeApiAuthSessionExchangePost = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useSessionExchangeApiAuthSessionExchangePostHook>>>, TError,{data: SessionExchangeRequest}, TContext>, }
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<ReturnType<typeof useSessionExchangeApiAuthSessionExchangePostHook>>>,
-        TError,
-        {data: SessionExchangeRequest},
-        TContext
-      > => {
-      return useMutation(useSessionExchangeApiAuthSessionExchangePostMutationOptions(options), queryClient);
-    }
-    /**
- * Internal token exchange for pre-verified sessions.
-
-Called by Next.js API route after server-side session verification.
-Creates/finds user and issues backend JWE tokens.
- * @summary Internal Exchange
- */
-export const useInternalExchangeApiAuthInternalExchangePostHook = () => {
-        const internalExchangeApiAuthInternalExchangePost = useCustomInstance<TokenResponse>();
-
-        return useCallback((
-    internalExchangeRequest: InternalExchangeRequest,
- signal?: AbortSignal
-) => {
-        return internalExchangeApiAuthInternalExchangePost(
-          {url: `/api/auth/internal-exchange`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: internalExchangeRequest, signal
-    },
-          );
-        }, [internalExchangeApiAuthInternalExchangePost])
-      }
-
-
-
-export const useInternalExchangeApiAuthInternalExchangePostMutationOptions = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useInternalExchangeApiAuthInternalExchangePostHook>>>, TError,{data: InternalExchangeRequest}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useInternalExchangeApiAuthInternalExchangePostHook>>>, TError,{data: InternalExchangeRequest}, TContext> => {
-
-const mutationKey = ['internalExchangeApiAuthInternalExchangePost'];
-const {mutation: mutationOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
-
-      const internalExchangeApiAuthInternalExchangePost =  useInternalExchangeApiAuthInternalExchangePostHook()
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<ReturnType<typeof useInternalExchangeApiAuthInternalExchangePostHook>>>, {data: InternalExchangeRequest}> = (props) => {
-          const {data} = props ?? {};
-
-          return  internalExchangeApiAuthInternalExchangePost(data,)
-        }
-
-
-
-
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type InternalExchangeApiAuthInternalExchangePostMutationResult = NonNullable<Awaited<ReturnType<ReturnType<typeof useInternalExchangeApiAuthInternalExchangePostHook>>>>
-    export type InternalExchangeApiAuthInternalExchangePostMutationBody = InternalExchangeRequest
-    export type InternalExchangeApiAuthInternalExchangePostMutationError = HTTPValidationError
-
-    /**
- * @summary Internal Exchange
- */
-export const useInternalExchangeApiAuthInternalExchangePost = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useInternalExchangeApiAuthInternalExchangePostHook>>>, TError,{data: InternalExchangeRequest}, TContext>, }
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<ReturnType<typeof useInternalExchangeApiAuthInternalExchangePostHook>>>,
-        TError,
-        {data: InternalExchangeRequest},
-        TContext
-      > => {
-      return useMutation(useInternalExchangeApiAuthInternalExchangePostMutationOptions(options), queryClient);
+      return useMutation(useOauthLoginApiAuthLoginPostMutationOptions(options), queryClient);
     }
     /**
  * Refresh access token using refresh token.
