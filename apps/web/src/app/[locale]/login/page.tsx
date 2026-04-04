@@ -15,7 +15,14 @@ import { useRouter } from "@/lib/i18n/routing";
 
 const emailSchema = z.string().email();
 
-type Mode = "signIn" | "signUp";
+type Mode = "signIn" | "signUp" | "verifyEmail";
+
+type RegisterResponse = {
+  access_token?: string;
+  refresh_token?: string;
+  requires_verification: boolean;
+  message: string;
+};
 
 type TokenResponse = {
   access_token: string;
@@ -27,6 +34,7 @@ export default function LoginPage() {
   const router = useRouter();
   const [mode, setMode] = useState<Mode>("signIn");
   const [error, setError] = useState("");
+  const [pendingEmail, setPendingEmail] = useState("");
 
   const signInForm = useForm({
     defaultValues: { email: "", password: "" },
@@ -40,8 +48,14 @@ export default function LoginPage() {
         setAccessToken(data.access_token);
         setRefreshToken(data.refresh_token);
         router.push("/dashboard");
-      } catch {
-        setError(t("invalidCredentials"));
+      } catch (err: unknown) {
+        const status = (err as { response?: { status?: number } })?.response?.status;
+        if (status === 403) {
+          setPendingEmail(value.email);
+          setMode("verifyEmail");
+        } else {
+          setError(t("invalidCredentials"));
+        }
       }
     },
   });
@@ -51,13 +65,18 @@ export default function LoginPage() {
     onSubmit: async ({ value }) => {
       setError("");
       try {
-        const { data } = await apiClient.post<TokenResponse>("/api/auth/register", {
+        const { data } = await apiClient.post<RegisterResponse>("/api/auth/register", {
           email: value.email,
           password: value.password,
           name: value.name,
         });
-        setAccessToken(data.access_token);
-        setRefreshToken(data.refresh_token);
+        if (data.requires_verification) {
+          setPendingEmail(value.email);
+          setMode("verifyEmail");
+          return;
+        }
+        if (data.access_token) setAccessToken(data.access_token);
+        if (data.refresh_token) setRefreshToken(data.refresh_token);
         router.push("/dashboard");
       } catch (err: unknown) {
         const msg =
@@ -67,6 +86,34 @@ export default function LoginPage() {
       }
     },
   });
+
+  if (mode === "verifyEmail") {
+    return (
+      <main className="flex min-h-screen items-center justify-center p-4">
+        <Card className="w-full max-w-sm">
+          <CardHeader className="text-center">
+            <CardTitle>{t("verifyEmail")}</CardTitle>
+            <CardDescription>
+              {t("verifyEmailDescription", { email: pendingEmail })}
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="flex flex-col gap-3">
+            <p className="text-muted-foreground text-center text-sm">{t("checkSpam")}</p>
+            <Button
+              variant="ghost"
+              className="w-full"
+              onClick={() => {
+                setMode("signIn");
+                setError("");
+              }}
+            >
+              {t("backToSignIn")}
+            </Button>
+          </CardContent>
+        </Card>
+      </main>
+    );
+  }
 
   return (
     <main className="flex min-h-screen items-center justify-center p-4">

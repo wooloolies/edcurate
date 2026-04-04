@@ -49,6 +49,11 @@ class Settings(BaseSettings):
     GEMINI_API_KEY: str | None = None
     OPENAI_API_KEY: str | None = None
 
+    # Email (optional — skip verification when absent)
+    RESEND_API_KEY: str | None = None
+    EMAIL_FROM: str = "noreply@edcurate.com"
+    FRONTEND_URL: str = "http://localhost:3000"
+
     # Search providers (optional)
     YOUTUBE_API_KEY: str | None = None
     OPENALEX_API_KEY: str | None = None
