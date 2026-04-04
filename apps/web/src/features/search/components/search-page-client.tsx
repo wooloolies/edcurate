@@ -16,27 +16,27 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ErrorBanner } from "@/features/search/components/error-banner";
 import { ResourceCardRenderer } from "@/features/search/components/resource-card";
 import { ResourceCardSkeleton } from "@/features/search/components/skeleton/resource-card-skeleton";
-import { useSearchApiDiscoverySearchPost } from "@/lib/api/discovery/discovery";
-import type { SearchResponse } from "@/lib/api/model";
+import { useSearchApiDiscoverySearchGet } from "@/lib/api/discovery/discovery";
 import { useListPresetsApiPresetsGet } from "@/lib/api/presets/presets";
 
 export function SearchPageClient() {
   const [presetId, setPresetId] = useQueryState("preset_id");
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState<SearchResponse | null>(null);
+  const [submittedQuery, setSubmittedQuery] = useState("");
 
   const { data: presetsData } = useListPresetsApiPresetsGet();
   const presets = presetsData?.data ?? [];
 
-  const searchMutation = useSearchApiDiscoverySearchPost();
+  const searchEnabled = !!presetId && !!submittedQuery;
+  const { data: results, isFetching } = useSearchApiDiscoverySearchGet(
+    { preset_id: presetId!, query: submittedQuery },
+    { query: { enabled: searchEnabled, staleTime: 3 * 60 * 1000 } },
+  );
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (!presetId || !query.trim()) return;
-    searchMutation.mutate(
-      { data: { preset_id: presetId, query: query.trim() } },
-      { onSuccess: (data) => setResults(data) }
-    );
+    setSubmittedQuery(query.trim());
   };
 
   const counts = results?.counts_by_source ?? { ddgs: 0, youtube: 0, openalex: 0 };
@@ -73,15 +73,15 @@ export function SearchPageClient() {
             placeholder="Search for educational resources..."
             className="min-w-0 flex-1"
           />
-          <Button type="submit" disabled={!presetId || !query.trim() || searchMutation.isPending}>
-            {searchMutation.isPending ? "Searching..." : "Search"}
+          <Button type="submit" disabled={!presetId || !query.trim() || isFetching}>
+            {isFetching ? "Searching..." : "Search"}
           </Button>
         </form>
       </div>
 
       {results && results.errors.length > 0 && <ErrorBanner errors={results.errors} />}
 
-      {searchMutation.isPending && (
+      {isFetching && (
         <div className="space-y-3">
           {Array.from({ length: 5 }).map((_, i) => (
             <ResourceCardSkeleton key={i} />
@@ -89,7 +89,7 @@ export function SearchPageClient() {
         </div>
       )}
 
-      {results && !searchMutation.isPending && (
+      {results && !isFetching && (
         <Tabs defaultValue="all">
           <TabsList className="overflow-x-auto">
             <TabsTrigger value="all">All ({totalCount})</TabsTrigger>
@@ -112,7 +112,7 @@ export function SearchPageClient() {
         </Tabs>
       )}
 
-      {!results && !searchMutation.isPending && (
+      {!results && !isFetching && (
         <div className="rounded-lg border border-dashed p-12 text-center">
           <p className="text-muted-foreground">
             Select a preset and enter a search query to discover educational resources.

@@ -2,11 +2,11 @@
 
 import uuid
 
-from fastapi import APIRouter, HTTPException, Request, status
+from fastapi import APIRouter, HTTPException, Query, Request, status
 from sqlalchemy import select
 
 from src.discovery import service
-from src.discovery.schemas import SearchRequest, SearchResponse
+from src.discovery.schemas import SearchResponse
 from src.lib.auth import decode_token
 from src.lib.dependencies import CurrentUser, DBSession
 from src.lib.rate_limit import rate_limit
@@ -33,13 +33,14 @@ def _user_rate_limit_key(request: Request) -> str:
     return f"discovery:search:{ip}"
 
 
-@router.post("/search", response_model=SearchResponse)
+@router.get("/search", response_model=SearchResponse)
 @rate_limit(requests=20, window=60, key_func=_user_rate_limit_key)
 async def search(
     request: Request,
-    body: SearchRequest,
     db: DBSession,
     current_user: CurrentUser,
+    preset_id: uuid.UUID = Query(...),
+    query: str = Query(..., min_length=1, max_length=500),
 ) -> SearchResponse:
     """
     Federated search across DuckDuckGo, YouTube, and OpenAlex.
@@ -52,7 +53,7 @@ async def search(
     # Verify preset ownership
     result = await db.execute(
         select(ClassroomPreset).where(
-            ClassroomPreset.id == body.preset_id,
+            ClassroomPreset.id == preset_id,
             ClassroomPreset.user_id == user_id,
         )
     )
@@ -63,4 +64,4 @@ async def search(
             detail="Preset not found",
         )
 
-    return await service.search_resources(preset, body.query)
+    return await service.search_resources(preset, query)

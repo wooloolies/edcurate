@@ -154,6 +154,48 @@
         }
       }
     },
+    "/api/auth/internal-exchange": {
+      "post": {
+        "tags": [
+          "authentication"
+        ],
+        "summary": "Internal Exchange",
+        "description": "Internal token exchange for pre-verified sessions.\n\nCalled by Next.js API route after server-side session verification.\nCreates/finds user and issues backend JWE tokens.",
+        "operationId": "internal_exchange_api_auth_internal_exchange_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InternalExchangeRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/auth/refresh": {
       "post": {
         "tags": [
@@ -484,23 +526,36 @@
       }
     },
     "/api/discovery/search": {
-      "post": {
+      "get": {
         "tags": [
           "discovery"
         ],
         "summary": "Search",
         "description": "Federated search across DuckDuckGo, YouTube, and OpenAlex.\n\nRate limited to 20 requests per minute per user.\nSource labels: ddgs=DuckDuckGo, youtube=YouTube, openalex=OpenAlex",
-        "operationId": "search_api_discovery_search_post",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/SearchRequest"
-              }
+        "operationId": "search_api_discovery_search_get",
+        "parameters": [
+          {
+            "name": "preset_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Preset Id"
             }
           },
-          "required": true
-        },
+          {
+            "name": "query",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 500,
+              "title": "Query"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -614,6 +669,31 @@
         ],
         "title": "HealthResponse",
         "description": "Health check response with detailed service statuses."
+      },
+      "InternalExchangeRequest": {
+        "properties": {
+          "email": {
+            "type": "string",
+            "title": "Email"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          }
+        },
+        "type": "object",
+        "required": [
+          "email"
+        ],
+        "title": "InternalExchangeRequest",
+        "description": "Internal token exchange — pre-verified by Next.js server."
       },
       "OAuthLoginRequest": {
         "properties": {
@@ -1458,28 +1538,6 @@
         ],
         "title": "ResourceCard",
         "description": "Normalised resource card returned by all providers."
-      },
-      "SearchRequest": {
-        "properties": {
-          "preset_id": {
-            "type": "string",
-            "format": "uuid",
-            "title": "Preset Id"
-          },
-          "query": {
-            "type": "string",
-            "maxLength": 500,
-            "minLength": 1,
-            "title": "Query"
-          }
-        },
-        "type": "object",
-        "required": [
-          "preset_id",
-          "query"
-        ],
-        "title": "SearchRequest",
-        "description": "Request body for federated search."
       },
       "SearchResponse": {
         "properties": {

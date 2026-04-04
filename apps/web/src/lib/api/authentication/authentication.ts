@@ -20,6 +20,7 @@ import {
 
 import type {
   HTTPValidationError,
+  InternalExchangeRequest,
   OAuthLoginRequest,
   RefreshTokenRequest,
   SessionExchangeRequest,
@@ -167,6 +168,75 @@ export const useSessionExchangeApiAuthSessionExchangePost = <TError = HTTPValida
         TContext
       > => {
       return useMutation(useSessionExchangeApiAuthSessionExchangePostMutationOptions(options), queryClient);
+    }
+    /**
+ * Internal token exchange for pre-verified sessions.
+
+Called by Next.js API route after server-side session verification.
+Creates/finds user and issues backend JWE tokens.
+ * @summary Internal Exchange
+ */
+export const useInternalExchangeApiAuthInternalExchangePostHook = () => {
+        const internalExchangeApiAuthInternalExchangePost = useCustomInstance<TokenResponse>();
+
+        return useCallback((
+    internalExchangeRequest: InternalExchangeRequest,
+ signal?: AbortSignal
+) => {
+        return internalExchangeApiAuthInternalExchangePost(
+          {url: `/api/auth/internal-exchange`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: internalExchangeRequest, signal
+    },
+          );
+        }, [internalExchangeApiAuthInternalExchangePost])
+      }
+
+
+
+export const useInternalExchangeApiAuthInternalExchangePostMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useInternalExchangeApiAuthInternalExchangePostHook>>>, TError,{data: InternalExchangeRequest}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useInternalExchangeApiAuthInternalExchangePostHook>>>, TError,{data: InternalExchangeRequest}, TContext> => {
+
+const mutationKey = ['internalExchangeApiAuthInternalExchangePost'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      const internalExchangeApiAuthInternalExchangePost =  useInternalExchangeApiAuthInternalExchangePostHook()
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<ReturnType<typeof useInternalExchangeApiAuthInternalExchangePostHook>>>, {data: InternalExchangeRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  internalExchangeApiAuthInternalExchangePost(data,)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type InternalExchangeApiAuthInternalExchangePostMutationResult = NonNullable<Awaited<ReturnType<ReturnType<typeof useInternalExchangeApiAuthInternalExchangePostHook>>>>
+    export type InternalExchangeApiAuthInternalExchangePostMutationBody = InternalExchangeRequest
+    export type InternalExchangeApiAuthInternalExchangePostMutationError = HTTPValidationError
+
+    /**
+ * @summary Internal Exchange
+ */
+export const useInternalExchangeApiAuthInternalExchangePost = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useInternalExchangeApiAuthInternalExchangePostHook>>>, TError,{data: InternalExchangeRequest}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<ReturnType<typeof useInternalExchangeApiAuthInternalExchangePostHook>>>,
+        TError,
+        {data: InternalExchangeRequest},
+        TContext
+      > => {
+      return useMutation(useInternalExchangeApiAuthInternalExchangePostMutationOptions(options), queryClient);
     }
     /**
  * Refresh access token using refresh token.

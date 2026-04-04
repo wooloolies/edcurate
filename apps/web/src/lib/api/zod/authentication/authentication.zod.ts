@@ -48,6 +48,26 @@ export const SessionExchangeApiAuthSessionExchangePostResponse = zod.object({
 }).describe('Token response.')
 
 /**
+ * Internal token exchange for pre-verified sessions.
+
+Called by Next.js API route after server-side session verification.
+Creates/finds user and issues backend JWE tokens.
+ * @summary Internal Exchange
+ */
+export const InternalExchangeApiAuthInternalExchangePostBody = zod.object({
+  "email": zod.string(),
+  "name": zod.union([zod.string(),zod.null()]).optional()
+}).describe('Internal token exchange — pre-verified by Next.js server.')
+
+export const internalExchangeApiAuthInternalExchangePostResponseTokenTypeDefault = `bearer`;
+
+export const InternalExchangeApiAuthInternalExchangePostResponse = zod.object({
+  "access_token": zod.string(),
+  "refresh_token": zod.string(),
+  "token_type": zod.string().default(internalExchangeApiAuthInternalExchangePostResponseTokenTypeDefault)
+}).describe('Token response.')
+
+/**
  * Refresh access token using refresh token.
  * @summary Refresh Token
  */

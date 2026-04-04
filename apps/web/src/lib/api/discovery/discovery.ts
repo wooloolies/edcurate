@@ -5,13 +5,26 @@
  * OpenAPI spec version: 0.1.0
  */
 import {
-  useMutation
+  useInfiniteQuery,
+  useQuery,
+  useSuspenseQuery
 } from '@tanstack/react-query';
 import type {
-  MutationFunction,
+  DataTag,
+  DefinedInitialDataOptions,
+  DefinedUseInfiniteQueryResult,
+  DefinedUseQueryResult,
+  InfiniteData,
   QueryClient,
-  UseMutationOptions,
-  UseMutationResult
+  QueryFunction,
+  QueryKey,
+  UndefinedInitialDataOptions,
+  UseInfiniteQueryOptions,
+  UseInfiniteQueryResult,
+  UseQueryOptions,
+  UseQueryResult,
+  UseSuspenseQueryOptions,
+  UseSuspenseQueryResult
 } from '@tanstack/react-query';
 
 import {
@@ -20,7 +33,7 @@ import {
 
 import type {
   HTTPValidationError,
-  SearchRequest,
+  SearchApiDiscoverySearchGetParams,
   SearchResponse
 } from '../model';
 
@@ -36,65 +49,217 @@ Rate limited to 20 requests per minute per user.
 Source labels: ddgs=DuckDuckGo, youtube=YouTube, openalex=OpenAlex
  * @summary Search
  */
-export const useSearchApiDiscoverySearchPostHook = () => {
-        const searchApiDiscoverySearchPost = useCustomInstance<SearchResponse>();
+export const useSearchApiDiscoverySearchGetHook = () => {
+        const searchApiDiscoverySearchGet = useCustomInstance<SearchResponse>();
 
         return useCallback((
-    searchRequest: SearchRequest,
+    params: SearchApiDiscoverySearchGetParams,
  signal?: AbortSignal
 ) => {
-        return searchApiDiscoverySearchPost(
-          {url: `/api/discovery/search`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: searchRequest, signal
+        return searchApiDiscoverySearchGet(
+          {url: `/api/discovery/search`, method: 'GET',
+        params, signal
     },
           );
-        }, [searchApiDiscoverySearchPost])
+        }, [searchApiDiscoverySearchGet])
       }
 
 
 
-export const useSearchApiDiscoverySearchPostMutationOptions = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useSearchApiDiscoverySearchPostHook>>>, TError,{data: SearchRequest}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useSearchApiDiscoverySearchPostHook>>>, TError,{data: SearchRequest}, TContext> => {
 
-const mutationKey = ['searchApiDiscoverySearchPost'];
-const {mutation: mutationOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+export const getSearchApiDiscoverySearchGetInfiniteQueryKey = (params?: SearchApiDiscoverySearchGetParams,) => {
+    return [
+    'infinite', `/api/discovery/search`, ...(params ? [params] : [])
+    ] as const;
+    }
 
-      const searchApiDiscoverySearchPost =  useSearchApiDiscoverySearchPostHook()
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<ReturnType<typeof useSearchApiDiscoverySearchPostHook>>>, {data: SearchRequest}> = (props) => {
-          const {data} = props ?? {};
-
-          return  searchApiDiscoverySearchPost(data,)
-        }
+export const getSearchApiDiscoverySearchGetQueryKey = (params?: SearchApiDiscoverySearchGetParams,) => {
+    return [
+    `/api/discovery/search`, ...(params ? [params] : [])
+    ] as const;
+    }
 
 
+export const useSearchApiDiscoverySearchGetInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<ReturnType<typeof useSearchApiDiscoverySearchGetHook>>>>, TError = HTTPValidationError>(params: SearchApiDiscoverySearchGetParams, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<ReturnType<typeof useSearchApiDiscoverySearchGetHook>>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getSearchApiDiscoverySearchGetInfiniteQueryKey(params);
+
+  const searchApiDiscoverySearchGet =  useSearchApiDiscoverySearchGetHook();
+
+    const queryFn: QueryFunction<Awaited<ReturnType<ReturnType<typeof useSearchApiDiscoverySearchGetHook>>>> = ({ signal }) => searchApiDiscoverySearchGet(params, signal);
 
 
 
 
-  return  { mutationFn, ...mutationOptions }}
 
-    export type SearchApiDiscoverySearchPostMutationResult = NonNullable<Awaited<ReturnType<ReturnType<typeof useSearchApiDiscoverySearchPostHook>>>>
-    export type SearchApiDiscoverySearchPostMutationBody = SearchRequest
-    export type SearchApiDiscoverySearchPostMutationError = HTTPValidationError
+   return  { queryKey, queryFn, ...queryOptions} as UseInfiniteQueryOptions<Awaited<ReturnType<ReturnType<typeof useSearchApiDiscoverySearchGetHook>>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
 
-    /**
+export type SearchApiDiscoverySearchGetInfiniteQueryResult = NonNullable<Awaited<ReturnType<ReturnType<typeof useSearchApiDiscoverySearchGetHook>>>>
+export type SearchApiDiscoverySearchGetInfiniteQueryError = HTTPValidationError
+
+
+export function useSearchApiDiscoverySearchGetInfinite<TData = InfiniteData<Awaited<ReturnType<ReturnType<typeof useSearchApiDiscoverySearchGetHook>>>>, TError = HTTPValidationError>(
+ params: SearchApiDiscoverySearchGetParams, options: { query:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<ReturnType<typeof useSearchApiDiscoverySearchGetHook>>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<ReturnType<typeof useSearchApiDiscoverySearchGetHook>>>,
+          TError,
+          Awaited<ReturnType<ReturnType<typeof useSearchApiDiscoverySearchGetHook>>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useSearchApiDiscoverySearchGetInfinite<TData = InfiniteData<Awaited<ReturnType<ReturnType<typeof useSearchApiDiscoverySearchGetHook>>>>, TError = HTTPValidationError>(
+ params: SearchApiDiscoverySearchGetParams, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<ReturnType<typeof useSearchApiDiscoverySearchGetHook>>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<ReturnType<typeof useSearchApiDiscoverySearchGetHook>>>,
+          TError,
+          Awaited<ReturnType<ReturnType<typeof useSearchApiDiscoverySearchGetHook>>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useSearchApiDiscoverySearchGetInfinite<TData = InfiniteData<Awaited<ReturnType<ReturnType<typeof useSearchApiDiscoverySearchGetHook>>>>, TError = HTTPValidationError>(
+ params: SearchApiDiscoverySearchGetParams, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<ReturnType<typeof useSearchApiDiscoverySearchGetHook>>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
  * @summary Search
  */
-export const useSearchApiDiscoverySearchPost = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useSearchApiDiscoverySearchPostHook>>>, TError,{data: SearchRequest}, TContext>, }
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<ReturnType<typeof useSearchApiDiscoverySearchPostHook>>>,
-        TError,
-        {data: SearchRequest},
-        TContext
-      > => {
-      return useMutation(useSearchApiDiscoverySearchPostMutationOptions(options), queryClient);
-    }
+
+export function useSearchApiDiscoverySearchGetInfinite<TData = InfiniteData<Awaited<ReturnType<ReturnType<typeof useSearchApiDiscoverySearchGetHook>>>>, TError = HTTPValidationError>(
+ params: SearchApiDiscoverySearchGetParams, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<ReturnType<typeof useSearchApiDiscoverySearchGetHook>>>, TError, TData>>, }
+ , queryClient?: QueryClient
+ ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = useSearchApiDiscoverySearchGetInfiniteQueryOptions(params,options)
+
+  const query = useInfiniteQuery(queryOptions, queryClient) as  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+export const useSearchApiDiscoverySearchGetQueryOptions = <TData = Awaited<ReturnType<ReturnType<typeof useSearchApiDiscoverySearchGetHook>>>, TError = HTTPValidationError>(params: SearchApiDiscoverySearchGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<ReturnType<typeof useSearchApiDiscoverySearchGetHook>>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getSearchApiDiscoverySearchGetQueryKey(params);
+
+  const searchApiDiscoverySearchGet =  useSearchApiDiscoverySearchGetHook();
+
+    const queryFn: QueryFunction<Awaited<ReturnType<ReturnType<typeof useSearchApiDiscoverySearchGetHook>>>> = ({ signal }) => searchApiDiscoverySearchGet(params, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<ReturnType<typeof useSearchApiDiscoverySearchGetHook>>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type SearchApiDiscoverySearchGetQueryResult = NonNullable<Awaited<ReturnType<ReturnType<typeof useSearchApiDiscoverySearchGetHook>>>>
+export type SearchApiDiscoverySearchGetQueryError = HTTPValidationError
+
+
+export function useSearchApiDiscoverySearchGet<TData = Awaited<ReturnType<ReturnType<typeof useSearchApiDiscoverySearchGetHook>>>, TError = HTTPValidationError>(
+ params: SearchApiDiscoverySearchGetParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<ReturnType<typeof useSearchApiDiscoverySearchGetHook>>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<ReturnType<typeof useSearchApiDiscoverySearchGetHook>>>,
+          TError,
+          Awaited<ReturnType<ReturnType<typeof useSearchApiDiscoverySearchGetHook>>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useSearchApiDiscoverySearchGet<TData = Awaited<ReturnType<ReturnType<typeof useSearchApiDiscoverySearchGetHook>>>, TError = HTTPValidationError>(
+ params: SearchApiDiscoverySearchGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<ReturnType<typeof useSearchApiDiscoverySearchGetHook>>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<ReturnType<typeof useSearchApiDiscoverySearchGetHook>>>,
+          TError,
+          Awaited<ReturnType<ReturnType<typeof useSearchApiDiscoverySearchGetHook>>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useSearchApiDiscoverySearchGet<TData = Awaited<ReturnType<ReturnType<typeof useSearchApiDiscoverySearchGetHook>>>, TError = HTTPValidationError>(
+ params: SearchApiDiscoverySearchGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<ReturnType<typeof useSearchApiDiscoverySearchGetHook>>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Search
+ */
+
+export function useSearchApiDiscoverySearchGet<TData = Awaited<ReturnType<ReturnType<typeof useSearchApiDiscoverySearchGetHook>>>, TError = HTTPValidationError>(
+ params: SearchApiDiscoverySearchGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<ReturnType<typeof useSearchApiDiscoverySearchGetHook>>>, TError, TData>>, }
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = useSearchApiDiscoverySearchGetQueryOptions(params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+export const useSearchApiDiscoverySearchGetSuspenseQueryOptions = <TData = Awaited<ReturnType<ReturnType<typeof useSearchApiDiscoverySearchGetHook>>>, TError = HTTPValidationError>(params: SearchApiDiscoverySearchGetParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<ReturnType<typeof useSearchApiDiscoverySearchGetHook>>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getSearchApiDiscoverySearchGetQueryKey(params);
+
+  const searchApiDiscoverySearchGet =  useSearchApiDiscoverySearchGetHook();
+
+    const queryFn: QueryFunction<Awaited<ReturnType<ReturnType<typeof useSearchApiDiscoverySearchGetHook>>>> = ({ signal }) => searchApiDiscoverySearchGet(params, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<ReturnType<typeof useSearchApiDiscoverySearchGetHook>>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type SearchApiDiscoverySearchGetSuspenseQueryResult = NonNullable<Awaited<ReturnType<ReturnType<typeof useSearchApiDiscoverySearchGetHook>>>>
+export type SearchApiDiscoverySearchGetSuspenseQueryError = HTTPValidationError
+
+
+export function useSearchApiDiscoverySearchGetSuspense<TData = Awaited<ReturnType<ReturnType<typeof useSearchApiDiscoverySearchGetHook>>>, TError = HTTPValidationError>(
+ params: SearchApiDiscoverySearchGetParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<ReturnType<typeof useSearchApiDiscoverySearchGetHook>>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useSearchApiDiscoverySearchGetSuspense<TData = Awaited<ReturnType<ReturnType<typeof useSearchApiDiscoverySearchGetHook>>>, TError = HTTPValidationError>(
+ params: SearchApiDiscoverySearchGetParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<ReturnType<typeof useSearchApiDiscoverySearchGetHook>>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useSearchApiDiscoverySearchGetSuspense<TData = Awaited<ReturnType<ReturnType<typeof useSearchApiDiscoverySearchGetHook>>>, TError = HTTPValidationError>(
+ params: SearchApiDiscoverySearchGetParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<ReturnType<typeof useSearchApiDiscoverySearchGetHook>>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Search
+ */
+
+export function useSearchApiDiscoverySearchGetSuspense<TData = Awaited<ReturnType<ReturnType<typeof useSearchApiDiscoverySearchGetHook>>>, TError = HTTPValidationError>(
+ params: SearchApiDiscoverySearchGetParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<ReturnType<typeof useSearchApiDiscoverySearchGetHook>>>, TError, TData>>, }
+ , queryClient?: QueryClient
+ ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = useSearchApiDiscoverySearchGetSuspenseQueryOptions(params,options)
+
+  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+

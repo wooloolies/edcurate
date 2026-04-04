@@ -14,21 +14,21 @@ Rate limited to 20 requests per minute per user.
 Source labels: ddgs=DuckDuckGo, youtube=YouTube, openalex=OpenAlex
  * @summary Search
  */
-export const searchApiDiscoverySearchPostBodyQueryMax = 500;
+export const searchApiDiscoverySearchGetQueryQueryMax = 500;
 
 
 
-export const SearchApiDiscoverySearchPostBody = zod.object({
+export const SearchApiDiscoverySearchGetQueryParams = zod.object({
   "preset_id": zod.uuid(),
-  "query": zod.string().min(1).max(searchApiDiscoverySearchPostBodyQueryMax)
-}).describe('Request body for federated search.')
+  "query": zod.string().min(1).max(searchApiDiscoverySearchGetQueryQueryMax)
+})
 
-export const searchApiDiscoverySearchPostResponseResultsItemMetadataOneSourceDefault = `ddgs`;
-export const searchApiDiscoverySearchPostResponseResultsItemMetadataTwoSourceDefault = `youtube`;
-export const searchApiDiscoverySearchPostResponseResultsItemMetadataTwoDurationDefault = ``;
-export const searchApiDiscoverySearchPostResponseResultsItemMetadataThreeSourceDefault = `openalex`;
+export const searchApiDiscoverySearchGetResponseResultsItemMetadataOneSourceDefault = `ddgs`;
+export const searchApiDiscoverySearchGetResponseResultsItemMetadataTwoSourceDefault = `youtube`;
+export const searchApiDiscoverySearchGetResponseResultsItemMetadataTwoDurationDefault = ``;
+export const searchApiDiscoverySearchGetResponseResultsItemMetadataThreeSourceDefault = `openalex`;
 
-export const SearchApiDiscoverySearchPostResponse = zod.object({
+export const SearchApiDiscoverySearchGetResponse = zod.object({
   "query": zod.string(),
   "preset_id": zod.uuid(),
   "total_results": zod.number(),
@@ -41,18 +41,18 @@ export const SearchApiDiscoverySearchPostResponse = zod.object({
   "snippet": zod.string(),
   "thumbnail_url": zod.union([zod.string(),zod.null()]).optional(),
   "metadata": zod.union([zod.object({
-  "source": zod.literal("ddgs").default(searchApiDiscoverySearchPostResponseResultsItemMetadataOneSourceDefault),
+  "source": zod.literal("ddgs").default(searchApiDiscoverySearchGetResponseResultsItemMetadataOneSourceDefault),
   "domain": zod.string(),
   "published_date": zod.union([zod.string(),zod.null()]).optional(),
   "language": zod.union([zod.string(),zod.null()]).optional()
 }).describe('Metadata from DuckDuckGo search results.'),zod.object({
-  "source": zod.literal("youtube").default(searchApiDiscoverySearchPostResponseResultsItemMetadataTwoSourceDefault),
+  "source": zod.literal("youtube").default(searchApiDiscoverySearchGetResponseResultsItemMetadataTwoSourceDefault),
   "channel": zod.string(),
-  "duration": zod.string().default(searchApiDiscoverySearchPostResponseResultsItemMetadataTwoDurationDefault),
+  "duration": zod.string().default(searchApiDiscoverySearchGetResponseResultsItemMetadataTwoDurationDefault),
   "view_count": zod.union([zod.number(),zod.null()]).optional(),
   "published_date": zod.union([zod.string(),zod.null()]).optional()
 }).describe('Metadata from YouTube Data API results.'),zod.object({
-  "source": zod.literal("openalex").default(searchApiDiscoverySearchPostResponseResultsItemMetadataThreeSourceDefault),
+  "source": zod.literal("openalex").default(searchApiDiscoverySearchGetResponseResultsItemMetadataThreeSourceDefault),
   "authors": zod.array(zod.string()).optional(),
   "journal": zod.union([zod.string(),zod.null()]).optional(),
   "citation_count": zod.union([zod.number(),zod.null()]).optional(),

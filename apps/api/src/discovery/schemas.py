@@ -4,13 +4,6 @@ from typing import Annotated, Literal
 from pydantic import BaseModel, Field
 
 
-class SearchRequest(BaseModel):
-    """Request body for federated search."""
-
-    preset_id: uuid.UUID
-    query: str = Field(min_length=1, max_length=500)
-
-
 # --- Source-specific metadata ---
 
 
