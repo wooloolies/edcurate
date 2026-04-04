@@ -59,6 +59,9 @@ htmlcov/
 
 .opencode/mimic/
 
+# Agent results (runtime output)
+.agents/results/*.md
+
 # Antigravity outputs
 .gemini/antigravity/brain/*
 !.gemini/antigravity/brain/.gitkeep
