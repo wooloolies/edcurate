@@ -152,7 +152,8 @@ def get_rate_limiter(config: RateLimitConfig) -> InMemoryRateLimiter | RedisRate
         else:
             if settings.PROJECT_ENV != "local":
                 logger.warning(
-                    "Redis not configured in non-local environment — rate limiting is per-process only"
+                    "Redis not configured in non-local environment"
+                    " — rate limiting is per-process only"
                 )
             else:
                 logger.info("Using in-memory rate limiter")

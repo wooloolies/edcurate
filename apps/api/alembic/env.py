@@ -5,7 +5,7 @@ from sqlalchemy.engine import Connection
 
 from alembic import context
 from src.lib.config import settings
-from src.lib.database import Base  # noqa: F401
+from src.lib.database import Base
 from src.users.model import User  # noqa: F401
 
 config = context.config

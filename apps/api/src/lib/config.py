@@ -60,11 +60,17 @@ class Settings(BaseSettings):
     def _check_secrets(self) -> "Settings":
         if self.PROJECT_ENV != "local":
             defaults = [
-                ("JWE_SECRET_KEY", "your-super-secret-jwe-encryption-key-change-in-production"),
+                (
+                    "JWE_SECRET_KEY",
+                    "your-super-secret-jwe-encryption-key-change-in-production",
+                ),
             ]
             for name, default_val in defaults:
                 if getattr(self, name) == default_val:
-                    raise ValueError(f"{name} must be changed from default in {self.PROJECT_ENV} environment")
+                    raise ValueError(
+                        f"{name} must be changed from default"
+                        f" in {self.PROJECT_ENV} environment"
+                    )
         return self
 
 
