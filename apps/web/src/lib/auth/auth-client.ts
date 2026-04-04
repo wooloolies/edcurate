@@ -108,13 +108,16 @@ export async function exchangeOAuthForBackendJwt(providerId?: OAuthProviderId) {
 }
 
 export async function exchangeSessionForBackendJwt() {
-  const { data: session } = await authClient.getSession();
-  if (!session?.session?.token) return;
-
-  const { data } = await apiClient.post<BackendTokenResponse>("/api/auth/session-exchange", {
-    session_token: session.session.token,
+  // Call Next.js API route (same-origin, cookies forwarded)
+  // which verifies session server-side then calls backend
+  const response = await fetch("/api/auth/backend-exchange", {
+    method: "POST",
+    credentials: "include",
   });
 
+  if (!response.ok) return;
+
+  const data: BackendTokenResponse = await response.json();
   if (data?.access_token) setAccessToken(data.access_token);
   if (data?.refresh_token) setRefreshToken(data.refresh_token);
 }

@@ -21,7 +21,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <nav className="border-b bg-background">
         <div className="mx-auto flex h-14 max-w-7xl items-center gap-6 px-4">
           <Link href="/dashboard" className="text-lg font-bold">
-            EduX
+            Edcurate
           </Link>
           <div className="flex gap-1">
             {navItems.map((item) => (

@@ -46,6 +46,13 @@ class SessionExchangeRequest(BaseModel):
     session_token: str
 
 
+class InternalExchangeRequest(BaseModel):
+    """Internal token exchange — pre-verified by Next.js server."""
+
+    email: str
+    name: str | None = None
+
+
 class RefreshTokenRequest(BaseModel):
     """Refresh token request."""
 
@@ -231,7 +238,10 @@ async def verify_session_token(session_token: str) -> OAuthUserInfo:
     async with httpx.AsyncClient() as client:
         response = await client.get(
             f"{settings.BETTER_AUTH_URL}/api/auth/get-session",
-            headers={"Authorization": f"Bearer {session_token}"},
+            headers={
+                "Authorization": f"Bearer {session_token}",
+                "Cookie": f"better-auth.session_token={session_token}",
+            },
             timeout=5.0,
         )
         if response.status_code != 200:
@@ -240,7 +250,17 @@ async def verify_session_token(session_token: str) -> OAuthUserInfo:
                 detail="Invalid session token",
             )
         data = response.json()
-        user = data.get("user", {})
+        if not data or not isinstance(data, dict):
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid session response",
+            )
+        user = data.get("user")
+        if not user or not isinstance(user, dict):
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid session: no user",
+            )
         user_id = user.get("id", "")
         if not user_id:
             raise HTTPException(

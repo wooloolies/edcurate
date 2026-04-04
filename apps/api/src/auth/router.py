@@ -3,6 +3,7 @@ from uuid import UUID
 from fastapi import APIRouter, HTTPException, status
 
 from src.lib.auth import (
+    InternalExchangeRequest,
     OAuthLoginRequest,
     RefreshTokenRequest,
     SessionExchangeRequest,
@@ -91,6 +92,44 @@ async def session_exchange(
     return TokenResponse(
         access_token=access_token,
         refresh_token=refresh_token,
+    )
+
+
+@router.post("/internal-exchange", response_model=TokenResponse)
+async def internal_exchange(
+    request: InternalExchangeRequest,
+    db: DBSession,
+) -> TokenResponse:
+    """Internal token exchange for pre-verified sessions.
+
+    Called by Next.js API route after server-side session verification.
+    Creates/finds user and issues backend JWE tokens.
+    """
+    from sqlalchemy import select
+
+    result = await db.execute(
+        select(User).where(User.email == request.email)
+    )
+    user = result.scalar_one_or_none()
+
+    if not user:
+        user = User(
+            email=request.email,
+            name=request.name,
+            email_verified=False,
+        )
+        db.add(user)
+        await db.commit()
+        await db.refresh(user)
+
+    from src.lib.auth import create_access_token, create_refresh_token
+
+    access_token = create_access_token(str(user.id))
+    refresh_token_str = create_refresh_token(str(user.id))
+
+    return TokenResponse(
+        access_token=access_token,
+        refresh_token=refresh_token_str,
     )
 
 

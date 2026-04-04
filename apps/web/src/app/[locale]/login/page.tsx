@@ -8,7 +8,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { resendVerificationEmail, signInWithEmail, signUpWithEmail } from "@/lib/auth/auth-client";
+import {
+  exchangeSessionForBackendJwt,
+  resendVerificationEmail,
+  signInWithEmail,
+  signUpWithEmail,
+} from "@/lib/auth/auth-client";
 import { useRouter } from "@/lib/i18n/routing";
 
 const RESEND_COOLDOWN = 60;
@@ -59,6 +64,7 @@ export default function LoginPage() {
         }
         return;
       }
+      await exchangeSessionForBackendJwt().catch(() => {});
       router.push("/dashboard");
     },
   });
@@ -72,6 +78,13 @@ export default function LoginPage() {
         setError(result.error.message ?? t("invalidCredentials"));
         return;
       }
+      // If token was returned, session created — verification not required
+      if (result.data?.token) {
+        await exchangeSessionForBackendJwt().catch(() => {});
+        router.push("/dashboard");
+        return;
+      }
+      // Otherwise show verification screen
       setPendingEmail(value.email);
       setMode("verifyEmail");
       startCooldown();
