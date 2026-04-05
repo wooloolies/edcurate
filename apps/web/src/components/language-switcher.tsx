@@ -41,7 +41,7 @@ export function LanguageSwitcher() {
           <DropdownMenuItem
             key={loc}
             onClick={() => onLocaleChange(loc)}
-            className={loc === locale ? "bg-accent" : ""}
+            className={loc === locale ? "cursor-pointer bg-accent" : "cursor-pointer"}
           >
             {localeLabels[loc]}
           </DropdownMenuItem>
