@@ -6,7 +6,7 @@ from fastapi import APIRouter, HTTPException, Query, Request, status
 from sqlalchemy import select
 
 from src.discovery import service
-from src.discovery.schemas import SearchResponse
+from src.evaluation.schemas import EvaluatedSearchResponse
 from src.lib.auth import decode_token
 from src.lib.dependencies import CurrentUser, DBSession
 from src.lib.rate_limit import rate_limit
@@ -33,7 +33,7 @@ def _user_rate_limit_key(request: Request) -> str:
     return f"discovery:search:{ip}"
 
 
-@router.get("/search", response_model=SearchResponse)
+@router.get("/search", response_model=EvaluatedSearchResponse)
 @rate_limit(requests=20, window=60, key_func=_user_rate_limit_key)
 async def search(
     request: Request,
@@ -41,7 +41,7 @@ async def search(
     current_user: CurrentUser,
     preset_id: uuid.UUID = Query(...),
     query: str = Query(..., min_length=1, max_length=500),
-) -> SearchResponse:
+) -> EvaluatedSearchResponse:
     """
     Federated search across DuckDuckGo, YouTube, and OpenAlex.
 

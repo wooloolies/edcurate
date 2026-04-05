@@ -15,7 +15,7 @@ const TanStackDevTools =
   env.NEXT_PUBLIC_ENABLE_DEVTOOLS === "true"
     ? dynamic(
         () => import("@/components/devtools/tanstack-devtools").then((mod) => mod.TanStackDevTools),
-        { ssr: false },
+        { ssr: false }
       )
     : () => null;
 

@@ -2,6 +2,7 @@ import { ExternalLink, Globe } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { RelevanceIndicator } from "@/features/search/components/resource-card/relevance-indicator";
 import type { ResourceCard } from "@/lib/api/model";
 
 interface DdgsCardProps {
@@ -34,6 +35,11 @@ export function DdgsCard({ resource }: DdgsCardProps) {
       </CardHeader>
       <CardContent>
         <p className="text-sm text-muted-foreground line-clamp-3">{resource.snippet}</p>
+        <RelevanceIndicator
+          score={resource.relevance_score}
+          reason={resource.relevance_reason}
+          details={resource.evaluation_details}
+        />
       </CardContent>
     </Card>
   );

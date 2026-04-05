@@ -5,13 +5,30 @@
  * OpenAPI spec version: 0.1.0
  */
 import {
-  useMutation
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useSuspenseQuery
 } from '@tanstack/react-query';
 import type {
+  DataTag,
+  DefinedInitialDataOptions,
+  DefinedUseInfiniteQueryResult,
+  DefinedUseQueryResult,
+  InfiniteData,
   MutationFunction,
   QueryClient,
+  QueryFunction,
+  QueryKey,
+  UndefinedInitialDataOptions,
+  UseInfiniteQueryOptions,
+  UseInfiniteQueryResult,
   UseMutationOptions,
-  UseMutationResult
+  UseMutationResult,
+  UseQueryOptions,
+  UseQueryResult,
+  UseSuspenseQueryOptions,
+  UseSuspenseQueryResult
 } from '@tanstack/react-query';
 
 import {
@@ -24,7 +41,12 @@ import type {
   OAuthLoginRequest,
   RefreshTokenRequest,
   RegisterRequest,
-  TokenResponse
+  RegisterResponse,
+  ResendVerificationEmailApiAuthResendVerificationPost200,
+  ResendVerificationRequest,
+  TokenResponse,
+  VerifyEmailApiAuthVerifyEmailGet200,
+  VerifyEmailApiAuthVerifyEmailGetParams
 } from '../model';
 
 import { useCustomInstance } from '../../../hooks/use-custom-instance';
@@ -37,7 +59,7 @@ import { useCustomInstance } from '../../../hooks/use-custom-instance';
  * @summary Register
  */
 export const useRegisterApiAuthRegisterPostHook = () => {
-        const registerApiAuthRegisterPost = useCustomInstance<TokenResponse>();
+        const registerApiAuthRegisterPost = useCustomInstance<RegisterResponse>();
 
         return useCallback((
     registerRequest: RegisterRequest,
@@ -97,6 +119,290 @@ export const useRegisterApiAuthRegisterPost = <TError = HTTPValidationError,
         TContext
       > => {
       return useMutation(useRegisterApiAuthRegisterPostMutationOptions(options), queryClient);
+    }
+    /**
+ * Verify email address via token from verification link.
+ * @summary Verify Email
+ */
+export const useVerifyEmailApiAuthVerifyEmailGetHook = () => {
+        const verifyEmailApiAuthVerifyEmailGet = useCustomInstance<VerifyEmailApiAuthVerifyEmailGet200>();
+
+        return useCallback((
+    params: VerifyEmailApiAuthVerifyEmailGetParams,
+ signal?: AbortSignal
+) => {
+        return verifyEmailApiAuthVerifyEmailGet(
+          {url: `/api/auth/verify-email`, method: 'GET',
+        params, signal
+    },
+          );
+        }, [verifyEmailApiAuthVerifyEmailGet])
+      }
+
+
+
+
+export const getVerifyEmailApiAuthVerifyEmailGetInfiniteQueryKey = (params?: VerifyEmailApiAuthVerifyEmailGetParams,) => {
+    return [
+    'infinite', `/api/auth/verify-email`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+export const getVerifyEmailApiAuthVerifyEmailGetQueryKey = (params?: VerifyEmailApiAuthVerifyEmailGetParams,) => {
+    return [
+    `/api/auth/verify-email`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+
+export const useVerifyEmailApiAuthVerifyEmailGetInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<ReturnType<typeof useVerifyEmailApiAuthVerifyEmailGetHook>>>>, TError = HTTPValidationError>(params: VerifyEmailApiAuthVerifyEmailGetParams, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<ReturnType<typeof useVerifyEmailApiAuthVerifyEmailGetHook>>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getVerifyEmailApiAuthVerifyEmailGetInfiniteQueryKey(params);
+
+  const verifyEmailApiAuthVerifyEmailGet =  useVerifyEmailApiAuthVerifyEmailGetHook();
+
+    const queryFn: QueryFunction<Awaited<ReturnType<ReturnType<typeof useVerifyEmailApiAuthVerifyEmailGetHook>>>> = ({ signal }) => verifyEmailApiAuthVerifyEmailGet(params, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseInfiniteQueryOptions<Awaited<ReturnType<ReturnType<typeof useVerifyEmailApiAuthVerifyEmailGetHook>>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type VerifyEmailApiAuthVerifyEmailGetInfiniteQueryResult = NonNullable<Awaited<ReturnType<ReturnType<typeof useVerifyEmailApiAuthVerifyEmailGetHook>>>>
+export type VerifyEmailApiAuthVerifyEmailGetInfiniteQueryError = HTTPValidationError
+
+
+export function useVerifyEmailApiAuthVerifyEmailGetInfinite<TData = InfiniteData<Awaited<ReturnType<ReturnType<typeof useVerifyEmailApiAuthVerifyEmailGetHook>>>>, TError = HTTPValidationError>(
+ params: VerifyEmailApiAuthVerifyEmailGetParams, options: { query:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<ReturnType<typeof useVerifyEmailApiAuthVerifyEmailGetHook>>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<ReturnType<typeof useVerifyEmailApiAuthVerifyEmailGetHook>>>,
+          TError,
+          Awaited<ReturnType<ReturnType<typeof useVerifyEmailApiAuthVerifyEmailGetHook>>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useVerifyEmailApiAuthVerifyEmailGetInfinite<TData = InfiniteData<Awaited<ReturnType<ReturnType<typeof useVerifyEmailApiAuthVerifyEmailGetHook>>>>, TError = HTTPValidationError>(
+ params: VerifyEmailApiAuthVerifyEmailGetParams, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<ReturnType<typeof useVerifyEmailApiAuthVerifyEmailGetHook>>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<ReturnType<typeof useVerifyEmailApiAuthVerifyEmailGetHook>>>,
+          TError,
+          Awaited<ReturnType<ReturnType<typeof useVerifyEmailApiAuthVerifyEmailGetHook>>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useVerifyEmailApiAuthVerifyEmailGetInfinite<TData = InfiniteData<Awaited<ReturnType<ReturnType<typeof useVerifyEmailApiAuthVerifyEmailGetHook>>>>, TError = HTTPValidationError>(
+ params: VerifyEmailApiAuthVerifyEmailGetParams, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<ReturnType<typeof useVerifyEmailApiAuthVerifyEmailGetHook>>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Verify Email
+ */
+
+export function useVerifyEmailApiAuthVerifyEmailGetInfinite<TData = InfiniteData<Awaited<ReturnType<ReturnType<typeof useVerifyEmailApiAuthVerifyEmailGetHook>>>>, TError = HTTPValidationError>(
+ params: VerifyEmailApiAuthVerifyEmailGetParams, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<ReturnType<typeof useVerifyEmailApiAuthVerifyEmailGetHook>>>, TError, TData>>, }
+ , queryClient?: QueryClient
+ ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = useVerifyEmailApiAuthVerifyEmailGetInfiniteQueryOptions(params,options)
+
+  const query = useInfiniteQuery(queryOptions, queryClient) as  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+export const useVerifyEmailApiAuthVerifyEmailGetQueryOptions = <TData = Awaited<ReturnType<ReturnType<typeof useVerifyEmailApiAuthVerifyEmailGetHook>>>, TError = HTTPValidationError>(params: VerifyEmailApiAuthVerifyEmailGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<ReturnType<typeof useVerifyEmailApiAuthVerifyEmailGetHook>>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getVerifyEmailApiAuthVerifyEmailGetQueryKey(params);
+
+  const verifyEmailApiAuthVerifyEmailGet =  useVerifyEmailApiAuthVerifyEmailGetHook();
+
+    const queryFn: QueryFunction<Awaited<ReturnType<ReturnType<typeof useVerifyEmailApiAuthVerifyEmailGetHook>>>> = ({ signal }) => verifyEmailApiAuthVerifyEmailGet(params, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<ReturnType<typeof useVerifyEmailApiAuthVerifyEmailGetHook>>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type VerifyEmailApiAuthVerifyEmailGetQueryResult = NonNullable<Awaited<ReturnType<ReturnType<typeof useVerifyEmailApiAuthVerifyEmailGetHook>>>>
+export type VerifyEmailApiAuthVerifyEmailGetQueryError = HTTPValidationError
+
+
+export function useVerifyEmailApiAuthVerifyEmailGet<TData = Awaited<ReturnType<ReturnType<typeof useVerifyEmailApiAuthVerifyEmailGetHook>>>, TError = HTTPValidationError>(
+ params: VerifyEmailApiAuthVerifyEmailGetParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<ReturnType<typeof useVerifyEmailApiAuthVerifyEmailGetHook>>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<ReturnType<typeof useVerifyEmailApiAuthVerifyEmailGetHook>>>,
+          TError,
+          Awaited<ReturnType<ReturnType<typeof useVerifyEmailApiAuthVerifyEmailGetHook>>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useVerifyEmailApiAuthVerifyEmailGet<TData = Awaited<ReturnType<ReturnType<typeof useVerifyEmailApiAuthVerifyEmailGetHook>>>, TError = HTTPValidationError>(
+ params: VerifyEmailApiAuthVerifyEmailGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<ReturnType<typeof useVerifyEmailApiAuthVerifyEmailGetHook>>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<ReturnType<typeof useVerifyEmailApiAuthVerifyEmailGetHook>>>,
+          TError,
+          Awaited<ReturnType<ReturnType<typeof useVerifyEmailApiAuthVerifyEmailGetHook>>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useVerifyEmailApiAuthVerifyEmailGet<TData = Awaited<ReturnType<ReturnType<typeof useVerifyEmailApiAuthVerifyEmailGetHook>>>, TError = HTTPValidationError>(
+ params: VerifyEmailApiAuthVerifyEmailGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<ReturnType<typeof useVerifyEmailApiAuthVerifyEmailGetHook>>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Verify Email
+ */
+
+export function useVerifyEmailApiAuthVerifyEmailGet<TData = Awaited<ReturnType<ReturnType<typeof useVerifyEmailApiAuthVerifyEmailGetHook>>>, TError = HTTPValidationError>(
+ params: VerifyEmailApiAuthVerifyEmailGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<ReturnType<typeof useVerifyEmailApiAuthVerifyEmailGetHook>>>, TError, TData>>, }
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = useVerifyEmailApiAuthVerifyEmailGetQueryOptions(params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+export const useVerifyEmailApiAuthVerifyEmailGetSuspenseQueryOptions = <TData = Awaited<ReturnType<ReturnType<typeof useVerifyEmailApiAuthVerifyEmailGetHook>>>, TError = HTTPValidationError>(params: VerifyEmailApiAuthVerifyEmailGetParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<ReturnType<typeof useVerifyEmailApiAuthVerifyEmailGetHook>>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getVerifyEmailApiAuthVerifyEmailGetQueryKey(params);
+
+  const verifyEmailApiAuthVerifyEmailGet =  useVerifyEmailApiAuthVerifyEmailGetHook();
+
+    const queryFn: QueryFunction<Awaited<ReturnType<ReturnType<typeof useVerifyEmailApiAuthVerifyEmailGetHook>>>> = ({ signal }) => verifyEmailApiAuthVerifyEmailGet(params, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<ReturnType<typeof useVerifyEmailApiAuthVerifyEmailGetHook>>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type VerifyEmailApiAuthVerifyEmailGetSuspenseQueryResult = NonNullable<Awaited<ReturnType<ReturnType<typeof useVerifyEmailApiAuthVerifyEmailGetHook>>>>
+export type VerifyEmailApiAuthVerifyEmailGetSuspenseQueryError = HTTPValidationError
+
+
+export function useVerifyEmailApiAuthVerifyEmailGetSuspense<TData = Awaited<ReturnType<ReturnType<typeof useVerifyEmailApiAuthVerifyEmailGetHook>>>, TError = HTTPValidationError>(
+ params: VerifyEmailApiAuthVerifyEmailGetParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<ReturnType<typeof useVerifyEmailApiAuthVerifyEmailGetHook>>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useVerifyEmailApiAuthVerifyEmailGetSuspense<TData = Awaited<ReturnType<ReturnType<typeof useVerifyEmailApiAuthVerifyEmailGetHook>>>, TError = HTTPValidationError>(
+ params: VerifyEmailApiAuthVerifyEmailGetParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<ReturnType<typeof useVerifyEmailApiAuthVerifyEmailGetHook>>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useVerifyEmailApiAuthVerifyEmailGetSuspense<TData = Awaited<ReturnType<ReturnType<typeof useVerifyEmailApiAuthVerifyEmailGetHook>>>, TError = HTTPValidationError>(
+ params: VerifyEmailApiAuthVerifyEmailGetParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<ReturnType<typeof useVerifyEmailApiAuthVerifyEmailGetHook>>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Verify Email
+ */
+
+export function useVerifyEmailApiAuthVerifyEmailGetSuspense<TData = Awaited<ReturnType<ReturnType<typeof useVerifyEmailApiAuthVerifyEmailGetHook>>>, TError = HTTPValidationError>(
+ params: VerifyEmailApiAuthVerifyEmailGetParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<ReturnType<typeof useVerifyEmailApiAuthVerifyEmailGetHook>>>, TError, TData>>, }
+ , queryClient?: QueryClient
+ ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = useVerifyEmailApiAuthVerifyEmailGetSuspenseQueryOptions(params,options)
+
+  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+/**
+ * Resend a verification email for an existing unverified user.
+ * @summary Resend Verification Email
+ */
+export const useResendVerificationEmailApiAuthResendVerificationPostHook = () => {
+        const resendVerificationEmailApiAuthResendVerificationPost = useCustomInstance<ResendVerificationEmailApiAuthResendVerificationPost200>();
+
+        return useCallback((
+    resendVerificationRequest: ResendVerificationRequest,
+ signal?: AbortSignal
+) => {
+        return resendVerificationEmailApiAuthResendVerificationPost(
+          {url: `/api/auth/resend-verification`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: resendVerificationRequest, signal
+    },
+          );
+        }, [resendVerificationEmailApiAuthResendVerificationPost])
+      }
+
+
+
+export const useResendVerificationEmailApiAuthResendVerificationPostMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useResendVerificationEmailApiAuthResendVerificationPostHook>>>, TError,{data: ResendVerificationRequest}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useResendVerificationEmailApiAuthResendVerificationPostHook>>>, TError,{data: ResendVerificationRequest}, TContext> => {
+
+const mutationKey = ['resendVerificationEmailApiAuthResendVerificationPost'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      const resendVerificationEmailApiAuthResendVerificationPost =  useResendVerificationEmailApiAuthResendVerificationPostHook()
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<ReturnType<typeof useResendVerificationEmailApiAuthResendVerificationPostHook>>>, {data: ResendVerificationRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  resendVerificationEmailApiAuthResendVerificationPost(data,)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ResendVerificationEmailApiAuthResendVerificationPostMutationResult = NonNullable<Awaited<ReturnType<ReturnType<typeof useResendVerificationEmailApiAuthResendVerificationPostHook>>>>
+    export type ResendVerificationEmailApiAuthResendVerificationPostMutationBody = ResendVerificationRequest
+    export type ResendVerificationEmailApiAuthResendVerificationPostMutationError = HTTPValidationError
+
+    /**
+ * @summary Resend Verification Email
+ */
+export const useResendVerificationEmailApiAuthResendVerificationPost = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useResendVerificationEmailApiAuthResendVerificationPostHook>>>, TError,{data: ResendVerificationRequest}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<ReturnType<typeof useResendVerificationEmailApiAuthResendVerificationPostHook>>>,
+        TError,
+        {data: ResendVerificationRequest},
+        TContext
+      > => {
+      return useMutation(useResendVerificationEmailApiAuthResendVerificationPostMutationOptions(options), queryClient);
     }
     /**
  * Login with email and password.
@@ -165,9 +471,7 @@ export const useEmailLoginApiAuthEmailLoginPost = <TError = HTTPValidationError,
       return useMutation(useEmailLoginApiAuthEmailLoginPostMutationOptions(options), queryClient);
     }
     /**
- * OAuth login endpoint.
-
-Verify OAuth token, create/update user, and issue JWE tokens.
+ * OAuth login — verify provider token, create/update user.
  * @summary Oauth Login
  */
 export const useOauthLoginApiAuthLoginPostHook = () => {
@@ -299,9 +603,7 @@ export const useRefreshTokenApiAuthRefreshPost = <TError = HTTPValidationError,
       return useMutation(useRefreshTokenApiAuthRefreshPostMutationOptions(options), queryClient);
     }
     /**
- * Logout endpoint.
-
-Client should remove tokens from localStorage.
+ * Logout — client should remove tokens from localStorage.
  * @summary Logout
  */
 export const useLogoutApiAuthLogoutPostHook = () => {

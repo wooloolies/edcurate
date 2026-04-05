@@ -32,9 +32,9 @@ import {
 } from 'react';
 
 import type {
+  EvaluatedSearchResponse,
   HTTPValidationError,
-  SearchApiDiscoverySearchGetParams,
-  SearchResponse
+  SearchApiDiscoverySearchGetParams
 } from '../model';
 
 import { useCustomInstance } from '../../../hooks/use-custom-instance';
@@ -50,7 +50,7 @@ Source labels: ddgs=DuckDuckGo, youtube=YouTube, openalex=OpenAlex
  * @summary Search
  */
 export const useSearchApiDiscoverySearchGetHook = () => {
-        const searchApiDiscoverySearchGet = useCustomInstance<SearchResponse>();
+        const searchApiDiscoverySearchGet = useCustomInstance<EvaluatedSearchResponse>();
 
         return useCallback((
     params: SearchApiDiscoverySearchGetParams,

@@ -6,7 +6,13 @@
  */
 
 export * from './ddgs-metadata';
+export * from './dimension-score';
 export * from './email-login-request';
+export * from './evaluated-search-response-counts-by-source';
+export * from './evaluated-search-response';
+export * from './evaluation-result-recommended-use';
+export * from './evaluation-result-scores';
+export * from './evaluation-result';
 export * from './health-response-services';
 export * from './health-response-status';
 export * from './health-response';
@@ -26,12 +32,14 @@ export * from './preset-update';
 export * from './readiness-check-health-ready-get200';
 export * from './refresh-token-request';
 export * from './register-request';
+export * from './register-response';
+export * from './resend-verification-email-api-auth-resend-verification-post200';
+export * from './resend-verification-request';
+export * from './resource-card-evaluation-details';
 export * from './resource-card-source';
 export * from './resource-card-type';
 export * from './resource-card';
 export * from './search-api-discovery-search-get-params';
-export * from './search-response-counts-by-source';
-export * from './search-response';
 export * from './service-status-status';
 export * from './service-status';
 export * from './source-error-source';
@@ -39,4 +47,6 @@ export * from './source-error';
 export * from './source-weights';
 export * from './token-response';
 export * from './validation-error';
+export * from './verify-email-api-auth-verify-email-get-params';
+export * from './verify-email-api-auth-verify-email-get200';
 export * from './youtube-metadata';

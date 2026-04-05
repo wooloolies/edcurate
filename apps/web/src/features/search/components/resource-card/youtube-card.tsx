@@ -2,6 +2,7 @@ import { ExternalLink, Play } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { RelevanceIndicator } from "@/features/search/components/resource-card/relevance-indicator";
 import type { ResourceCard } from "@/lib/api/model";
 
 interface YoutubeCardProps {
@@ -38,15 +39,22 @@ export function YoutubeCard({ resource }: YoutubeCardProps) {
         </div>
         {meta.channel && <p className="text-xs text-muted-foreground">{meta.channel}</p>}
       </CardHeader>
-      <CardContent className="flex gap-3">
-        {resource.thumbnail_url && (
-          <img
-            src={resource.thumbnail_url}
-            alt={resource.title}
-            className="h-20 w-36 shrink-0 rounded object-cover"
-          />
-        )}
-        <p className="text-sm text-muted-foreground line-clamp-3">{resource.snippet}</p>
+      <CardContent className="flex flex-col gap-3">
+        <div className="flex gap-3">
+          {resource.thumbnail_url && (
+            <img
+              src={resource.thumbnail_url}
+              alt={resource.title}
+              className="h-20 w-36 shrink-0 rounded object-cover"
+            />
+          )}
+          <p className="text-sm text-muted-foreground line-clamp-3">{resource.snippet}</p>
+        </div>
+        <RelevanceIndicator
+          score={resource.relevance_score}
+          reason={resource.relevance_reason}
+          details={resource.evaluation_details}
+        />
       </CardContent>
     </Card>
   );

@@ -53,6 +53,11 @@ class ResourceCard(BaseModel):
     snippet: str
     thumbnail_url: str | None = None
     metadata: DdgsMetadata | YoutubeMetadata | OpenAlexMetadata
+    relevance_score: float | None = None
+    relevance_reason: str | None = None
+    evaluation_details: dict[str, dict] | None = Field(
+        default=None, description="Detailed dimension scores"
+    )
 
 
 class SourceError(BaseModel):

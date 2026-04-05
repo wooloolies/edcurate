@@ -25,10 +25,7 @@ export async function POST() {
     });
 
     if (!response.ok) {
-      return NextResponse.json(
-        { error: "Backend exchange failed" },
-        { status: response.status },
-      );
+      return NextResponse.json({ error: "Backend exchange failed" }, { status: response.status });
     }
 
     const tokens = await response.json();

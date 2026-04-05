@@ -18,6 +18,26 @@ export const RegisterApiAuthRegisterPostBody = zod.object({
 }).describe('Email\/password registration.')
 
 /**
+ * Verify email address via token from verification link.
+ * @summary Verify Email
+ */
+export const VerifyEmailApiAuthVerifyEmailGetQueryParams = zod.object({
+  "token": zod.string()
+})
+
+export const VerifyEmailApiAuthVerifyEmailGetResponse = zod.record(zod.string(), zod.string())
+
+/**
+ * Resend a verification email for an existing unverified user.
+ * @summary Resend Verification Email
+ */
+export const ResendVerificationEmailApiAuthResendVerificationPostBody = zod.object({
+  "email": zod.string()
+}).describe('Resend email verification request.')
+
+export const ResendVerificationEmailApiAuthResendVerificationPostResponse = zod.record(zod.string(), zod.string())
+
+/**
  * Login with email and password.
  * @summary Email Login
  */
@@ -35,9 +55,7 @@ export const EmailLoginApiAuthEmailLoginPostResponse = zod.object({
 }).describe('Token response.')
 
 /**
- * OAuth login endpoint.
-
-Verify OAuth token, create/update user, and issue JWE tokens.
+ * OAuth login — verify provider token, create/update user.
  * @summary Oauth Login
  */
 export const OauthLoginApiAuthLoginPostBody = zod.object({

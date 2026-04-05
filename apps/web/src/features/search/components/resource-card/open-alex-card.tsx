@@ -2,6 +2,7 @@ import { BookOpen, ExternalLink } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { RelevanceIndicator } from "@/features/search/components/resource-card/relevance-indicator";
 import type { ResourceCard } from "@/lib/api/model";
 
 interface OpenAlexCardProps {
@@ -45,7 +46,7 @@ export function OpenAlexCard({ resource }: OpenAlexCardProps) {
           {meta.published_date && <span>&middot; {meta.published_date.slice(0, 4)}</span>}
         </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className="flex flex-col gap-3">
         <div className="flex items-center gap-3 text-sm text-muted-foreground">
           {meta.citation_count != null && (
             <span className="font-medium">{meta.citation_count} citations</span>
@@ -61,6 +62,11 @@ export function OpenAlexCard({ resource }: OpenAlexCardProps) {
             </a>
           )}
         </div>
+        <RelevanceIndicator
+          score={resource.relevance_score}
+          reason={resource.relevance_reason}
+          details={resource.evaluation_details}
+        />
       </CardContent>
     </Card>
   );

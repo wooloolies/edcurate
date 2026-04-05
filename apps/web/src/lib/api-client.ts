@@ -4,7 +4,7 @@ import { clearTokens, getAccessToken, getRefreshToken, setAccessToken } from "@/
 
 export const apiClient = axios.create({
   baseURL: env.NEXT_PUBLIC_API_URL,
-  timeout: 30000,
+  timeout: 120000,
   headers: {
     "Content-Type": "application/json",
   },

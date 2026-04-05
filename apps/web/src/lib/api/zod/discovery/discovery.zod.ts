@@ -27,6 +27,12 @@ export const searchApiDiscoverySearchGetResponseResultsItemMetadataOneSourceDefa
 export const searchApiDiscoverySearchGetResponseResultsItemMetadataTwoSourceDefault = `youtube`;
 export const searchApiDiscoverySearchGetResponseResultsItemMetadataTwoDurationDefault = ``;
 export const searchApiDiscoverySearchGetResponseResultsItemMetadataThreeSourceDefault = `openalex`;
+export const searchApiDiscoverySearchGetResponseEvaluationsItemOverallScoreMin = 0;
+export const searchApiDiscoverySearchGetResponseEvaluationsItemOverallScoreMax = 10;
+
+export const searchApiDiscoverySearchGetResponseEvaluationsItemScoresScoreMax = 10;
+
+export const searchApiDiscoverySearchGetResponseEvaluationsItemScoresMaxDefault = 10;
 
 export const SearchApiDiscoverySearchGetResponse = zod.object({
   "query": zod.string(),
@@ -58,11 +64,25 @@ export const SearchApiDiscoverySearchGetResponse = zod.object({
   "citation_count": zod.union([zod.number(),zod.null()]).optional(),
   "doi": zod.union([zod.string(),zod.null()]).optional(),
   "published_date": zod.union([zod.string(),zod.null()]).optional()
-}).describe('Metadata from OpenAlex works results.')])
+}).describe('Metadata from OpenAlex works results.')]),
+  "relevance_score": zod.union([zod.number(),zod.null()]).optional(),
+  "relevance_reason": zod.union([zod.string(),zod.null()]).optional(),
+  "evaluation_details": zod.union([zod.record(zod.string(), zod.record(zod.string(), zod.unknown())),zod.null()]).optional().describe('Detailed dimension scores')
 }).describe('Normalised resource card returned by all providers.')),
   "errors": zod.array(zod.object({
   "source": zod.enum(['ddgs', 'youtube', 'openalex']),
   "message": zod.string()
-}).describe('Error from a single search provider.'))
-}).describe('Unified federated search response.')
+}).describe('Error from a single search provider.')),
+  "evaluations": zod.array(zod.object({
+  "resource_url": zod.string(),
+  "overall_score": zod.number().min(searchApiDiscoverySearchGetResponseEvaluationsItemOverallScoreMin).max(searchApiDiscoverySearchGetResponseEvaluationsItemOverallScoreMax),
+  "relevance_reason": zod.string(),
+  "recommended_use": zod.enum(['primary_resource', 'supplementary', 'reference_only']),
+  "scores": zod.record(zod.string(), zod.object({
+  "score": zod.number().min(1).max(searchApiDiscoverySearchGetResponseEvaluationsItemScoresScoreMax),
+  "max": zod.number().default(searchApiDiscoverySearchGetResponseEvaluationsItemScoresMaxDefault),
+  "reason": zod.string()
+}).describe('Score for a single evaluation dimension.'))
+}).describe('Full evaluation of a single resource across 7 dimensions.')).optional()
+}).describe('Extends SearchResponse with evaluation data for the top 4 results.')
 
