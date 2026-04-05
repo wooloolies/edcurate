@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import { LanguageSwitcher } from "@/components/language-switcher";
 import { cn } from "@/lib/utils";
 
 const navItems = [
@@ -23,7 +24,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           <Link href="/dashboard" className="text-lg font-bold">
             Edcurate
           </Link>
-          <div className="flex gap-1">
+          <div className="flex flex-1 gap-1">
             {navItems.map((item) => (
               <Link
                 key={item.href}
@@ -39,6 +40,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               </Link>
             ))}
           </div>
+          <LanguageSwitcher />
         </div>
       </nav>
       <main className="mx-auto max-w-7xl px-4 py-6">{children}</main>

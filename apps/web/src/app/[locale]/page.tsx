@@ -1,6 +1,7 @@
 import type { Locale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { Button } from "@/components/ui/button";
+import { LanguageSwitcher } from "@/components/language-switcher";
 import { Link } from "@/lib/i18n/routing";
 
 interface HomePageProps {
@@ -17,6 +18,7 @@ export default async function HomePage({ params }: HomePageProps) {
         <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-4">
           <span className="text-lg font-bold">Edcurate</span>
           <div className="flex items-center gap-2">
+            <LanguageSwitcher />
             <Button asChild size="sm" variant="ghost">
               <Link href="/team">Team</Link>
             </Button>

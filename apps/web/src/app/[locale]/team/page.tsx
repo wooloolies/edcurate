@@ -1,6 +1,7 @@
 import type { Locale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Button } from "@/components/ui/button";
+import { LanguageSwitcher } from "@/components/language-switcher";
 import { Link } from "@/lib/i18n/routing";
 
 interface TeamPageProps {
@@ -46,9 +47,12 @@ export default async function TeamPage({ params }: TeamPageProps) {
           <Link href="/" className="text-lg font-bold">
             Edcurate
           </Link>
-          <Button asChild size="sm" variant="ghost">
-            <Link href="/">{t("backToHome")}</Link>
-          </Button>
+          <div className="flex items-center gap-2">
+            <LanguageSwitcher />
+            <Button asChild size="sm" variant="ghost">
+              <Link href="/">{t("backToHome")}</Link>
+            </Button>
+          </div>
         </div>
       </header>
       <main className="mx-auto max-w-5xl px-4 pt-28 pb-16">
