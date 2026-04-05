@@ -124,3 +124,29 @@ mise db:migrate
 # Start development servers
 mise dev:web
 ```
+
+## Auth and Email Delivery
+
+- Email/password sign-up and login are handled by `apps/api`.
+- `apps/web` no longer sends emails through Resend directly.
+- `apps/web` still hosts `better-auth` routes for session and OAuth exchange only.
+
+### Production Vercel env
+
+`apps/web`
+
+- `NEXT_PUBLIC_API_URL`
+- `NEXT_PUBLIC_BETTER_AUTH_URL`
+- `BETTER_AUTH_URL`
+- `BETTER_AUTH_SECRET`
+
+`apps/api`
+
+- `DATABASE_URL`
+- `BETTER_AUTH_URL`
+- `FRONTEND_URL`
+- `CORS_ORIGINS`
+- `JWE_SECRET_KEY`
+- `PROJECT_ENV`
+- `RESEND_API_KEY` when verification emails are enabled
+- `EMAIL_FROM` when `RESEND_API_KEY` is set

@@ -1,38 +1,11 @@
 import { betterAuth } from "better-auth";
-import { magicLink } from "better-auth/plugins";
-import { Resend } from "resend";
 import { env } from "@/config/env";
-
-const isProduction = process.env.NODE_ENV === "production";
-const resend = env.RESEND_API_KEY ? new Resend(env.RESEND_API_KEY) : null;
 
 export const auth = betterAuth({
   baseURL: env.BETTER_AUTH_URL,
   secret: env.BETTER_AUTH_SECRET,
   emailAndPassword: {
-    enabled: true,
-    requireEmailVerification: isProduction && !!resend,
-    sendResetPassword: async ({ user, url }) => {
-      if (!resend) return;
-      void resend.emails.send({
-        from: env.EMAIL_FROM,
-        to: user.email,
-        subject: "비밀번호 재설정",
-        html: `<a href="${url}">비밀번호 재설정하기</a>`,
-      });
-    },
-  },
-  emailVerification: {
-    sendOnSignUp: true,
-    sendVerificationEmail: async ({ user, url }) => {
-      if (!resend) return;
-      void resend.emails.send({
-        from: env.EMAIL_FROM,
-        to: user.email,
-        subject: "이메일 인증",
-        html: `<a href="${url}">이메일 인증하기</a>`,
-      });
-    },
+    enabled: false,
   },
   socialProviders: {
     google: env.GOOGLE_CLIENT_ID
@@ -54,19 +27,6 @@ export const auth = betterAuth({
         }
       : undefined,
   },
-  plugins: [
-    magicLink({
-      sendMagicLink: async ({ email, url }) => {
-        if (!resend) return;
-        void resend.emails.send({
-          from: env.EMAIL_FROM,
-          to: email,
-          subject: "Your Edcurate login link",
-          html: `<p>Click the link below to sign in to Edcurate:</p><p><a href="${url}">Sign in</a></p><p>This link expires in 10 minutes. If you did not request this, you can ignore this email.</p>`,
-        });
-      },
-    }),
-  ],
   session: {
     expiresIn: 60 * 60 * 24 * 7,
   },

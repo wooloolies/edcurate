@@ -1,4 +1,5 @@
 import secrets
+from logging import getLogger
 from datetime import UTC, datetime, timedelta
 from uuid import UUID
 
@@ -23,6 +24,7 @@ from src.lib.dependencies import DBSession
 from src.users.model import User
 
 router = APIRouter()
+logger = getLogger(__name__)
 
 # Verification tokens: token → (user_id, expires_at)
 _verification_tokens: dict[str, tuple[str, datetime]] = {}
@@ -57,6 +59,18 @@ def _send_verification_email(email: str, token: str) -> None:
             ),
         }
     )
+
+
+def _send_verification_email_or_raise(email: str, token: str) -> None:
+    """Translate email provider failures into an explicit API error."""
+    try:
+        _send_verification_email(email, token)
+    except Exception as exc:
+        logger.exception("Verification email delivery failed for %s", email)
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Verification email could not be sent. Verify your Resend domain or try again later.",
+        ) from exc
 
 
 class RegisterResponse(BaseModel):
@@ -101,7 +115,7 @@ async def register(
         token = secrets.token_urlsafe(32)
         expires = datetime.now(UTC) + timedelta(hours=24)
         _verification_tokens[token] = (str(user.id), expires)
-        _send_verification_email(request.email, token)
+        _send_verification_email_or_raise(request.email, token)
         return RegisterResponse(
             requires_verification=True,
             message="Verification email sent. Please check your inbox.",

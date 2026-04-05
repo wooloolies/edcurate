@@ -1,6 +1,5 @@
 "use client";
 
-import { magicLinkClient } from "better-auth/client/plugins";
 import { createAuthClient } from "better-auth/react";
 import { env } from "@/config/env";
 import { apiClient } from "@/lib/api-client";
@@ -23,44 +22,10 @@ type BackendTokenResponse = {
 
 export const authClient = createAuthClient({
   baseURL: env.NEXT_PUBLIC_BETTER_AUTH_URL,
-  plugins: [magicLinkClient()],
 });
 
 export const { useSession, signIn, signUp } = authClient;
 export const signOut = authClient.signOut;
-
-export async function sendMagicLink(email: string) {
-  return authClient.signIn.magicLink({ email, callbackURL: "/dashboard" });
-}
-
-export async function signUpWithEmail(email: string, password: string, name: string) {
-  return authClient.signUp.email({ email, password, name, callbackURL: "/" });
-}
-
-export async function signInWithEmail(email: string, password: string) {
-  return authClient.signIn.email(
-    { email, password },
-    {
-      onError: (ctx) => {
-        if (ctx.error.status === 403) {
-          // Email not verified
-        }
-      },
-    }
-  );
-}
-
-export async function resendVerificationEmail(email: string) {
-  return authClient.sendVerificationEmail({ email, callbackURL: "/" });
-}
-
-export async function requestPasswordReset(email: string) {
-  return authClient.requestPasswordReset({ email, redirectTo: "/reset-password" });
-}
-
-export async function resetPassword(token: string, newPassword: string) {
-  return authClient.resetPassword({ newPassword, token });
-}
 
 function normalizeProviderId(providerId: string): OAuthProviderId | null {
   if (providerId === "google" || providerId === "github" || providerId === "facebook") {

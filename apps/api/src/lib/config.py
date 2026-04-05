@@ -5,6 +5,22 @@ from pydantic import model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
+def to_sync_database_url(url: str) -> str:
+    """Convert async SQLAlchemy URLs to sync URLs for Alembic."""
+    if url.startswith("postgresql+asyncpg://"):
+        return url.replace("postgresql+asyncpg://", "postgresql://", 1)
+    return url
+
+
+def escape_alembic_url(url: str) -> str:
+    """Escape percent signs for Alembic's ConfigParser-backed config."""
+    return url.replace("%", "%%")
+
+
+LOCAL_DATABASE_URL = "postgresql+asyncpg://postgres:postgres@localhost:5432/edcurate"
+LOCAL_DATABASE_URL_SYNC = "postgresql://postgres:postgres@localhost:5432/edcurate"
+
+
 class Settings(BaseSettings):
     """Application settings loaded from environment variables."""
 
@@ -20,8 +36,8 @@ class Settings(BaseSettings):
     PROJECT_ENV: Literal["local", "staging", "prod"] = "local"
 
     # Database
-    DATABASE_URL: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/edcurate"
-    DATABASE_URL_SYNC: str = "postgresql://postgres:postgres@localhost:5432/edcurate"
+    DATABASE_URL: str = LOCAL_DATABASE_URL
+    DATABASE_URL_SYNC: str | None = None
 
     # CORS
     CORS_ORIGINS: list[str] = ["http://localhost:3000"]
@@ -67,6 +83,12 @@ class Settings(BaseSettings):
 
     @model_validator(mode="after")
     def _check_secrets(self) -> "Settings":
+        if not self.DATABASE_URL_SYNC or (
+            self.DATABASE_URL_SYNC == LOCAL_DATABASE_URL_SYNC
+            and self.DATABASE_URL != LOCAL_DATABASE_URL
+        ):
+            self.DATABASE_URL_SYNC = to_sync_database_url(self.DATABASE_URL)
+
         if self.PROJECT_ENV != "local":
             defaults = [
                 (

@@ -4,7 +4,7 @@ from sqlalchemy import engine_from_config, pool
 from sqlalchemy.engine import Connection
 
 from alembic import context
-from src.lib.config import settings
+from src.lib.config import escape_alembic_url, settings
 from src.lib.database import Base
 from src.presets.model import ClassroomPreset  # noqa: F401
 from src.users.model import User  # noqa: F401
@@ -15,7 +15,8 @@ if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
 # Set sqlalchemy.url from settings (sync driver required by Alembic)
-config.set_main_option("sqlalchemy.url", settings.DATABASE_URL_SYNC)
+assert settings.DATABASE_URL_SYNC is not None
+config.set_main_option("sqlalchemy.url", escape_alembic_url(settings.DATABASE_URL_SYNC))
 
 target_metadata = Base.metadata
 
