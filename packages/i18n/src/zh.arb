@@ -379,5 +379,181 @@
   "nav__dashboard": "仪表板",
   "@nav__dashboard": {
     "description": "Navigation label for the Dashboard page"
+  },
+  "home__team": "团队",
+  "@home__team": {
+    "description": "Homepage navigation button for the team page"
+  },
+  "home__login": "登录",
+  "@home__login": {
+    "description": "Homepage navigation button for the login page"
+  },
+  "home__tagline": "面向教师的情境感知资源发现与适配",
+  "@home__tagline": {
+    "description": "Homepage tagline"
+  },
+  "errors__title": "错误",
+  "@errors__title": {
+    "description": "Generic error page title"
+  },
+  "errors__somethingWentWrong": "出了点问题。",
+  "@errors__somethingWentWrong": {
+    "description": "Generic error page message"
+  },
+  "errors__tryAgain": "重试",
+  "@errors__tryAgain": {
+    "description": "Retry action on the error page"
+  },
+  "errors__pageNotFound": "页面未找到",
+  "@errors__pageNotFound": {
+    "description": "Not found page message"
+  },
+  "presets__placeholders__name": "例如：九年级地理 - 凯恩斯",
+  "@presets__placeholders__name": {
+    "description": "Placeholder for preset name"
+  },
+  "presets__placeholders__curriculumFramework": "例如：NSW NESA 教学大纲",
+  "@presets__placeholders__curriculumFramework": {
+    "description": "Placeholder for curriculum framework"
+  },
+  "presets__placeholders__subject": "例如：地理",
+  "@presets__placeholders__subject": {
+    "description": "Placeholder for subject"
+  },
+  "presets__placeholders__yearLevel": "例如：九年级",
+  "@presets__placeholders__yearLevel": {
+    "description": "Placeholder for year level"
+  },
+  "presets__placeholders__topic": "例如：海岸侵蚀",
+  "@presets__placeholders__topic": {
+    "description": "Placeholder for topic"
+  },
+  "presets__placeholders__country": "例如：澳大利亚",
+  "@presets__placeholders__country": {
+    "description": "Placeholder for country"
+  },
+  "presets__placeholders__stateRegion": "例如：昆士兰州",
+  "@presets__placeholders__stateRegion": {
+    "description": "Placeholder for state or region"
+  },
+  "presets__placeholders__city": "例如：凯恩斯",
+  "@presets__placeholders__city": {
+    "description": "Placeholder for city"
+  },
+  "presets__placeholders__teachingLanguage": "例如：zh",
+  "@presets__placeholders__teachingLanguage": {
+    "description": "Placeholder for teaching language code"
+  },
+  "presets__placeholders__averageReadingLevel": "例如：八年级中段水平",
+  "@presets__placeholders__averageReadingLevel": {
+    "description": "Placeholder for average reading level"
+  },
+  "presets__placeholders__studentInterests": "输入一个兴趣后按 Enter",
+  "@presets__placeholders__studentInterests": {
+    "description": "Placeholder for the student interests tag input"
+  },
+  "presets__placeholders__languageBackgrounds": "输入一种语言后按 Enter",
+  "@presets__placeholders__languageBackgrounds": {
+    "description": "Placeholder for the language backgrounds tag input"
+  },
+  "presets__placeholders__additionalNotes": "补充一些关于班级的背景信息...",
+  "@presets__placeholders__additionalNotes": {
+    "description": "Placeholder for additional notes"
+  },
+  "presets__moreActions": "更多操作",
+  "@presets__moreActions": {
+    "description": "Accessible label for the preset actions menu"
+  },
+  "presets__saving": "保存中...",
+  "@presets__saving": {
+    "description": "Button label while a preset is being saved"
+  },
+  "search__idleState": "选择一个预设并输入搜索词，以发现教育资源。",
+  "@search__idleState": {
+    "description": "Instruction shown before a search is started"
+  },
+  "search__searchingButton": "搜索中...",
+  "@search__searchingButton": {
+    "description": "Button label while a search is running"
+  },
+  "search__showUnscored": "显示另外 {count} 条未评分结果",
+  "@search__showUnscored": {
+    "description": "Button label to reveal more unscored results",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "description": "Number of unscored results"
+      }
+    }
+  },
+  "search__hideUnscored": "隐藏未评分结果",
+  "@search__hideUnscored": {
+    "description": "Button label to hide unscored results"
+  },
+  "search__progress__title": "深度评估进行中",
+  "@search__progress__title": {
+    "description": "Title shown while deep evaluation is running"
+  },
+  "search__progress__duration": "通常需要 60 到 90 秒",
+  "@search__progress__duration": {
+    "description": "Estimated duration for deep evaluation"
+  },
+  "search__progress__step1": "正在跨多个来源搜索",
+  "@search__progress__step1": {
+    "description": "Evaluation progress step 1"
+  },
+  "search__progress__step2": "正在获取已发现资源的内容",
+  "@search__progress__step2": {
+    "description": "Evaluation progress step 2"
+  },
+  "search__progress__step3": "正在提取并切分文本以供分析",
+  "@search__progress__step3": {
+    "description": "Evaluation progress step 3"
+  },
+  "search__progress__step4": "正在生成语义嵌入",
+  "@search__progress__step4": {
+    "description": "Evaluation progress step 4"
+  },
+  "search__progress__step5": "正在存储向量以进行相似度搜索",
+  "@search__progress__step5": {
+    "description": "Evaluation progress step 5"
+  },
+  "search__progress__step6": "正在检索最相关的文本片段",
+  "@search__progress__step6": {
+    "description": "Evaluation progress step 6"
+  },
+  "search__progress__step7": "正在评估课程契合度与教学质量",
+  "@search__progress__step7": {
+    "description": "Evaluation progress step 7"
+  },
+  "search__progress__step8": "正在评估阅读难度与偏见呈现",
+  "@search__progress__step8": {
+    "description": "Evaluation progress step 8"
+  },
+  "search__progress__step9": "正在完成评分并排序结果",
+  "@search__progress__step9": {
+    "description": "Evaluation progress step 9"
+  },
+  "search__evaluation__unevaluated": "未评估",
+  "@search__evaluation__unevaluated": {
+    "description": "Badge shown when a resource has not been evaluated yet"
+  },
+  "search__evaluation__score": "评分：{score}/10",
+  "@search__evaluation__score": {
+    "description": "Score label for a resource evaluation",
+    "placeholders": {
+      "score": {
+        "type": "String",
+        "description": "Evaluation score"
+      }
+    }
+  },
+  "search__evaluation__agent": "深度评估代理",
+  "@search__evaluation__agent": {
+    "description": "Label for the evaluation system"
+  },
+  "search__evaluation__criteria": "评估标准",
+  "@search__evaluation__criteria": {
+    "description": "Tooltip title listing evaluation criteria"
   }
 }

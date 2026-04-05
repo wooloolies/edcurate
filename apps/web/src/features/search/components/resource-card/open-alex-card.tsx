@@ -1,4 +1,5 @@
 import { BookOpen, ExternalLink } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,6 +11,7 @@ interface OpenAlexCardProps {
 }
 
 export function OpenAlexCard({ resource }: OpenAlexCardProps) {
+  const t = useTranslations("search");
   const meta = resource.metadata as {
     authors?: string[];
     journal?: string | null;
@@ -49,7 +51,9 @@ export function OpenAlexCard({ resource }: OpenAlexCardProps) {
       <CardContent className="flex flex-col gap-3">
         <div className="flex items-center gap-3 text-sm text-muted-foreground">
           {meta.citation_count != null && (
-            <span className="font-medium">{meta.citation_count} citations</span>
+            <span className="font-medium">
+              {meta.citation_count} {t("card.citations")}
+            </span>
           )}
           {meta.doi && (
             <a

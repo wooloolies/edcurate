@@ -379,5 +379,181 @@
   "nav__dashboard": "แดชบอร์ด",
   "@nav__dashboard": {
     "description": "Navigation label for the Dashboard page"
+  },
+  "home__team": "ทีม",
+  "@home__team": {
+    "description": "Homepage navigation button for the team page"
+  },
+  "home__login": "เข้าสู่ระบบ",
+  "@home__login": {
+    "description": "Homepage navigation button for the login page"
+  },
+  "home__tagline": "การค้นหาและปรับใช้ทรัพยากรตามบริบทสำหรับครูผู้สอน",
+  "@home__tagline": {
+    "description": "Homepage tagline"
+  },
+  "errors__title": "ข้อผิดพลาด",
+  "@errors__title": {
+    "description": "Generic error page title"
+  },
+  "errors__somethingWentWrong": "เกิดข้อผิดพลาดบางอย่าง",
+  "@errors__somethingWentWrong": {
+    "description": "Generic error page message"
+  },
+  "errors__tryAgain": "ลองอีกครั้ง",
+  "@errors__tryAgain": {
+    "description": "Retry action on the error page"
+  },
+  "errors__pageNotFound": "ไม่พบหน้าที่ต้องการ",
+  "@errors__pageNotFound": {
+    "description": "Not found page message"
+  },
+  "presets__placeholders__name": "เช่น ภูมิศาสตร์ ม.3 - แคนส์",
+  "@presets__placeholders__name": {
+    "description": "Placeholder for preset name"
+  },
+  "presets__placeholders__curriculumFramework": "เช่น หลักสูตร NSW NESA",
+  "@presets__placeholders__curriculumFramework": {
+    "description": "Placeholder for curriculum framework"
+  },
+  "presets__placeholders__subject": "เช่น ภูมิศาสตร์",
+  "@presets__placeholders__subject": {
+    "description": "Placeholder for subject"
+  },
+  "presets__placeholders__yearLevel": "เช่น ม.3",
+  "@presets__placeholders__yearLevel": {
+    "description": "Placeholder for year level"
+  },
+  "presets__placeholders__topic": "เช่น การกัดเซาะชายฝั่ง",
+  "@presets__placeholders__topic": {
+    "description": "Placeholder for topic"
+  },
+  "presets__placeholders__country": "เช่น ออสเตรเลีย",
+  "@presets__placeholders__country": {
+    "description": "Placeholder for country"
+  },
+  "presets__placeholders__stateRegion": "เช่น ควีนส์แลนด์",
+  "@presets__placeholders__stateRegion": {
+    "description": "Placeholder for state or region"
+  },
+  "presets__placeholders__city": "เช่น แคนส์",
+  "@presets__placeholders__city": {
+    "description": "Placeholder for city"
+  },
+  "presets__placeholders__teachingLanguage": "เช่น th",
+  "@presets__placeholders__teachingLanguage": {
+    "description": "Placeholder for teaching language code"
+  },
+  "presets__placeholders__averageReadingLevel": "เช่น ระดับ ม.2.5",
+  "@presets__placeholders__averageReadingLevel": {
+    "description": "Placeholder for average reading level"
+  },
+  "presets__placeholders__studentInterests": "พิมพ์ความสนใจแล้วกด Enter",
+  "@presets__placeholders__studentInterests": {
+    "description": "Placeholder for the student interests tag input"
+  },
+  "presets__placeholders__languageBackgrounds": "พิมพ์ภาษาแล้วกด Enter",
+  "@presets__placeholders__languageBackgrounds": {
+    "description": "Placeholder for the language backgrounds tag input"
+  },
+  "presets__placeholders__additionalNotes": "เพิ่มบริบทเกี่ยวกับห้องเรียนของคุณ...",
+  "@presets__placeholders__additionalNotes": {
+    "description": "Placeholder for additional notes"
+  },
+  "presets__moreActions": "การทำงานเพิ่มเติม",
+  "@presets__moreActions": {
+    "description": "Accessible label for the preset actions menu"
+  },
+  "presets__saving": "กำลังบันทึก...",
+  "@presets__saving": {
+    "description": "Button label while a preset is being saved"
+  },
+  "search__idleState": "เลือกพรีเซ็ตและกรอกคำค้นหาเพื่อค้นหาทรัพยากรการศึกษา",
+  "@search__idleState": {
+    "description": "Instruction shown before a search is started"
+  },
+  "search__searchingButton": "กำลังค้นหา...",
+  "@search__searchingButton": {
+    "description": "Button label while a search is running"
+  },
+  "search__showUnscored": "แสดงผลลัพธ์ที่ยังไม่ประเมินอีก {count} รายการ",
+  "@search__showUnscored": {
+    "description": "Button label to reveal more unscored results",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "description": "Number of unscored results"
+      }
+    }
+  },
+  "search__hideUnscored": "ซ่อนผลลัพธ์ที่ยังไม่ประเมิน",
+  "@search__hideUnscored": {
+    "description": "Button label to hide unscored results"
+  },
+  "search__progress__title": "กำลังประเมินเชิงลึก",
+  "@search__progress__title": {
+    "description": "Title shown while deep evaluation is running"
+  },
+  "search__progress__duration": "โดยปกติใช้เวลา 60-90 วินาที",
+  "@search__progress__duration": {
+    "description": "Estimated duration for deep evaluation"
+  },
+  "search__progress__step1": "กำลังค้นหาจากหลายแหล่ง",
+  "@search__progress__step1": {
+    "description": "Evaluation progress step 1"
+  },
+  "search__progress__step2": "กำลังดึงเนื้อหาจากทรัพยากรที่พบ",
+  "@search__progress__step2": {
+    "description": "Evaluation progress step 2"
+  },
+  "search__progress__step3": "กำลังแยกและตัดข้อความเพื่อการวิเคราะห์",
+  "@search__progress__step3": {
+    "description": "Evaluation progress step 3"
+  },
+  "search__progress__step4": "กำลังสร้าง semantic embeddings",
+  "@search__progress__step4": {
+    "description": "Evaluation progress step 4"
+  },
+  "search__progress__step5": "กำลังจัดเก็บเวกเตอร์เพื่อค้นหาความคล้ายคลึง",
+  "@search__progress__step5": {
+    "description": "Evaluation progress step 5"
+  },
+  "search__progress__step6": "กำลังดึงช่วงข้อความที่เกี่ยวข้องที่สุด",
+  "@search__progress__step6": {
+    "description": "Evaluation progress step 6"
+  },
+  "search__progress__step7": "กำลังให้คะแนนความสอดคล้องกับหลักสูตรและคุณภาพเชิงการสอน",
+  "@search__progress__step7": {
+    "description": "Evaluation progress step 7"
+  },
+  "search__progress__step8": "กำลังประเมินระดับการอ่านและการนำเสนออคติ",
+  "@search__progress__step8": {
+    "description": "Evaluation progress step 8"
+  },
+  "search__progress__step9": "กำลังสรุปคะแนนและจัดอันดับผลลัพธ์",
+  "@search__progress__step9": {
+    "description": "Evaluation progress step 9"
+  },
+  "search__evaluation__unevaluated": "ยังไม่ประเมิน",
+  "@search__evaluation__unevaluated": {
+    "description": "Badge shown when a resource has not been evaluated yet"
+  },
+  "search__evaluation__score": "คะแนน: {score}/10",
+  "@search__evaluation__score": {
+    "description": "Score label for a resource evaluation",
+    "placeholders": {
+      "score": {
+        "type": "String",
+        "description": "Evaluation score"
+      }
+    }
+  },
+  "search__evaluation__agent": "เอเจนต์ประเมินเชิงลึก",
+  "@search__evaluation__agent": {
+    "description": "Label for the evaluation system"
+  },
+  "search__evaluation__criteria": "เกณฑ์การประเมิน",
+  "@search__evaluation__criteria": {
+    "description": "Tooltip title listing evaluation criteria"
   }
 }

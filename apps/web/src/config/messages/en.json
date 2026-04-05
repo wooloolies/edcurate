@@ -45,5 +45,129 @@
     "subtitle": "Meet the people behind Edcurate",
     "description": "We are a team of students from the University of Technology Sydney (UTS), building context-aware resource discovery and adaptation tools for educators.",
     "backToHome": "Back to home"
+  },
+  "presets": {
+    "title": "My Classroom Presets",
+    "newPreset": "New Preset",
+    "editPreset": "Edit Preset",
+    "createPreset": "Create Preset",
+    "savePreset": "Save Preset",
+    "deletePreset": "Delete Preset",
+    "setDefault": "Set as Default",
+    "default": "Default",
+    "searchWithPreset": "Search",
+    "emptyState": "No presets yet. Create your first classroom preset to get started.",
+    "deleteConfirm": "Are you sure you want to delete this preset?",
+    "deleteDefaultError": "Cannot delete the default preset. Set another preset as default first.",
+    "privacyNote": "No student PII is stored or sent to AI models.",
+    "sections": {
+      "presetName": "Preset Name",
+      "curriculum": "Curriculum",
+      "location": "Location",
+      "cohort": "Cohort (Anonymised)",
+      "sourceWeights": "Source Weights",
+      "notes": "Notes"
+    },
+    "fields": {
+      "name": "Preset Name",
+      "curriculumFramework": "Curriculum Framework",
+      "subject": "Subject",
+      "yearLevel": "Year Level",
+      "topic": "Topic",
+      "country": "Country",
+      "stateRegion": "State/Region",
+      "city": "City",
+      "teachingLanguage": "Teaching Language",
+      "classSize": "Class Size",
+      "ealdStudents": "EAL/D Students",
+      "readingSupportStudents": "Reading Support Students",
+      "extensionStudents": "Extension Students",
+      "studentInterests": "Student Interests",
+      "languageBackgrounds": "Language Backgrounds",
+      "averageReadingLevel": "Average Reading Level",
+      "additionalNotes": "Additional Notes"
+    },
+    "sources": {
+      "ddgs": "DuckDuckGo",
+      "youtube": "YouTube",
+      "openalex": "OpenAlex"
+    },
+    "placeholders": {
+      "name": "e.g., Year 9 Geography - Cairns",
+      "curriculumFramework": "e.g., NSW NESA Syllabus",
+      "subject": "e.g., Geography",
+      "yearLevel": "e.g., Year 9",
+      "topic": "e.g., Coastal erosion",
+      "country": "e.g., Australia",
+      "stateRegion": "e.g., Queensland",
+      "city": "e.g., Cairns",
+      "teachingLanguage": "e.g., en",
+      "averageReadingLevel": "e.g., Year 8.5",
+      "studentInterests": "Type an interest and press Enter",
+      "languageBackgrounds": "Type a language and press Enter",
+      "additionalNotes": "Additional context about your classroom..."
+    },
+    "moreActions": "More actions",
+    "saving": "Saving..."
+  },
+  "search": {
+    "title": "Resource Discovery",
+    "placeholder": "Search for educational resources...",
+    "searchButton": "Search",
+    "selectPreset": "Select a preset",
+    "managePresets": "Manage",
+    "noResults": "No results found. Try adjusting your search query or preset.",
+    "partialError": "Some sources failed to return results.",
+    "allSourcesFailed": "All search sources failed. Please try again later.",
+    "tabs": {
+      "all": "All",
+      "web": "Web",
+      "video": "Video",
+      "papers": "Papers"
+    },
+    "card": {
+      "citations": "citations",
+      "views": "views",
+      "by": "by"
+    },
+    "idleState": "Select a preset and enter a search query to discover educational resources.",
+    "searchingButton": "Searching...",
+    "showUnscored": "Show {count} more unscored results",
+    "hideUnscored": "Hide unscored results",
+    "progress": {
+      "title": "Deep Evaluation in Progress",
+      "duration": "This usually takes 60–90 seconds",
+      "step1": "Searching across multiple providers",
+      "step2": "Fetching content from discovered resources",
+      "step3": "Extracting and chunking text for analysis",
+      "step4": "Generating semantic embeddings",
+      "step5": "Storing vectors for similarity search",
+      "step6": "Retrieving the most relevant chunks",
+      "step7": "Scoring curriculum alignment and pedagogical quality",
+      "step8": "Evaluating reading level and bias representation",
+      "step9": "Finalising scores and ranking results"
+    },
+    "evaluation": {
+      "unevaluated": "Unevaluated",
+      "score": "Score: {score}/10",
+      "agent": "Deep Evaluation Agent",
+      "criteria": "Evaluation Criteria"
+    }
+  },
+  "nav": {
+    "presets": "Presets",
+    "search": "Search",
+    "dashboard": "Dashboard"
+  },
+  "home": {
+    "team": "Team",
+    "login": "Login",
+    "tagline": "Context-aware resource discovery and adaptation for teachers"
+  },
+  "errors": {
+    "title": "Error",
+    "somethingWentWrong": "Something went wrong!",
+    "tryAgain": "Try again",
+    "pageNotFound": "Page not found"
   }
 }

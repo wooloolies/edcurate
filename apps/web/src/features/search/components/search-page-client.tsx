@@ -1,6 +1,7 @@
 "use client";
 
 import { ChevronDown, ChevronUp } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useQueryState } from "nuqs";
 import { useState } from "react";
 
@@ -22,6 +23,7 @@ import { useSearchApiDiscoverySearchGet } from "@/lib/api/discovery/discovery";
 import { useListPresetsApiPresetsGet } from "@/lib/api/presets/presets";
 
 export function SearchPageClient() {
+  const t = useTranslations("search");
   const [presetId, setPresetId] = useQueryState("preset_id");
   const [searchQuery, setSearchQuery] = useQueryState("q");
   const [draft, setDraft] = useState(searchQuery ?? "");
@@ -52,13 +54,13 @@ export function SearchPageClient() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold">Resource Discovery</h1>
+      <h1 className="text-2xl font-bold">{t("title")}</h1>
 
       <div className="flex flex-wrap items-end gap-3">
         <div className="w-64">
           <Select value={presetId ?? ""} onValueChange={(v) => setPresetId(v)}>
             <SelectTrigger>
-              <SelectValue placeholder="Select a preset" />
+              <SelectValue placeholder={t("selectPreset")} />
             </SelectTrigger>
             <SelectContent>
               {presets.map((p) => (
@@ -74,11 +76,11 @@ export function SearchPageClient() {
           <Input
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
-            placeholder="Search for educational resources..."
+            placeholder={t("placeholder")}
             className="min-w-0 flex-1"
           />
           <Button type="submit" disabled={!presetId || !draft.trim() || isFetching}>
-            {isFetching ? "Searching..." : "Search"}
+            {isFetching ? t("searchingButton") : t("searchButton")}
           </Button>
         </form>
       </div>
@@ -100,10 +102,12 @@ export function SearchPageClient() {
       {results && !isFetching ? (
         <Tabs defaultValue="all">
           <TabsList>
-            <TabsTrigger value="all">All ({totalCount})</TabsTrigger>
-            <TabsTrigger value="ddgs">Web ({counts.ddgs ?? 0})</TabsTrigger>
-            <TabsTrigger value="youtube">Video ({counts.youtube ?? 0})</TabsTrigger>
-            <TabsTrigger value="openalex">Papers ({counts.openalex ?? 0})</TabsTrigger>
+            <TabsTrigger value="all">{t("tabs.all")} ({totalCount})</TabsTrigger>
+            <TabsTrigger value="ddgs">{t("tabs.web")} ({counts.ddgs ?? 0})</TabsTrigger>
+            <TabsTrigger value="youtube">{t("tabs.video")} ({counts.youtube ?? 0})</TabsTrigger>
+            <TabsTrigger value="openalex">
+              {t("tabs.papers")} ({counts.openalex ?? 0})
+            </TabsTrigger>
           </TabsList>
 
           {["all", "ddgs", "youtube", "openalex"].map((tab) => {
@@ -114,7 +118,7 @@ export function SearchPageClient() {
             return (
               <TabsContent key={tab} value={tab} className="space-y-3">
                 {items.length === 0 ? (
-                  <p className="py-8 text-center text-muted-foreground">No results found.</p>
+                  <p className="py-8 text-center text-muted-foreground">{t("noResults")}</p>
                 ) : (
                   <>
                     {evaluated.map((resource) => (
@@ -133,8 +137,8 @@ export function SearchPageClient() {
                             <ChevronDown className="mr-2 h-4 w-4" />
                           )}
                           {showUnscored
-                            ? "Hide unscored results"
-                            : `Show ${unevaluated.length} more unscored results`}
+                            ? t("hideUnscored")
+                            : t("showUnscored", { count: unevaluated.length })}
                         </Button>
                         {showUnscored
                           ? unevaluated.map((resource) => (
@@ -153,9 +157,7 @@ export function SearchPageClient() {
 
       {!results && !isFetching ? (
         <div className="rounded-lg border border-dashed p-12 text-center">
-          <p className="text-muted-foreground">
-            Select a preset and enter a search query to discover educational resources.
-          </p>
+          <p className="text-muted-foreground">{t("idleState")}</p>
         </div>
       ) : null}
     </div>

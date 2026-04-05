@@ -45,5 +45,129 @@
     "subtitle": "Edcurate를 만드는 사람들",
     "description": "우리는 시드니 공과대학교(UTS) 학생들로 구성된 팀으로, 교육자를 위한 맥락 인식 기반 교육 자료 발굴 및 적용 도구를 개발하고 있습니다.",
     "backToHome": "홈으로 돌아가기"
+  },
+  "presets": {
+    "title": "내 수업 프리셋",
+    "newPreset": "새 프리셋",
+    "editPreset": "프리셋 편집",
+    "createPreset": "프리셋 만들기",
+    "savePreset": "프리셋 저장",
+    "deletePreset": "프리셋 삭제",
+    "setDefault": "기본값으로 설정",
+    "default": "기본",
+    "searchWithPreset": "검색",
+    "emptyState": "아직 프리셋이 없습니다. 첫 번째 수업 프리셋을 만들어 시작하세요.",
+    "deleteConfirm": "이 프리셋을 삭제하시겠습니까?",
+    "deleteDefaultError": "기본 프리셋은 삭제할 수 없습니다. 먼저 다른 프리셋을 기본값으로 설정하세요.",
+    "privacyNote": "학생 개인 정보는 저장되거나 AI 모델에 전송되지 않습니다.",
+    "sections": {
+      "presetName": "프리셋 이름",
+      "curriculum": "교육과정",
+      "location": "위치",
+      "cohort": "학습 집단 (익명화)",
+      "sourceWeights": "출처 가중치",
+      "notes": "메모"
+    },
+    "fields": {
+      "name": "프리셋 이름",
+      "curriculumFramework": "교육과정 프레임워크",
+      "subject": "과목",
+      "yearLevel": "학년",
+      "topic": "주제",
+      "country": "국가",
+      "stateRegion": "주/지역",
+      "city": "도시",
+      "teachingLanguage": "수업 언어",
+      "classSize": "학급 인원",
+      "ealdStudents": "EAL/D 학생 수",
+      "readingSupportStudents": "읽기 지원 학생 수",
+      "extensionStudents": "심화 학생 수",
+      "studentInterests": "학생 관심사",
+      "languageBackgrounds": "언어적 배경",
+      "averageReadingLevel": "평균 읽기 수준",
+      "additionalNotes": "추가 메모"
+    },
+    "sources": {
+      "ddgs": "DuckDuckGo",
+      "youtube": "YouTube",
+      "openalex": "OpenAlex"
+    },
+    "placeholders": {
+      "name": "예: 9학년 지리 - 케언스",
+      "curriculumFramework": "예: NSW NESA 교육과정",
+      "subject": "예: 지리",
+      "yearLevel": "예: 9학년",
+      "topic": "예: 해안 침식",
+      "country": "예: 호주",
+      "stateRegion": "예: 퀸즐랜드",
+      "city": "예: 케언스",
+      "teachingLanguage": "예: ko",
+      "averageReadingLevel": "예: 8.5학년 수준",
+      "studentInterests": "관심사를 입력하고 Enter를 누르세요",
+      "languageBackgrounds": "언어를 입력하고 Enter를 누르세요",
+      "additionalNotes": "학급에 대한 추가 맥락을 입력하세요..."
+    },
+    "moreActions": "추가 작업",
+    "saving": "저장 중..."
+  },
+  "search": {
+    "title": "교육 자료 탐색",
+    "placeholder": "교육 자료를 검색하세요...",
+    "searchButton": "검색",
+    "selectPreset": "프리셋 선택",
+    "managePresets": "관리",
+    "noResults": "결과가 없습니다. 검색어 또는 프리셋을 조정해 보세요.",
+    "partialError": "일부 출처에서 결과를 가져오지 못했습니다.",
+    "allSourcesFailed": "모든 검색 출처에서 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.",
+    "tabs": {
+      "all": "전체",
+      "web": "웹",
+      "video": "동영상",
+      "papers": "논문"
+    },
+    "card": {
+      "citations": "인용",
+      "views": "조회",
+      "by": "저자"
+    },
+    "idleState": "프리셋을 선택하고 검색어를 입력해 교육 자료를 찾아보세요.",
+    "searchingButton": "검색 중...",
+    "showUnscored": "{count}개의 미평가 결과 더 보기",
+    "hideUnscored": "미평가 결과 숨기기",
+    "progress": {
+      "title": "심층 평가 진행 중",
+      "duration": "보통 60~90초 정도 걸립니다",
+      "step1": "여러 출처에서 검색 중",
+      "step2": "발견된 자료의 콘텐츠를 가져오는 중",
+      "step3": "분석용 텍스트를 추출하고 분할하는 중",
+      "step4": "의미 임베딩을 생성하는 중",
+      "step5": "유사도 검색을 위해 벡터를 저장하는 중",
+      "step6": "가장 관련성 높은 조각을 찾는 중",
+      "step7": "교육과정 정합성과 교수학적 품질을 평가하는 중",
+      "step8": "읽기 수준과 편향 표현을 평가하는 중",
+      "step9": "점수를 마무리하고 결과 순위를 정하는 중"
+    },
+    "evaluation": {
+      "unevaluated": "미평가",
+      "score": "점수: {score}/10",
+      "agent": "심층 평가 에이전트",
+      "criteria": "평가 기준"
+    }
+  },
+  "nav": {
+    "presets": "프리셋",
+    "search": "검색",
+    "dashboard": "대시보드"
+  },
+  "home": {
+    "team": "팀 소개",
+    "login": "로그인",
+    "tagline": "교사를 위한 맥락 인식 기반 자료 탐색 및 적용"
+  },
+  "errors": {
+    "title": "오류",
+    "somethingWentWrong": "문제가 발생했습니다.",
+    "tryAgain": "다시 시도",
+    "pageNotFound": "페이지를 찾을 수 없습니다"
   }
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -14,6 +14,7 @@ import {
   type SourceWeights,
 } from "@/features/presets/utils/normalize-weights";
 import type { PresetCreate } from "@/lib/api/model";
+import { useRouter } from "@/lib/i18n/routing";
 import {
   useCreatePresetApiPresetsPost,
   useGetPresetApiPresetsPresetIdGet,
@@ -32,6 +33,8 @@ interface PresetFormClientProps {
 
 export function PresetFormClient({ presetId }: PresetFormClientProps) {
   const router = useRouter();
+  const tRoot = useTranslations();
+  const t = useTranslations("presets");
   const isEdit = !!presetId;
 
   const { data: existing } = useGetPresetApiPresetsPresetIdGet(presetId ?? "", {
@@ -102,17 +105,17 @@ export function PresetFormClient({ presetId }: PresetFormClientProps) {
 
   return (
     <form onSubmit={handleSubmit} className="mx-auto max-w-2xl space-y-8">
-      <h1 className="text-2xl font-bold">{isEdit ? "Edit Preset" : "Create Preset"}</h1>
+      <h1 className="text-2xl font-bold">{isEdit ? t("editPreset") : t("createPreset")}</h1>
 
       <fieldset className="space-y-4">
-        <legend className="text-lg font-semibold">Preset Name</legend>
+        <legend className="text-lg font-semibold">{t("sections.presetName")}</legend>
         <div>
-          <Label htmlFor="name">Name</Label>
+          <Label htmlFor="name">{t("fields.name")}</Label>
           <Input
             id="name"
             value={form.name}
             onChange={(e) => set("name", e.target.value)}
-            placeholder="e.g., Year 9 Geography - Cairns"
+            placeholder={t("placeholders.name")}
             required
           />
         </div>
@@ -121,44 +124,44 @@ export function PresetFormClient({ presetId }: PresetFormClientProps) {
       <Separator />
 
       <fieldset className="space-y-4">
-        <legend className="text-lg font-semibold">Curriculum</legend>
+        <legend className="text-lg font-semibold">{t("sections.curriculum")}</legend>
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <Label htmlFor="curriculum_framework">Framework</Label>
+            <Label htmlFor="curriculum_framework">{t("fields.curriculumFramework")}</Label>
             <Input
               id="curriculum_framework"
               value={form.curriculum_framework ?? ""}
               onChange={(e) => set("curriculum_framework", e.target.value || undefined)}
-              placeholder="e.g., NSW NESA Syllabus"
+              placeholder={t("placeholders.curriculumFramework")}
             />
           </div>
           <div>
-            <Label htmlFor="subject">Subject *</Label>
+            <Label htmlFor="subject">{t("fields.subject")} *</Label>
             <Input
               id="subject"
               value={form.subject}
               onChange={(e) => set("subject", e.target.value)}
-              placeholder="e.g., Geography"
+              placeholder={t("placeholders.subject")}
               required
             />
           </div>
           <div>
-            <Label htmlFor="year_level">Year Level *</Label>
+            <Label htmlFor="year_level">{t("fields.yearLevel")} *</Label>
             <Input
               id="year_level"
               value={form.year_level}
               onChange={(e) => set("year_level", e.target.value)}
-              placeholder="e.g., Year 9"
+              placeholder={t("placeholders.yearLevel")}
               required
             />
           </div>
           <div>
-            <Label htmlFor="topic">Topic</Label>
+            <Label htmlFor="topic">{t("fields.topic")}</Label>
             <Input
               id="topic"
               value={form.topic ?? ""}
               onChange={(e) => set("topic", e.target.value || undefined)}
-              placeholder="e.g., Coastal erosion"
+              placeholder={t("placeholders.topic")}
             />
           </div>
         </div>
@@ -167,43 +170,43 @@ export function PresetFormClient({ presetId }: PresetFormClientProps) {
       <Separator />
 
       <fieldset className="space-y-4">
-        <legend className="text-lg font-semibold">Location</legend>
+        <legend className="text-lg font-semibold">{t("sections.location")}</legend>
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <Label htmlFor="country">Country *</Label>
+            <Label htmlFor="country">{t("fields.country")} *</Label>
             <Input
               id="country"
               value={form.country}
               onChange={(e) => set("country", e.target.value)}
-              placeholder="e.g., Australia"
+              placeholder={t("placeholders.country")}
               required
             />
           </div>
           <div>
-            <Label htmlFor="state_region">State/Region</Label>
+            <Label htmlFor="state_region">{t("fields.stateRegion")}</Label>
             <Input
               id="state_region"
               value={form.state_region ?? ""}
               onChange={(e) => set("state_region", e.target.value || undefined)}
-              placeholder="e.g., Queensland"
+              placeholder={t("placeholders.stateRegion")}
             />
           </div>
           <div>
-            <Label htmlFor="city">City</Label>
+            <Label htmlFor="city">{t("fields.city")}</Label>
             <Input
               id="city"
               value={form.city ?? ""}
               onChange={(e) => set("city", e.target.value || undefined)}
-              placeholder="e.g., Cairns"
+              placeholder={t("placeholders.city")}
             />
           </div>
           <div>
-            <Label htmlFor="teaching_language">Teaching Language</Label>
+            <Label htmlFor="teaching_language">{t("fields.teachingLanguage")}</Label>
             <Input
               id="teaching_language"
               value={form.teaching_language}
               onChange={(e) => set("teaching_language", e.target.value)}
-              placeholder="e.g., en"
+              placeholder={t("placeholders.teachingLanguage")}
             />
           </div>
         </div>
@@ -212,10 +215,10 @@ export function PresetFormClient({ presetId }: PresetFormClientProps) {
       <Separator />
 
       <fieldset className="space-y-4">
-        <legend className="text-lg font-semibold">Cohort (Anonymised)</legend>
+        <legend className="text-lg font-semibold">{t("sections.cohort")}</legend>
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <Label htmlFor="class_size">Class Size</Label>
+            <Label htmlFor="class_size">{t("fields.classSize")}</Label>
             <Input
               id="class_size"
               type="number"
@@ -225,7 +228,7 @@ export function PresetFormClient({ presetId }: PresetFormClientProps) {
             />
           </div>
           <div>
-            <Label htmlFor="eal_d_students">EAL/D Students</Label>
+            <Label htmlFor="eal_d_students">{t("fields.ealdStudents")}</Label>
             <Input
               id="eal_d_students"
               type="number"
@@ -235,7 +238,7 @@ export function PresetFormClient({ presetId }: PresetFormClientProps) {
             />
           </div>
           <div>
-            <Label htmlFor="reading_support_students">Reading Support</Label>
+            <Label htmlFor="reading_support_students">{t("fields.readingSupportStudents")}</Label>
             <Input
               id="reading_support_students"
               type="number"
@@ -245,7 +248,7 @@ export function PresetFormClient({ presetId }: PresetFormClientProps) {
             />
           </div>
           <div>
-            <Label htmlFor="extension_students">Extension Students</Label>
+            <Label htmlFor="extension_students">{t("fields.extensionStudents")}</Label>
             <Input
               id="extension_students"
               type="number"
@@ -256,28 +259,28 @@ export function PresetFormClient({ presetId }: PresetFormClientProps) {
           </div>
         </div>
         <div>
-          <Label htmlFor="average_reading_level">Average Reading Level</Label>
+          <Label htmlFor="average_reading_level">{t("fields.averageReadingLevel")}</Label>
           <Input
             id="average_reading_level"
             value={form.average_reading_level ?? ""}
             onChange={(e) => set("average_reading_level", e.target.value || undefined)}
-            placeholder="e.g., Year 8.5"
+            placeholder={t("placeholders.averageReadingLevel")}
           />
         </div>
         <div>
-          <Label>Student Interests</Label>
+          <Label>{t("fields.studentInterests")}</Label>
           <TagInput
             value={form.student_interests ?? []}
             onChange={(tags) => set("student_interests", tags)}
-            placeholder="Type an interest and press Enter"
+            placeholder={t("placeholders.studentInterests")}
           />
         </div>
         <div>
-          <Label>Language Backgrounds</Label>
+          <Label>{t("fields.languageBackgrounds")}</Label>
           <TagInput
             value={form.language_backgrounds ?? []}
             onChange={(tags) => set("language_backgrounds", tags)}
-            placeholder="Type a language and press Enter"
+            placeholder={t("placeholders.languageBackgrounds")}
           />
         </div>
       </fieldset>
@@ -285,7 +288,7 @@ export function PresetFormClient({ presetId }: PresetFormClientProps) {
       <Separator />
 
       <fieldset className="space-y-4">
-        <legend className="text-lg font-semibold">Source Weights</legend>
+        <legend className="text-lg font-semibold">{t("sections.sourceWeights")}</legend>
         <SourceToggles
           value={coerceSourceWeights(form.source_weights)}
           onChange={(w) => set("source_weights", w)}
@@ -295,26 +298,24 @@ export function PresetFormClient({ presetId }: PresetFormClientProps) {
       <Separator />
 
       <fieldset className="space-y-4">
-        <legend className="text-lg font-semibold">Notes</legend>
+        <legend className="text-lg font-semibold">{t("sections.notes")}</legend>
         <textarea
           className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
           rows={3}
           value={form.additional_notes ?? ""}
           onChange={(e) => set("additional_notes", e.target.value || undefined)}
-          placeholder="Additional context about your classroom..."
+          placeholder={t("placeholders.additionalNotes")}
         />
       </fieldset>
 
-      <p className="text-xs text-muted-foreground">
-        No student PII is stored or sent to AI models.
-      </p>
+      <p className="text-xs text-muted-foreground">{t("privacyNote")}</p>
 
       <div className="flex gap-3">
         <Button type="submit" disabled={isPending}>
-          {isPending ? "Saving..." : "Save Preset"}
+          {isPending ? t("saving") : t("savePreset")}
         </Button>
         <Button type="button" variant="outline" onClick={() => router.push("/dashboard/presets")}>
-          Cancel
+          {tRoot("common.cancel")}
         </Button>
       </div>
     </form>

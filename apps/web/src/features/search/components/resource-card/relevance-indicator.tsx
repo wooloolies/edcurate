@@ -1,4 +1,5 @@
 import { AlertCircle, CheckCircle2, HelpCircle, Info } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
@@ -20,6 +21,8 @@ function getDimensionValue(value: unknown, key: "score" | "max"): number | strin
 }
 
 export function RelevanceIndicator({ score, reason, details }: RelevanceIndicatorProps) {
+  const t = useTranslations("search.evaluation");
+
   if (score == null) {
     return (
       <div className="mt-3 flex flex-col gap-2 rounded-md border bg-slate-50/50 p-3">
@@ -28,7 +31,7 @@ export function RelevanceIndicator({ score, reason, details }: RelevanceIndicato
             variant="outline"
             className="shrink-0 text-slate-500 bg-slate-100 border-slate-200"
           >
-            Unevaluated
+            {t("unevaluated")}
           </Badge>
         </div>
       </div>
@@ -55,9 +58,9 @@ export function RelevanceIndicator({ score, reason, details }: RelevanceIndicato
       <div className="flex items-center gap-2">
         <Badge variant="outline" className={`shrink-0 ${colorClass}`}>
           {icon}
-          Score: {score}/10
+          {t("score", { score })}
         </Badge>
-        <span className="text-xs font-medium text-slate-700">Deep Evaluation Agent</span>
+        <span className="text-xs font-medium text-slate-700">{t("agent")}</span>
 
         {details ? (
           <TooltipProvider>
@@ -69,7 +72,7 @@ export function RelevanceIndicator({ score, reason, details }: RelevanceIndicato
               </TooltipTrigger>
               <TooltipContent side="top" align="start" className="max-w-sm p-3">
                 <div className="space-y-2">
-                  <p className="text-xs font-semibold">Evaluation Criteria</p>
+                  <p className="text-xs font-semibold">{t("criteria")}</p>
                   <ul className="grid grid-cols-1 gap-1.5 text-xs">
                     {Object.entries(details).map(([key, value]) => {
                       // Normalize the key e.g. "curriculum_alignment" -> "Curriculum Alignment"

@@ -403,5 +403,181 @@
   "nav__dashboard": "Dashboard",
   "@nav__dashboard": {
     "description": "Navigation label for the Dashboard page"
+  },
+  "home__team": "Team",
+  "@home__team": {
+    "description": "Homepage navigation button for the team page"
+  },
+  "home__login": "Login",
+  "@home__login": {
+    "description": "Homepage navigation button for the login page"
+  },
+  "home__tagline": "Context-aware resource discovery and adaptation for teachers",
+  "@home__tagline": {
+    "description": "Homepage tagline"
+  },
+  "errors__title": "Error",
+  "@errors__title": {
+    "description": "Generic error page title"
+  },
+  "errors__somethingWentWrong": "Something went wrong!",
+  "@errors__somethingWentWrong": {
+    "description": "Generic error page message"
+  },
+  "errors__tryAgain": "Try again",
+  "@errors__tryAgain": {
+    "description": "Retry action on the error page"
+  },
+  "errors__pageNotFound": "Page not found",
+  "@errors__pageNotFound": {
+    "description": "Not found page message"
+  },
+  "presets__placeholders__name": "e.g., Year 9 Geography - Cairns",
+  "@presets__placeholders__name": {
+    "description": "Placeholder for preset name"
+  },
+  "presets__placeholders__curriculumFramework": "e.g., NSW NESA Syllabus",
+  "@presets__placeholders__curriculumFramework": {
+    "description": "Placeholder for curriculum framework"
+  },
+  "presets__placeholders__subject": "e.g., Geography",
+  "@presets__placeholders__subject": {
+    "description": "Placeholder for subject"
+  },
+  "presets__placeholders__yearLevel": "e.g., Year 9",
+  "@presets__placeholders__yearLevel": {
+    "description": "Placeholder for year level"
+  },
+  "presets__placeholders__topic": "e.g., Coastal erosion",
+  "@presets__placeholders__topic": {
+    "description": "Placeholder for topic"
+  },
+  "presets__placeholders__country": "e.g., Australia",
+  "@presets__placeholders__country": {
+    "description": "Placeholder for country"
+  },
+  "presets__placeholders__stateRegion": "e.g., Queensland",
+  "@presets__placeholders__stateRegion": {
+    "description": "Placeholder for state or region"
+  },
+  "presets__placeholders__city": "e.g., Cairns",
+  "@presets__placeholders__city": {
+    "description": "Placeholder for city"
+  },
+  "presets__placeholders__teachingLanguage": "e.g., en",
+  "@presets__placeholders__teachingLanguage": {
+    "description": "Placeholder for teaching language code"
+  },
+  "presets__placeholders__averageReadingLevel": "e.g., Year 8.5",
+  "@presets__placeholders__averageReadingLevel": {
+    "description": "Placeholder for average reading level"
+  },
+  "presets__placeholders__studentInterests": "Type an interest and press Enter",
+  "@presets__placeholders__studentInterests": {
+    "description": "Placeholder for the student interests tag input"
+  },
+  "presets__placeholders__languageBackgrounds": "Type a language and press Enter",
+  "@presets__placeholders__languageBackgrounds": {
+    "description": "Placeholder for the language backgrounds tag input"
+  },
+  "presets__placeholders__additionalNotes": "Additional context about your classroom...",
+  "@presets__placeholders__additionalNotes": {
+    "description": "Placeholder for additional notes"
+  },
+  "presets__moreActions": "More actions",
+  "@presets__moreActions": {
+    "description": "Accessible label for the preset actions menu"
+  },
+  "presets__saving": "Saving...",
+  "@presets__saving": {
+    "description": "Button label while a preset is being saved"
+  },
+  "search__idleState": "Select a preset and enter a search query to discover educational resources.",
+  "@search__idleState": {
+    "description": "Instruction shown before a search is started"
+  },
+  "search__searchingButton": "Searching...",
+  "@search__searchingButton": {
+    "description": "Button label while a search is running"
+  },
+  "search__showUnscored": "Show {count} more unscored results",
+  "@search__showUnscored": {
+    "description": "Button label to reveal more unscored results",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "description": "Number of unscored results"
+      }
+    }
+  },
+  "search__hideUnscored": "Hide unscored results",
+  "@search__hideUnscored": {
+    "description": "Button label to hide unscored results"
+  },
+  "search__progress__title": "Deep Evaluation in Progress",
+  "@search__progress__title": {
+    "description": "Title shown while deep evaluation is running"
+  },
+  "search__progress__duration": "This usually takes 60–90 seconds",
+  "@search__progress__duration": {
+    "description": "Estimated duration for deep evaluation"
+  },
+  "search__progress__step1": "Searching across multiple providers",
+  "@search__progress__step1": {
+    "description": "Evaluation progress step 1"
+  },
+  "search__progress__step2": "Fetching content from discovered resources",
+  "@search__progress__step2": {
+    "description": "Evaluation progress step 2"
+  },
+  "search__progress__step3": "Extracting and chunking text for analysis",
+  "@search__progress__step3": {
+    "description": "Evaluation progress step 3"
+  },
+  "search__progress__step4": "Generating semantic embeddings",
+  "@search__progress__step4": {
+    "description": "Evaluation progress step 4"
+  },
+  "search__progress__step5": "Storing vectors for similarity search",
+  "@search__progress__step5": {
+    "description": "Evaluation progress step 5"
+  },
+  "search__progress__step6": "Retrieving the most relevant chunks",
+  "@search__progress__step6": {
+    "description": "Evaluation progress step 6"
+  },
+  "search__progress__step7": "Scoring curriculum alignment and pedagogical quality",
+  "@search__progress__step7": {
+    "description": "Evaluation progress step 7"
+  },
+  "search__progress__step8": "Evaluating reading level and bias representation",
+  "@search__progress__step8": {
+    "description": "Evaluation progress step 8"
+  },
+  "search__progress__step9": "Finalising scores and ranking results",
+  "@search__progress__step9": {
+    "description": "Evaluation progress step 9"
+  },
+  "search__evaluation__unevaluated": "Unevaluated",
+  "@search__evaluation__unevaluated": {
+    "description": "Badge shown when a resource has not been evaluated yet"
+  },
+  "search__evaluation__score": "Score: {score}/10",
+  "@search__evaluation__score": {
+    "description": "Score label for a resource evaluation",
+    "placeholders": {
+      "score": {
+        "type": "String",
+        "description": "Evaluation score"
+      }
+    }
+  },
+  "search__evaluation__agent": "Deep Evaluation Agent",
+  "@search__evaluation__agent": {
+    "description": "Label for the evaluation system"
+  },
+  "search__evaluation__criteria": "Evaluation Criteria",
+  "@search__evaluation__criteria": {
+    "description": "Tooltip title listing evaluation criteria"
   }
 }

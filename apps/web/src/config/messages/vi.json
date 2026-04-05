@@ -45,5 +45,129 @@
     "subtitle": "Gặp gỡ những người đứng sau Edcurate",
     "description": "Chúng tôi là nhóm sinh viên đến từ Đại học Công nghệ Sydney (UTS), xây dựng công cụ khám phá và điều chỉnh tài nguyên giáo dục theo ngữ cảnh dành cho giáo viên.",
     "backToHome": "Quay lại trang chủ"
+  },
+  "presets": {
+    "title": "Thiết lập lớp học của tôi",
+    "newPreset": "Thiết lập mới",
+    "editPreset": "Chỉnh sửa thiết lập",
+    "createPreset": "Tạo thiết lập",
+    "savePreset": "Lưu thiết lập",
+    "deletePreset": "Xóa thiết lập",
+    "setDefault": "Đặt làm mặc định",
+    "default": "Mặc định",
+    "searchWithPreset": "Tìm kiếm",
+    "emptyState": "Chưa có thiết lập nào. Hãy tạo thiết lập lớp học đầu tiên để bắt đầu.",
+    "deleteConfirm": "Bạn có chắc muốn xóa thiết lập này không?",
+    "deleteDefaultError": "Không thể xóa thiết lập mặc định. Hãy đặt một thiết lập khác làm mặc định trước.",
+    "privacyNote": "Không lưu trữ hoặc gửi dữ liệu nhận dạng cá nhân của học sinh tới mô hình AI.",
+    "sections": {
+      "presetName": "Tên thiết lập",
+      "curriculum": "Chương trình học",
+      "location": "Địa điểm",
+      "cohort": "Nhóm lớp (ẩn danh)",
+      "sourceWeights": "Trọng số nguồn",
+      "notes": "Ghi chú"
+    },
+    "fields": {
+      "name": "Tên thiết lập",
+      "curriculumFramework": "Khung chương trình học",
+      "subject": "Môn học",
+      "yearLevel": "Khối lớp",
+      "topic": "Chủ đề",
+      "country": "Quốc gia",
+      "stateRegion": "Bang/Khu vực",
+      "city": "Thành phố",
+      "teachingLanguage": "Ngôn ngữ giảng dạy",
+      "classSize": "Sĩ số lớp",
+      "ealdStudents": "Số học sinh EAL/D",
+      "readingSupportStudents": "Số học sinh cần hỗ trợ đọc",
+      "extensionStudents": "Số học sinh nâng cao",
+      "studentInterests": "Sở thích của học sinh",
+      "languageBackgrounds": "Nền tảng ngôn ngữ",
+      "averageReadingLevel": "Mức đọc trung bình",
+      "additionalNotes": "Ghi chú bổ sung"
+    },
+    "sources": {
+      "ddgs": "DuckDuckGo",
+      "youtube": "YouTube",
+      "openalex": "OpenAlex"
+    },
+    "placeholders": {
+      "name": "ví dụ: Địa lý lớp 9 - Cairns",
+      "curriculumFramework": "ví dụ: Chương trình NSW NESA",
+      "subject": "ví dụ: Địa lý",
+      "yearLevel": "ví dụ: Lớp 9",
+      "topic": "ví dụ: Xói mòn bờ biển",
+      "country": "ví dụ: Úc",
+      "stateRegion": "ví dụ: Queensland",
+      "city": "ví dụ: Cairns",
+      "teachingLanguage": "ví dụ: vi",
+      "averageReadingLevel": "ví dụ: mức lớp 8.5",
+      "studentInterests": "Nhập một sở thích rồi nhấn Enter",
+      "languageBackgrounds": "Nhập một ngôn ngữ rồi nhấn Enter",
+      "additionalNotes": "Thêm bối cảnh về lớp học của bạn..."
+    },
+    "moreActions": "Thao tác khác",
+    "saving": "Đang lưu..."
+  },
+  "search": {
+    "title": "Khám phá tài nguyên",
+    "placeholder": "Tìm kiếm tài nguyên giáo dục...",
+    "searchButton": "Tìm kiếm",
+    "selectPreset": "Chọn thiết lập",
+    "managePresets": "Quản lý",
+    "noResults": "Không tìm thấy kết quả. Hãy thử điều chỉnh truy vấn hoặc thiết lập.",
+    "partialError": "Một số nguồn không trả về kết quả.",
+    "allSourcesFailed": "Tất cả nguồn tìm kiếm đều lỗi. Vui lòng thử lại sau.",
+    "tabs": {
+      "all": "Tất cả",
+      "web": "Web",
+      "video": "Video",
+      "papers": "Bài báo"
+    },
+    "card": {
+      "citations": "lượt trích dẫn",
+      "views": "lượt xem",
+      "by": "bởi"
+    },
+    "idleState": "Chọn một thiết lập và nhập từ khóa để khám phá tài nguyên giáo dục.",
+    "searchingButton": "Đang tìm kiếm...",
+    "showUnscored": "Hiện thêm {count} kết quả chưa được chấm điểm",
+    "hideUnscored": "Ẩn kết quả chưa chấm điểm",
+    "progress": {
+      "title": "Đang đánh giá chuyên sâu",
+      "duration": "Thường mất khoảng 60-90 giây",
+      "step1": "Đang tìm kiếm trên nhiều nguồn",
+      "step2": "Đang lấy nội dung từ các tài nguyên đã tìm thấy",
+      "step3": "Đang trích xuất và chia nhỏ văn bản để phân tích",
+      "step4": "Đang tạo semantic embeddings",
+      "step5": "Đang lưu vector để tìm kiếm độ tương đồng",
+      "step6": "Đang truy xuất các đoạn liên quan nhất",
+      "step7": "Đang chấm mức độ phù hợp với chương trình và chất lượng sư phạm",
+      "step8": "Đang đánh giá mức độ đọc và cách thể hiện thiên lệch",
+      "step9": "Đang hoàn tất điểm số và xếp hạng kết quả"
+    },
+    "evaluation": {
+      "unevaluated": "Chưa đánh giá",
+      "score": "Điểm: {score}/10",
+      "agent": "Tác nhân đánh giá chuyên sâu",
+      "criteria": "Tiêu chí đánh giá"
+    }
+  },
+  "nav": {
+    "presets": "Thiết lập",
+    "search": "Tìm kiếm",
+    "dashboard": "Bảng điều khiển"
+  },
+  "home": {
+    "team": "Đội ngũ",
+    "login": "Đăng nhập",
+    "tagline": "Khám phá và điều chỉnh tài nguyên theo ngữ cảnh dành cho giáo viên"
+  },
+  "errors": {
+    "title": "Lỗi",
+    "somethingWentWrong": "Đã xảy ra sự cố.",
+    "tryAgain": "Thử lại",
+    "pageNotFound": "Không tìm thấy trang"
   }
 }
