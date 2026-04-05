@@ -3,13 +3,14 @@ import { ExternalLink, Globe } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { RelevanceIndicator } from "@/features/search/components/resource-card/relevance-indicator";
-import type { ResourceCard } from "@/lib/api/model";
+import type { AdversarialReviewResult, ResourceCard } from "@/lib/api/model";
 
 interface DdgsCardProps {
   resource: ResourceCard;
+  adversarial?: AdversarialReviewResult | null;
 }
 
-export function DdgsCard({ resource }: DdgsCardProps) {
+export function DdgsCard({ resource, adversarial }: DdgsCardProps) {
   const meta = resource.metadata as { domain?: string };
   return (
     <Card>
@@ -39,6 +40,7 @@ export function DdgsCard({ resource }: DdgsCardProps) {
           score={resource.relevance_score}
           reason={resource.relevance_reason}
           details={resource.evaluation_details}
+          adversarial={adversarial}
         />
       </CardContent>
     </Card>

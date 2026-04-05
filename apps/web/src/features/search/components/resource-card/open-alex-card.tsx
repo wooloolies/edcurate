@@ -3,13 +3,14 @@ import { BookOpen, ExternalLink } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { RelevanceIndicator } from "@/features/search/components/resource-card/relevance-indicator";
-import type { ResourceCard } from "@/lib/api/model";
+import type { AdversarialReviewResult, ResourceCard } from "@/lib/api/model";
 
 interface OpenAlexCardProps {
   resource: ResourceCard;
+  adversarial?: AdversarialReviewResult | null;
 }
 
-export function OpenAlexCard({ resource }: OpenAlexCardProps) {
+export function OpenAlexCard({ resource, adversarial }: OpenAlexCardProps) {
   const meta = resource.metadata as {
     authors?: string[];
     journal?: string | null;
@@ -66,6 +67,7 @@ export function OpenAlexCard({ resource }: OpenAlexCardProps) {
           score={resource.relevance_score}
           reason={resource.relevance_reason}
           details={resource.evaluation_details}
+          adversarial={adversarial}
         />
       </CardContent>
     </Card>

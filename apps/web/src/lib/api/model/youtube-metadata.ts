@@ -14,4 +14,6 @@ export interface YoutubeMetadata {
   duration?: string;
   view_count?: number | null;
   published_date?: string | null;
+  tags?: string[];
+  full_description?: string | null;
 }

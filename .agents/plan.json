@@ -1,129 +1,83 @@
 {
-  "name": "RAG Pipeline & Deep Evaluation Agent",
-  "design_doc": "docs/plans/rag-evaluation-pipeline-design.md",
+  "name": "Agent 4 — Adversarial Review Agent",
+  "design_doc": "docs/plans/agent-4-adversarial-design.md",
   "created": "2026-04-05",
+  "prerequisite": "RAG pipeline + Agent 3 (Deep Evaluation) already integrated per docs/plans/rag-evaluation-pipeline-design.md",
+  "api_contracts": {
+    "EvaluationResult": "Extends with optional `adversarial: AdversarialReviewResult | null`",
+    "AdversarialReviewResult": "{ verdict, flags[], score_adjustments{}, review_summary }",
+    "AdversarialFlag": "{ category, severity, explanation, suggested_action }",
+    "GET /discovery/search": "Same EvaluatedSearchResponse; evaluations[] may include nested adversarial"
+  },
   "assumptions": [
-    "Gemini text-embedding-004 for embeddings (via google-genai SDK)",
-    "Gemini LLM for 7-dimension evaluation scoring (via google-genai SDK)",
-    "Weaviate already configured in .env (http://localhost:8080)",
-    "GOOGLE_CLOUD_PROJECT=edcurate added to .env",
-    "trafilatura for HTML content extraction",
-    "tiktoken for token counting in chunker",
-    "POC scope: top 4 results evaluated, all ~15 returned",
-    "Single endpoint — inline pipeline (~15-20s response)",
-    "Teacher preset context serves as curriculum KB (no separate doc store)"
+    "Hybrid single Weaviate query + client-side rerank into claim vs framing buckets",
+    "Gemini same stack as Agent 3 (Vertex, google-genai)",
+    "Step 6 in _run_rag_pipeline after evaluations sorted",
+    "Graceful degradation: adversarial=None preserves Agent 3 output"
   ],
   "tasks": [
     {
-      "id": "R1",
-      "title": "Install Python deps (google-genai, trafilatura, weaviate-client, tiktoken)",
+      "id": "A4-P0-1",
+      "title": "Pydantic schemas — AdversarialFlag, AdversarialReviewResult; extend EvaluationResult",
       "agent": "backend",
       "priority": "P0",
       "depends_on": [],
-      "files": ["apps/api/pyproject.toml"],
-      "acceptance": "All 4 packages in dependencies, uv sync succeeds"
+      "files": ["apps/api/src/evaluation/schemas.py"],
+      "acceptance": "Models validate; OpenAPI reflects nested adversarial on evaluation"
     },
     {
-      "id": "R2",
-      "title": "Add GOOGLE_CLOUD_PROJECT=edcurate to .env",
+      "id": "A4-P0-2",
+      "title": "adversarial_retrieval.py — hybrid query text + bucket_chunks_for_adversarial heuristics",
       "agent": "backend",
       "priority": "P0",
       "depends_on": [],
-      "files": ["apps/api/.env", "apps/api/.env.example"],
-      "acceptance": "GOOGLE_CLOUD_PROJECT visible in Settings"
+      "files": ["apps/api/src/evaluation/adversarial_retrieval.py"],
+      "acceptance": "Returns two capped text blocks from Weaviate chunk dicts; snippet fallback documented"
     },
     {
-      "id": "R3",
-      "title": "Create rag/fetcher.py — content fetcher (httpx + trafilatura)",
+      "id": "A4-P0-3",
+      "title": "adversarial_agent.py — Gemini JSON-only adversarial_review_resource + retry",
       "agent": "backend",
       "priority": "P0",
-      "depends_on": ["R1"],
-      "files": [
-        "apps/api/src/rag/__init__.py",
-        "apps/api/src/rag/fetcher.py"
-      ],
-      "acceptance": "fetch_content(url) returns clean text for HTML pages, YouTube captions, and paper abstracts"
+      "depends_on": ["A4-P0-1"],
+      "files": ["apps/api/src/evaluation/adversarial_agent.py"],
+      "acceptance": "Parses to AdversarialReviewResult | None; mirrors evaluate_resource error handling"
     },
     {
-      "id": "R4",
-      "title": "Create rag/chunker.py — semantic chunking (tiktoken-based)",
-      "agent": "backend",
-      "priority": "P0",
-      "depends_on": ["R1"],
-      "files": ["apps/api/src/rag/chunker.py"],
-      "acceptance": "chunk_text(text) returns list of 300-500 token chunks with 50-token overlap, heading metadata preserved"
-    },
-    {
-      "id": "R5",
-      "title": "Create rag/embedder.py — Gemini text-embedding-004 wrapper",
-      "agent": "backend",
-      "priority": "P0",
-      "depends_on": ["R1", "R2"],
-      "files": ["apps/api/src/rag/embedder.py"],
-      "acceptance": "embed_texts(texts) returns list of float vectors, batch support"
-    },
-    {
-      "id": "R6",
-      "title": "Create rag/weaviate_store.py — Weaviate upsert + query client",
-      "agent": "backend",
-      "priority": "P0",
-      "depends_on": ["R1"],
-      "files": ["apps/api/src/rag/weaviate_store.py"],
-      "acceptance": "ensure_collection(), upsert_chunks(), query_chunks() all functional with ResourceChunk collection"
-    },
-    {
-      "id": "R7",
-      "title": "Create evaluation/schemas.py — DimensionScore, EvaluationResult, EvaluatedSearchResponse",
+      "id": "A4-P1-1",
+      "title": "discovery/service.py — Step 6 parallel adversarial after Agent 3",
       "agent": "backend",
       "priority": "P1",
-      "depends_on": [],
-      "files": [
-        "apps/api/src/evaluation/__init__.py",
-        "apps/api/src/evaluation/schemas.py"
-      ],
-      "acceptance": "All Pydantic models defined, EvaluatedSearchResponse extends SearchResponse"
-    },
-    {
-      "id": "R8",
-      "title": "Create evaluation/agent.py — Gemini 7-dimension scorer",
-      "agent": "backend",
-      "priority": "P1",
-      "depends_on": ["R5", "R7"],
-      "files": ["apps/api/src/evaluation/agent.py"],
-      "acceptance": "evaluate_resource(resource, chunks, preset) returns EvaluationResult with 7 dimension scores"
-    },
-    {
-      "id": "R9",
-      "title": "Update discovery/service.py — wire RAG pipeline + evaluation into search_resources()",
-      "agent": "backend",
-      "priority": "P2",
-      "depends_on": ["R3", "R4", "R5", "R6", "R7", "R8"],
+      "depends_on": ["A4-P0-1", "A4-P0-2", "A4-P0-3"],
       "files": ["apps/api/src/discovery/service.py"],
-      "acceptance": "search_resources() returns EvaluatedSearchResponse with evaluations for top 4, graceful degradation if Weaviate/Gemini fails"
+      "acceptance": "Each EvaluationResult gets adversarial when pipeline succeeds; timeouts/degrade per design §5"
     },
     {
-      "id": "R10",
-      "title": "Update discovery/router.py + schemas.py — return EvaluatedSearchResponse",
-      "agent": "backend",
+      "id": "A4-P2-1",
+      "title": "Regenerate OpenAPI + apps/web gen:api",
+      "agent": "frontend",
       "priority": "P2",
-      "depends_on": ["R7", "R9"],
-      "files": [
-        "apps/api/src/discovery/router.py",
-        "apps/api/src/discovery/schemas.py"
-      ],
-      "acceptance": "Router returns EvaluatedSearchResponse, OpenAPI schema updated"
+      "depends_on": ["A4-P1-1"],
+      "files": ["apps/api/openapi.json", "apps/web/src/lib/api/**"],
+      "acceptance": "Types include adversarial fields on evaluation"
     },
     {
-      "id": "R11",
-      "title": "Regenerate openapi.json + run bun run gen:api",
-      "agent": "backend",
+      "id": "A4-P2-2",
+      "title": "UI — show verdict, flags, score adjustments on evaluated resources",
+      "agent": "frontend",
+      "priority": "P2",
+      "depends_on": ["A4-P2-1"],
+      "files": ["apps/web/src/**/*resource*", "apps/web/src/**/*evaluation*"],
+      "acceptance": "Teacher can see adversarial output for top evaluated cards (minimal viable display)"
+    },
+    {
+      "id": "A4-P3-1",
+      "title": "QA review — security, performance, a11y spot-check on new surfaces",
+      "agent": "qa",
       "priority": "P3",
-      "depends_on": ["R10"],
-      "files": [
-        "apps/api/openapi.json",
-        "apps/web/src/lib/api/**"
-      ],
-      "acceptance": "Frontend Orval hooks include evaluation types"
+      "depends_on": ["A4-P2-2"],
+      "files": [],
+      "acceptance": "No CRITICAL issues; findings logged in memory or issue list"
     }
   ]
 }

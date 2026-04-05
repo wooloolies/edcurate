@@ -5,6 +5,12 @@
  * OpenAPI spec version: 0.1.0
  */
 
+export * from './adversarial-flag-category';
+export * from './adversarial-flag-severity';
+export * from './adversarial-flag';
+export * from './adversarial-review-result-score-adjustments';
+export * from './adversarial-review-result-verdict';
+export * from './adversarial-review-result';
 export * from './ddgs-metadata';
 export * from './dimension-score';
 export * from './email-login-request';
