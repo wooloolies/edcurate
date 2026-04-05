@@ -151,5 +151,409 @@
   "team__backToHome": "Quay lại trang chủ",
   "@team__backToHome": {
     "description": "Link to go back to home page"
+  },
+  "presets__title": "Thiết lập lớp học của tôi",
+  "@presets__title": {
+    "description": "Presets page heading"
+  },
+  "presets__newPreset": "Thiết lập mới",
+  "@presets__newPreset": {
+    "description": "Button to create a new preset"
+  },
+  "presets__editPreset": "Chỉnh sửa thiết lập",
+  "@presets__editPreset": {
+    "description": "Button to edit a preset"
+  },
+  "presets__createPreset": "Tạo thiết lập",
+  "@presets__createPreset": {
+    "description": "Create preset form heading"
+  },
+  "presets__savePreset": "Lưu thiết lập",
+  "@presets__savePreset": {
+    "description": "Button to save a preset"
+  },
+  "presets__deletePreset": "Xóa thiết lập",
+  "@presets__deletePreset": {
+    "description": "Button to delete a preset"
+  },
+  "presets__setDefault": "Đặt làm mặc định",
+  "@presets__setDefault": {
+    "description": "Button to set preset as default"
+  },
+  "presets__default": "Mặc định",
+  "@presets__default": {
+    "description": "Badge label for the default preset"
+  },
+  "presets__searchWithPreset": "Tìm kiếm",
+  "@presets__searchWithPreset": {
+    "description": "Button to search with a preset"
+  },
+  "presets__emptyState": "Chưa có thiết lập nào. Hãy tạo thiết lập lớp học đầu tiên để bắt đầu.",
+  "@presets__emptyState": {
+    "description": "Empty state message on presets page"
+  },
+  "presets__deleteConfirm": "Bạn có chắc muốn xóa thiết lập này không?",
+  "@presets__deleteConfirm": {
+    "description": "Confirmation message before deleting a preset"
+  },
+  "presets__deleteDefaultError": "Không thể xóa thiết lập mặc định. Hãy đặt một thiết lập khác làm mặc định trước.",
+  "@presets__deleteDefaultError": {
+    "description": "Error when user tries to delete the default preset"
+  },
+  "presets__privacyNote": "Không lưu trữ hoặc gửi dữ liệu nhận dạng cá nhân của học sinh tới mô hình AI.",
+  "@presets__privacyNote": {
+    "description": "Privacy note shown on preset forms"
+  },
+  "presets__sections__presetName": "Tên thiết lập",
+  "@presets__sections__presetName": {
+    "description": "Section label for preset name"
+  },
+  "presets__sections__curriculum": "Chương trình học",
+  "@presets__sections__curriculum": {
+    "description": "Section label for curriculum"
+  },
+  "presets__sections__location": "Địa điểm",
+  "@presets__sections__location": {
+    "description": "Section label for location"
+  },
+  "presets__sections__cohort": "Nhóm lớp (ẩn danh)",
+  "@presets__sections__cohort": {
+    "description": "Section label for cohort"
+  },
+  "presets__sections__sourceWeights": "Trọng số nguồn",
+  "@presets__sections__sourceWeights": {
+    "description": "Section label for source weights"
+  },
+  "presets__sections__notes": "Ghi chú",
+  "@presets__sections__notes": {
+    "description": "Section label for notes"
+  },
+  "presets__fields__name": "Tên thiết lập",
+  "@presets__fields__name": {
+    "description": "Field label for preset name"
+  },
+  "presets__fields__curriculumFramework": "Khung chương trình học",
+  "@presets__fields__curriculumFramework": {
+    "description": "Field label for curriculum framework"
+  },
+  "presets__fields__subject": "Môn học",
+  "@presets__fields__subject": {
+    "description": "Field label for subject"
+  },
+  "presets__fields__yearLevel": "Khối lớp",
+  "@presets__fields__yearLevel": {
+    "description": "Field label for year level"
+  },
+  "presets__fields__topic": "Chủ đề",
+  "@presets__fields__topic": {
+    "description": "Field label for topic"
+  },
+  "presets__fields__country": "Quốc gia",
+  "@presets__fields__country": {
+    "description": "Field label for country"
+  },
+  "presets__fields__stateRegion": "Bang/Khu vực",
+  "@presets__fields__stateRegion": {
+    "description": "Field label for state or region"
+  },
+  "presets__fields__city": "Thành phố",
+  "@presets__fields__city": {
+    "description": "Field label for city"
+  },
+  "presets__fields__teachingLanguage": "Ngôn ngữ giảng dạy",
+  "@presets__fields__teachingLanguage": {
+    "description": "Field label for teaching language"
+  },
+  "presets__fields__classSize": "Sĩ số lớp",
+  "@presets__fields__classSize": {
+    "description": "Field label for class size"
+  },
+  "presets__fields__ealdStudents": "Số học sinh EAL/D",
+  "@presets__fields__ealdStudents": {
+    "description": "Field label for EAL/D students"
+  },
+  "presets__fields__readingSupportStudents": "Số học sinh cần hỗ trợ đọc",
+  "@presets__fields__readingSupportStudents": {
+    "description": "Field label for reading support students"
+  },
+  "presets__fields__extensionStudents": "Số học sinh nâng cao",
+  "@presets__fields__extensionStudents": {
+    "description": "Field label for extension students"
+  },
+  "presets__fields__studentInterests": "Sở thích của học sinh",
+  "@presets__fields__studentInterests": {
+    "description": "Field label for student interests"
+  },
+  "presets__fields__languageBackgrounds": "Nền tảng ngôn ngữ",
+  "@presets__fields__languageBackgrounds": {
+    "description": "Field label for language backgrounds"
+  },
+  "presets__fields__averageReadingLevel": "Mức đọc trung bình",
+  "@presets__fields__averageReadingLevel": {
+    "description": "Field label for average reading level"
+  },
+  "presets__fields__additionalNotes": "Ghi chú bổ sung",
+  "@presets__fields__additionalNotes": {
+    "description": "Field label for additional notes"
+  },
+  "presets__sources__ddgs": "DuckDuckGo",
+  "@presets__sources__ddgs": {
+    "description": "Label for DuckDuckGo source toggle"
+  },
+  "presets__sources__youtube": "YouTube",
+  "@presets__sources__youtube": {
+    "description": "Label for YouTube source toggle"
+  },
+  "presets__sources__openalex": "OpenAlex",
+  "@presets__sources__openalex": {
+    "description": "Label for OpenAlex source toggle"
+  },
+  "search__title": "Khám phá tài nguyên",
+  "@search__title": {
+    "description": "Search page heading"
+  },
+  "search__placeholder": "Tìm kiếm tài nguyên giáo dục...",
+  "@search__placeholder": {
+    "description": "Placeholder text for the search input"
+  },
+  "search__searchButton": "Tìm kiếm",
+  "@search__searchButton": {
+    "description": "Button label to trigger resource search"
+  },
+  "search__selectPreset": "Chọn thiết lập",
+  "@search__selectPreset": {
+    "description": "Placeholder for preset selector on search page"
+  },
+  "search__managePresets": "Quản lý",
+  "@search__managePresets": {
+    "description": "Link to manage presets from search page"
+  },
+  "search__noResults": "Không tìm thấy kết quả. Hãy thử điều chỉnh truy vấn hoặc thiết lập.",
+  "@search__noResults": {
+    "description": "Message shown when search returns no results"
+  },
+  "search__partialError": "Một số nguồn không trả về kết quả.",
+  "@search__partialError": {
+    "description": "Warning when some search sources failed"
+  },
+  "search__allSourcesFailed": "Tất cả nguồn tìm kiếm đều lỗi. Vui lòng thử lại sau.",
+  "@search__allSourcesFailed": {
+    "description": "Error when all search sources failed"
+  },
+  "search__tabs__all": "Tất cả",
+  "@search__tabs__all": {
+    "description": "Tab label for all results"
+  },
+  "search__tabs__web": "Web",
+  "@search__tabs__web": {
+    "description": "Tab label for web results"
+  },
+  "search__tabs__video": "Video",
+  "@search__tabs__video": {
+    "description": "Tab label for video results"
+  },
+  "search__tabs__papers": "Bài báo",
+  "@search__tabs__papers": {
+    "description": "Tab label for academic papers results"
+  },
+  "search__card__citations": "lượt trích dẫn",
+  "@search__card__citations": {
+    "description": "Label for citation count on a result card"
+  },
+  "search__card__views": "lượt xem",
+  "@search__card__views": {
+    "description": "Label for view count on a result card"
+  },
+  "search__card__by": "bởi",
+  "@search__card__by": {
+    "description": "Preposition before author name on a result card"
+  },
+  "nav__presets": "Thiết lập",
+  "@nav__presets": {
+    "description": "Navigation label for the Presets page"
+  },
+  "nav__search": "Tìm kiếm",
+  "@nav__search": {
+    "description": "Navigation label for the Search page"
+  },
+  "nav__dashboard": "Bảng điều khiển",
+  "@nav__dashboard": {
+    "description": "Navigation label for the Dashboard page"
+  },
+  "home__team": "Đội ngũ",
+  "@home__team": {
+    "description": "Homepage navigation button for the team page"
+  },
+  "home__login": "Đăng nhập",
+  "@home__login": {
+    "description": "Homepage navigation button for the login page"
+  },
+  "home__tagline": "Khám phá và điều chỉnh tài nguyên theo ngữ cảnh dành cho giáo viên",
+  "@home__tagline": {
+    "description": "Homepage tagline"
+  },
+  "errors__title": "Lỗi",
+  "@errors__title": {
+    "description": "Generic error page title"
+  },
+  "errors__somethingWentWrong": "Đã xảy ra sự cố.",
+  "@errors__somethingWentWrong": {
+    "description": "Generic error page message"
+  },
+  "errors__tryAgain": "Thử lại",
+  "@errors__tryAgain": {
+    "description": "Retry action on the error page"
+  },
+  "errors__pageNotFound": "Không tìm thấy trang",
+  "@errors__pageNotFound": {
+    "description": "Not found page message"
+  },
+  "presets__placeholders__name": "ví dụ: Địa lý lớp 9 - Cairns",
+  "@presets__placeholders__name": {
+    "description": "Placeholder for preset name"
+  },
+  "presets__placeholders__curriculumFramework": "ví dụ: Chương trình NSW NESA",
+  "@presets__placeholders__curriculumFramework": {
+    "description": "Placeholder for curriculum framework"
+  },
+  "presets__placeholders__subject": "ví dụ: Địa lý",
+  "@presets__placeholders__subject": {
+    "description": "Placeholder for subject"
+  },
+  "presets__placeholders__yearLevel": "ví dụ: Lớp 9",
+  "@presets__placeholders__yearLevel": {
+    "description": "Placeholder for year level"
+  },
+  "presets__placeholders__topic": "ví dụ: Xói mòn bờ biển",
+  "@presets__placeholders__topic": {
+    "description": "Placeholder for topic"
+  },
+  "presets__placeholders__country": "ví dụ: Úc",
+  "@presets__placeholders__country": {
+    "description": "Placeholder for country"
+  },
+  "presets__placeholders__stateRegion": "ví dụ: Queensland",
+  "@presets__placeholders__stateRegion": {
+    "description": "Placeholder for state or region"
+  },
+  "presets__placeholders__city": "ví dụ: Cairns",
+  "@presets__placeholders__city": {
+    "description": "Placeholder for city"
+  },
+  "presets__placeholders__teachingLanguage": "ví dụ: vi",
+  "@presets__placeholders__teachingLanguage": {
+    "description": "Placeholder for teaching language code"
+  },
+  "presets__placeholders__averageReadingLevel": "ví dụ: mức lớp 8.5",
+  "@presets__placeholders__averageReadingLevel": {
+    "description": "Placeholder for average reading level"
+  },
+  "presets__placeholders__studentInterests": "Nhập một sở thích rồi nhấn Enter",
+  "@presets__placeholders__studentInterests": {
+    "description": "Placeholder for the student interests tag input"
+  },
+  "presets__placeholders__languageBackgrounds": "Nhập một ngôn ngữ rồi nhấn Enter",
+  "@presets__placeholders__languageBackgrounds": {
+    "description": "Placeholder for the language backgrounds tag input"
+  },
+  "presets__placeholders__additionalNotes": "Thêm bối cảnh về lớp học của bạn...",
+  "@presets__placeholders__additionalNotes": {
+    "description": "Placeholder for additional notes"
+  },
+  "presets__moreActions": "Thao tác khác",
+  "@presets__moreActions": {
+    "description": "Accessible label for the preset actions menu"
+  },
+  "presets__saving": "Đang lưu...",
+  "@presets__saving": {
+    "description": "Button label while a preset is being saved"
+  },
+  "search__idleState": "Chọn một thiết lập và nhập từ khóa để khám phá tài nguyên giáo dục.",
+  "@search__idleState": {
+    "description": "Instruction shown before a search is started"
+  },
+  "search__searchingButton": "Đang tìm kiếm...",
+  "@search__searchingButton": {
+    "description": "Button label while a search is running"
+  },
+  "search__showUnscored": "Hiện thêm {count} kết quả chưa được chấm điểm",
+  "@search__showUnscored": {
+    "description": "Button label to reveal more unscored results",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "description": "Number of unscored results"
+      }
+    }
+  },
+  "search__hideUnscored": "Ẩn kết quả chưa chấm điểm",
+  "@search__hideUnscored": {
+    "description": "Button label to hide unscored results"
+  },
+  "search__progress__title": "Đang đánh giá chuyên sâu",
+  "@search__progress__title": {
+    "description": "Title shown while deep evaluation is running"
+  },
+  "search__progress__duration": "Thường mất khoảng 60-90 giây",
+  "@search__progress__duration": {
+    "description": "Estimated duration for deep evaluation"
+  },
+  "search__progress__step1": "Đang tìm kiếm trên nhiều nguồn",
+  "@search__progress__step1": {
+    "description": "Evaluation progress step 1"
+  },
+  "search__progress__step2": "Đang lấy nội dung từ các tài nguyên đã tìm thấy",
+  "@search__progress__step2": {
+    "description": "Evaluation progress step 2"
+  },
+  "search__progress__step3": "Đang trích xuất và chia nhỏ văn bản để phân tích",
+  "@search__progress__step3": {
+    "description": "Evaluation progress step 3"
+  },
+  "search__progress__step4": "Đang tạo semantic embeddings",
+  "@search__progress__step4": {
+    "description": "Evaluation progress step 4"
+  },
+  "search__progress__step5": "Đang lưu vector để tìm kiếm độ tương đồng",
+  "@search__progress__step5": {
+    "description": "Evaluation progress step 5"
+  },
+  "search__progress__step6": "Đang truy xuất các đoạn liên quan nhất",
+  "@search__progress__step6": {
+    "description": "Evaluation progress step 6"
+  },
+  "search__progress__step7": "Đang chấm mức độ phù hợp với chương trình và chất lượng sư phạm",
+  "@search__progress__step7": {
+    "description": "Evaluation progress step 7"
+  },
+  "search__progress__step8": "Đang đánh giá mức độ đọc và cách thể hiện thiên lệch",
+  "@search__progress__step8": {
+    "description": "Evaluation progress step 8"
+  },
+  "search__progress__step9": "Đang hoàn tất điểm số và xếp hạng kết quả",
+  "@search__progress__step9": {
+    "description": "Evaluation progress step 9"
+  },
+  "search__evaluation__unevaluated": "Chưa đánh giá",
+  "@search__evaluation__unevaluated": {
+    "description": "Badge shown when a resource has not been evaluated yet"
+  },
+  "search__evaluation__score": "Điểm: {score}/10",
+  "@search__evaluation__score": {
+    "description": "Score label for a resource evaluation",
+    "placeholders": {
+      "score": {
+        "type": "String",
+        "description": "Evaluation score"
+      }
+    }
+  },
+  "search__evaluation__agent": "Tác nhân đánh giá chuyên sâu",
+  "@search__evaluation__agent": {
+    "description": "Label for the evaluation system"
+  },
+  "search__evaluation__criteria": "Tiêu chí đánh giá",
+  "@search__evaluation__criteria": {
+    "description": "Tooltip title listing evaluation criteria"
   }
 }

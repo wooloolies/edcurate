@@ -1,4 +1,5 @@
 import { AlertCircle, CheckCircle2, ChevronDown, HelpCircle, Info } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
@@ -59,6 +60,8 @@ export function RelevanceIndicator({
   details,
   adversarial,
 }: RelevanceIndicatorProps) {
+  const t = useTranslations("search.evaluation");
+
   if (score == null) {
     return (
       <div className="mt-3 flex flex-col gap-2 rounded-md border bg-slate-50/50 p-3">
@@ -67,7 +70,7 @@ export function RelevanceIndicator({
             variant="outline"
             className="shrink-0 text-slate-500 bg-slate-100 border-slate-200"
           >
-            Unevaluated
+            {t("unevaluated")}
           </Badge>
         </div>
       </div>
@@ -97,9 +100,9 @@ export function RelevanceIndicator({
         <div className="flex min-w-0 flex-wrap items-center gap-2">
           <Badge variant="outline" className={`shrink-0 ${colorClass}`}>
             {icon}
-            Score: {score}/10
+            {t("score", { score })}
           </Badge>
-          <span className="text-xs font-medium text-slate-700">Deep Evaluation Agent</span>
+          <span className="text-xs font-medium text-slate-700">{t("agent")}</span>
 
           {details ? (
             <TooltipProvider>
@@ -114,7 +117,7 @@ export function RelevanceIndicator({
                 </TooltipTrigger>
                 <TooltipContent side="top" align="start" className="max-w-sm p-3">
                   <div className="space-y-2">
-                    <p className="text-xs font-semibold">Evaluation Criteria</p>
+                    <p className="text-xs font-semibold">{t("criteria")}</p>
                     <ul className="grid grid-cols-1 gap-1.5 text-xs">
                       {Object.entries(details).map(([key, value]) => {
                         // Normalize the key e.g. "curriculum_alignment" -> "Curriculum Alignment"
@@ -156,6 +159,7 @@ export function RelevanceIndicator({
           </div>
         ) : null}
       </div>
+
       {reason ? (
         <details className="group mt-1 rounded-md border border-slate-200/80 bg-white/40 px-2 py-1.5">
           <summary className="flex w-full cursor-pointer list-none items-center justify-between gap-2 text-xs font-medium text-slate-600 outline-none marker:hidden [&::-webkit-details-marker]:hidden hover:text-slate-800 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm">

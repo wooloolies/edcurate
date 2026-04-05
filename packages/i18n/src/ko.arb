@@ -379,5 +379,181 @@
   "nav__dashboard": "대시보드",
   "@nav__dashboard": {
     "description": "Navigation label for the Dashboard page"
+  },
+  "home__team": "팀 소개",
+  "@home__team": {
+    "description": "Homepage navigation button for the team page"
+  },
+  "home__login": "로그인",
+  "@home__login": {
+    "description": "Homepage navigation button for the login page"
+  },
+  "home__tagline": "교사를 위한 맥락 인식 기반 자료 탐색 및 적용",
+  "@home__tagline": {
+    "description": "Homepage tagline"
+  },
+  "errors__title": "오류",
+  "@errors__title": {
+    "description": "Generic error page title"
+  },
+  "errors__somethingWentWrong": "문제가 발생했습니다.",
+  "@errors__somethingWentWrong": {
+    "description": "Generic error page message"
+  },
+  "errors__tryAgain": "다시 시도",
+  "@errors__tryAgain": {
+    "description": "Retry action on the error page"
+  },
+  "errors__pageNotFound": "페이지를 찾을 수 없습니다",
+  "@errors__pageNotFound": {
+    "description": "Not found page message"
+  },
+  "presets__placeholders__name": "예: 9학년 지리 - 케언스",
+  "@presets__placeholders__name": {
+    "description": "Placeholder for preset name"
+  },
+  "presets__placeholders__curriculumFramework": "예: NSW NESA 교육과정",
+  "@presets__placeholders__curriculumFramework": {
+    "description": "Placeholder for curriculum framework"
+  },
+  "presets__placeholders__subject": "예: 지리",
+  "@presets__placeholders__subject": {
+    "description": "Placeholder for subject"
+  },
+  "presets__placeholders__yearLevel": "예: 9학년",
+  "@presets__placeholders__yearLevel": {
+    "description": "Placeholder for year level"
+  },
+  "presets__placeholders__topic": "예: 해안 침식",
+  "@presets__placeholders__topic": {
+    "description": "Placeholder for topic"
+  },
+  "presets__placeholders__country": "예: 호주",
+  "@presets__placeholders__country": {
+    "description": "Placeholder for country"
+  },
+  "presets__placeholders__stateRegion": "예: 퀸즐랜드",
+  "@presets__placeholders__stateRegion": {
+    "description": "Placeholder for state or region"
+  },
+  "presets__placeholders__city": "예: 케언스",
+  "@presets__placeholders__city": {
+    "description": "Placeholder for city"
+  },
+  "presets__placeholders__teachingLanguage": "예: ko",
+  "@presets__placeholders__teachingLanguage": {
+    "description": "Placeholder for teaching language code"
+  },
+  "presets__placeholders__averageReadingLevel": "예: 8.5학년 수준",
+  "@presets__placeholders__averageReadingLevel": {
+    "description": "Placeholder for average reading level"
+  },
+  "presets__placeholders__studentInterests": "관심사를 입력하고 Enter를 누르세요",
+  "@presets__placeholders__studentInterests": {
+    "description": "Placeholder for the student interests tag input"
+  },
+  "presets__placeholders__languageBackgrounds": "언어를 입력하고 Enter를 누르세요",
+  "@presets__placeholders__languageBackgrounds": {
+    "description": "Placeholder for the language backgrounds tag input"
+  },
+  "presets__placeholders__additionalNotes": "학급에 대한 추가 맥락을 입력하세요...",
+  "@presets__placeholders__additionalNotes": {
+    "description": "Placeholder for additional notes"
+  },
+  "presets__moreActions": "추가 작업",
+  "@presets__moreActions": {
+    "description": "Accessible label for the preset actions menu"
+  },
+  "presets__saving": "저장 중...",
+  "@presets__saving": {
+    "description": "Button label while a preset is being saved"
+  },
+  "search__idleState": "프리셋을 선택하고 검색어를 입력해 교육 자료를 찾아보세요.",
+  "@search__idleState": {
+    "description": "Instruction shown before a search is started"
+  },
+  "search__searchingButton": "검색 중...",
+  "@search__searchingButton": {
+    "description": "Button label while a search is running"
+  },
+  "search__showUnscored": "{count}개의 미평가 결과 더 보기",
+  "@search__showUnscored": {
+    "description": "Button label to reveal more unscored results",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "description": "Number of unscored results"
+      }
+    }
+  },
+  "search__hideUnscored": "미평가 결과 숨기기",
+  "@search__hideUnscored": {
+    "description": "Button label to hide unscored results"
+  },
+  "search__progress__title": "심층 평가 진행 중",
+  "@search__progress__title": {
+    "description": "Title shown while deep evaluation is running"
+  },
+  "search__progress__duration": "보통 60~90초 정도 걸립니다",
+  "@search__progress__duration": {
+    "description": "Estimated duration for deep evaluation"
+  },
+  "search__progress__step1": "여러 출처에서 검색 중",
+  "@search__progress__step1": {
+    "description": "Evaluation progress step 1"
+  },
+  "search__progress__step2": "발견된 자료의 콘텐츠를 가져오는 중",
+  "@search__progress__step2": {
+    "description": "Evaluation progress step 2"
+  },
+  "search__progress__step3": "분석용 텍스트를 추출하고 분할하는 중",
+  "@search__progress__step3": {
+    "description": "Evaluation progress step 3"
+  },
+  "search__progress__step4": "의미 임베딩을 생성하는 중",
+  "@search__progress__step4": {
+    "description": "Evaluation progress step 4"
+  },
+  "search__progress__step5": "유사도 검색을 위해 벡터를 저장하는 중",
+  "@search__progress__step5": {
+    "description": "Evaluation progress step 5"
+  },
+  "search__progress__step6": "가장 관련성 높은 조각을 찾는 중",
+  "@search__progress__step6": {
+    "description": "Evaluation progress step 6"
+  },
+  "search__progress__step7": "교육과정 정합성과 교수학적 품질을 평가하는 중",
+  "@search__progress__step7": {
+    "description": "Evaluation progress step 7"
+  },
+  "search__progress__step8": "읽기 수준과 편향 표현을 평가하는 중",
+  "@search__progress__step8": {
+    "description": "Evaluation progress step 8"
+  },
+  "search__progress__step9": "점수를 마무리하고 결과 순위를 정하는 중",
+  "@search__progress__step9": {
+    "description": "Evaluation progress step 9"
+  },
+  "search__evaluation__unevaluated": "미평가",
+  "@search__evaluation__unevaluated": {
+    "description": "Badge shown when a resource has not been evaluated yet"
+  },
+  "search__evaluation__score": "점수: {score}/10",
+  "@search__evaluation__score": {
+    "description": "Score label for a resource evaluation",
+    "placeholders": {
+      "score": {
+        "type": "String",
+        "description": "Evaluation score"
+      }
+    }
+  },
+  "search__evaluation__agent": "심층 평가 에이전트",
+  "@search__evaluation__agent": {
+    "description": "Label for the evaluation system"
+  },
+  "search__evaluation__criteria": "평가 기준",
+  "@search__evaluation__criteria": {
+    "description": "Tooltip title listing evaluation criteria"
   }
 }

@@ -7,6 +7,6 @@ export const revalidate = 0;
 
 export const { dynamic, dynamicParams, generateStaticParams, GET } = createSerwistRoute({
   additionalPrecacheEntries: [{ revision, url: "/offline" }],
-  nextConfig: {},
   swSrc: "src/app/sw.ts",
+  useNativeEsbuild: true,
 });

@@ -1,14 +1,10 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+
 import { Button } from "@/components/ui/button";
 
 import type { SourceWeights } from "@/features/presets/utils/normalize-weights";
-
-const SOURCE_LABELS: Record<keyof SourceWeights, string> = {
-  ddgs: "DuckDuckGo",
-  youtube: "YouTube",
-  openalex: "OpenAlex",
-};
 
 const SOURCE_KEYS: (keyof SourceWeights)[] = ["ddgs", "youtube", "openalex"];
 
@@ -21,6 +17,7 @@ interface SourceTogglesProps {
 }
 
 export function SourceToggles({ value, onChange }: SourceTogglesProps) {
+  const t = useTranslations("presets.sources");
   const handleToggle = (key: keyof SourceWeights) => {
     const wasActive = value[key] > MIN_WEIGHT;
     const next = { ...value };
@@ -71,7 +68,7 @@ export function SourceToggles({ value, onChange }: SourceTogglesProps) {
             size="sm"
             onClick={() => handleToggle(key)}
           >
-            {SOURCE_LABELS[key]} ({Math.round(value[key] * 100)}%)
+            {t(key)} ({Math.round(value[key] * 100)}%)
           </Button>
         );
       })}

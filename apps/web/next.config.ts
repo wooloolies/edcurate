@@ -1,3 +1,4 @@
+import { withSerwist } from "@serwist/turbopack";
 import type { NextConfig } from "next";
 
 import createNextIntlPlugin from "next-intl/plugin";
@@ -59,7 +60,7 @@ const nextConfig: NextConfig = {
   experimental: {
     typedEnv: true,
   },
-  serverExternalPackages: ["esbuild-wasm"],
+
   async headers() {
     return [
       {
@@ -70,4 +71,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default withNextIntl(nextConfig);
+export default withSerwist(withNextIntl(nextConfig));

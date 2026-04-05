@@ -1,4 +1,5 @@
 import { ExternalLink, Globe } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,6 +12,8 @@ interface DdgsCardProps {
 }
 
 export function DdgsCard({ resource, adversarial }: DdgsCardProps) {
+  const t = useTranslations("search");
+
   const meta = resource.metadata as { domain?: string };
   return (
     <Card>
@@ -29,7 +32,7 @@ export function DdgsCard({ resource, adversarial }: DdgsCardProps) {
             </a>
           </CardTitle>
           <Badge variant="outline" className="shrink-0">
-            Web
+            {t("tabs.web")}
           </Badge>
         </div>
         {!!meta.domain && <p className="text-xs text-muted-foreground">{meta.domain}</p>}

@@ -45,5 +45,129 @@
     "subtitle": "认识 Edcurate 背后的成员",
     "description": "我们是一支来自悉尼科技大学（UTS）的学生团队，致力于为教育工作者构建情境感知的教育资源发现与适配工具。",
     "backToHome": "返回首页"
+  },
+  "presets": {
+    "title": "我的课堂预设",
+    "newPreset": "新建预设",
+    "editPreset": "编辑预设",
+    "createPreset": "创建预设",
+    "savePreset": "保存预设",
+    "deletePreset": "删除预设",
+    "setDefault": "设为默认",
+    "default": "默认",
+    "searchWithPreset": "搜索",
+    "emptyState": "暂无预设。创建您的第一个课堂预设以开始使用。",
+    "deleteConfirm": "确定要删除此预设吗？",
+    "deleteDefaultError": "无法删除默认预设。请先将其他预设设为默认。",
+    "privacyNote": "不会存储或向 AI 模型发送任何学生个人信息。",
+    "sections": {
+      "presetName": "预设名称",
+      "curriculum": "课程",
+      "location": "位置",
+      "cohort": "班级（已匿名化）",
+      "sourceWeights": "来源权重",
+      "notes": "备注"
+    },
+    "fields": {
+      "name": "预设名称",
+      "curriculumFramework": "课程框架",
+      "subject": "科目",
+      "yearLevel": "年级",
+      "topic": "主题",
+      "country": "国家",
+      "stateRegion": "省/地区",
+      "city": "城市",
+      "teachingLanguage": "教学语言",
+      "classSize": "班级人数",
+      "ealdStudents": "EAL/D 学生数",
+      "readingSupportStudents": "阅读支持学生数",
+      "extensionStudents": "拓展学生数",
+      "studentInterests": "学生兴趣",
+      "languageBackgrounds": "语言背景",
+      "averageReadingLevel": "平均阅读水平",
+      "additionalNotes": "补充说明"
+    },
+    "sources": {
+      "ddgs": "DuckDuckGo",
+      "youtube": "YouTube",
+      "openalex": "OpenAlex"
+    },
+    "placeholders": {
+      "name": "例如：九年级地理 - 凯恩斯",
+      "curriculumFramework": "例如：NSW NESA 教学大纲",
+      "subject": "例如：地理",
+      "yearLevel": "例如：九年级",
+      "topic": "例如：海岸侵蚀",
+      "country": "例如：澳大利亚",
+      "stateRegion": "例如：昆士兰州",
+      "city": "例如：凯恩斯",
+      "teachingLanguage": "例如：zh",
+      "averageReadingLevel": "例如：八年级中段水平",
+      "studentInterests": "输入一个兴趣后按 Enter",
+      "languageBackgrounds": "输入一种语言后按 Enter",
+      "additionalNotes": "补充一些关于班级的背景信息..."
+    },
+    "moreActions": "更多操作",
+    "saving": "保存中..."
+  },
+  "search": {
+    "title": "教育资源探索",
+    "placeholder": "搜索教育资源...",
+    "searchButton": "搜索",
+    "selectPreset": "选择预设",
+    "managePresets": "管理",
+    "noResults": "未找到结果。请调整搜索词或预设后重试。",
+    "partialError": "部分来源未能返回结果。",
+    "allSourcesFailed": "所有搜索来源均出现错误，请稍后再试。",
+    "tabs": {
+      "all": "全部",
+      "web": "网页",
+      "video": "视频",
+      "papers": "论文"
+    },
+    "card": {
+      "citations": "引用",
+      "views": "浏览",
+      "by": "作者"
+    },
+    "idleState": "选择一个预设并输入搜索词，以发现教育资源。",
+    "searchingButton": "搜索中...",
+    "showUnscored": "显示另外 {count} 条未评分结果",
+    "hideUnscored": "隐藏未评分结果",
+    "progress": {
+      "title": "深度评估进行中",
+      "duration": "通常需要 60 到 90 秒",
+      "step1": "正在跨多个来源搜索",
+      "step2": "正在获取已发现资源的内容",
+      "step3": "正在提取并切分文本以供分析",
+      "step4": "正在生成语义嵌入",
+      "step5": "正在存储向量以进行相似度搜索",
+      "step6": "正在检索最相关的文本片段",
+      "step7": "正在评估课程契合度与教学质量",
+      "step8": "正在评估阅读难度与偏见呈现",
+      "step9": "正在完成评分并排序结果"
+    },
+    "evaluation": {
+      "unevaluated": "未评估",
+      "score": "评分：{score}/10",
+      "agent": "深度评估代理",
+      "criteria": "评估标准"
+    }
+  },
+  "nav": {
+    "presets": "预设",
+    "search": "搜索",
+    "dashboard": "仪表板"
+  },
+  "home": {
+    "team": "团队",
+    "login": "登录",
+    "tagline": "面向教师的情境感知资源发现与适配"
+  },
+  "errors": {
+    "title": "错误",
+    "somethingWentWrong": "出了点问题。",
+    "tryAgain": "重试",
+    "pageNotFound": "页面未找到"
   }
 }

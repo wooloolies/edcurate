@@ -2,7 +2,7 @@
 
 import { useQueryClient } from "@tanstack/react-query";
 import { MoreHorizontal, Pencil, Search, Star } from "lucide-react";
-import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -18,12 +18,14 @@ import {
   useDeletePresetApiPresetsPresetIdDelete,
   useSetDefaultPresetApiPresetsPresetIdDefaultPatch,
 } from "@/lib/api/presets/presets";
+import { Link } from "@/lib/i18n/routing";
 
 interface PresetCardProps {
   preset: PresetResponse;
 }
 
 export function PresetCard({ preset }: PresetCardProps) {
+  const t = useTranslations("presets");
   const queryClient = useQueryClient();
   const deleteMutation = useDeletePresetApiPresetsPresetIdDelete();
   const setDefaultMutation = useSetDefaultPresetApiPresetsPresetIdDefaultPatch();
@@ -47,7 +49,7 @@ export function PresetCard({ preset }: PresetCardProps) {
           {!!preset.is_default && (
             <Badge variant="secondary">
               <Star className="mr-1 h-3 w-3" />
-              Default
+              {t("default")}
             </Badge>
           )}
         </div>
@@ -62,13 +64,13 @@ export function PresetCard({ preset }: PresetCardProps) {
           <Button variant="outline" size="sm" asChild>
             <Link href={`/dashboard/presets/${preset.id}/edit`}>
               <Pencil className="mr-1 h-3 w-3" />
-              Edit
+              {t("editPreset")}
             </Link>
           </Button>
           <Button variant="outline" size="sm" asChild>
             <Link href={`/dashboard/search?preset_id=${preset.id}`}>
               <Search className="mr-1 h-3 w-3" />
-              Search
+              {t("searchWithPreset")}
             </Link>
           </Button>
           <DropdownMenu>
@@ -77,7 +79,7 @@ export function PresetCard({ preset }: PresetCardProps) {
                 variant="ghost"
                 size="sm"
                 className="ml-auto h-8 w-8 p-0"
-                aria-label="More actions"
+                aria-label={t("moreActions")}
               >
                 <MoreHorizontal className="h-4 w-4" />
               </Button>
@@ -89,7 +91,7 @@ export function PresetCard({ preset }: PresetCardProps) {
                     setDefaultMutation.mutate({ presetId: preset.id }, { onSuccess: invalidate })
                   }
                 >
-                  Set as Default
+                  {t("setDefault")}
                 </DropdownMenuItem>
               )}
               <DropdownMenuItem
@@ -98,7 +100,7 @@ export function PresetCard({ preset }: PresetCardProps) {
                   deleteMutation.mutate({ presetId: preset.id }, { onSuccess: invalidate })
                 }
               >
-                Delete
+                {t("deletePreset")}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
