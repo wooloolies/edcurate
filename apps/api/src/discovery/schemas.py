@@ -20,9 +20,11 @@ class YoutubeMetadata(BaseModel):
 
     source: Literal["youtube"] = "youtube"
     channel: str
-    duration: str = ""  # ISO 8601 (e.g., PT12M30S) — not available from search endpoint
+    duration: str = ""  # ISO 8601 (e.g., PT12M30S)
     view_count: int | None = None
     published_date: str | None = None
+    tags: list[str] = Field(default_factory=list)
+    full_description: str | None = None
 
 
 class OpenAlexMetadata(BaseModel):

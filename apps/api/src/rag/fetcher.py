@@ -1,15 +1,25 @@
 """Content fetcher — retrieves and extracts clean text from URLs."""
 
+from __future__ import annotations
+
 import asyncio
 import ipaddress
 import socket
 from functools import partial
+from typing import TYPE_CHECKING
 from urllib.parse import urljoin, urlparse
 
 import httpx
 import trafilatura
+from google import genai
+from google.genai import types
+from youtube_transcript_api import YouTubeTranscriptApi
 
+from src.lib.config import settings
 from src.lib.logging import get_logger
+
+if TYPE_CHECKING:
+    from src.discovery.schemas import ResourceCard
 
 logger = get_logger(__name__)
 
@@ -19,20 +29,23 @@ _MAX_REDIRECTS = 5
 _REDIRECT_STATUS_CODES = {301, 302, 303, 307, 308}
 
 
-async def fetch_content(url: str, source_type: str = "ddgs") -> str:
+async def fetch_content(card: ResourceCard) -> str:
     """
-    Fetch and extract clean text content from a URL.
+    Fetch and extract clean text content from a resource card.
 
-    For YouTube videos, extracts title + description.
-    For papers (OpenAlex), returns the abstract text.
+    For YouTube videos, tries transcript first, falls back to metadata.
     For web pages, uses trafilatura for clean extraction.
     """
     try:
-        if source_type == "youtube":
-            return await _fetch_youtube_text(url)
-        return await _fetch_web_content(url)
+        if card.source == "youtube":
+            transcript = await _fetch_youtube_transcript(card.url)
+            if transcript:
+                summary = await _summarize_transcript(transcript, card.title)
+                return summary if summary else _build_youtube_text(card)
+            return _build_youtube_text(card)
+        return await _fetch_web_content(card.url)
     except Exception as e:
-        logger.warning("Failed to fetch content", url=url, error=str(e))
+        logger.warning("Failed to fetch content", url=card.url, error=str(e))
         return ""
 
 
@@ -142,11 +155,124 @@ async def _fetch_web_content(url: str) -> str:
     return text or ""
 
 
-async def _fetch_youtube_text(url: str) -> str:
-    """Extract text from YouTube video metadata."""
-    # For POC: fetch the YouTube page and extract what we can
-    # In production, would use YouTube Data API for captions
-    try:
-        return await _fetch_web_content(url)
-    except Exception:
+def _extract_video_id(url: str) -> str | None:
+    """Extract video ID from a YouTube URL."""
+    parsed = urlparse(url)
+    if parsed.hostname in {"www.youtube.com", "youtube.com"}:
+        from urllib.parse import parse_qs
+
+        return parse_qs(parsed.query).get("v", [None])[0]
+    if parsed.hostname == "youtu.be":
+        return parsed.path.lstrip("/")
+    return None
+
+
+_MAX_TRANSCRIPT_CHARS = 30_000
+
+
+async def _fetch_youtube_transcript(url: str) -> str:
+    """Fetch transcript text from a YouTube video.
+
+    Tries manual captions first, then auto-generated.
+    Returns joined plain text or empty string on failure.
+    """
+    video_id = _extract_video_id(url)
+    if not video_id:
         return ""
+
+    loop = asyncio.get_running_loop()
+
+    try:
+        api = YouTubeTranscriptApi()
+        transcript_list = await loop.run_in_executor(
+            None,
+            partial(api.list, video_id),
+        )
+
+        # Prefer manual captions, then auto-generated
+        manual = [t for t in transcript_list if not t.is_generated]
+        auto = [t for t in transcript_list if t.is_generated]
+        target = manual[0] if manual else (auto[0] if auto else None)
+
+        if not target:
+            return ""
+
+        result = await loop.run_in_executor(
+            None,
+            partial(api.fetch, video_id, languages=[target.language_code]),
+        )
+
+        text = " ".join(snippet.text for snippet in result.snippets)
+        return text[:_MAX_TRANSCRIPT_CHARS]
+    except Exception as e:
+        logger.debug(
+            "YouTube transcript unavailable, falling back to metadata",
+            video_id=video_id,
+            error=str(e),
+        )
+        return ""
+
+
+_SUMMARIZE_PROMPT = """Summarize the following video transcript into a structured abstract.
+Include: main topics covered, key concepts explained, and methodology used.
+Keep it concise (300-500 words). Write in clear, formal prose — not bullet points.
+
+Video Title: {title}
+
+Transcript:
+{transcript}"""
+
+_SUMMARIZE_MODEL = "gemini-2.5-flash"
+
+
+async def _summarize_transcript(transcript: str, title: str) -> str:
+    """Summarize raw transcript into a structured educational abstract via Gemini."""
+    try:
+        client = genai.Client(
+            vertexai=True,
+            project=settings.GOOGLE_CLOUD_PROJECT,
+            location="us-central1",
+        )
+
+        prompt = _SUMMARIZE_PROMPT.format(
+            title=title,
+            transcript=transcript[:_MAX_TRANSCRIPT_CHARS],
+        )
+
+        response = await asyncio.to_thread(
+            client.models.generate_content,
+            model=_SUMMARIZE_MODEL,
+            contents=prompt,
+            config=types.GenerateContentConfig(
+                temperature=0.1,
+            ),
+        )
+
+        return response.text or ""
+    except Exception as e:
+        logger.warning("Transcript summarization failed", error=str(e))
+        return ""
+
+
+def _build_youtube_text(card: ResourceCard) -> str:
+    """Build rich text from YouTube video metadata for chunking."""
+    from src.discovery.schemas import YoutubeMetadata
+
+    parts: list[str] = [f"Title: {card.title}"]
+
+    if isinstance(card.metadata, YoutubeMetadata):
+        meta = card.metadata
+        if meta.channel:
+            parts.append(f"Channel: {meta.channel}")
+        if meta.duration:
+            parts.append(f"Duration: {meta.duration}")
+        if meta.tags:
+            parts.append(f"Tags: {', '.join(meta.tags[:20])}")
+        if meta.full_description:
+            parts.append(f"\n{meta.full_description}")
+        elif card.snippet:
+            parts.append(f"\n{card.snippet}")
+    elif card.snippet:
+        parts.append(f"\n{card.snippet}")
+
+    return "\n".join(parts)

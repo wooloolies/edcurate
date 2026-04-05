@@ -31,6 +31,7 @@ dependencies = [
     "trafilatura>=2.0.0",
     "weaviate-client>=4.0.0",
     "tiktoken>=0.9.0",
+    "youtube-transcript-api>=1.2.4",
 ]
 
 [dependency-groups]

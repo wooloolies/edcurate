@@ -28,7 +28,7 @@ export function DdgsCard({ resource }: DdgsCardProps) {
             </a>
           </CardTitle>
           <Badge variant="outline" className="shrink-0">
-            DDGS
+            Web
           </Badge>
         </div>
         {meta.domain && <p className="text-xs text-muted-foreground">{meta.domain}</p>}

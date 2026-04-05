@@ -93,7 +93,7 @@ async def _run_rag_pipeline(
         return []
 
     # Step 2: Fetch content for all resources in parallel
-    fetch_tasks = [fetch_content(card.url, card.source) for card in cards]
+    fetch_tasks = [fetch_content(card) for card in cards]
     contents = await asyncio.gather(*fetch_tasks, return_exceptions=True)
 
     # Step 3: Chunk and embed each resource
