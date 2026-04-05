@@ -9,6 +9,15 @@ from src.presets.model import ClassroomPreset
 
 _OPENALEX_WORKS_URL = "https://api.openalex.org/works"
 
+# Publishers excluded due to peer-review integrity concerns, mass retractions,
+# or institutional non-recognition (Malaysia, China, Finland, Czech Republic).
+_EXCLUDED_PUBLISHERS = [
+    "https://openalex.org/P4310310987",  # MDPI
+    "https://openalex.org/P4310320527",  # Frontiers Media
+    "https://openalex.org/P4310319869",  # Hindawi (11,300+ retractions, shut down 2024)
+    "https://openalex.org/P4310320466",  # OMICS International (FTC lawsuit, $50M fine)
+]
+
 
 def _reconstruct_abstract(
     abstract_index: dict[str, list[int]] | None,
@@ -40,8 +49,14 @@ class OpenAlexProvider(SearchProvider):
         topic = context.topic or ""
         built_query = f"{topic} {query}".strip() if topic else query
 
+        exclusion_filters = ",".join(
+            f"primary_location.source.publisher_lineage:!{pid}"
+            for pid in _EXCLUDED_PUBLISHERS
+        )
+
         params: dict[str, str | int] = {
             "search": built_query,
+            "filter": exclusion_filters,
             "per_page": limit,
             "select": (
                 "id,title,primary_location,authorships,"
