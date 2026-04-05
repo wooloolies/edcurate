@@ -1,6 +1,8 @@
 """Federated search orchestrator with RAG pipeline and deep evaluation."""
 
 import asyncio
+import hashlib
+import json
 import uuid
 from typing import Literal
 
@@ -10,6 +12,7 @@ from src.discovery.providers.youtube import YoutubeProvider
 from src.discovery.schemas import ResourceCard, SourceError
 from src.evaluation.agent import evaluate_resource
 from src.evaluation.schemas import EvaluatedSearchResponse, EvaluationResult
+from src.lib.config import settings
 from src.lib.logging import get_logger
 from src.presets.model import ClassroomPreset
 from src.rag.chunker import chunk_text
@@ -23,6 +26,7 @@ from src.rag.weaviate_store import (
 
 logger = get_logger(__name__)
 
+_CACHE_TTL = 3600  # 1 hour
 _TOTAL_RESULTS = 15
 _TOP_K_EVALUATE = 4
 _SOURCE_KEYS: list[Literal["ddgs", "youtube", "openalex"]] = [
@@ -188,6 +192,46 @@ async def _run_rag_pipeline(
     return evaluations
 
 
+def _cache_key(preset_id: str, query: str) -> str:
+    """Build a deterministic Redis key for search results."""
+    raw = f"{preset_id}:{query.lower().strip()}"
+    digest = hashlib.sha256(raw.encode()).hexdigest()[:16]
+    return f"discovery:result:{digest}"
+
+
+async def _get_cached(key: str) -> EvaluatedSearchResponse | None:
+    if not settings.REDIS_URL:
+        return None
+    try:
+        import redis.asyncio as aioredis
+
+        r = aioredis.from_url(settings.REDIS_URL)
+        try:
+            data = await r.get(key)
+            if data:
+                return EvaluatedSearchResponse.model_validate_json(data)
+        finally:
+            await r.aclose()
+    except Exception as e:
+        logger.debug("Cache read miss", key=key, error=str(e))
+    return None
+
+
+async def _set_cached(key: str, response: EvaluatedSearchResponse) -> None:
+    if not settings.REDIS_URL:
+        return
+    try:
+        import redis.asyncio as aioredis
+
+        r = aioredis.from_url(settings.REDIS_URL)
+        try:
+            await r.set(key, response.model_dump_json(), ex=_CACHE_TTL)
+        finally:
+            await r.aclose()
+    except Exception as e:
+        logger.debug("Cache write failed", key=key, error=str(e))
+
+
 async def search_resources(
     preset: ClassroomPreset,
     query: str,
@@ -195,12 +239,20 @@ async def search_resources(
     """
     Run federated search with RAG pipeline and deep evaluation.
 
-    1. Federated search across all providers (~15 results)
-    2. Take top 4 results
-    3. RAG pipeline: fetch → chunk → embed → Weaviate → evaluate
-    4. Return all results + evaluations for top 4
+    1. Check Redis cache
+    2. Federated search across all providers (~15 results)
+    3. Take top 4 results
+    4. RAG pipeline: fetch → chunk → embed → Weaviate → evaluate
+    5. Cache and return
     """
     from fastapi import HTTPException, status
+
+    # Check cache first
+    cache_key = _cache_key(str(preset.id), query)
+    cached = await _get_cached(cache_key)
+    if cached:
+        logger.info("Cache hit", key=cache_key, query=query)
+        return cached
 
     search_id = str(uuid.uuid4())
     limits = _calculate_limits(preset.source_weights)
@@ -287,7 +339,7 @@ async def search_resources(
         reverse=True,
     )
 
-    return EvaluatedSearchResponse(
+    response = EvaluatedSearchResponse(
         query=query,
         preset_id=uuid.UUID(str(preset.id)),
         total_results=len(all_results),
@@ -296,3 +348,6 @@ async def search_resources(
         errors=errors,
         evaluations=evaluations,
     )
+
+    await _set_cached(cache_key, response)
+    return response

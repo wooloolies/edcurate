@@ -2,6 +2,8 @@
 
 **Trusted and Context-Aware Resource Discovery for Teaching**
 
+Challenge brief: https://cambridge-edtech-society.org/edux/edux-challenge-4.html
+
 ---
 
 ## Problem Overview
