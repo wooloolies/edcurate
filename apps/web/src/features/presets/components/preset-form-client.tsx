@@ -7,9 +7,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { TagInput } from "@/features/presets/components/tag-input";
 import { SourceToggles } from "@/features/presets/components/source-toggles";
-import type { SourceWeights } from "@/features/presets/utils/normalize-weights";
+import { TagInput } from "@/features/presets/components/tag-input";
+import {
+  coerceSourceWeights,
+  type SourceWeights,
+} from "@/features/presets/utils/normalize-weights";
 import type { PresetCreate } from "@/lib/api/model";
 import {
   useCreatePresetApiPresetsPost,
@@ -69,7 +72,7 @@ export function PresetFormClient({ presetId }: PresetFormClientProps) {
       student_interests: (existing.student_interests as string[]) ?? [],
       language_backgrounds: (existing.language_backgrounds as string[]) ?? [],
       average_reading_level: existing.average_reading_level,
-      source_weights: (existing.source_weights as SourceWeights) ?? DEFAULT_WEIGHTS,
+      source_weights: coerceSourceWeights(existing.source_weights),
       additional_notes: existing.additional_notes,
     });
     setSynced(true);
@@ -284,7 +287,7 @@ export function PresetFormClient({ presetId }: PresetFormClientProps) {
       <fieldset className="space-y-4">
         <legend className="text-lg font-semibold">Source Weights</legend>
         <SourceToggles
-          value={(form.source_weights as SourceWeights) ?? DEFAULT_WEIGHTS}
+          value={coerceSourceWeights(form.source_weights)}
           onChange={(w) => set("source_weights", w)}
         />
       </fieldset>
