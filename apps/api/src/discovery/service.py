@@ -33,7 +33,7 @@ _SOURCE_KEYS: list[Literal["ddgs", "youtube", "openalex"]] = [
 
 
 def _calculate_limits(
-    source_weights: dict, total: int = _TOTAL_RESULTS
+    source_weights: dict[str, float], total: int = _TOTAL_RESULTS
 ) -> dict[str, int]:
     """Distribute total results across sources proportional to their weights."""
     weights = {
@@ -87,7 +87,7 @@ async def _run_rag_pipeline(
     """
     # Step 1: Ensure Weaviate collection exists
     try:
-        ensure_collection()
+        await asyncio.to_thread(ensure_collection)
     except Exception as e:
         logger.error("Weaviate collection setup failed", error=str(e))
         return []
@@ -98,7 +98,7 @@ async def _run_rag_pipeline(
 
     # Step 3: Chunk and embed each resource
     for card, content in zip(cards, contents, strict=True):
-        if isinstance(content, Exception) or not content:
+        if not isinstance(content, str) or not content:
             logger.warning(
                 "Skipping resource — no content",
                 url=card.url,
@@ -113,7 +113,8 @@ async def _run_rag_pipeline(
         try:
             chunk_texts = [c.text for c in chunks]
             vectors = await embed_texts(chunk_texts)
-            upsert_chunks(
+            await asyncio.to_thread(
+                upsert_chunks,
                 chunks=chunks,
                 resource_url=card.url,
                 source_type=card.source,
@@ -141,7 +142,8 @@ async def _run_rag_pipeline(
 
     for card in cards:
         try:
-            retrieved = query_chunks(
+            retrieved = await asyncio.to_thread(
+                query_chunks,
                 query_vector=eval_vector,
                 search_id=search_id,
                 resource_url=card.url,
@@ -159,7 +161,9 @@ async def _run_rag_pipeline(
             # Use snippet as fallback
             chunks_text = card.snippet
         else:
-            chunks_text = "\n\n---\n\n".join(r["chunk_text"] for r in retrieved)
+            chunks_text = "\n\n---\n\n".join(
+                str(r.get("chunk_text", "")) for r in retrieved
+            )
 
         eval_tasks.append(
             evaluate_resource(
@@ -221,12 +225,12 @@ async def search_resources(
     seen_urls: set[str] = set()
 
     # Collect successful iterables for round-robin interleaving
-    valid_results_lists = []
+    valid_results_lists: list[list[ResourceCard]] = []
 
     for source, result in zip(_SOURCE_KEYS, raw_results, strict=True):
         if isinstance(result, Exception):
             errors.append(SourceError(source=source, message=str(result)))
-        else:
+        elif isinstance(result, list):
             valid_results_lists.append(result)
 
     # Interleave 1 item from each provider round-robin

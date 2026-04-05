@@ -1,5 +1,7 @@
 """Vertex AI embedding wrapper — text-embedding-004 via Vertex AI."""
 
+import asyncio
+
 from google import genai
 
 from src.lib.config import settings
@@ -34,11 +36,20 @@ async def embed_texts(texts: list[str]) -> list[list[float]]:
     client = _get_client()
 
     try:
-        result = client.models.embed_content(
+        result = await asyncio.to_thread(
+            client.models.embed_content,
             model=_MODEL,
             contents=texts,
         )
-        return [emb.values for emb in result.embeddings]
+        embeddings = result.embeddings or []
+        vectors: list[list[float]] = []
+        for embedding in embeddings:
+            if embedding.values is None:
+                raise ValueError("Embedding response did not include vector values")
+            vectors.append(list(embedding.values))
+        if len(vectors) != len(texts):
+            raise ValueError("Embedding response count did not match request count")
+        return vectors
     except Exception as e:
         logger.error("Embedding failed", error=str(e), batch_size=len(texts))
         raise

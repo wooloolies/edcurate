@@ -1,5 +1,6 @@
 """Deep Evaluation Agent — Gemini-powered 7-dimension resource scorer."""
 
+import asyncio
 import json
 
 from google import genai
@@ -115,7 +116,8 @@ async def evaluate_resource(
 
     for attempt in range(2):
         try:
-            response = client.models.generate_content(
+            response = await asyncio.to_thread(
+                client.models.generate_content,
                 model=_MODEL,
                 contents=prompt,
                 config=types.GenerateContentConfig(
@@ -125,7 +127,11 @@ async def evaluate_resource(
                 ),
             )
 
-            raw = response.text.strip()
+            raw_text = response.text
+            if raw_text is None or not raw_text.strip():
+                raise ValueError("Gemini response did not include JSON text")
+
+            raw = raw_text.strip()
             data = json.loads(raw)
 
             scores: dict[str, DimensionScore] = {}

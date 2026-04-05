@@ -10,6 +10,15 @@ interface RelevanceIndicatorProps {
   details?: ResourceCardEvaluationDetails;
 }
 
+function getDimensionValue(value: unknown, key: "score" | "max"): number | string {
+  if (typeof value !== "object" || value == null) {
+    return "—";
+  }
+
+  const candidate = value as Record<string, unknown>;
+  return typeof candidate[key] === "number" ? candidate[key] : "—";
+}
+
 export function RelevanceIndicator({ score, reason, details }: RelevanceIndicatorProps) {
   if (score == null) {
     return (
@@ -27,7 +36,6 @@ export function RelevanceIndicator({ score, reason, details }: RelevanceIndicato
   }
 
   // Determine color and icon based on score (0-10)
-  let _variant: "default" | "secondary" | "destructive" | "outline" = "default";
   let icon = <CheckCircle2 className="mr-1 h-3 w-3" />;
   let colorClass = "text-green-700 bg-green-50 border-green-200";
 
@@ -35,11 +43,9 @@ export function RelevanceIndicator({ score, reason, details }: RelevanceIndicato
     colorClass = "text-green-700 bg-green-50 border-green-200";
     icon = <CheckCircle2 className="mr-1 h-3 w-3" />;
   } else if (score >= 5) {
-    _variant = "secondary";
     colorClass = "text-yellow-700 bg-yellow-50 border-yellow-200";
     icon = <Info className="mr-1 h-3 w-3" />;
   } else {
-    _variant = "destructive";
     colorClass = "text-red-700 bg-red-50 border-red-200";
     icon = <AlertCircle className="mr-1 h-3 w-3" />;
   }
@@ -71,8 +77,8 @@ export function RelevanceIndicator({ score, reason, details }: RelevanceIndicato
                         .split("_")
                         .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
                         .join(" ");
-                      const scoreVal = (value as any).score;
-                      const maxVal = (value as any).max;
+                      const scoreVal = getDimensionValue(value, "score");
+                      const maxVal = getDimensionValue(value, "max");
                       return (
                         <li
                           key={key}

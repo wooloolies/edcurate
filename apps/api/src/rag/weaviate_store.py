@@ -118,7 +118,7 @@ def query_chunks(
     search_id: str,
     resource_url: str,
     limit: int = 5,
-) -> list[dict]:
+) -> list[dict[str, object | None]]:
     """
     Query Weaviate for chunks most similar to the query vector.
 
