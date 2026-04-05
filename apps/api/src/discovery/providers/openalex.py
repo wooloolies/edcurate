@@ -10,6 +10,24 @@ from src.presets.model import ClassroomPreset
 _OPENALEX_WORKS_URL = "https://api.openalex.org/works"
 
 
+def _reconstruct_abstract(
+    abstract_index: dict[str, list[int]] | None,
+) -> str:
+    """Reconstruct OpenAlex abstract text from the inverted index."""
+    if not abstract_index:
+        return ""
+
+    position_to_word: dict[int, str] = {}
+    for word, positions in abstract_index.items():
+        for position in positions:
+            position_to_word[position] = word
+
+    return " ".join(
+        position_to_word[position]
+        for position in sorted(position_to_word)
+    )
+
+
 class OpenAlexProvider(SearchProvider):
     """Search provider backed by the OpenAlex public API."""
 
@@ -27,7 +45,7 @@ class OpenAlexProvider(SearchProvider):
             "per_page": limit,
             "select": (
                 "id,title,primary_location,authorships,"
-                "cited_by_count,doi,publication_date"
+                "abstract_inverted_index,cited_by_count,doi,publication_date"
             ),
         }
         if settings.OPENALEX_API_KEY:
@@ -66,6 +84,7 @@ class OpenAlexProvider(SearchProvider):
 
             # Abstract is not included in select, use empty snippet
             title: str = work.get("title") or ""
+            abstract = _reconstruct_abstract(work.get("abstract_inverted_index"))
 
             cards.append(
                 ResourceCard(
@@ -73,7 +92,8 @@ class OpenAlexProvider(SearchProvider):
                     url=url,
                     source="openalex",
                     type="paper",
-                    snippet=f"Authors: {', '.join(authors[:3])}" if authors else "",
+                    snippet=abstract
+                    or (f"Authors: {', '.join(authors[:3])}" if authors else ""),
                     thumbnail_url=None,
                     metadata=OpenAlexMetadata(
                         authors=authors,

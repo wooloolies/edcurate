@@ -10,17 +10,13 @@ export async function GET(request: NextRequest) {
   }
 
   const response = await fetch(
-    `${API_URL}/api/auth/verify-email?token=${encodeURIComponent(token)}`,
+    `${API_URL}/api/auth/verify-email?token=${encodeURIComponent(token)}`
   );
 
   if (response.ok) {
     // Redirect to login with success message
-    return NextResponse.redirect(
-      new URL("/login?verified=true", request.url),
-    );
+    return NextResponse.redirect(new URL("/login?verified=true", request.url));
   }
 
-  return NextResponse.redirect(
-    new URL("/login?verified=false", request.url),
-  );
+  return NextResponse.redirect(new URL("/login?verified=false", request.url));
 }

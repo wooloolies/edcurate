@@ -1,8 +1,10 @@
 "use client";
 
+import { BrainCircuit } from "lucide-react";
 import { useQueryState } from "nuqs";
 import { useState } from "react";
 
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -30,7 +32,7 @@ export function SearchPageClient() {
   const searchEnabled = !!presetId && !!submittedQuery;
   const { data: results, isFetching } = useSearchApiDiscoverySearchGet(
     { preset_id: presetId!, query: submittedQuery },
-    { query: { enabled: searchEnabled, staleTime: 3 * 60 * 1000 } },
+    { query: { enabled: searchEnabled, staleTime: 3 * 60 * 1000 } }
   );
 
   const handleSearch = (e: React.FormEvent) => {
@@ -79,17 +81,29 @@ export function SearchPageClient() {
         </form>
       </div>
 
-      {results && results.errors.length > 0 && <ErrorBanner errors={results.errors} />}
+      {results && results.errors.length > 0 ? <ErrorBanner errors={results.errors} /> : null}
 
-      {isFetching && (
-        <div className="space-y-3">
-          {Array.from({ length: 5 }).map((_, i) => (
-            <ResourceCardSkeleton key={i} />
-          ))}
+      {isFetching ? (
+        <div className="space-y-4">
+          <Alert className="border-blue-200 bg-blue-50 text-blue-900">
+            <BrainCircuit className="h-5 w-5 animate-pulse text-blue-600" />
+            <AlertTitle className="text-blue-800">Deep Evaluation in Progress...</AlertTitle>
+            <AlertDescription className="text-blue-700">
+              Our AI agent is currently reading the resources, extracting content, and calculating
+              pedagogical scores across multiple dimensions. This usually takes between 60 to 90
+              seconds.
+            </AlertDescription>
+          </Alert>
+          <div className="space-y-3">
+            {Array.from({ length: 5 }).map((_, i) => (
+              // biome-ignore lint/suspicious/noArrayIndexKey: skeleton list is static
+              <ResourceCardSkeleton key={i} />
+            ))}
+          </div>
         </div>
-      )}
+      ) : null}
 
-      {results && !isFetching && (
+      {results && !isFetching ? (
         <Tabs defaultValue="all">
           <TabsList className="overflow-x-auto">
             <TabsTrigger value="all">All ({totalCount})</TabsTrigger>
@@ -110,15 +124,15 @@ export function SearchPageClient() {
             </TabsContent>
           ))}
         </Tabs>
-      )}
+      ) : null}
 
-      {!results && !isFetching && (
+      {!results && !isFetching ? (
         <div className="rounded-lg border border-dashed p-12 text-center">
           <p className="text-muted-foreground">
             Select a preset and enter a search query to discover educational resources.
           </p>
         </div>
-      )}
+      ) : null}
     </div>
   );
 }

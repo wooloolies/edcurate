@@ -5,4 +5,9 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export type SearchResponseCountsBySource = {[key: string]: number};
+/**
+ * Resend email verification request.
+ */
+export interface ResendVerificationRequest {
+  email: string;
+}

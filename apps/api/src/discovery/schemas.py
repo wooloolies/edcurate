@@ -52,7 +52,12 @@ class ResourceCard(BaseModel):
     type: Literal["webpage", "video", "paper"]
     snippet: str
     thumbnail_url: str | None = None
-    metadata: DdgsMetadata | YoutubeMetadata | OpenAlexMetadata
+    metadata: ResourceMetadata
+    relevance_score: float | None = None
+    relevance_reason: str | None = None
+    evaluation_details: dict[str, dict[str, object]] | None = Field(
+        default=None, description="Detailed dimension scores"
+    )
 
 
 class SourceError(BaseModel):

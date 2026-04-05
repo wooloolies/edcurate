@@ -6,6 +6,7 @@
  */
 import type { DdgsMetadata } from './ddgs-metadata';
 import type { OpenAlexMetadata } from './open-alex-metadata';
+import type { ResourceCardEvaluationDetails } from './resource-card-evaluation-details';
 import type { ResourceCardSource } from './resource-card-source';
 import type { ResourceCardType } from './resource-card-type';
 import type { YoutubeMetadata } from './youtube-metadata';
@@ -21,4 +22,8 @@ export interface ResourceCard {
   snippet: string;
   thumbnail_url?: string | null;
   metadata: DdgsMetadata | YoutubeMetadata | OpenAlexMetadata;
+  relevance_score?: number | null;
+  relevance_reason?: string | null;
+  /** Detailed dimension scores */
+  evaluation_details?: ResourceCardEvaluationDetails;
 }

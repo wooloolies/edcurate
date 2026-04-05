@@ -1,7 +1,7 @@
 import type { Locale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
-import { Button } from "@/components/ui/button";
 import { LanguageSwitcher } from "@/components/language-switcher";
+import { Button } from "@/components/ui/button";
 import { Link } from "@/lib/i18n/routing";
 
 interface HomePageProps {

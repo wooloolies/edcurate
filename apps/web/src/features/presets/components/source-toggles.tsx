@@ -44,8 +44,7 @@ export function SourceToggles({ value, onChange }: SourceTogglesProps) {
     }
 
     const inactiveTotal = inactiveKeys.length * MIN_WEIGHT;
-    const activeShare =
-      Math.round(((1 - inactiveTotal) / activeKeys.length) * 100) / 100;
+    const activeShare = Math.round(((1 - inactiveTotal) / activeKeys.length) * 100) / 100;
 
     const result: SourceWeights = { ddgs: 0, youtube: 0, openalex: 0 };
     for (const k of inactiveKeys) result[k] = MIN_WEIGHT;

@@ -27,6 +27,10 @@ dependencies = [
     "ddgs>=9.12.0",
     "bcrypt>=4.2.0",
     "resend>=2.7.0",
+    "google-genai>=1.0.0",
+    "trafilatura>=2.0.0",
+    "weaviate-client>=4.0.0",
+    "tiktoken>=0.9.0",
 ]
 
 [dependency-groups]
