@@ -60,7 +60,7 @@ const nextConfig: NextConfig = {
   experimental: {
     typedEnv: true,
   },
-  serverExternalPackages: ["esbuild-wasm"],
+
   async headers() {
     return [
       {
