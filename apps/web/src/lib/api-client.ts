@@ -12,6 +12,27 @@ export const apiClient = axios.create({
 
 let isRefreshing = false;
 let refreshSubscribers: ((token: string) => void)[] = [];
+const AUTH_BYPASS_PATHS = new Set([
+  "/api/auth/email-login",
+  "/api/auth/login",
+  "/api/auth/register",
+  "/api/auth/resend-verification",
+  "/api/auth/verify-email",
+  "/api/auth/refresh",
+]);
+
+function shouldBypassAuthRedirect(url?: string): boolean {
+  if (!url) return false;
+
+  try {
+    const pathname = url.startsWith("http")
+      ? new URL(url).pathname
+      : new URL(url, env.NEXT_PUBLIC_API_URL).pathname;
+    return AUTH_BYPASS_PATHS.has(pathname);
+  } catch {
+    return AUTH_BYPASS_PATHS.has(url);
+  }
+}
 
 function subscribeTokenRefresh(cb: (token: string) => void) {
   refreshSubscribers.push(cb);
@@ -36,6 +57,10 @@ apiClient.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
+
+    if (shouldBypassAuthRedirect(originalRequest?.url)) {
+      return Promise.reject(error);
+    }
 
     if (error.response?.status === 401 && originalRequest && !originalRequest._retry) {
       const refreshToken = getRefreshToken();
