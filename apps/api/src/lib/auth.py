@@ -23,6 +23,15 @@ class TokenPayload(BaseModel):
     iat: int
 
 
+class EmailVerificationTokenPayload(BaseModel):
+    """Email verification token payload."""
+
+    user_id: str
+    token_type: Literal["email_verification"]
+    exp: int
+    iat: int
+
+
 class TokenResponse(BaseModel):
     """Token response."""
 
@@ -59,6 +68,12 @@ class RegisterRequest(BaseModel):
     email: str
     password: str
     name: str | None = None
+
+
+class ResendVerificationRequest(BaseModel):
+    """Resend email verification request."""
+
+    email: str
 
 
 class EmailLoginRequest(BaseModel):
@@ -100,6 +115,29 @@ def _get_jwe_key() -> jwk.JWK:
     return jwk.JWK(kty="oct", k=jwk.base64url_encode(key_bytes))
 
 
+def _encode_token(payload: dict[str, Any]) -> str:
+    """Create a compact JWE token from a JSON payload."""
+    key = _get_jwe_key()
+    jwe_token = jwe.JWE(
+        json.dumps(payload).encode("utf-8"),
+        recipient=key,
+        protected={"alg": "A256KW", "enc": "A256GCM"},
+    )
+    return str(jwe_token.serialize(compact=True))
+
+
+def _decode_raw_token(token: str) -> dict[str, Any]:
+    """Decode a compact JWE token into a JSON payload."""
+    key = _get_jwe_key()
+    jwe_token = jwe.JWE()
+    jwe_token.deserialize(token)
+    jwe_token.decrypt(key)
+    payload = json.loads(jwe_token.payload.decode("utf-8"))
+    if not isinstance(payload, dict):
+        raise ValueError("Invalid token payload")
+    return payload
+
+
 def create_access_token(user_id: str) -> str:
     """Create JWE access token."""
     now = datetime.now(UTC)
@@ -110,13 +148,7 @@ def create_access_token(user_id: str) -> str:
         "iat": int(now.timestamp()),
     }
 
-    key = _get_jwe_key()
-    jwe_token = jwe.JWE(
-        json.dumps(payload).encode("utf-8"),
-        recipient=key,
-        protected={"alg": "A256KW", "enc": "A256GCM"},
-    )
-    return str(jwe_token.serialize(compact=True))
+    return _encode_token(payload)
 
 
 def create_refresh_token(user_id: str) -> str:
@@ -129,24 +161,26 @@ def create_refresh_token(user_id: str) -> str:
         "iat": int(now.timestamp()),
     }
 
-    key = _get_jwe_key()
-    jwe_token = jwe.JWE(
-        json.dumps(payload).encode("utf-8"),
-        recipient=key,
-        protected={"alg": "A256KW", "enc": "A256GCM"},
-    )
-    return str(jwe_token.serialize(compact=True))
+    return _encode_token(payload)
+
+
+def create_email_verification_token(user_id: str) -> str:
+    """Create JWE email verification token."""
+    now = datetime.now(UTC)
+    payload = {
+        "user_id": user_id,
+        "token_type": "email_verification",
+        "exp": int((now + timedelta(hours=24)).timestamp()),
+        "iat": int(now.timestamp()),
+    }
+
+    return _encode_token(payload)
 
 
 def decode_token(token: str) -> TokenPayload:
     """Decode and validate JWE token."""
     try:
-        key = _get_jwe_key()
-        jwe_token = jwe.JWE()
-        jwe_token.deserialize(token)
-        jwe_token.decrypt(key)
-        payload = json.loads(jwe_token.payload.decode("utf-8"))
-        token_payload = TokenPayload(**payload)
+        token_payload = TokenPayload(**_decode_raw_token(token))
         if datetime.now(UTC).timestamp() > token_payload.exp:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
@@ -166,6 +200,19 @@ def decode_token(token: str) -> TokenPayload:
             detail="Invalid token",
             headers={"WWW-Authenticate": "Bearer"},
         ) from None
+
+
+def decode_email_verification_token(token: str) -> EmailVerificationTokenPayload:
+    """Decode and validate an email verification token."""
+    try:
+        token_payload = EmailVerificationTokenPayload(**_decode_raw_token(token))
+        if datetime.now(UTC).timestamp() > token_payload.exp:
+            raise ValueError("Verification token expired")
+        return token_payload
+    except (JWException, ValueError):
+        raise ValueError("Invalid or expired verification token") from None
+    except Exception:
+        raise ValueError("Invalid or expired verification token") from None
 
 
 async def verify_google_token(access_token: str) -> OAuthUserInfo:

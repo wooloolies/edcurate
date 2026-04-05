@@ -29,17 +29,24 @@ type TokenResponse = {
   refresh_token: string;
 };
 
+type MessageResponse = {
+  message: string;
+};
+
 export default function LoginPage() {
   const t = useTranslations("login");
   const router = useRouter();
   const [mode, setMode] = useState<Mode>("signIn");
   const [error, setError] = useState("");
   const [pendingEmail, setPendingEmail] = useState("");
+  const [resendMessage, setResendMessage] = useState("");
+  const [isResending, setIsResending] = useState(false);
 
   const signInForm = useForm({
     defaultValues: { email: "", password: "" },
     onSubmit: async ({ value }) => {
       setError("");
+      setResendMessage("");
       try {
         const { data } = await apiClient.post<TokenResponse>("/api/auth/email-login", {
           email: value.email,
@@ -64,6 +71,7 @@ export default function LoginPage() {
     defaultValues: { name: "", email: "", password: "" },
     onSubmit: async ({ value }) => {
       setError("");
+      setResendMessage("");
       try {
         const { data } = await apiClient.post<RegisterResponse>("/api/auth/register", {
           email: value.email,
@@ -99,12 +107,44 @@ export default function LoginPage() {
           </CardHeader>
           <CardContent className="flex flex-col gap-3">
             <p className="text-muted-foreground text-center text-sm">{t("checkSpam")}</p>
+            {resendMessage ? (
+              <p className="text-center text-sm" role="status">
+                {resendMessage}
+              </p>
+            ) : null}
+            <Button
+              variant="outline"
+              className="w-full"
+              disabled={isResending || !pendingEmail}
+              onClick={async () => {
+                setError("");
+                setResendMessage("");
+                setIsResending(true);
+                try {
+                  const { data } = await apiClient.post<MessageResponse>(
+                    "/api/auth/resend-verification",
+                    { email: pendingEmail }
+                  );
+                  setResendMessage(data.message);
+                } catch (err: unknown) {
+                  const msg =
+                    (err as { response?: { data?: { detail?: string } } })?.response?.data
+                      ?.detail ?? t("invalidCredentials");
+                  setError(msg);
+                } finally {
+                  setIsResending(false);
+                }
+              }}
+            >
+              {isResending ? t("submitting") : t("resendVerification")}
+            </Button>
             <Button
               variant="ghost"
               className="w-full"
               onClick={() => {
                 setMode("signIn");
                 setError("");
+                setResendMessage("");
               }}
             >
               {t("backToSignIn")}

@@ -1,6 +1,4 @@
-import secrets
 from logging import getLogger
-from datetime import UTC, datetime, timedelta
 from uuid import UUID
 
 import bcrypt
@@ -13,9 +11,12 @@ from src.lib.auth import (
     OAuthLoginRequest,
     RefreshTokenRequest,
     RegisterRequest,
+    ResendVerificationRequest,
     TokenResponse,
     create_access_token,
+    create_email_verification_token,
     create_refresh_token,
+    decode_email_verification_token,
     decode_token,
     verify_oauth_token,
 )
@@ -25,9 +26,6 @@ from src.users.model import User
 
 router = APIRouter()
 logger = getLogger(__name__)
-
-# Verification tokens: token → (user_id, expires_at)
-_verification_tokens: dict[str, tuple[str, datetime]] = {}
 
 
 def _hash_password(password: str) -> str:
@@ -69,7 +67,10 @@ def _send_verification_email_or_raise(email: str, token: str) -> None:
         logger.exception("Verification email delivery failed for %s", email)
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail="Verification email could not be sent. Verify your Resend domain or try again later.",
+            detail=(
+                "Verification email could not be sent. "
+                "Verify your Resend domain or try again later."
+            ),
         ) from exc
 
 
@@ -112,9 +113,7 @@ async def register(
     await db.refresh(user)
 
     if needs_verification:
-        token = secrets.token_urlsafe(32)
-        expires = datetime.now(UTC) + timedelta(hours=24)
-        _verification_tokens[token] = (str(user.id), expires)
+        token = create_email_verification_token(str(user.id))
         _send_verification_email_or_raise(request.email, token)
         return RegisterResponse(
             requires_verification=True,
@@ -135,21 +134,15 @@ async def verify_email(
     db: DBSession = ...,
 ) -> dict[str, str]:
     """Verify email address via token from verification link."""
-    entry = _verification_tokens.pop(token, None)
-    if not entry:
+    try:
+        payload = decode_email_verification_token(token)
+    except ValueError as exc:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid or expired verification token",
-        )
+            detail=str(exc),
+        ) from exc
 
-    user_id, expires_at = entry
-    if datetime.now(UTC) > expires_at:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Verification token expired",
-        )
-
-    result = await db.execute(select(User).where(User.id == UUID(user_id)))
+    result = await db.execute(select(User).where(User.id == UUID(payload.user_id)))
     user = result.scalar_one_or_none()
     if not user:
         raise HTTPException(
@@ -161,6 +154,33 @@ async def verify_email(
     await db.flush()
 
     return {"message": "Email verified successfully. You can now sign in."}
+
+
+@router.post("/resend-verification")
+async def resend_verification_email(
+    request: ResendVerificationRequest,
+    db: DBSession,
+) -> dict[str, str]:
+    """Resend a verification email for an existing unverified user."""
+    if not settings.RESEND_API_KEY:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Email verification is not enabled",
+        )
+
+    result = await db.execute(select(User).where(User.email == request.email))
+    user = result.scalar_one_or_none()
+
+    if user and not user.email_verified:
+        token = create_email_verification_token(str(user.id))
+        _send_verification_email_or_raise(user.email, token)
+
+    return {
+        "message": (
+            "If an unverified account exists for that email, "
+            "a verification email has been sent."
+        )
+    }
 
 
 @router.post("/email-login", response_model=TokenResponse)
