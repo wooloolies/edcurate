@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { TagInput } from "@/features/presets/components/tag-input";
-import { WeightSliders } from "@/features/presets/components/weight-sliders";
+import { SourceToggles } from "@/features/presets/components/source-toggles";
 import type { SourceWeights } from "@/features/presets/utils/normalize-weights";
 import type { PresetCreate } from "@/lib/api/model";
 import {
@@ -283,7 +283,7 @@ export function PresetFormClient({ presetId }: PresetFormClientProps) {
 
       <fieldset className="space-y-4">
         <legend className="text-lg font-semibold">Source Weights</legend>
-        <WeightSliders
+        <SourceToggles
           value={(form.source_weights as SourceWeights) ?? DEFAULT_WEIGHTS}
           onChange={(w) => set("source_weights", w)}
         />
