@@ -43,8 +43,8 @@ export function OpenAlexCard({ resource, adversarial }: OpenAlexCardProps) {
           {meta.authors && meta.authors.length > 0 && (
             <span>{meta.authors.slice(0, 3).join(", ")}</span>
           )}
-          {meta.journal && <span>&middot; {meta.journal}</span>}
-          {meta.published_date && <span>&middot; {meta.published_date.slice(0, 4)}</span>}
+          {!!meta.journal && <span>&middot; {meta.journal}</span>}
+          {!!meta.published_date && <span>&middot; {meta.published_date.slice(0, 4)}</span>}
         </div>
       </CardHeader>
       <CardContent className="flex flex-col gap-3">
@@ -52,7 +52,7 @@ export function OpenAlexCard({ resource, adversarial }: OpenAlexCardProps) {
           {meta.citation_count != null && (
             <span className="font-medium">{meta.citation_count} citations</span>
           )}
-          {meta.doi && (
+          {!!meta.doi && (
             <a
               href={meta.doi}
               target="_blank"

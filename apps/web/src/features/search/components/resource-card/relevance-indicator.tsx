@@ -74,8 +74,7 @@ export function RelevanceIndicator({
     );
   }
 
-  const peerCheckDisplay =
-    adversarial != null ? peerCheckFromVerdict(adversarial.verdict) : null;
+  const peerCheckDisplay = adversarial != null ? peerCheckFromVerdict(adversarial.verdict) : null;
 
   // Determine color and icon based on score (0-10)
   let icon = <CheckCircle2 className="mr-1 h-3 w-3" />;
@@ -106,7 +105,10 @@ export function RelevanceIndicator({
             <TooltipProvider>
               <Tooltip delayDuration={300}>
                 <TooltipTrigger asChild>
-                  <button type="button" className="text-slate-400 hover:text-slate-600 outline-none">
+                  <button
+                    type="button"
+                    className="text-slate-400 hover:text-slate-600 outline-none"
+                  >
                     <HelpCircle className="h-4 w-4" />
                   </button>
                 </TooltipTrigger>

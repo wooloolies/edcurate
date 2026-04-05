@@ -28,9 +28,9 @@ export function TagInput({ value, onChange, placeholder }: TagInputProps) {
 
   return (
     <div className="space-y-2">
-      <div role="list" className="flex flex-wrap gap-1.5">
+      <div className="flex flex-wrap gap-1.5">
         {value.map((tag) => (
-          <Badge key={tag} variant="secondary" role="listitem">
+          <Badge key={tag} variant="secondary">
             {tag}
             <button
               type="button"

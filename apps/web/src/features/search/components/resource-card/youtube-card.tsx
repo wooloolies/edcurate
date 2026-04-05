@@ -38,11 +38,11 @@ export function YoutubeCard({ resource, adversarial }: YoutubeCardProps) {
             YouTube
           </Badge>
         </div>
-        {meta.channel && <p className="text-xs text-muted-foreground">{meta.channel}</p>}
+        {!!meta.channel && <p className="text-xs text-muted-foreground">{meta.channel}</p>}
       </CardHeader>
       <CardContent className="flex flex-col gap-3">
         <div className="flex flex-col gap-3 sm:flex-row">
-          {resource.thumbnail_url && (
+          {!!resource.thumbnail_url && (
             <img
               src={resource.thumbnail_url}
               alt={resource.title}

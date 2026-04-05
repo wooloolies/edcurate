@@ -44,7 +44,7 @@ export function PresetCard({ preset }: PresetCardProps) {
               {preset.subject} &middot; {preset.year_level} &middot; {preset.country}
             </CardDescription>
           </div>
-          {preset.is_default && (
+          {!!preset.is_default && (
             <Badge variant="secondary">
               <Star className="mr-1 h-3 w-3" />
               Default

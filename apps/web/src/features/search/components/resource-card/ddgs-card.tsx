@@ -32,7 +32,7 @@ export function DdgsCard({ resource, adversarial }: DdgsCardProps) {
             Web
           </Badge>
         </div>
-        {meta.domain && <p className="text-xs text-muted-foreground">{meta.domain}</p>}
+        {!!meta.domain && <p className="text-xs text-muted-foreground">{meta.domain}</p>}
       </CardHeader>
       <CardContent>
         <p className="text-sm text-muted-foreground line-clamp-3">{resource.snippet}</p>
