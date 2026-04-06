@@ -6,6 +6,13 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { SourceToggles } from "@/features/presets/components/source-toggles";
 import { TagInput } from "@/features/presets/components/tag-input";
@@ -14,6 +21,12 @@ import {
   type SourceWeights,
 } from "@/features/presets/utils/normalize-weights";
 import type { PresetCreate } from "@/lib/api/model";
+import {
+  useGetCountriesApiCurriculumCountriesGet,
+  useGetFrameworksApiCurriculumFrameworksGet,
+  useGetGradesApiCurriculumGradesGet,
+  useGetSubjectsApiCurriculumSubjectsGet,
+} from "@/lib/api/curriculum/curriculum";
 import {
   useCreatePresetApiPresetsPost,
   useGetPresetApiPresetsPresetIdGet,
@@ -44,6 +57,13 @@ export function PresetFormClient({ presetId }: PresetFormClientProps) {
   const createMutation = useCreatePresetApiPresetsPost();
   const updateMutation = useUpdatePresetApiPresetsPresetIdPut();
 
+  // Curriculum cascading dropdown state
+  const [countryCode, setCountryCode] = useState("");
+  const { data: countries } = useGetCountriesApiCurriculumCountriesGet();
+  const { data: subjects } = useGetSubjectsApiCurriculumSubjectsGet(
+    { country: countryCode },
+    { query: { enabled: !!countryCode } },
+  );
   const [form, setForm] = useState<PresetCreate>(() => ({
     name: "",
     curriculum_framework: "",
@@ -64,9 +84,21 @@ export function PresetFormClient({ presetId }: PresetFormClientProps) {
     additional_notes: "",
   }));
 
+  const { data: frameworks } = useGetFrameworksApiCurriculumFrameworksGet(
+    { country: countryCode, subject: form.subject },
+    { query: { enabled: !!countryCode && !!form.subject } },
+  );
+  const { data: grades } = useGetGradesApiCurriculumGradesGet(
+    { country: countryCode, subject: form.subject, framework: form.curriculum_framework ?? "" },
+    { query: { enabled: !!countryCode && !!form.subject && !!form.curriculum_framework } },
+  );
+
   // Sync form when existing data loads
   const [synced, setSynced] = useState(false);
   if (existing && !synced) {
+    // Resolve country_code from country name
+    const match = countries?.find((c) => c.name === existing.country);
+    if (match) setCountryCode(match.code);
     setForm({
       name: existing.name,
       curriculum_framework: existing.curriculum_framework ?? "",
@@ -91,6 +123,35 @@ export function PresetFormClient({ presetId }: PresetFormClientProps) {
 
   const set = <K extends keyof PresetCreate>(key: K, val: PresetCreate[K]) =>
     setForm((f) => ({ ...f, [key]: val }));
+
+  const handleCountryChange = (code: string) => {
+    const country = countries?.find((c) => c.code === code);
+    setCountryCode(code);
+    setForm((f) => ({
+      ...f,
+      country: country?.name ?? "",
+      subject: "",
+      curriculum_framework: "",
+      year_level: "",
+    }));
+  };
+
+  const handleSubjectChange = (subject: string) => {
+    setForm((f) => ({
+      ...f,
+      subject,
+      curriculum_framework: "",
+      year_level: "",
+    }));
+  };
+
+  const handleFrameworkChange = (framework: string) => {
+    setForm((f) => ({
+      ...f,
+      curriculum_framework: framework,
+      year_level: "",
+    }));
+  };
 
   const setInt = (key: keyof PresetCreate, raw: string) => {
     const n = parseInt(raw, 10);
@@ -135,33 +196,76 @@ export function PresetFormClient({ presetId }: PresetFormClientProps) {
         <legend className="text-lg font-semibold">{t("sections.curriculum")}</legend>
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <Label htmlFor="curriculum_framework">{t("fields.curriculumFramework")}</Label>
-            <Input
-              id="curriculum_framework"
-              value={form.curriculum_framework ?? ""}
-              onChange={(e) => set("curriculum_framework", e.target.value)}
-              placeholder={t("placeholders.curriculumFramework")}
-            />
+            <Label>{t("fields.country")} *</Label>
+            <Select value={countryCode} onValueChange={handleCountryChange}>
+              <SelectTrigger>
+                <SelectValue placeholder={t("placeholders.country")} />
+              </SelectTrigger>
+              <SelectContent>
+                {countries?.map((c) => (
+                  <SelectItem key={c.code} value={c.code}>
+                    {c.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
           <div>
-            <Label htmlFor="subject">{t("fields.subject")} *</Label>
-            <Input
-              id="subject"
+            <Label>{t("fields.subject")} *</Label>
+            <Select
               value={form.subject}
-              onChange={(e) => set("subject", e.target.value)}
-              placeholder={t("placeholders.subject")}
-              required
-            />
+              onValueChange={handleSubjectChange}
+              disabled={!countryCode}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder={t("placeholders.subject")} />
+              </SelectTrigger>
+              <SelectContent>
+                {subjects?.map((s) => (
+                  <SelectItem key={s} value={s}>
+                    {s}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
           <div>
-            <Label htmlFor="year_level">{t("fields.yearLevel")} *</Label>
-            <Input
-              id="year_level"
+            <Label>{t("fields.curriculumFramework")}</Label>
+            <Select
+              value={form.curriculum_framework ?? ""}
+              onValueChange={handleFrameworkChange}
+              disabled={!form.subject}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder={t("placeholders.curriculumFramework")} />
+              </SelectTrigger>
+              <SelectContent>
+                {frameworks?.map((f) => (
+                  <SelectItem key={f} value={f}>
+                    {f}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div>
+            <Label>{t("fields.yearLevel")} *</Label>
+            <Select
               value={form.year_level}
-              onChange={(e) => set("year_level", e.target.value)}
-              placeholder={t("placeholders.yearLevel")}
-              required
-            />
+              onValueChange={(v) => set("year_level", v)}
+              disabled={!form.curriculum_framework}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder={t("placeholders.yearLevel")} />
+              </SelectTrigger>
+              <SelectContent>
+                {grades?.map((g) => (
+                  <SelectItem key={g.name} value={g.name}>
+                    {g.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
         </div>
       </fieldset>
@@ -171,16 +275,6 @@ export function PresetFormClient({ presetId }: PresetFormClientProps) {
       <fieldset className="space-y-4">
         <legend className="text-lg font-semibold">{t("sections.location")}</legend>
         <div className="grid gap-4 sm:grid-cols-2">
-          <div>
-            <Label htmlFor="country">{t("fields.country")} *</Label>
-            <Input
-              id="country"
-              value={form.country}
-              onChange={(e) => set("country", e.target.value)}
-              placeholder={t("placeholders.country")}
-              required
-            />
-          </div>
           <div>
             <Label htmlFor="state_region">{t("fields.stateRegion")}</Label>
             <Input
