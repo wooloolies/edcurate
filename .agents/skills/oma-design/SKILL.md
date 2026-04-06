@@ -10,12 +10,10 @@ description: >
 # oma-design
 
 ## Role
-
 Design specialist that defines, creates, and validates project design systems.
 DESIGN.md is the central artifact — all design work revolves around it.
 
 ## Core Rules
-
 1. Check `.design-context.md` before any design work. If missing, run Phase 1 (Setup) to create it.
 2. System font stack as default (`system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif`). Add custom fonts only with project justification.
 3. If the service supports CJK languages (ko/ja/zh): prioritize CJK-ready fonts (Pretendard Variable > Noto Sans CJK > system-ui fallback). If latin-only: choose fonts appropriate for the target audience.
@@ -30,7 +28,6 @@ DESIGN.md is the central artifact — all design work revolves around it.
 ## Anti-Pattern Quick Reference
 
 ### Typography
-
 - DON'T: Default to custom Google Fonts when system fonts suffice
 - DON'T: Use Inter/Geist alone without considering project context
 - DON'T: Load 3+ font families without justification
@@ -39,7 +36,6 @@ DESIGN.md is the central artifact — all design work revolves around it.
 - DO: Test CJK at every size (line-height 1.7-1.8)
 
 ### Color & Gradient
-
 - DON'T: Purple-to-blue gradient backgrounds (strongest AI slop signal)
 - DON'T: Gradient orbs/blobs as hero decoration ("AI SaaS look")
 - DON'T: Gradient + glassmorphism + blur combo (triple slop)
@@ -50,7 +46,6 @@ DESIGN.md is the central artifact — all design work revolves around it.
 - DO: Derive gradients from brand colors with clear purpose
 
 ### Layout
-
 - DON'T: Nested cards inside nested cards
 - DON'T: Desktop-only fixed-width layouts
 - DON'T: Hero with identical 3-metric stats layout (AI pattern)
@@ -59,7 +54,6 @@ DESIGN.md is the central artifact — all design work revolves around it.
 - DO: Mix layout patterns (chess, grid, bento, full-bleed)
 
 ### Motion
-
 - DON'T: Bounce easing on everything
 - DON'T: Animation duration > 800ms for UI transitions
 - DON'T: Ignore prefers-reduced-motion
@@ -67,19 +61,16 @@ DESIGN.md is the central artifact — all design work revolves around it.
 - DO: 150ms micro-interactions, 200-500ms transitions
 
 ### Components
-
 - DON'T: Glassmorphism everywhere — use sparingly
 - DON'T: Hover-only interactions without touch/keyboard alternatives
 - DO: shadcn/ui for base, Aceternity UI / React Bits for accent effects
 - DO: All interactive elements must have visible focus states
 
 ## Workflow Summary
-
 7 phases: Setup → Extract → Enhance → Propose → Generate → Audit → Handoff.
 See `resources/execution-protocol.md` for full detail.
 
 ## Resources
-
 - `resources/execution-protocol.md` — 7-phase workflow
 - `resources/anti-patterns.md` — Full DO/DON'T catalog
 - `resources/checklist.md` — Audit checklist (Responsive + WCAG + Nielsen + Slop)
@@ -90,7 +81,6 @@ See `resources/execution-protocol.md` for full detail.
 - `resources/error-playbook.md` — Design error recovery
 
 ## References
-
 - `reference/typography.md` — Font selection, type scale, CJK
 - `reference/color-and-contrast.md` — Color psychology, WCAG contrast
 - `reference/spatial-design.md` — 8px grid, breakpoints, spacing
@@ -101,6 +91,5 @@ See `resources/execution-protocol.md` for full detail.
 - `reference/shader-and-3d.md` — WebGL, R3F, ogl, performance
 
 ## Examples
-
 - `examples/design-context-example.md` — .design-context.md example
 - `examples/landing-page-prompt.md` — Detailed landing page prompt

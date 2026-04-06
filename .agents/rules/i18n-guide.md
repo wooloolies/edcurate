@@ -1,86 +1,68 @@
 ---
-trigger: model_decision
-description: when working for internationalization or localization.
-paths:
-  - "packages/i18n/**"
-  - "apps/web/src/config/messages/**"
+trigger: always_on
+description: Response language rules for agents and workflows
 ---
 
-# I18n Workflow
+# i18n Guide — Response Language Rules
 
-## Source of Truth
-The single source of truth for all i18n keys is in packages/i18n/src/.
+Rules for determining and applying response language across agents and workflows.
 
-- Do NOT edit files in apps/web/src/config/messages or apps/mobile/lib/i18n directly
-- ALWAYS make changes in packages/i18n/src/*.arb (en.arb, ko.arb, ja.arb)
+## Language Resolution
 
-## Workflow
+Response language is determined by the following priority:
 
-### 1. Modify Keys
-Add, update, or delete keys in packages/i18n/src/en.arb.
-Sync changes to other language files (ko.arb, ja.arb).
+1. **User prompt language** — if the user writes in a specific language, respond in that language
+2. **`oma-config.yaml`** — `language` field in `.agents/oma-config.yaml`
+3. **Fallback** — English (en) if neither of the above is set
 
-### 2. Build & Distribute
-```bash
-mise //packages/i18n:build
+```yaml
+# .agents/oma-config.yaml
+language: ko  # ko, en, ja, zh, ...
 ```
 
-This generates:
-- Web: apps/web/src/config/messages/*.json
-- Mobile: apps/mobile/lib/i18n/messages/*.arb
+## What to Localize
 
-### 3. Apply to Mobile
-```bash
-cd apps/mobile
-flutter gen-l10n
+| Category | Localize? | Example |
+|----------|-----------|---------|
+| Natural language responses | Yes | User-facing explanations and descriptions |
+| Error messages (user-facing) | Yes | Authentication failure messages |
+| Status updates / progress reports | Yes | "Phase 2 complete, starting Phase 3" |
+| Charter Preflight output | Yes | Descriptive text localized, keywords stay in English |
+| Result files (result-*.md) | Yes | User-readable text |
+
+## What Stays in English
+
+| Category | Why | Example |
+|----------|-----|---------|
+| Code (variables, functions, classes) | Codebase consistency | `getUserProfile()` |
+| Git commit messages | Conventional commits standard | `feat: add user auth` |
+| PR titles/body | GitHub collaboration standard | `fix: resolve race condition` |
+| Technical / domain terms | Meaning loss when translated | API, JWT, middleware, scaffold |
+| File paths / config keys | System identifiers | `.agents/config/` |
+| Log levels / status keywords | Parsing compatibility | `Status: completed`, `BLOCKED` |
+| CLAUDE.md / SKILL.md content | System prompts | Keep English originals |
+
+## Mixed-Language Rules
+
+1. **Keep technical terms in original language** — don't force-translate
+   - Good: "Validates the JWT token"
+   - Bad: "Validates the JSON Web Token"
+2. **Code blocks are always in English** — including comments
+3. **Inline code (`backtick`) is never translated**
+4. **Parenthetical supplement allowed** — for unfamiliar terms, use `translated(original)` format once
+5. **Register consistency** — match the target language's appropriate register for the context
+6. **Translation tasks** — for translating UI strings, docs, or marketing copy, use the `/oma-translator` skill
+
+## Workflow Integration
+
+All workflows follow these rules. The following line in existing workflows references this guide:
+
+```
+- **Response language follows `language` setting in `.agents/oma-config.yaml` if configured.**
 ```
 
-## Using Translations
+## Subagent Behavior
 
-### Web (Next.js)
-The build process transforms double underscores (`__`) in ARB keys to nested objects in JSON.
-For example, `nav__home` in ARB becomes `nav.home` in code.
-
-```typescript
-import { useTranslations } from 'next-intl';
-
-function MyComponent() {
-  const t = useTranslations();
-  // packages/i18n: nav__home -> apps/web: nav.home
-  return <Link href="/">{t('nav.home')}</Link>;
-}
-```
-
-### Mobile (Flutter)
-```dart
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
-Text(AppLocalizations.of(context)!.save)
-```
-
-## Translation Quality
-- `en.arb` is the source language; other locales are translated via `/oma-translator` skill
-- New or updated translations MUST be reviewed by `/oma-translator` before commit
-- When adding i18n keys: write `en.arb` first, then invoke `/oma-translator` for the remaining locales
-
-## Best Practices
-1. Always include descriptions (@key) for translators
-2. Keep keys descriptive
-3. Use consistent naming across locales
-4. Test all locales after adding translations
-5. Build frequently to catch errors early
-6. Never modify generated files
-
-## Troubleshooting
-
-### Build Fails
-```bash
-rm -rf packages/i18n/dist apps/web/src/config/messages apps/mobile/lib/i18n/messages
-mise //packages/i18n:build
-```
-
-### Mobile Not Showing Translations
-```bash
-cd apps/mobile
-flutter clean && flutter pub get && flutter gen-l10n
-```
+- Subagent **result files** (`result-*.md`) are written in the user's language
+- **Internal communication** between subagents (charter, status keywords) stays in English
+- Agent definition files (`.agents/agents/*.md`) stay in English
