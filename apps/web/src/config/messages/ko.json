@@ -174,7 +174,8 @@
   "nav": {
     "presets": "프리셋",
     "search": "검색",
-    "dashboard": "대시보드"
+    "dashboard": "대시보드",
+    "profile": "프로필"
   },
   "home": {
     "team": "팀 소개",
@@ -186,5 +187,15 @@
     "somethingWentWrong": "문제가 발생했습니다.",
     "tryAgain": "다시 시도",
     "pageNotFound": "페이지를 찾을 수 없습니다"
+  },
+  "userMenu": {
+    "profile": "프로필",
+    "logout": "로그아웃",
+    "myAccount": "내 계정"
+  },
+  "profile": {
+    "title": "프로필",
+    "nameLabel": "이름",
+    "emailLabel": "이메일"
   }
 }

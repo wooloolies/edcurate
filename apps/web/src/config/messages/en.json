@@ -174,7 +174,8 @@
   "nav": {
     "presets": "Presets",
     "search": "Search",
-    "dashboard": "Dashboard"
+    "dashboard": "Dashboard",
+    "profile": "Profile"
   },
   "home": {
     "team": "Team",
@@ -186,5 +187,15 @@
     "somethingWentWrong": "Something went wrong!",
     "tryAgain": "Try again",
     "pageNotFound": "Page not found"
+  },
+  "userMenu": {
+    "profile": "Profile",
+    "logout": "Log out",
+    "myAccount": "My Account"
+  },
+  "profile": {
+    "title": "Profile",
+    "nameLabel": "Name",
+    "emailLabel": "Email"
   }
 }

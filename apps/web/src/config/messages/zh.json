@@ -174,7 +174,8 @@
   "nav": {
     "presets": "预设",
     "search": "搜索",
-    "dashboard": "仪表板"
+    "dashboard": "仪表板",
+    "profile": "个人资料"
   },
   "home": {
     "team": "团队",
@@ -186,5 +187,15 @@
     "somethingWentWrong": "出了点问题。",
     "tryAgain": "重试",
     "pageNotFound": "页面未找到"
+  },
+  "userMenu": {
+    "profile": "个人资料",
+    "logout": "退出登录",
+    "myAccount": "我的账户"
+  },
+  "profile": {
+    "title": "个人资料",
+    "nameLabel": "姓名",
+    "emailLabel": "电子邮件"
   }
 }

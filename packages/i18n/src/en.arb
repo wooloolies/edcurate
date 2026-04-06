@@ -631,5 +631,33 @@
   "search__evaluation__dimensions__licensingIp": "Licensing and IP",
   "@search__evaluation__dimensions__licensingIp": {
     "description": "Evaluation dimension label for licensing and intellectual property"
+  },
+  "userMenu__profile": "Profile",
+  "@userMenu__profile": {
+    "description": "Profile menu item in user dropdown"
+  },
+  "userMenu__logout": "Log out",
+  "@userMenu__logout": {
+    "description": "Logout menu item in user dropdown"
+  },
+  "userMenu__myAccount": "My Account",
+  "@userMenu__myAccount": {
+    "description": "My account label in user dropdown"
+  },
+  "profile__title": "Profile",
+  "@profile__title": {
+    "description": "Profile page title"
+  },
+  "profile__nameLabel": "Name",
+  "@profile__nameLabel": {
+    "description": "Name field label on profile page"
+  },
+  "profile__emailLabel": "Email",
+  "@profile__emailLabel": {
+    "description": "Email field label on profile page"
+  },
+  "nav__profile": "Profile",
+  "@nav__profile": {
+    "description": "Profile nav link"
   }
 }

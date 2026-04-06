@@ -174,7 +174,8 @@
   "nav": {
     "presets": "Thiết lập",
     "search": "Tìm kiếm",
-    "dashboard": "Bảng điều khiển"
+    "dashboard": "Bảng điều khiển",
+    "profile": "Hồ sơ"
   },
   "home": {
     "team": "Đội ngũ",
@@ -186,5 +187,15 @@
     "somethingWentWrong": "Đã xảy ra sự cố.",
     "tryAgain": "Thử lại",
     "pageNotFound": "Không tìm thấy trang"
+  },
+  "userMenu": {
+    "profile": "Hồ sơ",
+    "logout": "Đăng xuất",
+    "myAccount": "Tài khoản của tôi"
+  },
+  "profile": {
+    "title": "Hồ sơ",
+    "nameLabel": "Tên",
+    "emailLabel": "Email"
   }
 }

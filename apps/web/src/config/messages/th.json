@@ -174,7 +174,8 @@
   "nav": {
     "presets": "พรีเซ็ต",
     "search": "ค้นหา",
-    "dashboard": "แดชบอร์ด"
+    "dashboard": "แดชบอร์ด",
+    "profile": "โปรไฟล์"
   },
   "home": {
     "team": "ทีม",
@@ -186,5 +187,15 @@
     "somethingWentWrong": "เกิดข้อผิดพลาดบางอย่าง",
     "tryAgain": "ลองอีกครั้ง",
     "pageNotFound": "ไม่พบหน้าที่ต้องการ"
+  },
+  "userMenu": {
+    "profile": "โปรไฟล์",
+    "logout": "ออกจากระบบ",
+    "myAccount": "บัญชีของฉัน"
+  },
+  "profile": {
+    "title": "โปรไฟล์",
+    "nameLabel": "ชื่อ",
+    "emailLabel": "อีเมล"
   }
 }
