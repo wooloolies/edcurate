@@ -3,13 +3,14 @@ import { ExternalLink, Play } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { RelevanceIndicator } from "@/features/search/components/resource-card/relevance-indicator";
-import type { ResourceCard } from "@/lib/api/model";
+import type { AdversarialReviewResult, ResourceCard } from "@/lib/api/model";
 
 interface YoutubeCardProps {
   resource: ResourceCard;
+  adversarial?: AdversarialReviewResult | null;
 }
 
-export function YoutubeCard({ resource }: YoutubeCardProps) {
+export function YoutubeCard({ resource, adversarial }: YoutubeCardProps) {
   const meta = resource.metadata as {
     channel?: string;
     duration?: string;
@@ -37,15 +38,15 @@ export function YoutubeCard({ resource }: YoutubeCardProps) {
             YouTube
           </Badge>
         </div>
-        {meta.channel && <p className="text-xs text-muted-foreground">{meta.channel}</p>}
+        {!!meta.channel && <p className="text-xs text-muted-foreground">{meta.channel}</p>}
       </CardHeader>
       <CardContent className="flex flex-col gap-3">
-        <div className="flex gap-3">
-          {resource.thumbnail_url && (
+        <div className="flex flex-col gap-3 sm:flex-row">
+          {!!resource.thumbnail_url && (
             <img
               src={resource.thumbnail_url}
               alt={resource.title}
-              className="h-20 w-36 shrink-0 rounded object-cover"
+              className="w-full shrink-0 rounded object-cover sm:h-20 sm:w-36"
             />
           )}
           <p className="text-sm text-muted-foreground line-clamp-3">{resource.snippet}</p>
@@ -54,6 +55,7 @@ export function YoutubeCard({ resource }: YoutubeCardProps) {
           score={resource.relevance_score}
           reason={resource.relevance_reason}
           details={resource.evaluation_details}
+          adversarial={adversarial}
         />
       </CardContent>
     </Card>

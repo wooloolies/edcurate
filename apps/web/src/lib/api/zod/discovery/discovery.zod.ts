@@ -33,6 +33,9 @@ export const searchApiDiscoverySearchGetResponseEvaluationsItemOverallScoreMax =
 export const searchApiDiscoverySearchGetResponseEvaluationsItemScoresScoreMax = 10;
 
 export const searchApiDiscoverySearchGetResponseEvaluationsItemScoresMaxDefault = 10;
+export const searchApiDiscoverySearchGetResponseEvaluationsItemAdversarialOneScoreAdjustmentsScoreMax = 10;
+
+export const searchApiDiscoverySearchGetResponseEvaluationsItemAdversarialOneScoreAdjustmentsMaxDefault = 10;
 
 export const SearchApiDiscoverySearchGetResponse = zod.object({
   "query": zod.string(),
@@ -56,7 +59,9 @@ export const SearchApiDiscoverySearchGetResponse = zod.object({
   "channel": zod.string(),
   "duration": zod.string().default(searchApiDiscoverySearchGetResponseResultsItemMetadataTwoDurationDefault),
   "view_count": zod.union([zod.number(),zod.null()]).optional(),
-  "published_date": zod.union([zod.string(),zod.null()]).optional()
+  "published_date": zod.union([zod.string(),zod.null()]).optional(),
+  "tags": zod.array(zod.string()).optional(),
+  "full_description": zod.union([zod.string(),zod.null()]).optional()
 }).describe('Metadata from YouTube Data API results.'),zod.object({
   "source": zod.literal("openalex").default(searchApiDiscoverySearchGetResponseResultsItemMetadataThreeSourceDefault),
   "authors": zod.array(zod.string()).optional(),
@@ -82,7 +87,22 @@ export const SearchApiDiscoverySearchGetResponse = zod.object({
   "score": zod.number().min(1).max(searchApiDiscoverySearchGetResponseEvaluationsItemScoresScoreMax),
   "max": zod.number().default(searchApiDiscoverySearchGetResponseEvaluationsItemScoresMaxDefault),
   "reason": zod.string()
-}).describe('Score for a single evaluation dimension.'))
+}).describe('Score for a single evaluation dimension.')),
+  "adversarial": zod.union([zod.object({
+  "verdict": zod.enum(['approved', 'approved_with_caveats', 'flagged_for_teacher_review', 'not_recommended']),
+  "flags": zod.array(zod.object({
+  "category": zod.enum(['false_positive', 'hidden_bias', 'accuracy_gap', 'safety', 'licensing_trap']),
+  "severity": zod.enum(['high', 'medium', 'low']),
+  "explanation": zod.string(),
+  "suggested_action": zod.string()
+}).describe('Single issue raised by the adversarial reviewer.')).optional(),
+  "score_adjustments": zod.record(zod.string(), zod.object({
+  "score": zod.number().min(1).max(searchApiDiscoverySearchGetResponseEvaluationsItemAdversarialOneScoreAdjustmentsScoreMax),
+  "max": zod.number().default(searchApiDiscoverySearchGetResponseEvaluationsItemAdversarialOneScoreAdjustmentsMaxDefault),
+  "reason": zod.string()
+}).describe('Score for a single evaluation dimension.')).optional(),
+  "review_summary": zod.string()
+}).describe('Output of Agent 4 — challenges Agent 3 scores and surfaces risks.'),zod.null()]).optional()
 }).describe('Full evaluation of a single resource across 7 dimensions.')).optional()
 }).describe('Extends SearchResponse with evaluation data for the top 4 results.')
 

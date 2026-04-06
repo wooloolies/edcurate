@@ -3,7 +3,7 @@
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useQueryState } from "nuqs";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,6 +20,7 @@ import { EvaluationProgress } from "@/features/search/components/evaluation-prog
 import { ResourceCardRenderer } from "@/features/search/components/resource-card";
 import { ResourceCardSkeleton } from "@/features/search/components/skeleton/resource-card-skeleton";
 import { useSearchApiDiscoverySearchGet } from "@/lib/api/discovery/discovery";
+import type { AdversarialReviewResult } from "@/lib/api/model";
 import { useListPresetsApiPresetsGet } from "@/lib/api/presets/presets";
 
 export function SearchPageClient() {
@@ -46,6 +47,14 @@ export function SearchPageClient() {
   const counts = results?.counts_by_source ?? { ddgs: 0, youtube: 0, openalex: 0 };
   const totalCount = results?.total_results ?? 0;
   const allResults = results?.results ?? [];
+
+  const adversarialByUrl = useMemo(() => {
+    const m = new Map<string, AdversarialReviewResult | null | undefined>();
+    for (const ev of results?.evaluations ?? []) {
+      m.set(ev.resource_url, ev.adversarial);
+    }
+    return m;
+  }, [results?.evaluations]);
 
   const [showUnscored, setShowUnscored] = useState(false);
 
@@ -102,9 +111,15 @@ export function SearchPageClient() {
       {results && !isFetching ? (
         <Tabs defaultValue="all">
           <TabsList>
-            <TabsTrigger value="all">{t("tabs.all")} ({totalCount})</TabsTrigger>
-            <TabsTrigger value="ddgs">{t("tabs.web")} ({counts.ddgs ?? 0})</TabsTrigger>
-            <TabsTrigger value="youtube">{t("tabs.video")} ({counts.youtube ?? 0})</TabsTrigger>
+            <TabsTrigger value="all">
+              {t("tabs.all")} ({totalCount})
+            </TabsTrigger>
+            <TabsTrigger value="ddgs">
+              {t("tabs.web")} ({counts.ddgs ?? 0})
+            </TabsTrigger>
+            <TabsTrigger value="youtube">
+              {t("tabs.video")} ({counts.youtube ?? 0})
+            </TabsTrigger>
             <TabsTrigger value="openalex">
               {t("tabs.papers")} ({counts.openalex ?? 0})
             </TabsTrigger>
@@ -122,7 +137,11 @@ export function SearchPageClient() {
                 ) : (
                   <>
                     {evaluated.map((resource) => (
-                      <ResourceCardRenderer key={resource.url} resource={resource} />
+                      <ResourceCardRenderer
+                        key={resource.url}
+                        resource={resource}
+                        adversarial={adversarialByUrl.get(resource.url)}
+                      />
                     ))}
                     {unevaluated.length > 0 ? (
                       <>
@@ -142,7 +161,11 @@ export function SearchPageClient() {
                         </Button>
                         {showUnscored
                           ? unevaluated.map((resource) => (
-                              <ResourceCardRenderer key={resource.url} resource={resource} />
+                              <ResourceCardRenderer
+                                key={resource.url}
+                                resource={resource}
+                                adversarial={adversarialByUrl.get(resource.url)}
+                              />
                             ))
                           : null}
                       </>

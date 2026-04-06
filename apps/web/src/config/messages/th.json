@@ -151,7 +151,24 @@
       "unevaluated": "ยังไม่ประเมิน",
       "score": "คะแนน: {score}/10",
       "agent": "เอเจนต์ประเมินเชิงลึก",
-      "criteria": "เกณฑ์การประเมิน"
+      "criteria": "เกณฑ์การประเมิน",
+      "peerCheck": "การตรวจทานร่วม",
+      "peerCheckVerdicts": {
+        "approved": "แนะนำ",
+        "approvedWithCaveats": "แนะนำพร้อมข้อควรระวัง",
+        "flaggedForTeacherReview": "ครูควรตรวจสอบ",
+        "notRecommended": "ไม่แนะนำ"
+      },
+      "showReason": "ดูเหตุผลในการประเมิน",
+      "dimensions": {
+        "curriculumAlignment": "ความสอดคล้องกับหลักสูตร",
+        "pedagogicalQuality": "คุณภาพเชิงการสอน",
+        "readingLevel": "ระดับการอ่าน",
+        "biasRepresentation": "อคติและการนำเสนอ",
+        "factualAccuracy": "ความถูกต้องของข้อมูล",
+        "sourceCredibility": "ความน่าเชื่อถือของแหล่งข้อมูล",
+        "licensingIp": "ใบอนุญาตและทรัพย์สินทางปัญญา"
+      }
     }
   },
   "nav": {

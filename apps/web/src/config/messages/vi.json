@@ -151,7 +151,24 @@
       "unevaluated": "Chưa đánh giá",
       "score": "Điểm: {score}/10",
       "agent": "Tác nhân đánh giá chuyên sâu",
-      "criteria": "Tiêu chí đánh giá"
+      "criteria": "Tiêu chí đánh giá",
+      "peerCheck": "Kiểm tra đồng cấp",
+      "peerCheckVerdicts": {
+        "approved": "Khuyến nghị",
+        "approvedWithCaveats": "Khuyến nghị kèm lưu ý",
+        "flaggedForTeacherReview": "Cần giáo viên xem lại",
+        "notRecommended": "Không khuyến nghị"
+      },
+      "showReason": "Xem lý do đánh giá",
+      "dimensions": {
+        "curriculumAlignment": "Mức độ phù hợp chương trình",
+        "pedagogicalQuality": "Chất lượng sư phạm",
+        "readingLevel": "Trình độ đọc",
+        "biasRepresentation": "Thiên kiến và cách thể hiện",
+        "factualAccuracy": "Độ chính xác thông tin",
+        "sourceCredibility": "Độ tin cậy của nguồn",
+        "licensingIp": "Giấy phép và sở hữu trí tuệ"
+      }
     }
   },
   "nav": {

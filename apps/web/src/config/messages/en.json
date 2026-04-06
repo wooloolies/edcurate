@@ -151,7 +151,24 @@
       "unevaluated": "Unevaluated",
       "score": "Score: {score}/10",
       "agent": "Deep Evaluation Agent",
-      "criteria": "Evaluation Criteria"
+      "criteria": "Evaluation Criteria",
+      "peerCheck": "Peer check",
+      "peerCheckVerdicts": {
+        "approved": "Recommended",
+        "approvedWithCaveats": "Recommended with caveats",
+        "flaggedForTeacherReview": "Needs teacher review",
+        "notRecommended": "Not recommended"
+      },
+      "showReason": "Show evaluation reason",
+      "dimensions": {
+        "curriculumAlignment": "Curriculum alignment",
+        "pedagogicalQuality": "Pedagogical quality",
+        "readingLevel": "Reading level",
+        "biasRepresentation": "Bias and representation",
+        "factualAccuracy": "Factual accuracy",
+        "sourceCredibility": "Source credibility",
+        "licensingIp": "Licensing and IP"
+      }
     }
   },
   "nav": {

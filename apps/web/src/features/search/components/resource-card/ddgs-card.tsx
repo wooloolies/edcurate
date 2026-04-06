@@ -4,14 +4,16 @@ import { useTranslations } from "next-intl";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { RelevanceIndicator } from "@/features/search/components/resource-card/relevance-indicator";
-import type { ResourceCard } from "@/lib/api/model";
+import type { AdversarialReviewResult, ResourceCard } from "@/lib/api/model";
 
 interface DdgsCardProps {
   resource: ResourceCard;
+  adversarial?: AdversarialReviewResult | null;
 }
 
-export function DdgsCard({ resource }: DdgsCardProps) {
+export function DdgsCard({ resource, adversarial }: DdgsCardProps) {
   const t = useTranslations("search");
+
   const meta = resource.metadata as { domain?: string };
   return (
     <Card>
@@ -33,7 +35,7 @@ export function DdgsCard({ resource }: DdgsCardProps) {
             {t("tabs.web")}
           </Badge>
         </div>
-        {meta.domain && <p className="text-xs text-muted-foreground">{meta.domain}</p>}
+        {!!meta.domain && <p className="text-xs text-muted-foreground">{meta.domain}</p>}
       </CardHeader>
       <CardContent>
         <p className="text-sm text-muted-foreground line-clamp-3">{resource.snippet}</p>
@@ -41,6 +43,7 @@ export function DdgsCard({ resource }: DdgsCardProps) {
           score={resource.relevance_score}
           reason={resource.relevance_reason}
           details={resource.evaluation_details}
+          adversarial={adversarial}
         />
       </CardContent>
     </Card>

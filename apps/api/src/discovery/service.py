@@ -2,7 +2,6 @@
 
 import asyncio
 import hashlib
-import json
 import uuid
 from typing import Literal
 
@@ -10,6 +9,12 @@ from src.discovery.providers.ddgs import DdgsProvider
 from src.discovery.providers.openalex import OpenAlexProvider
 from src.discovery.providers.youtube import YoutubeProvider
 from src.discovery.schemas import ResourceCard, SourceError
+from src.evaluation.adversarial_agent import adversarial_review_resource
+from src.evaluation.adversarial_retrieval import (
+    ADV_RETRIEVAL_LIMIT,
+    bucket_chunks_for_adversarial,
+    build_adversarial_hybrid_query_text,
+)
 from src.evaluation.agent import evaluate_resource
 from src.evaluation.schemas import EvaluatedSearchResponse, EvaluationResult
 from src.lib.config import settings
@@ -189,6 +194,63 @@ async def _run_rag_pipeline(
 
     # Sort by overall_score descending
     evaluations.sort(key=lambda e: e.overall_score, reverse=True)
+
+    # Step 6: Adversarial review (hybrid retrieval + Gemini per resource)
+    card_by_url = {c.url: c for c in cards}
+    try:
+        hybrid_text = build_adversarial_hybrid_query_text(preset, query)
+        adv_vector = await embed_single(hybrid_text)
+    except Exception as e:
+        logger.error("Adversarial hybrid embedding failed", error=str(e))
+        return evaluations
+
+    async def _one_adversarial(ev: EvaluationResult) -> EvaluationResult:
+        card = card_by_url.get(ev.resource_url)
+        if not card:
+            return ev
+        try:
+            retrieved_adv = await asyncio.to_thread(
+                query_chunks,
+                query_vector=adv_vector,
+                search_id=search_id,
+                resource_url=ev.resource_url,
+                limit=ADV_RETRIEVAL_LIMIT,
+            )
+        except Exception as e:
+            logger.warning(
+                "Adversarial chunk retrieval failed",
+                url=ev.resource_url,
+                error=str(e),
+            )
+            retrieved_adv = []
+        claim_text, framing_text = bucket_chunks_for_adversarial(
+            retrieved_adv,
+            card.snippet,
+        )
+        adv = await adversarial_review_resource(
+            evaluation=ev,
+            claim_chunks_text=claim_text,
+            framing_chunks_text=framing_text,
+            title=card.title,
+            url=card.url,
+            source=card.source,
+            preset=preset,
+        )
+        return ev.model_copy(update={"adversarial": adv})
+
+    try:
+        reviewed = await asyncio.wait_for(
+            asyncio.gather(*[_one_adversarial(ev) for ev in evaluations]),
+            timeout=60.0,
+        )
+        evaluations = list(reviewed)
+    except TimeoutError:
+        logger.warning(
+            "Adversarial batch timed out — returning evaluations without adversarial"
+        )
+    except Exception as e:
+        logger.error("Adversarial batch failed", error=str(e))
+
     return evaluations
 
 
@@ -309,7 +371,7 @@ async def search_resources(
     evaluations: list[EvaluationResult] = []
     try:
         evaluations = await asyncio.wait_for(
-            _run_rag_pipeline(top_cards, preset, query, search_id), timeout=100.0
+            _run_rag_pipeline(top_cards, preset, query, search_id), timeout=120.0
         )
         # Create a lookup mapping by URL
         eval_map = {e.resource_url: e for e in evaluations}

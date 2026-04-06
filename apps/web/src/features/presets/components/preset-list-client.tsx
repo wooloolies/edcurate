@@ -6,8 +6,8 @@ import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { PresetCard } from "@/features/presets/components/preset-card";
 import { PresetCardSkeleton } from "@/features/presets/components/skeleton/preset-card-skeleton";
-import { Link } from "@/lib/i18n/routing";
 import { useListPresetsApiPresetsGet } from "@/lib/api/presets/presets";
+import { Link } from "@/lib/i18n/routing";
 
 export function PresetListClient() {
   const t = useTranslations("presets");
@@ -29,6 +29,7 @@ export function PresetListClient() {
       {isPending ? (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {Array.from({ length: 3 }).map((_, i) => (
+            // biome-ignore lint/suspicious/noArrayIndexKey: skeletons do not change order
             <PresetCardSkeleton key={i} />
           ))}
         </div>

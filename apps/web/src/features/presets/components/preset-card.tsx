@@ -14,11 +14,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import type { PresetResponse } from "@/lib/api/model";
-import { Link } from "@/lib/i18n/routing";
 import {
   useDeletePresetApiPresetsPresetIdDelete,
   useSetDefaultPresetApiPresetsPresetIdDefaultPatch,
 } from "@/lib/api/presets/presets";
+import { Link } from "@/lib/i18n/routing";
 
 interface PresetCardProps {
   preset: PresetResponse;
@@ -46,7 +46,7 @@ export function PresetCard({ preset }: PresetCardProps) {
               {preset.subject} &middot; {preset.year_level} &middot; {preset.country}
             </CardDescription>
           </div>
-          {preset.is_default && (
+          {!!preset.is_default && (
             <Badge variant="secondary">
               <Star className="mr-1 h-3 w-3" />
               {t("default")}

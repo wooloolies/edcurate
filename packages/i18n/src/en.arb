@@ -579,5 +579,57 @@
   "search__evaluation__criteria": "Evaluation Criteria",
   "@search__evaluation__criteria": {
     "description": "Tooltip title listing evaluation criteria"
+  },
+  "search__evaluation__peerCheck": "Peer check",
+  "@search__evaluation__peerCheck": {
+    "description": "Label shown before the adversarial review verdict badge"
+  },
+  "search__evaluation__peerCheckVerdicts__approved": "Recommended",
+  "@search__evaluation__peerCheckVerdicts__approved": {
+    "description": "Peer check verdict label when the resource is approved"
+  },
+  "search__evaluation__peerCheckVerdicts__approvedWithCaveats": "Recommended with caveats",
+  "@search__evaluation__peerCheckVerdicts__approvedWithCaveats": {
+    "description": "Peer check verdict label when the resource is approved with caveats"
+  },
+  "search__evaluation__peerCheckVerdicts__flaggedForTeacherReview": "Needs teacher review",
+  "@search__evaluation__peerCheckVerdicts__flaggedForTeacherReview": {
+    "description": "Peer check verdict label when the resource needs teacher review"
+  },
+  "search__evaluation__peerCheckVerdicts__notRecommended": "Not recommended",
+  "@search__evaluation__peerCheckVerdicts__notRecommended": {
+    "description": "Peer check verdict label when the resource is not recommended"
+  },
+  "search__evaluation__showReason": "Show evaluation reason",
+  "@search__evaluation__showReason": {
+    "description": "Expandable summary label for showing the evaluation reason"
+  },
+  "search__evaluation__dimensions__curriculumAlignment": "Curriculum alignment",
+  "@search__evaluation__dimensions__curriculumAlignment": {
+    "description": "Evaluation dimension label for curriculum alignment"
+  },
+  "search__evaluation__dimensions__pedagogicalQuality": "Pedagogical quality",
+  "@search__evaluation__dimensions__pedagogicalQuality": {
+    "description": "Evaluation dimension label for pedagogical quality"
+  },
+  "search__evaluation__dimensions__readingLevel": "Reading level",
+  "@search__evaluation__dimensions__readingLevel": {
+    "description": "Evaluation dimension label for reading level"
+  },
+  "search__evaluation__dimensions__biasRepresentation": "Bias and representation",
+  "@search__evaluation__dimensions__biasRepresentation": {
+    "description": "Evaluation dimension label for bias and representation"
+  },
+  "search__evaluation__dimensions__factualAccuracy": "Factual accuracy",
+  "@search__evaluation__dimensions__factualAccuracy": {
+    "description": "Evaluation dimension label for factual accuracy"
+  },
+  "search__evaluation__dimensions__sourceCredibility": "Source credibility",
+  "@search__evaluation__dimensions__sourceCredibility": {
+    "description": "Evaluation dimension label for source credibility"
+  },
+  "search__evaluation__dimensions__licensingIp": "Licensing and IP",
+  "@search__evaluation__dimensions__licensingIp": {
+    "description": "Evaluation dimension label for licensing and intellectual property"
   }
 }

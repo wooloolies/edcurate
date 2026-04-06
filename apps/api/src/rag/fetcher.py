@@ -102,7 +102,7 @@ async def _validate_public_url(url: str) -> None:
             raise ValueError("Host did not resolve to a public IP") from None
         for raw_ip in resolved_ips:
             if _is_forbidden_ip(ipaddress.ip_address(raw_ip)):
-                raise ValueError("Only public HTTP(S) URLs can be fetched")
+                raise ValueError("Only public HTTP(S) URLs can be fetched") from None
         return
 
     if _is_forbidden_ip(literal_ip):
@@ -213,7 +213,8 @@ async def _fetch_youtube_transcript(url: str) -> str:
         return ""
 
 
-_SUMMARIZE_PROMPT = """Summarize the following video transcript into a structured abstract.
+_SUMMARIZE_PROMPT = """\
+Summarize the following video transcript into a structured abstract.
 Include: main topics covered, key concepts explained, and methodology used.
 Keep it concise (300-500 words). Write in clear, formal prose — not bullet points.
 

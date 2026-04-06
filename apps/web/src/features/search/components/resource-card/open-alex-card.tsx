@@ -4,14 +4,16 @@ import { useTranslations } from "next-intl";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { RelevanceIndicator } from "@/features/search/components/resource-card/relevance-indicator";
-import type { ResourceCard } from "@/lib/api/model";
+import type { AdversarialReviewResult, ResourceCard } from "@/lib/api/model";
 
 interface OpenAlexCardProps {
   resource: ResourceCard;
+  adversarial?: AdversarialReviewResult | null;
 }
 
-export function OpenAlexCard({ resource }: OpenAlexCardProps) {
+export function OpenAlexCard({ resource, adversarial }: OpenAlexCardProps) {
   const t = useTranslations("search");
+
   const meta = resource.metadata as {
     authors?: string[];
     journal?: string | null;
@@ -44,8 +46,8 @@ export function OpenAlexCard({ resource }: OpenAlexCardProps) {
           {meta.authors && meta.authors.length > 0 && (
             <span>{meta.authors.slice(0, 3).join(", ")}</span>
           )}
-          {meta.journal && <span>&middot; {meta.journal}</span>}
-          {meta.published_date && <span>&middot; {meta.published_date.slice(0, 4)}</span>}
+          {!!meta.journal && <span>&middot; {meta.journal}</span>}
+          {!!meta.published_date && <span>&middot; {meta.published_date.slice(0, 4)}</span>}
         </div>
       </CardHeader>
       <CardContent className="flex flex-col gap-3">
@@ -55,7 +57,7 @@ export function OpenAlexCard({ resource }: OpenAlexCardProps) {
               {meta.citation_count} {t("card.citations")}
             </span>
           )}
-          {meta.doi && (
+          {!!meta.doi && (
             <a
               href={meta.doi}
               target="_blank"
@@ -70,6 +72,7 @@ export function OpenAlexCard({ resource }: OpenAlexCardProps) {
           score={resource.relevance_score}
           reason={resource.relevance_reason}
           details={resource.evaluation_details}
+          adversarial={adversarial}
         />
       </CardContent>
     </Card>
