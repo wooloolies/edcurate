@@ -2,6 +2,7 @@
 
 import { useQueryClient } from "@tanstack/react-query";
 import { Bookmark } from "lucide-react";
+import { useQueryState } from "nuqs";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -14,11 +15,18 @@ import {
 } from "@/lib/api/saved-resources/saved-resources";
 
 interface BookmarkButtonProps {
-  presetId: string;
+  presetId?: string;
   resource: ResourceCard;
+  checked?: boolean;
+  onToggleChecked?: (e: React.MouseEvent, checked: boolean) => void;
 }
 
-export function BookmarkButton({ presetId, resource }: BookmarkButtonProps) {
+export function BookmarkButton({
+  presetId,
+  resource,
+  checked,
+  onToggleChecked,
+}: BookmarkButtonProps) {
   const queryClient = useQueryClient();
   const { data: savedData, isFetching: isLoadingList } = useListSavedResourcesEndpointApiSavedGet();
   const { mutateAsync: saveResource, isPending: isSaving } =
@@ -26,32 +34,52 @@ export function BookmarkButton({ presetId, resource }: BookmarkButtonProps) {
   const { mutateAsync: deleteResource, isPending: isDeleting } =
     useDeleteSavedResourceEndpointApiSavedIdDelete();
 
+  const isControlled = checked !== undefined && onToggleChecked !== undefined;
+
   // Find if it's saved
   let savedId: string | undefined;
-  if (savedData?.groups) {
+  if (!isControlled && presetId && savedData?.groups) {
     for (const group of savedData.groups) {
       if (group.preset_id === presetId) {
-        const found = group.items.find((item) => item.resource_url === resource.url);
-        if (found) {
-          savedId = found.id;
-          break;
+        for (const qGroup of group.query_groups) {
+          const found = qGroup.items.find((item) => item.resource_url === resource.url);
+          if (found) {
+            savedId = found.id;
+            break;
+          }
         }
       }
+      if (savedId) break;
     }
   }
 
-  const isSaved = !!savedId;
-  const isPending = isSaving || isDeleting || isLoadingList;
+  const [searchQuery] = useQueryState("q");
+  const isSaved = isControlled ? checked : !!savedId;
+  const isPending = isControlled ? false : isSaving || isDeleting || isLoadingList;
 
   const handleToggle = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+
+    if (isControlled && onToggleChecked) {
+      onToggleChecked(e, !isSaved);
+      return;
+    }
+
+    if (!presetId) return;
+
     try {
       if (isSaved) {
         await deleteResource({ id: savedId! });
         toast.success("Resource removed from library");
       } else {
-        await saveResource({ data: { preset_id: presetId, resource } });
+        await saveResource({
+          data: {
+            preset_id: presetId,
+            search_query: searchQuery || "custom",
+            resource,
+          },
+        });
         toast.success("Resource saved to library");
       }
       queryClient.invalidateQueries({

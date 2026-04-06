@@ -10,6 +10,7 @@ import type { ResourceCard } from './resource-card';
 export interface SavedResourceResponse {
   id: string;
   preset_id: string;
+  search_query: string;
   resource_url: string;
   resource_data: ResourceCard;
   evaluation_data: EvaluationResult | null;

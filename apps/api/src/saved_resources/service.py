@@ -1,18 +1,20 @@
 import uuid
+from collections import defaultdict
 from typing import Any
 
 from fastapi import HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.dialects.postgresql import insert
 
-from src.discovery.schemas import ResourceCard
 from src.agents.schemas import EvaluationResult
+from src.discovery.schemas import ResourceCard
 from src.lib.dependencies import DBSession
 from src.presets.model import ClassroomPreset
 from src.saved_resources.model import SavedResource
 from src.saved_resources.schemas import (
     AddCustomLinkRequest,
     PresetGroup,
+    QueryGroup,
     SavedResourceListResponse,
     SavedResourceResponse,
     SaveResourceRequest,
@@ -21,7 +23,7 @@ from src.saved_resources.schemas import (
 
 async def save_resource(
     db: DBSession, user_id: uuid.UUID, request: SaveResourceRequest
-) -> SavedResourceResponse | None:
+) -> SavedResourceResponse:
     # Verify preset ownership
     preset_exec = await db.execute(
         select(ClassroomPreset).where(
@@ -56,24 +58,24 @@ async def save_resource(
     stmt = insert(SavedResource).values(
         user_id=user_id,
         preset_id=request.preset_id,
+        search_query=request.search_query,
         resource_url=request.resource.url,
         resource_data=request.resource.model_dump(mode="json"),
         evaluation_data=eval_data,
     )
     stmt = stmt.on_conflict_do_nothing(
-        index_elements=["user_id", "preset_id", "resource_url"]
+        constraint="uq_saved_resource_v2",
     )
-    # returning
     stmt = stmt.returning(SavedResource)
     result = await db.execute(stmt)
     saved = result.scalar_one_or_none()
 
     if not saved:
-        # Fetch existing
         exist_result = await db.execute(
             select(SavedResource).where(
                 SavedResource.user_id == user_id,
                 SavedResource.preset_id == request.preset_id,
+                SavedResource.search_query == request.search_query,
                 SavedResource.resource_url == request.resource.url,
             )
         )
@@ -110,27 +112,51 @@ async def list_saved_resources(
     if preset_id:
         query = query.where(SavedResource.preset_id == preset_id)
 
-    query = query.order_by(ClassroomPreset.name, SavedResource.saved_at.desc())
+    query = query.order_by(
+        ClassroomPreset.name,
+        SavedResource.search_query,
+        SavedResource.saved_at.desc(),
+    )
 
     result = await db.execute(query)
     rows = result.all()
 
-    groups_dict: dict[uuid.UUID, PresetGroup] = {}
+    # Group by preset_id -> search_query
+    preset_meta: dict[uuid.UUID, dict[str, Any]] = {}
+    grouped: dict[uuid.UUID, dict[str, list[SavedResourceResponse]]] = defaultdict(
+        lambda: defaultdict(list)
+    )
     total = 0
 
     for saved, preset in rows:
         total += 1
-        if preset.id not in groups_dict:
-            groups_dict[preset.id] = PresetGroup(
-                preset_id=preset.id,
-                preset_name=preset.name,
-                preset_subject=preset.subject,
-                preset_topic=None,
-                items=[],
-            )
-        groups_dict[preset.id].items.append(SavedResourceResponse.model_validate(saved))
+        pid = preset.id
+        if pid not in preset_meta:
+            preset_meta[pid] = {
+                "preset_name": preset.name,
+                "preset_subject": preset.subject,
+                "preset_topic": None,
+            }
+        item = SavedResourceResponse.model_validate(saved)
+        grouped[pid][saved.search_query].append(item)
 
-    return SavedResourceListResponse(total=total, groups=list(groups_dict.values()))
+    groups = []
+    for pid, queries in grouped.items():
+        meta = preset_meta[pid]
+        query_groups = [
+            QueryGroup(search_query=sq, items=items) for sq, items in queries.items()
+        ]
+        groups.append(
+            PresetGroup(
+                preset_id=pid,
+                preset_name=meta["preset_name"],
+                preset_subject=meta["preset_subject"],
+                preset_topic=meta["preset_topic"],
+                query_groups=query_groups,
+            )
+        )
+
+    return SavedResourceListResponse(total=total, groups=groups)
 
 
 async def add_custom_link(
@@ -192,6 +218,7 @@ async def add_custom_link(
                 img = i_match.group(1).strip()
     except Exception:
         import structlog
+
         logger = structlog.get_logger(__name__)
         logger.error("Error fetching custom link metadata", exc_info=True)
 
@@ -217,12 +244,13 @@ async def add_custom_link(
     stmt = insert(SavedResource).values(
         user_id=user_id,
         preset_id=request.preset_id,
+        search_query=request.search_query,
         resource_url=str(request.url),
         resource_data=card.model_dump(mode="json"),
         evaluation_data=None,
     )
     stmt = stmt.on_conflict_do_nothing(
-        index_elements=["user_id", "preset_id", "resource_url"]
+        constraint="uq_saved_resource_v2",
     )
     stmt = stmt.returning(SavedResource)
     result = await db.execute(stmt)
@@ -233,6 +261,7 @@ async def add_custom_link(
             select(SavedResource).where(
                 SavedResource.user_id == user_id,
                 SavedResource.preset_id == request.preset_id,
+                SavedResource.search_query == request.search_query,
                 SavedResource.resource_url == str(request.url),
             )
         )
@@ -241,14 +270,55 @@ async def add_custom_link(
     return SavedResourceResponse.model_validate(saved)
 
 
+async def evaluate_single_resource(
+    db: DBSession, user_id: uuid.UUID, saved_resource_id: uuid.UUID
+) -> SavedResourceResponse:
+    """Evaluate a single saved resource."""
+    result = await db.execute(
+        select(SavedResource, ClassroomPreset)
+        .join(ClassroomPreset, SavedResource.preset_id == ClassroomPreset.id)
+        .where(
+            SavedResource.id == saved_resource_id,
+            SavedResource.user_id == user_id,
+        )
+    )
+    row = result.one_or_none()
+    if row is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Saved resource not found"
+        )
+
+    saved, preset = row
+    card = ResourceCard.model_validate(saved.resource_data)
+
+    from src.discovery.service import _run_rag_pipeline
+
+    search_id = str(uuid.uuid4())
+    evaluations = await _run_rag_pipeline(
+        [card], preset, saved.search_query or "Evaluate resource", search_id
+    )
+
+    if evaluations:
+        ev = evaluations[0]
+        saved.evaluation_data = ev.model_dump(mode="json")
+        await db.commit()
+        await db.refresh(saved)
+
+    return SavedResourceResponse.model_validate(saved)
+
+
 async def evaluate_saved_resources(
-    db: DBSession, user_id: uuid.UUID, preset_id: uuid.UUID
+    db: DBSession,
+    user_id: uuid.UUID,
+    preset_id: uuid.UUID,
+    search_query: str,
 ) -> dict[str, Any]:
-    # 1. Fetch unevaluated
+    """Batch evaluate unevaluated resources in a specific preset+query group."""
     result = await db.execute(
         select(SavedResource).where(
             SavedResource.user_id == user_id,
             SavedResource.preset_id == preset_id,
+            SavedResource.search_query == search_query,
             SavedResource.evaluation_data.is_(None),
         )
     )
@@ -265,22 +335,13 @@ async def evaluate_saved_resources(
     )
     preset = preset_exec.scalar_one()
 
-    # Create dummy cards for evaluator
-    cards = []
-    for r in unevaluated:
-        cards.append(ResourceCard.model_validate(r.resource_data))
-
-    import uuid as uuid_lib
+    cards = [ResourceCard.model_validate(r.resource_data) for r in unevaluated]
 
     from src.discovery.service import _run_rag_pipeline
 
-    search_id = str(uuid_lib.uuid4())
-    # 2. Evaluate using _run_rag_pipeline
-    evaluations = await _run_rag_pipeline(
-        cards, preset, "Evaluate saved library", search_id
-    )
+    search_id = str(uuid.uuid4())
+    evaluations = await _run_rag_pipeline(cards, preset, search_query, search_id)
 
-    # 3. Patch db
     eval_map = {e.resource_url: e for e in evaluations}
 
     processed = 0
@@ -288,7 +349,6 @@ async def evaluate_saved_resources(
         ev = eval_map.get(r.resource_url)
         if ev:
             r.evaluation_data = ev.model_dump(mode="json")
-            # Also patch the snapshot so we don't drift? Not strictly required.
             processed += 1
 
     await db.commit()

@@ -8,5 +8,6 @@ import type { ResourceCard } from './resource-card';
 
 export interface SaveResourceRequest {
   preset_id: string;
+  search_query: string;
   resource: ResourceCard;
 }

@@ -400,6 +400,10 @@
   "@nav__dashboard": {
     "description": "Navigation label for the Dashboard page"
   },
+  "nav__library": "Library",
+  "@nav__library": {
+    "description": "Navigation label for the Library page"
+  },
   "home__team": "Team",
   "@home__team": {
     "description": "Homepage navigation button for the team page"

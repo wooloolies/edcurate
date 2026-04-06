@@ -15,20 +15,20 @@ export const ListSavedResourcesEndpointApiSavedGetQueryParams = zod.object({
   "preset_id": zod.union([zod.uuid(),zod.null()]).optional()
 })
 
-export const listSavedResourcesEndpointApiSavedGetResponseGroupsItemItemsItemResourceDataMetadataOneSourceDefault = `ddgs`;
-export const listSavedResourcesEndpointApiSavedGetResponseGroupsItemItemsItemResourceDataMetadataTwoSourceDefault = `youtube`;
-export const listSavedResourcesEndpointApiSavedGetResponseGroupsItemItemsItemResourceDataMetadataTwoDurationDefault = ``;
-export const listSavedResourcesEndpointApiSavedGetResponseGroupsItemItemsItemResourceDataMetadataThreeSourceDefault = `openalex`;
-export const listSavedResourcesEndpointApiSavedGetResponseGroupsItemItemsItemResourceDataMetadataFourSourceDefault = `custom`;
-export const listSavedResourcesEndpointApiSavedGetResponseGroupsItemItemsItemEvaluationDataOneOverallScoreMin = 0;
-export const listSavedResourcesEndpointApiSavedGetResponseGroupsItemItemsItemEvaluationDataOneOverallScoreMax = 10;
+export const listSavedResourcesEndpointApiSavedGetResponseGroupsItemQueryGroupsItemItemsItemResourceDataMetadataOneSourceDefault = `ddgs`;
+export const listSavedResourcesEndpointApiSavedGetResponseGroupsItemQueryGroupsItemItemsItemResourceDataMetadataTwoSourceDefault = `youtube`;
+export const listSavedResourcesEndpointApiSavedGetResponseGroupsItemQueryGroupsItemItemsItemResourceDataMetadataTwoDurationDefault = ``;
+export const listSavedResourcesEndpointApiSavedGetResponseGroupsItemQueryGroupsItemItemsItemResourceDataMetadataThreeSourceDefault = `openalex`;
+export const listSavedResourcesEndpointApiSavedGetResponseGroupsItemQueryGroupsItemItemsItemResourceDataMetadataFourSourceDefault = `custom`;
+export const listSavedResourcesEndpointApiSavedGetResponseGroupsItemQueryGroupsItemItemsItemEvaluationDataOneOverallScoreMin = 0;
+export const listSavedResourcesEndpointApiSavedGetResponseGroupsItemQueryGroupsItemItemsItemEvaluationDataOneOverallScoreMax = 10;
 
-export const listSavedResourcesEndpointApiSavedGetResponseGroupsItemItemsItemEvaluationDataOneScoresScoreMax = 10;
+export const listSavedResourcesEndpointApiSavedGetResponseGroupsItemQueryGroupsItemItemsItemEvaluationDataOneScoresScoreMax = 10;
 
-export const listSavedResourcesEndpointApiSavedGetResponseGroupsItemItemsItemEvaluationDataOneScoresMaxDefault = 10;
-export const listSavedResourcesEndpointApiSavedGetResponseGroupsItemItemsItemEvaluationDataOneAdversarialOneScoreAdjustmentsScoreMax = 10;
+export const listSavedResourcesEndpointApiSavedGetResponseGroupsItemQueryGroupsItemItemsItemEvaluationDataOneScoresMaxDefault = 10;
+export const listSavedResourcesEndpointApiSavedGetResponseGroupsItemQueryGroupsItemItemsItemEvaluationDataOneAdversarialOneScoreAdjustmentsScoreMax = 10;
 
-export const listSavedResourcesEndpointApiSavedGetResponseGroupsItemItemsItemEvaluationDataOneAdversarialOneScoreAdjustmentsMaxDefault = 10;
+export const listSavedResourcesEndpointApiSavedGetResponseGroupsItemQueryGroupsItemItemsItemEvaluationDataOneAdversarialOneScoreAdjustmentsMaxDefault = 10;
 
 export const ListSavedResourcesEndpointApiSavedGetResponse = zod.object({
   "total": zod.number(),
@@ -37,9 +37,12 @@ export const ListSavedResourcesEndpointApiSavedGetResponse = zod.object({
   "preset_name": zod.string(),
   "preset_subject": zod.string(),
   "preset_topic": zod.union([zod.string(),zod.null()]).optional(),
+  "query_groups": zod.array(zod.object({
+  "search_query": zod.string(),
   "items": zod.array(zod.object({
   "id": zod.uuid(),
   "preset_id": zod.uuid(),
+  "search_query": zod.string(),
   "resource_url": zod.string(),
   "resource_data": zod.object({
   "title": zod.string(),
@@ -49,27 +52,27 @@ export const ListSavedResourcesEndpointApiSavedGetResponse = zod.object({
   "snippet": zod.string(),
   "thumbnail_url": zod.union([zod.string(),zod.null()]).optional(),
   "metadata": zod.union([zod.object({
-  "source": zod.literal("ddgs").default(listSavedResourcesEndpointApiSavedGetResponseGroupsItemItemsItemResourceDataMetadataOneSourceDefault),
+  "source": zod.literal("ddgs").default(listSavedResourcesEndpointApiSavedGetResponseGroupsItemQueryGroupsItemItemsItemResourceDataMetadataOneSourceDefault),
   "domain": zod.string(),
   "published_date": zod.union([zod.string(),zod.null()]).optional(),
   "language": zod.union([zod.string(),zod.null()]).optional()
 }).describe('Metadata from DuckDuckGo search results.'),zod.object({
-  "source": zod.literal("youtube").default(listSavedResourcesEndpointApiSavedGetResponseGroupsItemItemsItemResourceDataMetadataTwoSourceDefault),
+  "source": zod.literal("youtube").default(listSavedResourcesEndpointApiSavedGetResponseGroupsItemQueryGroupsItemItemsItemResourceDataMetadataTwoSourceDefault),
   "channel": zod.string(),
-  "duration": zod.string().default(listSavedResourcesEndpointApiSavedGetResponseGroupsItemItemsItemResourceDataMetadataTwoDurationDefault),
+  "duration": zod.string().default(listSavedResourcesEndpointApiSavedGetResponseGroupsItemQueryGroupsItemItemsItemResourceDataMetadataTwoDurationDefault),
   "view_count": zod.union([zod.number(),zod.null()]).optional(),
   "published_date": zod.union([zod.string(),zod.null()]).optional(),
   "tags": zod.array(zod.string()).optional(),
   "full_description": zod.union([zod.string(),zod.null()]).optional()
 }).describe('Metadata from YouTube Data API results.'),zod.object({
-  "source": zod.literal("openalex").default(listSavedResourcesEndpointApiSavedGetResponseGroupsItemItemsItemResourceDataMetadataThreeSourceDefault),
+  "source": zod.literal("openalex").default(listSavedResourcesEndpointApiSavedGetResponseGroupsItemQueryGroupsItemItemsItemResourceDataMetadataThreeSourceDefault),
   "authors": zod.array(zod.string()).optional(),
   "journal": zod.union([zod.string(),zod.null()]).optional(),
   "citation_count": zod.union([zod.number(),zod.null()]).optional(),
   "doi": zod.union([zod.string(),zod.null()]).optional(),
   "published_date": zod.union([zod.string(),zod.null()]).optional()
 }).describe('Metadata from OpenAlex works results.'),zod.object({
-  "source": zod.literal("custom").default(listSavedResourcesEndpointApiSavedGetResponseGroupsItemItemsItemResourceDataMetadataFourSourceDefault),
+  "source": zod.literal("custom").default(listSavedResourcesEndpointApiSavedGetResponseGroupsItemQueryGroupsItemItemsItemResourceDataMetadataFourSourceDefault),
   "domain": zod.string(),
   "og_title": zod.union([zod.string(),zod.null()]).optional(),
   "og_description": zod.union([zod.string(),zod.null()]).optional(),
@@ -81,12 +84,12 @@ export const ListSavedResourcesEndpointApiSavedGetResponse = zod.object({
 }).describe('Normalised resource card returned by all providers.'),
   "evaluation_data": zod.union([zod.object({
   "resource_url": zod.string(),
-  "overall_score": zod.number().min(listSavedResourcesEndpointApiSavedGetResponseGroupsItemItemsItemEvaluationDataOneOverallScoreMin).max(listSavedResourcesEndpointApiSavedGetResponseGroupsItemItemsItemEvaluationDataOneOverallScoreMax),
+  "overall_score": zod.number().min(listSavedResourcesEndpointApiSavedGetResponseGroupsItemQueryGroupsItemItemsItemEvaluationDataOneOverallScoreMin).max(listSavedResourcesEndpointApiSavedGetResponseGroupsItemQueryGroupsItemItemsItemEvaluationDataOneOverallScoreMax),
   "relevance_reason": zod.string(),
   "recommended_use": zod.enum(['primary_resource', 'supplementary', 'reference_only']),
   "scores": zod.record(zod.string(), zod.object({
-  "score": zod.number().min(1).max(listSavedResourcesEndpointApiSavedGetResponseGroupsItemItemsItemEvaluationDataOneScoresScoreMax),
-  "max": zod.number().default(listSavedResourcesEndpointApiSavedGetResponseGroupsItemItemsItemEvaluationDataOneScoresMaxDefault),
+  "score": zod.number().min(1).max(listSavedResourcesEndpointApiSavedGetResponseGroupsItemQueryGroupsItemItemsItemEvaluationDataOneScoresScoreMax),
+  "max": zod.number().default(listSavedResourcesEndpointApiSavedGetResponseGroupsItemQueryGroupsItemItemsItemEvaluationDataOneScoresMaxDefault),
   "reason": zod.string()
 }).describe('Score for a single evaluation dimension.')),
   "adversarial": zod.union([zod.object({
@@ -98,8 +101,8 @@ export const ListSavedResourcesEndpointApiSavedGetResponse = zod.object({
   "suggested_action": zod.string()
 }).describe('Single issue raised by the adversarial reviewer.')).optional(),
   "score_adjustments": zod.record(zod.string(), zod.object({
-  "score": zod.number().min(1).max(listSavedResourcesEndpointApiSavedGetResponseGroupsItemItemsItemEvaluationDataOneAdversarialOneScoreAdjustmentsScoreMax),
-  "max": zod.number().default(listSavedResourcesEndpointApiSavedGetResponseGroupsItemItemsItemEvaluationDataOneAdversarialOneScoreAdjustmentsMaxDefault),
+  "score": zod.number().min(1).max(listSavedResourcesEndpointApiSavedGetResponseGroupsItemQueryGroupsItemItemsItemEvaluationDataOneAdversarialOneScoreAdjustmentsScoreMax),
+  "max": zod.number().default(listSavedResourcesEndpointApiSavedGetResponseGroupsItemQueryGroupsItemItemsItemEvaluationDataOneAdversarialOneScoreAdjustmentsMaxDefault),
   "reason": zod.string()
 }).describe('Score for a single evaluation dimension.')).optional(),
   "review_summary": zod.string()
@@ -107,6 +110,7 @@ export const ListSavedResourcesEndpointApiSavedGetResponse = zod.object({
 }).describe('Full evaluation of a single resource across 7 dimensions.'),zod.null()]),
   "saved_at": zod.iso.datetime({})
 }))
+}).describe('A group of saved resources from the same search query.'))
 }))
 })
 
@@ -122,6 +126,7 @@ export const toggleSaveResourceEndpointApiSavedPostBodyResourceMetadataFourSourc
 
 export const ToggleSaveResourceEndpointApiSavedPostBody = zod.object({
   "preset_id": zod.uuid(),
+  "search_query": zod.string(),
   "resource": zod.object({
   "title": zod.string(),
   "url": zod.string(),
@@ -180,6 +185,7 @@ export const toggleSaveResourceEndpointApiSavedPostResponseEvaluationDataOneAdve
 export const ToggleSaveResourceEndpointApiSavedPostResponse = zod.object({
   "id": zod.uuid(),
   "preset_id": zod.uuid(),
+  "search_query": zod.string(),
   "resource_url": zod.string(),
   "resource_data": zod.object({
   "title": zod.string(),
@@ -266,6 +272,7 @@ export const addCustomLinkEndpointApiSavedLinkPostBodyUrlMax = 2083;
 
 export const AddCustomLinkEndpointApiSavedLinkPostBody = zod.object({
   "preset_id": zod.uuid(),
+  "search_query": zod.string(),
   "url": zod.url().min(1).max(addCustomLinkEndpointApiSavedLinkPostBodyUrlMax),
   "title": zod.union([zod.string(),zod.null()]).optional()
 })
@@ -288,6 +295,7 @@ export const addCustomLinkEndpointApiSavedLinkPostResponseEvaluationDataOneAdver
 export const AddCustomLinkEndpointApiSavedLinkPostResponse = zod.object({
   "id": zod.uuid(),
   "preset_id": zod.uuid(),
+  "search_query": zod.string(),
   "resource_url": zod.string(),
   "resource_data": zod.object({
   "title": zod.string(),
@@ -357,12 +365,108 @@ export const AddCustomLinkEndpointApiSavedLinkPostResponse = zod.object({
 })
 
 /**
- * Batch evaluate unevaluated library resources within a preset.
+ * Batch evaluate unevaluated library resources within a preset+query group.
  * @summary Evaluate Saved Resources Endpoint
  */
 export const EvaluateSavedResourcesEndpointApiSavedEvaluatePostBody = zod.object({
-  "preset_id": zod.uuid()
+  "preset_id": zod.uuid(),
+  "search_query": zod.string()
 })
 
 export const EvaluateSavedResourcesEndpointApiSavedEvaluatePostResponse = zod.record(zod.string(), zod.unknown())
+
+/**
+ * Evaluate a single saved resource.
+ * @summary Evaluate Single Resource Endpoint
+ */
+export const EvaluateSingleResourceEndpointApiSavedEvaluateSinglePostBody = zod.object({
+  "saved_resource_id": zod.uuid()
+})
+
+export const evaluateSingleResourceEndpointApiSavedEvaluateSinglePostResponseResourceDataMetadataOneSourceDefault = `ddgs`;
+export const evaluateSingleResourceEndpointApiSavedEvaluateSinglePostResponseResourceDataMetadataTwoSourceDefault = `youtube`;
+export const evaluateSingleResourceEndpointApiSavedEvaluateSinglePostResponseResourceDataMetadataTwoDurationDefault = ``;
+export const evaluateSingleResourceEndpointApiSavedEvaluateSinglePostResponseResourceDataMetadataThreeSourceDefault = `openalex`;
+export const evaluateSingleResourceEndpointApiSavedEvaluateSinglePostResponseResourceDataMetadataFourSourceDefault = `custom`;
+export const evaluateSingleResourceEndpointApiSavedEvaluateSinglePostResponseEvaluationDataOneOverallScoreMin = 0;
+export const evaluateSingleResourceEndpointApiSavedEvaluateSinglePostResponseEvaluationDataOneOverallScoreMax = 10;
+
+export const evaluateSingleResourceEndpointApiSavedEvaluateSinglePostResponseEvaluationDataOneScoresScoreMax = 10;
+
+export const evaluateSingleResourceEndpointApiSavedEvaluateSinglePostResponseEvaluationDataOneScoresMaxDefault = 10;
+export const evaluateSingleResourceEndpointApiSavedEvaluateSinglePostResponseEvaluationDataOneAdversarialOneScoreAdjustmentsScoreMax = 10;
+
+export const evaluateSingleResourceEndpointApiSavedEvaluateSinglePostResponseEvaluationDataOneAdversarialOneScoreAdjustmentsMaxDefault = 10;
+
+export const EvaluateSingleResourceEndpointApiSavedEvaluateSinglePostResponse = zod.object({
+  "id": zod.uuid(),
+  "preset_id": zod.uuid(),
+  "search_query": zod.string(),
+  "resource_url": zod.string(),
+  "resource_data": zod.object({
+  "title": zod.string(),
+  "url": zod.string(),
+  "source": zod.enum(['ddgs', 'youtube', 'openalex', 'custom']),
+  "type": zod.enum(['webpage', 'video', 'paper']),
+  "snippet": zod.string(),
+  "thumbnail_url": zod.union([zod.string(),zod.null()]).optional(),
+  "metadata": zod.union([zod.object({
+  "source": zod.literal("ddgs").default(evaluateSingleResourceEndpointApiSavedEvaluateSinglePostResponseResourceDataMetadataOneSourceDefault),
+  "domain": zod.string(),
+  "published_date": zod.union([zod.string(),zod.null()]).optional(),
+  "language": zod.union([zod.string(),zod.null()]).optional()
+}).describe('Metadata from DuckDuckGo search results.'),zod.object({
+  "source": zod.literal("youtube").default(evaluateSingleResourceEndpointApiSavedEvaluateSinglePostResponseResourceDataMetadataTwoSourceDefault),
+  "channel": zod.string(),
+  "duration": zod.string().default(evaluateSingleResourceEndpointApiSavedEvaluateSinglePostResponseResourceDataMetadataTwoDurationDefault),
+  "view_count": zod.union([zod.number(),zod.null()]).optional(),
+  "published_date": zod.union([zod.string(),zod.null()]).optional(),
+  "tags": zod.array(zod.string()).optional(),
+  "full_description": zod.union([zod.string(),zod.null()]).optional()
+}).describe('Metadata from YouTube Data API results.'),zod.object({
+  "source": zod.literal("openalex").default(evaluateSingleResourceEndpointApiSavedEvaluateSinglePostResponseResourceDataMetadataThreeSourceDefault),
+  "authors": zod.array(zod.string()).optional(),
+  "journal": zod.union([zod.string(),zod.null()]).optional(),
+  "citation_count": zod.union([zod.number(),zod.null()]).optional(),
+  "doi": zod.union([zod.string(),zod.null()]).optional(),
+  "published_date": zod.union([zod.string(),zod.null()]).optional()
+}).describe('Metadata from OpenAlex works results.'),zod.object({
+  "source": zod.literal("custom").default(evaluateSingleResourceEndpointApiSavedEvaluateSinglePostResponseResourceDataMetadataFourSourceDefault),
+  "domain": zod.string(),
+  "og_title": zod.union([zod.string(),zod.null()]).optional(),
+  "og_description": zod.union([zod.string(),zod.null()]).optional(),
+  "og_image": zod.union([zod.string(),zod.null()]).optional()
+}).describe('Metadata from manually added custom links.')]),
+  "relevance_score": zod.union([zod.number(),zod.null()]).optional(),
+  "relevance_reason": zod.union([zod.string(),zod.null()]).optional(),
+  "evaluation_details": zod.union([zod.record(zod.string(), zod.record(zod.string(), zod.unknown())),zod.null()]).optional().describe('Detailed dimension scores')
+}).describe('Normalised resource card returned by all providers.'),
+  "evaluation_data": zod.union([zod.object({
+  "resource_url": zod.string(),
+  "overall_score": zod.number().min(evaluateSingleResourceEndpointApiSavedEvaluateSinglePostResponseEvaluationDataOneOverallScoreMin).max(evaluateSingleResourceEndpointApiSavedEvaluateSinglePostResponseEvaluationDataOneOverallScoreMax),
+  "relevance_reason": zod.string(),
+  "recommended_use": zod.enum(['primary_resource', 'supplementary', 'reference_only']),
+  "scores": zod.record(zod.string(), zod.object({
+  "score": zod.number().min(1).max(evaluateSingleResourceEndpointApiSavedEvaluateSinglePostResponseEvaluationDataOneScoresScoreMax),
+  "max": zod.number().default(evaluateSingleResourceEndpointApiSavedEvaluateSinglePostResponseEvaluationDataOneScoresMaxDefault),
+  "reason": zod.string()
+}).describe('Score for a single evaluation dimension.')),
+  "adversarial": zod.union([zod.object({
+  "verdict": zod.enum(['approved', 'approved_with_caveats', 'flagged_for_teacher_review', 'not_recommended']),
+  "flags": zod.array(zod.object({
+  "category": zod.enum(['false_positive', 'hidden_bias', 'accuracy_gap', 'safety', 'licensing_trap']),
+  "severity": zod.enum(['high', 'medium', 'low']),
+  "explanation": zod.string(),
+  "suggested_action": zod.string()
+}).describe('Single issue raised by the adversarial reviewer.')).optional(),
+  "score_adjustments": zod.record(zod.string(), zod.object({
+  "score": zod.number().min(1).max(evaluateSingleResourceEndpointApiSavedEvaluateSinglePostResponseEvaluationDataOneAdversarialOneScoreAdjustmentsScoreMax),
+  "max": zod.number().default(evaluateSingleResourceEndpointApiSavedEvaluateSinglePostResponseEvaluationDataOneAdversarialOneScoreAdjustmentsMaxDefault),
+  "reason": zod.string()
+}).describe('Score for a single evaluation dimension.')).optional(),
+  "review_summary": zod.string()
+}).describe('Output of Agent 4 — challenges Agent 3 scores and surfaces risks.'),zod.null()]).optional()
+}).describe('Full evaluation of a single resource across 7 dimensions.'),zod.null()]),
+  "saved_at": zod.iso.datetime({})
+})
 

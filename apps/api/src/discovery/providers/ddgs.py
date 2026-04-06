@@ -59,7 +59,9 @@ class DdgsProvider(SearchProvider):
         context: ClassroomPreset,
         limit: int,
     ) -> list[ResourceCard]:
-        built_query = f"{query} {context.subject} {context.year_level} resources".strip()
+        built_query = (
+            f"{query} {context.subject} {context.year_level} resources".strip()
+        )
         region = _country_to_region(context.country)
 
         loop = asyncio.get_running_loop()

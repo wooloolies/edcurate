@@ -172,7 +172,8 @@
   "nav": {
     "presets": "Presets",
     "search": "Search",
-    "dashboard": "Dashboard"
+    "dashboard": "Dashboard",
+    "library": "Library"
   },
   "home": {
     "team": "Team",

@@ -1,9 +1,11 @@
 "use client";
 
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
+import { ChevronDown, ChevronUp, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useQueryState } from "nuqs";
 import { useMemo, useState } from "react";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,17 +22,87 @@ import { EvaluationProgress } from "@/features/search/components/evaluation-prog
 import { ResourceCardRenderer } from "@/features/search/components/resource-card";
 import { ResourceCardSkeleton } from "@/features/search/components/skeleton/resource-card-skeleton";
 import { useSearchApiDiscoverySearchGet } from "@/lib/api/discovery/discovery";
-import type { AdversarialReviewResult } from "@/lib/api/model";
+import type { AdversarialReviewResult, ResourceCard } from "@/lib/api/model";
 import { useListPresetsApiPresetsGet } from "@/lib/api/presets/presets";
+import {
+  getListSavedResourcesEndpointApiSavedGetQueryKey,
+  useListSavedResourcesEndpointApiSavedGet,
+  useToggleSaveResourceEndpointApiSavedPost,
+} from "@/lib/api/saved-resources/saved-resources";
 
 export function SearchPageClient() {
   const t = useTranslations("search");
+  const queryClient = useQueryClient();
   const [presetId, setPresetId] = useQueryState("preset_id");
   const [searchQuery, setSearchQuery] = useQueryState("q");
   const [draft, setDraft] = useState(searchQuery ?? "");
 
   const { data: presetsData } = useListPresetsApiPresetsGet();
   const presets = presetsData?.data ?? [];
+
+  const { data: savedData } = useListSavedResourcesEndpointApiSavedGet();
+  const { mutateAsync: saveResource, isPending: isSaving } =
+    useToggleSaveResourceEndpointApiSavedPost();
+  const [selectedResources, setSelectedResources] = useState<Map<string, ResourceCard>>(new Map());
+
+  // Build a set of already-saved URLs for the active preset
+  const savedUrls = useMemo(() => {
+    const urls = new Set<string>();
+    if (presetId && savedData?.groups) {
+      for (const group of savedData.groups) {
+        if (group.preset_id === presetId) {
+          for (const qGroup of group.query_groups) {
+            for (const item of qGroup.items) {
+              urls.add(item.resource_url);
+            }
+          }
+        }
+      }
+    }
+    return urls;
+  }, [presetId, savedData]);
+
+  const isChecked = (url: string) => selectedResources.has(url) || savedUrls.has(url);
+
+  const handleToggleChecked = (resource: ResourceCard, checked: boolean) => {
+    setSelectedResources((prev) => {
+      const next = new Map(prev);
+      if (checked) {
+        next.set(resource.url, resource);
+      } else {
+        next.delete(resource.url);
+      }
+      return next;
+    });
+  };
+
+  const handleSaveSelected = async () => {
+    if (!presetId || selectedResources.size === 0) return;
+    try {
+      await Promise.all(
+        Array.from(selectedResources.values()).map((r) =>
+          saveResource({
+            data: {
+              preset_id: presetId,
+              search_query: searchQuery || "custom",
+              resource: r,
+            },
+          })
+        )
+      );
+      setSelectedResources(new Map());
+      toast.success("Resources saved to library!");
+      queryClient.invalidateQueries({
+        queryKey: getListSavedResourcesEndpointApiSavedGetQueryKey(),
+      });
+    } catch (_e) {
+      toast.error("Failed to save resources");
+    }
+  };
+
+  const handleClearSelection = () => {
+    setSelectedResources(new Map());
+  };
 
   const searchEnabled = !!presetId && !!searchQuery;
   const { data: results, isFetching } = useSearchApiDiscoverySearchGet(
@@ -142,6 +214,8 @@ export function SearchPageClient() {
                         resource={resource}
                         adversarial={adversarialByUrl.get(resource.url)}
                         presetId={presetId ?? undefined}
+                        checked={isChecked(resource.url)}
+                        onToggleChecked={(_, c) => handleToggleChecked(resource, c)}
                       />
                     ))}
                     {unevaluated.length > 0 ? (
@@ -168,6 +242,8 @@ export function SearchPageClient() {
                                 resource={resource}
                                 adversarial={adversarialByUrl.get(resource.url)}
                                 presetId={presetId ?? undefined}
+                                checked={isChecked(resource.url)}
+                                onToggleChecked={(_, c) => handleToggleChecked(resource, c)}
                               />
                             ))}
                           </div>
@@ -187,6 +263,26 @@ export function SearchPageClient() {
           <p className="text-muted-foreground">{t("idleState")}</p>
         </div>
       ) : null}
+
+      {selectedResources.size > 0 && (
+        <div className="fixed bottom-6 left-1/2 z-50 flex -translate-x-1/2 items-center gap-4 rounded-full border bg-background px-6 py-3 shadow-lg">
+          <span className="text-sm font-medium">
+            {selectedResources.size} resource{selectedResources.size === 1 ? "" : "s"} selected
+          </span>
+          <Button size="sm" onClick={handleSaveSelected} disabled={isSaving}>
+            {isSaving ? "Saving..." : "Save to Library"}
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-7 w-7 shrink-0"
+            onClick={handleClearSelection}
+            aria-label="Clear selection"
+          >
+            <X className="h-4 w-4" />
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
