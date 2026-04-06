@@ -607,5 +607,37 @@
   "search__evaluation__dimensions__licensingIp": "라이선스 및 지식재산권",
   "@search__evaluation__dimensions__licensingIp": {
     "description": "Evaluation dimension label for licensing and intellectual property"
+  },
+  "userMenu__profile": "프로필",
+  "@userMenu__profile": {
+    "description": "User menu link to profile page"
+  },
+  "userMenu__logout": "로그아웃",
+  "@userMenu__logout": {
+    "description": "User menu logout action"
+  },
+  "profile__title": "프로필",
+  "@profile__title": {
+    "description": "Profile page title"
+  },
+  "profile__name": "이름",
+  "@profile__name": {
+    "description": "Profile name label"
+  },
+  "profile__email": "이메일",
+  "@profile__email": {
+    "description": "Profile email label"
+  },
+  "profile__emailVerified": "이메일 인증됨",
+  "@profile__emailVerified": {
+    "description": "Profile email verification status"
+  },
+  "profile__emailNotVerified": "이메일 미인증",
+  "@profile__emailNotVerified": {
+    "description": "Profile email not verified status"
+  },
+  "profile__memberSince": "가입일",
+  "@profile__memberSince": {
+    "description": "Profile join date label"
   }
 }

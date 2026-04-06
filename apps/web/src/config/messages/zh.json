@@ -186,5 +186,17 @@
     "somethingWentWrong": "出了点问题。",
     "tryAgain": "重试",
     "pageNotFound": "页面未找到"
+  },
+  "userMenu": {
+    "profile": "个人资料",
+    "logout": "退出登录"
+  },
+  "profile": {
+    "title": "个人资料",
+    "name": "姓名",
+    "email": "电子邮件",
+    "emailVerified": "邮箱已验证",
+    "emailNotVerified": "邮箱未验证",
+    "memberSince": "注册时间"
   }
 }

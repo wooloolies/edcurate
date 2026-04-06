@@ -186,5 +186,17 @@
     "somethingWentWrong": "Đã xảy ra sự cố.",
     "tryAgain": "Thử lại",
     "pageNotFound": "Không tìm thấy trang"
+  },
+  "userMenu": {
+    "profile": "Hồ sơ",
+    "logout": "Đăng xuất"
+  },
+  "profile": {
+    "title": "Hồ sơ",
+    "name": "Tên",
+    "email": "Email",
+    "emailVerified": "Email đã xác minh",
+    "emailNotVerified": "Email chưa xác minh",
+    "memberSince": "Thành viên từ"
   }
 }

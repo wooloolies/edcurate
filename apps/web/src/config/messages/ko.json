@@ -186,5 +186,17 @@
     "somethingWentWrong": "문제가 발생했습니다.",
     "tryAgain": "다시 시도",
     "pageNotFound": "페이지를 찾을 수 없습니다"
+  },
+  "userMenu": {
+    "profile": "프로필",
+    "logout": "로그아웃"
+  },
+  "profile": {
+    "title": "프로필",
+    "name": "이름",
+    "email": "이메일",
+    "emailVerified": "이메일 인증됨",
+    "emailNotVerified": "이메일 미인증",
+    "memberSince": "가입일"
   }
 }

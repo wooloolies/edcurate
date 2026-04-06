@@ -631,5 +631,37 @@
   "search__evaluation__dimensions__licensingIp": "Licensing and IP",
   "@search__evaluation__dimensions__licensingIp": {
     "description": "Evaluation dimension label for licensing and intellectual property"
+  },
+  "userMenu__profile": "Profile",
+  "@userMenu__profile": {
+    "description": "User menu link to profile page"
+  },
+  "userMenu__logout": "Logout",
+  "@userMenu__logout": {
+    "description": "User menu logout action"
+  },
+  "profile__title": "Profile",
+  "@profile__title": {
+    "description": "Profile page title"
+  },
+  "profile__name": "Name",
+  "@profile__name": {
+    "description": "Profile name label"
+  },
+  "profile__email": "Email",
+  "@profile__email": {
+    "description": "Profile email label"
+  },
+  "profile__emailVerified": "Email verified",
+  "@profile__emailVerified": {
+    "description": "Profile email verification status"
+  },
+  "profile__emailNotVerified": "Email not verified",
+  "@profile__emailNotVerified": {
+    "description": "Profile email not verified status"
+  },
+  "profile__memberSince": "Member since",
+  "@profile__memberSince": {
+    "description": "Profile join date label"
   }
 }

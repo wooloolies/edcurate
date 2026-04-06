@@ -607,5 +607,37 @@
   "search__evaluation__dimensions__licensingIp": "Giấy phép và sở hữu trí tuệ",
   "@search__evaluation__dimensions__licensingIp": {
     "description": "Evaluation dimension label for licensing and intellectual property"
+  },
+  "userMenu__profile": "Hồ sơ",
+  "@userMenu__profile": {
+    "description": "User menu link to profile page"
+  },
+  "userMenu__logout": "Đăng xuất",
+  "@userMenu__logout": {
+    "description": "User menu logout action"
+  },
+  "profile__title": "Hồ sơ",
+  "@profile__title": {
+    "description": "Profile page title"
+  },
+  "profile__name": "Tên",
+  "@profile__name": {
+    "description": "Profile name label"
+  },
+  "profile__email": "Email",
+  "@profile__email": {
+    "description": "Profile email label"
+  },
+  "profile__emailVerified": "Email đã xác minh",
+  "@profile__emailVerified": {
+    "description": "Profile email verification status"
+  },
+  "profile__emailNotVerified": "Email chưa xác minh",
+  "@profile__emailNotVerified": {
+    "description": "Profile email not verified status"
+  },
+  "profile__memberSince": "Thành viên từ",
+  "@profile__memberSince": {
+    "description": "Profile join date label"
   }
 }

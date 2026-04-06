@@ -52,6 +52,7 @@ export * from './source-error-source';
 export * from './source-error';
 export * from './source-weights';
 export * from './token-response';
+export * from './user-response';
 export * from './validation-error';
 export * from './verify-email-api-auth-verify-email-get-params';
 export * from './verify-email-api-auth-verify-email-get200';

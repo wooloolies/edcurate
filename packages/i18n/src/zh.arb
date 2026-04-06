@@ -607,5 +607,37 @@
   "search__evaluation__dimensions__licensingIp": "许可与知识产权",
   "@search__evaluation__dimensions__licensingIp": {
     "description": "Evaluation dimension label for licensing and intellectual property"
+  },
+  "userMenu__profile": "个人资料",
+  "@userMenu__profile": {
+    "description": "User menu link to profile page"
+  },
+  "userMenu__logout": "退出登录",
+  "@userMenu__logout": {
+    "description": "User menu logout action"
+  },
+  "profile__title": "个人资料",
+  "@profile__title": {
+    "description": "Profile page title"
+  },
+  "profile__name": "姓名",
+  "@profile__name": {
+    "description": "Profile name label"
+  },
+  "profile__email": "电子邮件",
+  "@profile__email": {
+    "description": "Profile email label"
+  },
+  "profile__emailVerified": "邮箱已验证",
+  "@profile__emailVerified": {
+    "description": "Profile email verification status"
+  },
+  "profile__emailNotVerified": "邮箱未验证",
+  "@profile__emailNotVerified": {
+    "description": "Profile email not verified status"
+  },
+  "profile__memberSince": "注册时间",
+  "@profile__memberSince": {
+    "description": "Profile join date label"
   }
 }

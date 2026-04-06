@@ -36,6 +36,8 @@ class User(Base):
 class UserResponse(BaseModel):
     """User response model."""
 
+    model_config = {"from_attributes": True}
+
     id: str
     email: str
     name: str | None = None

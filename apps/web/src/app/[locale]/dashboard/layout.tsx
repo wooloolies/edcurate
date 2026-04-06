@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 
 import { LanguageSwitcher } from "@/components/language-switcher";
+import { UserMenu } from "@/components/user-menu";
 import { Link, usePathname } from "@/lib/i18n/routing";
 import { cn } from "@/lib/utils";
 
@@ -39,6 +40,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             ))}
           </div>
           <LanguageSwitcher />
+          <UserMenu />
         </div>
       </nav>
       <main className="mx-auto max-w-7xl px-4 py-6">{children}</main>

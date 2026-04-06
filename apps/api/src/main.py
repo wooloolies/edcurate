@@ -309,7 +309,9 @@ async def readiness_check() -> dict[str, str]:
 from src.auth.router import router as auth_router  # noqa: E402
 from src.discovery.router import router as discovery_router  # noqa: E402
 from src.presets.router import router as presets_router  # noqa: E402
+from src.users.router import router as users_router  # noqa: E402
 
 app.include_router(auth_router, prefix="/api/auth", tags=["authentication"])
 app.include_router(presets_router, prefix="/api/presets", tags=["presets"])
+app.include_router(users_router, prefix="/api/users", tags=["users"])
 app.include_router(discovery_router, prefix="/api/discovery", tags=["discovery"])

@@ -186,5 +186,17 @@
     "somethingWentWrong": "Something went wrong!",
     "tryAgain": "Try again",
     "pageNotFound": "Page not found"
+  },
+  "userMenu": {
+    "profile": "Profile",
+    "logout": "Logout"
+  },
+  "profile": {
+    "title": "Profile",
+    "name": "Name",
+    "email": "Email",
+    "emailVerified": "Email verified",
+    "emailNotVerified": "Email not verified",
+    "memberSince": "Member since"
   }
 }

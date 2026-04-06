@@ -607,5 +607,37 @@
   "search__evaluation__dimensions__licensingIp": "ใบอนุญาตและทรัพย์สินทางปัญญา",
   "@search__evaluation__dimensions__licensingIp": {
     "description": "Evaluation dimension label for licensing and intellectual property"
+  },
+  "userMenu__profile": "โปรไฟล์",
+  "@userMenu__profile": {
+    "description": "User menu link to profile page"
+  },
+  "userMenu__logout": "ออกจากระบบ",
+  "@userMenu__logout": {
+    "description": "User menu logout action"
+  },
+  "profile__title": "โปรไฟล์",
+  "@profile__title": {
+    "description": "Profile page title"
+  },
+  "profile__name": "ชื่อ",
+  "@profile__name": {
+    "description": "Profile name label"
+  },
+  "profile__email": "อีเมล",
+  "@profile__email": {
+    "description": "Profile email label"
+  },
+  "profile__emailVerified": "ยืนยันอีเมลแล้ว",
+  "@profile__emailVerified": {
+    "description": "Profile email verification status"
+  },
+  "profile__emailNotVerified": "ยังไม่ได้ยืนยันอีเมล",
+  "@profile__emailNotVerified": {
+    "description": "Profile email not verified status"
+  },
+  "profile__memberSince": "สมาชิกตั้งแต่",
+  "@profile__memberSince": {
+    "description": "Profile join date label"
   }
 }

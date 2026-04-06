@@ -186,5 +186,17 @@
     "somethingWentWrong": "เกิดข้อผิดพลาดบางอย่าง",
     "tryAgain": "ลองอีกครั้ง",
     "pageNotFound": "ไม่พบหน้าที่ต้องการ"
+  },
+  "userMenu": {
+    "profile": "โปรไฟล์",
+    "logout": "ออกจากระบบ"
+  },
+  "profile": {
+    "title": "โปรไฟล์",
+    "name": "ชื่อ",
+    "email": "อีเมล",
+    "emailVerified": "ยืนยันอีเมลแล้ว",
+    "emailNotVerified": "ยังไม่ได้ยืนยันอีเมล",
+    "memberSince": "สมาชิกตั้งแต่"
   }
 }
