@@ -4,7 +4,7 @@ from datetime import datetime
 from pydantic import BaseModel, HttpUrl
 
 from src.discovery.schemas import ResourceCard
-from src.evaluation.schemas import EvaluationResult
+from src.agents.schemas import EvaluationResult
 
 
 class SaveResourceRequest(BaseModel):

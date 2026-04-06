@@ -6,7 +6,7 @@ from sqlalchemy import select
 from sqlalchemy.dialects.postgresql import insert
 
 from src.discovery.schemas import ResourceCard
-from src.evaluation.schemas import EvaluationResult
+from src.agents.schemas import EvaluationResult
 from src.lib.dependencies import DBSession
 from src.presets.model import ClassroomPreset
 from src.saved_resources.model import SavedResource
@@ -40,7 +40,7 @@ async def save_resource(
         # Mocking an EvaluationResult from the card
         # In a real scenario, this would either be passed fully
         # or we construct what we can.
-        from src.evaluation.schemas import DimensionScore
+        from src.agents.schemas import DimensionScore
 
         eval_data = EvaluationResult(
             resource_url=request.resource.url,
@@ -125,7 +125,7 @@ async def list_saved_resources(
                 preset_id=preset.id,
                 preset_name=preset.name,
                 preset_subject=preset.subject,
-                preset_topic=preset.topic,
+                preset_topic=None,
                 items=[],
             )
         groups_dict[preset.id].items.append(SavedResourceResponse.model_validate(saved))
