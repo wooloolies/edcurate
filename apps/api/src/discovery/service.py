@@ -16,7 +16,12 @@ from src.evaluation.adversarial_retrieval import (
     build_adversarial_hybrid_query_text,
 )
 from src.evaluation.agent import evaluate_resource
-from src.evaluation.schemas import EvaluatedSearchResponse, EvaluationResult
+from src.evaluation.reconciler import reconcile
+from src.evaluation.schemas import (
+    AdversarialReviewResult,
+    EvaluatedSearchResponse,
+    EvaluationResult,
+)
 from src.lib.config import settings
 from src.lib.logging import get_logger
 from src.presets.model import ClassroomPreset
@@ -86,13 +91,14 @@ async def _run_rag_pipeline(
     query: str,
     search_id: str,
 ) -> list[EvaluationResult]:
-    """
-    Run the full RAG pipeline on top-4 resources:
+    """Run the full RAG pipeline on top-4 resources.
+
     1. Fetch content
     2. Chunk
     3. Embed chunks + store in Weaviate
-    4. Build eval query + embed
-    5. For each resource: retrieve chunks → Gemini 7-dim score
+    4. Build BOTH eval query + adversarial query and embed them
+    5. For each resource: retrieve chunks → run Agent 3 + Agent 4
+       IN PARALLEL → reconcile
     """
     # Step 1: Ensure Weaviate collection exists
     try:
@@ -137,26 +143,39 @@ async def _run_rag_pipeline(
                 error=str(e),
             )
 
-    # Step 4: Build and embed the evaluation query
+    # Step 4: Build and embed BOTH queries in parallel
     eval_query_text = _build_eval_query(preset, query)
+    hybrid_text = build_adversarial_hybrid_query_text(preset, query)
+
     try:
-        eval_vector = await embed_single(eval_query_text)
+        eval_vector, adv_vector = await asyncio.gather(
+            embed_single(eval_query_text),
+            embed_single(hybrid_text),
+        )
     except Exception as e:
-        logger.error("Eval query embedding failed", error=str(e))
+        logger.error("Query embedding failed", error=str(e))
         return []
 
-    # Step 5: For each resource, retrieve chunks and evaluate
-    evaluations: list[EvaluationResult] = []
-    eval_tasks = []
-
-    for card in cards:
+    # Step 5: For each resource — Agent 3 + Agent 4 in parallel, then reconcile
+    async def _process_one(card: ResourceCard) -> EvaluationResult | None:
+        """Run Agent 3 + Agent 4 in parallel for a single resource."""
+        # Retrieve both chunk sets in parallel
         try:
-            retrieved = await asyncio.to_thread(
-                query_chunks,
-                query_vector=eval_vector,
-                search_id=search_id,
-                resource_url=card.url,
-                limit=5,
+            eval_retrieved, adv_retrieved = await asyncio.gather(
+                asyncio.to_thread(
+                    query_chunks,
+                    query_vector=eval_vector,
+                    search_id=search_id,
+                    resource_url=card.url,
+                    limit=5,
+                ),
+                asyncio.to_thread(
+                    query_chunks,
+                    query_vector=adv_vector,
+                    search_id=search_id,
+                    resource_url=card.url,
+                    limit=ADV_RETRIEVAL_LIMIT,
+                ),
             )
         except Exception as e:
             logger.warning(
@@ -164,92 +183,90 @@ async def _run_rag_pipeline(
                 url=card.url,
                 error=str(e),
             )
-            retrieved = []
+            eval_retrieved = []
+            adv_retrieved = []
 
-        if not retrieved:
-            # Use snippet as fallback
-            chunks_text = card.snippet
+        # Build eval text
+        if not eval_retrieved:
+            eval_chunks_text = card.snippet
         else:
-            chunks_text = "\n\n---\n\n".join(
-                str(r.get("chunk_text", "")) for r in retrieved
+            eval_chunks_text = "\n\n---\n\n".join(
+                str(r.get("chunk_text", "")) for r in eval_retrieved
             )
 
-        eval_tasks.append(
+        # Build adversarial texts (claim vs framing buckets)
+        claim_text, framing_text = bucket_chunks_for_adversarial(
+            adv_retrieved if isinstance(adv_retrieved, list) else [],
+            card.snippet,
+        )
+
+        # Run Agent 3 (eval) + Agent 4 (adversarial) in PARALLEL — blind
+        eval_result, adv_result = await asyncio.gather(
             evaluate_resource(
                 title=card.title,
                 url=card.url,
                 source=card.source,
-                chunks_text=chunks_text,
+                chunks_text=eval_chunks_text,
                 preset=preset,
-            )
+            ),
+            adversarial_review_resource(
+                claim_chunks_text=claim_text,
+                framing_chunks_text=framing_text,
+                title=card.title,
+                url=card.url,
+                source=card.source,
+                preset=preset,
+            ),
+            return_exceptions=True,
         )
 
-    # Run all evaluations in parallel
-    eval_results = await asyncio.gather(*eval_tasks, return_exceptions=True)
-    for result in eval_results:
+        # Handle Agent 3 failure
+        if isinstance(eval_result, Exception):
+            logger.warning(
+                "Agent 3 evaluation failed",
+                url=card.url,
+                error=str(eval_result),
+            )
+            return None
+        if not isinstance(eval_result, EvaluationResult):
+            return None
+
+        # Handle Agent 4 failure — return eval without adversarial
+        if isinstance(adv_result, Exception):
+            logger.warning(
+                "Agent 4 adversarial failed — skipping reconciliation",
+                url=card.url,
+                error=str(adv_result),
+            )
+            return eval_result
+        if not isinstance(adv_result, AdversarialReviewResult):
+            return eval_result
+
+        # Both succeeded — reconcile
+        return reconcile(eval_result, adv_result)
+
+    # Run all resources in parallel with timeout
+    try:
+        results = await asyncio.wait_for(
+            asyncio.gather(
+                *[_process_one(card) for card in cards],
+                return_exceptions=True,
+            ),
+            timeout=120.0,
+        )
+    except TimeoutError:
+        logger.warning("RAG pipeline timed out")
+        return []
+
+    evaluations: list[EvaluationResult] = []
+    for result in results:
         if isinstance(result, EvaluationResult):
             evaluations.append(result)
         elif isinstance(result, Exception):
-            logger.warning("Evaluation task failed", error=str(result))
+            logger.warning("Resource processing failed", error=str(result))
 
     # Sort by overall_score descending
     evaluations.sort(key=lambda e: e.overall_score, reverse=True)
-
-    # Step 6: Adversarial review (hybrid retrieval + Gemini per resource)
-    card_by_url = {c.url: c for c in cards}
-    try:
-        hybrid_text = build_adversarial_hybrid_query_text(preset, query)
-        adv_vector = await embed_single(hybrid_text)
-    except Exception as e:
-        logger.error("Adversarial hybrid embedding failed", error=str(e))
-        return evaluations
-
-    async def _one_adversarial(ev: EvaluationResult) -> EvaluationResult:
-        card = card_by_url.get(ev.resource_url)
-        if not card:
-            return ev
-        try:
-            retrieved_adv = await asyncio.to_thread(
-                query_chunks,
-                query_vector=adv_vector,
-                search_id=search_id,
-                resource_url=ev.resource_url,
-                limit=ADV_RETRIEVAL_LIMIT,
-            )
-        except Exception as e:
-            logger.warning(
-                "Adversarial chunk retrieval failed",
-                url=ev.resource_url,
-                error=str(e),
-            )
-            retrieved_adv = []
-        claim_text, framing_text = bucket_chunks_for_adversarial(
-            retrieved_adv,
-            card.snippet,
-        )
-        adv = await adversarial_review_resource(
-            evaluation=ev,
-            claim_chunks_text=claim_text,
-            framing_chunks_text=framing_text,
-            title=card.title,
-            url=card.url,
-            source=card.source,
-            preset=preset,
-        )
-        return ev.model_copy(update={"adversarial": adv})
-
-    try:
-        reviewed = await asyncio.wait_for(
-            asyncio.gather(*[_one_adversarial(ev) for ev in evaluations]),
-            timeout=60.0,
-        )
-        evaluations = list(reviewed)
-    except TimeoutError:
-        logger.warning(
-            "Adversarial batch timed out — returning evaluations without adversarial"
-        )
-    except Exception as e:
-        logger.error("Adversarial batch failed", error=str(e))
 
     return evaluations
 
@@ -298,13 +315,13 @@ async def search_resources(
     preset: ClassroomPreset,
     query: str,
 ) -> EvaluatedSearchResponse:
-    """
-    Run federated search with RAG pipeline and deep evaluation.
+    """Run federated search with RAG pipeline and deep evaluation.
 
     1. Check Redis cache
     2. Federated search across all providers (~15 results)
     3. Take top 4 results
-    4. RAG pipeline: fetch → chunk → embed → Weaviate → evaluate
+    4. RAG pipeline: fetch → chunk → embed → Weaviate →
+       Agent 3 + Agent 4 (parallel, blind) → reconcile
     5. Cache and return
     """
     from fastapi import HTTPException, status
