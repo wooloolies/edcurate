@@ -9,6 +9,8 @@ interface ResourceCardRendererProps {
   adversarial?: AdversarialReviewResult | null;
   presetId?: string;
   hideAction?: boolean;
+  checked?: boolean;
+  onToggleChecked?: (e: React.MouseEvent, checked: boolean) => void;
 }
 
 import { BookmarkButton } from "./bookmark-button";
@@ -18,11 +20,25 @@ export function ResourceCardRenderer({
   adversarial,
   presetId,
   hideAction,
-}: ResourceCardRendererProps) {
-  const action =
-    presetId && !hideAction ? (
-      <BookmarkButton presetId={presetId} resource={resource} />
-    ) : undefined;
+  checked,
+  onToggleChecked,
+  customAction,
+}: ResourceCardRendererProps & { customAction?: React.ReactNode }) {
+  const isSearchPageMode = checked !== undefined && onToggleChecked !== undefined;
+
+  let action: React.ReactNode;
+  if (customAction) {
+    action = customAction;
+  } else if ((presetId && !hideAction) || isSearchPageMode) {
+    action = (
+      <BookmarkButton
+        presetId={presetId}
+        resource={resource}
+        checked={checked}
+        onToggleChecked={onToggleChecked}
+      />
+    );
+  }
 
   switch (resource.source) {
     case "ddgs":

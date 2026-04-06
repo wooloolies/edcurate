@@ -8,6 +8,7 @@ from src.saved_resources import service
 from src.saved_resources.schemas import (
     AddCustomLinkRequest,
     BatchEvaluateRequest,
+    EvaluateSingleRequest,
     SavedResourceListResponse,
     SavedResourceResponse,
     SaveResourceRequest,
@@ -66,6 +67,21 @@ async def evaluate_saved_resources_endpoint(
     current_user: CurrentUser,
     request: BatchEvaluateRequest,
 ) -> dict[str, Any]:
-    """Batch evaluate unevaluated library resources within a preset."""
+    """Batch evaluate unevaluated library resources within a preset+query group."""
     user_id = uuid.UUID(current_user.id)
-    return await service.evaluate_saved_resources(db, user_id, request.preset_id)
+    return await service.evaluate_saved_resources(
+        db, user_id, request.preset_id, request.search_query
+    )
+
+
+@router.post("/evaluate-single")
+async def evaluate_single_resource_endpoint(
+    db: DBSession,
+    current_user: CurrentUser,
+    request: EvaluateSingleRequest,
+) -> SavedResourceResponse:
+    """Evaluate a single saved resource."""
+    user_id = uuid.UUID(current_user.id)
+    return await service.evaluate_single_resource(
+        db, user_id, request.saved_resource_id
+    )

@@ -7,6 +7,7 @@
 
 export interface AddCustomLinkRequest {
   preset_id: string;
+  search_query: string;
   /**
      * @minLength 1
      * @maxLength 2083

@@ -34,6 +34,7 @@ _CATEGORY_CAPS: dict[str, dict[str, int]] = {
     "licensing_trap": {"high": 2, "medium": 5, "low": 7},
 }
 
+
 def _derive_verdict(
     review: AdversarialReviewResult,
 ) -> AdversarialVerdict:

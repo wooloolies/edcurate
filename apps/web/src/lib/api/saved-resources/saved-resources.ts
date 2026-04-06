@@ -39,6 +39,7 @@ import type {
   AddCustomLinkRequest,
   BatchEvaluateRequest,
   EvaluateSavedResourcesEndpointApiSavedEvaluatePost200,
+  EvaluateSingleRequest,
   HTTPValidationError,
   ListSavedResourcesEndpointApiSavedGetParams,
   SaveResourceRequest,
@@ -466,7 +467,7 @@ export const useAddCustomLinkEndpointApiSavedLinkPost = <TError = HTTPValidation
       return useMutation(useAddCustomLinkEndpointApiSavedLinkPostMutationOptions(options), queryClient);
     }
     /**
- * Batch evaluate unevaluated library resources within a preset.
+ * Batch evaluate unevaluated library resources within a preset+query group.
  * @summary Evaluate Saved Resources Endpoint
  */
 export const useEvaluateSavedResourcesEndpointApiSavedEvaluatePostHook = () => {
@@ -530,4 +531,70 @@ export const useEvaluateSavedResourcesEndpointApiSavedEvaluatePost = <TError = H
         TContext
       > => {
       return useMutation(useEvaluateSavedResourcesEndpointApiSavedEvaluatePostMutationOptions(options), queryClient);
+    }
+    /**
+ * Evaluate a single saved resource.
+ * @summary Evaluate Single Resource Endpoint
+ */
+export const useEvaluateSingleResourceEndpointApiSavedEvaluateSinglePostHook = () => {
+        const evaluateSingleResourceEndpointApiSavedEvaluateSinglePost = useCustomInstance<SavedResourceResponse>();
+
+        return useCallback((
+    evaluateSingleRequest: EvaluateSingleRequest,
+ signal?: AbortSignal
+) => {
+        return evaluateSingleResourceEndpointApiSavedEvaluateSinglePost(
+          {url: `/api/saved/evaluate-single`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: evaluateSingleRequest, signal
+    },
+          );
+        }, [evaluateSingleResourceEndpointApiSavedEvaluateSinglePost])
+      }
+
+
+
+export const useEvaluateSingleResourceEndpointApiSavedEvaluateSinglePostMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useEvaluateSingleResourceEndpointApiSavedEvaluateSinglePostHook>>>, TError,{data: EvaluateSingleRequest}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useEvaluateSingleResourceEndpointApiSavedEvaluateSinglePostHook>>>, TError,{data: EvaluateSingleRequest}, TContext> => {
+
+const mutationKey = ['evaluateSingleResourceEndpointApiSavedEvaluateSinglePost'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      const evaluateSingleResourceEndpointApiSavedEvaluateSinglePost =  useEvaluateSingleResourceEndpointApiSavedEvaluateSinglePostHook()
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<ReturnType<typeof useEvaluateSingleResourceEndpointApiSavedEvaluateSinglePostHook>>>, {data: EvaluateSingleRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  evaluateSingleResourceEndpointApiSavedEvaluateSinglePost(data,)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type EvaluateSingleResourceEndpointApiSavedEvaluateSinglePostMutationResult = NonNullable<Awaited<ReturnType<ReturnType<typeof useEvaluateSingleResourceEndpointApiSavedEvaluateSinglePostHook>>>>
+    export type EvaluateSingleResourceEndpointApiSavedEvaluateSinglePostMutationBody = EvaluateSingleRequest
+    export type EvaluateSingleResourceEndpointApiSavedEvaluateSinglePostMutationError = HTTPValidationError
+
+    /**
+ * @summary Evaluate Single Resource Endpoint
+ */
+export const useEvaluateSingleResourceEndpointApiSavedEvaluateSinglePost = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useEvaluateSingleResourceEndpointApiSavedEvaluateSinglePostHook>>>, TError,{data: EvaluateSingleRequest}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<ReturnType<typeof useEvaluateSingleResourceEndpointApiSavedEvaluateSinglePostHook>>>,
+        TError,
+        {data: EvaluateSingleRequest},
+        TContext
+      > => {
+      return useMutation(useEvaluateSingleResourceEndpointApiSavedEvaluateSinglePostMutationOptions(options), queryClient);
     }

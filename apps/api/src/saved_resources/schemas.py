@@ -1,34 +1,51 @@
 import uuid
 from datetime import datetime
 
-from pydantic import BaseModel, HttpUrl
+from pydantic import BaseModel, ConfigDict, HttpUrl
 
-from src.discovery.schemas import ResourceCard
 from src.agents.schemas import EvaluationResult
+from src.discovery.schemas import ResourceCard
 
 
 class SaveResourceRequest(BaseModel):
     preset_id: uuid.UUID
+    search_query: str
     resource: ResourceCard
 
 
 class AddCustomLinkRequest(BaseModel):
     preset_id: uuid.UUID
+    search_query: str
     url: HttpUrl
     title: str | None = None
 
 
 class BatchEvaluateRequest(BaseModel):
     preset_id: uuid.UUID
+    search_query: str
+
+
+class EvaluateSingleRequest(BaseModel):
+    saved_resource_id: uuid.UUID
 
 
 class SavedResourceResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: uuid.UUID
     preset_id: uuid.UUID
+    search_query: str
     resource_url: str
     resource_data: ResourceCard
     evaluation_data: EvaluationResult | None
     saved_at: datetime
+
+
+class QueryGroup(BaseModel):
+    """A group of saved resources from the same search query."""
+
+    search_query: str
+    items: list[SavedResourceResponse]
 
 
 class PresetGroup(BaseModel):
@@ -36,7 +53,7 @@ class PresetGroup(BaseModel):
     preset_name: str
     preset_subject: str
     preset_topic: str | None = None
-    items: list[SavedResourceResponse]
+    query_groups: list[QueryGroup]
 
 
 class SavedResourceListResponse(BaseModel):

@@ -4,12 +4,12 @@
  * edcurate-api
  * OpenAPI spec version: 0.1.0
  */
-import type { SavedResourceResponse } from './saved-resource-response';
+import type { QueryGroup } from './query-group';
 
 export interface PresetGroup {
   preset_id: string;
   preset_name: string;
   preset_subject: string;
   preset_topic?: string | null;
-  items: SavedResourceResponse[];
+  query_groups: QueryGroup[];
 }

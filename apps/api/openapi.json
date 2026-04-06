@@ -346,6 +346,196 @@
         }
       }
     },
+    "/api/curriculum/countries": {
+      "get": {
+        "tags": [
+          "curriculum"
+        ],
+        "summary": "Get Countries",
+        "operationId": "get_countries_api_curriculum_countries_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/CountryOption"
+                  },
+                  "type": "array",
+                  "title": "Response Get Countries Api Curriculum Countries Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/curriculum/subjects": {
+      "get": {
+        "tags": [
+          "curriculum"
+        ],
+        "summary": "Get Subjects",
+        "operationId": "get_subjects_api_curriculum_subjects_get",
+        "parameters": [
+          {
+            "name": "country",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Country"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "title": "Response Get Subjects Api Curriculum Subjects Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/curriculum/frameworks": {
+      "get": {
+        "tags": [
+          "curriculum"
+        ],
+        "summary": "Get Frameworks",
+        "operationId": "get_frameworks_api_curriculum_frameworks_get",
+        "parameters": [
+          {
+            "name": "country",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Country"
+            }
+          },
+          {
+            "name": "subject",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Subject"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "title": "Response Get Frameworks Api Curriculum Frameworks Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/curriculum/grades": {
+      "get": {
+        "tags": [
+          "curriculum"
+        ],
+        "summary": "Get Grades",
+        "operationId": "get_grades_api_curriculum_grades_get",
+        "parameters": [
+          {
+            "name": "country",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Country"
+            }
+          },
+          {
+            "name": "subject",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Subject"
+            }
+          },
+          {
+            "name": "framework",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Framework"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GradeOption"
+                  },
+                  "title": "Response Get Grades Api Curriculum Grades Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/presets/": {
       "post": {
         "tags": [
@@ -871,7 +1061,7 @@
           "saved_resources"
         ],
         "summary": "Evaluate Saved Resources Endpoint",
-        "description": "Batch evaluate unevaluated library resources within a preset.",
+        "description": "Batch evaluate unevaluated library resources within a preset+query group.",
         "operationId": "evaluate_saved_resources_endpoint_api_saved_evaluate_post",
         "requestBody": {
           "content": {
@@ -908,6 +1098,48 @@
           }
         }
       }
+    },
+    "/api/saved/evaluate-single": {
+      "post": {
+        "tags": [
+          "saved_resources"
+        ],
+        "summary": "Evaluate Single Resource Endpoint",
+        "description": "Evaluate a single saved resource.",
+        "operationId": "evaluate_single_resource_endpoint_api_saved_evaluate_single_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EvaluateSingleRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SavedResourceResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -918,6 +1150,10 @@
             "type": "string",
             "format": "uuid",
             "title": "Preset Id"
+          },
+          "search_query": {
+            "type": "string",
+            "title": "Search Query"
           },
           "url": {
             "type": "string",
@@ -941,6 +1177,7 @@
         "type": "object",
         "required": [
           "preset_id",
+          "search_query",
           "url"
         ],
         "title": "AddCustomLinkRequest"
@@ -1031,13 +1268,36 @@
             "type": "string",
             "format": "uuid",
             "title": "Preset Id"
+          },
+          "search_query": {
+            "type": "string",
+            "title": "Search Query"
           }
         },
         "type": "object",
         "required": [
-          "preset_id"
+          "preset_id",
+          "search_query"
         ],
         "title": "BatchEvaluateRequest"
+      },
+      "CountryOption": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          }
+        },
+        "type": "object",
+        "required": [
+          "code",
+          "name"
+        ],
+        "title": "CountryOption"
       },
       "CustomMetadata": {
         "properties": {
@@ -1179,6 +1439,20 @@
         "title": "EmailLoginRequest",
         "description": "Email/password login."
       },
+      "EvaluateSingleRequest": {
+        "properties": {
+          "saved_resource_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Saved Resource Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "saved_resource_id"
+        ],
+        "title": "EvaluateSingleRequest"
+      },
       "EvaluatedSearchResponse": {
         "properties": {
           "query": {
@@ -1288,6 +1562,24 @@
         ],
         "title": "EvaluationResult",
         "description": "Full evaluation of a single resource across 7 dimensions."
+      },
+      "GradeOption": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "sort_order": {
+            "type": "integer",
+            "title": "Sort Order"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "sort_order"
+        ],
+        "title": "GradeOption"
       },
       "HTTPValidationError": {
         "properties": {
@@ -1722,12 +2014,12 @@
             ],
             "title": "Preset Topic"
           },
-          "items": {
+          "query_groups": {
             "items": {
-              "$ref": "#/components/schemas/SavedResourceResponse"
+              "$ref": "#/components/schemas/QueryGroup"
             },
             "type": "array",
-            "title": "Items"
+            "title": "Query Groups"
           }
         },
         "type": "object",
@@ -1735,7 +2027,7 @@
           "preset_id",
           "preset_name",
           "preset_subject",
-          "items"
+          "query_groups"
         ],
         "title": "PresetGroup"
       },
@@ -2101,6 +2393,28 @@
         "title": "PresetUpdate",
         "description": "Schema for updating a classroom preset (full replacement)."
       },
+      "QueryGroup": {
+        "properties": {
+          "search_query": {
+            "type": "string",
+            "title": "Search Query"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/SavedResourceResponse"
+            },
+            "type": "array",
+            "title": "Items"
+          }
+        },
+        "type": "object",
+        "required": [
+          "search_query",
+          "items"
+        ],
+        "title": "QueryGroup",
+        "description": "A group of saved resources from the same search query."
+      },
       "RefreshTokenRequest": {
         "properties": {
           "refresh_token": {
@@ -2328,6 +2642,10 @@
             "format": "uuid",
             "title": "Preset Id"
           },
+          "search_query": {
+            "type": "string",
+            "title": "Search Query"
+          },
           "resource": {
             "$ref": "#/components/schemas/ResourceCard"
           }
@@ -2335,6 +2653,7 @@
         "type": "object",
         "required": [
           "preset_id",
+          "search_query",
           "resource"
         ],
         "title": "SaveResourceRequest"
@@ -2372,6 +2691,10 @@
             "format": "uuid",
             "title": "Preset Id"
           },
+          "search_query": {
+            "type": "string",
+            "title": "Search Query"
+          },
           "resource_url": {
             "type": "string",
             "title": "Resource Url"
@@ -2399,6 +2722,7 @@
         "required": [
           "id",
           "preset_id",
+          "search_query",
           "resource_url",
           "resource_data",
           "evaluation_data",

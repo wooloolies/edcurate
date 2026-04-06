@@ -5,7 +5,8 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export interface BatchEvaluateRequest {
-  preset_id: string;
-  search_query: string;
-}
+export type GetGradesApiCurriculumGradesGetParams = {
+country: string;
+subject: string;
+framework: string;
+};

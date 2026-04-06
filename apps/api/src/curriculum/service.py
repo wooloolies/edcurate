@@ -29,7 +29,9 @@ async def list_subjects(db: AsyncSession, country_code: str) -> list[str]:
     return list(result.scalars().all())
 
 
-async def list_frameworks(db: AsyncSession, country_code: str, subject: str) -> list[str]:
+async def list_frameworks(
+    db: AsyncSession, country_code: str, subject: str
+) -> list[str]:
     result = await db.execute(
         select(distinct(CurriculumEntry.framework))
         .where(
