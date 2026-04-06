@@ -16,34 +16,29 @@ interface RelevanceIndicatorProps {
   adversarial?: AdversarialReviewResult | null;
 }
 
-/** Maps API verdict → card copy (product spec). */
-function peerCheckFromVerdict(verdict: AdversarialReviewResultVerdict): {
-  label: string;
-  badgeClass: string;
-} {
-  switch (verdict) {
-    case "approved":
-      return {
-        label: "Recommend",
-        badgeClass: "text-emerald-800 bg-emerald-50 border-emerald-200",
-      };
-    case "approved_with_caveats":
-      return {
-        label: "Recommend with Caveats",
-        badgeClass: "text-amber-900 bg-amber-50 border-amber-200",
-      };
-    case "flagged_for_teacher_review":
-      return {
-        label: "Need to Review",
-        badgeClass: "text-orange-900 bg-orange-50 border-orange-200",
-      };
-    case "not_recommended":
-      return {
-        label: "Not Recommend",
-        badgeClass: "text-red-800 bg-red-50 border-red-200",
-      };
-  }
-}
+const PEER_CHECK_BADGE_CLASS: Record<AdversarialReviewResultVerdict, string> = {
+  approved: "text-emerald-800 bg-emerald-50 border-emerald-200",
+  approved_with_caveats: "text-amber-900 bg-amber-50 border-amber-200",
+  flagged_for_teacher_review: "text-orange-900 bg-orange-50 border-orange-200",
+  not_recommended: "text-red-800 bg-red-50 border-red-200",
+};
+
+const PEER_CHECK_LABEL_KEYS: Record<AdversarialReviewResultVerdict, string> = {
+  approved: "peerCheckVerdicts.approved",
+  approved_with_caveats: "peerCheckVerdicts.approvedWithCaveats",
+  flagged_for_teacher_review: "peerCheckVerdicts.flaggedForTeacherReview",
+  not_recommended: "peerCheckVerdicts.notRecommended",
+};
+
+const DIMENSION_LABEL_KEYS = {
+  curriculum_alignment: "dimensions.curriculumAlignment",
+  pedagogical_quality: "dimensions.pedagogicalQuality",
+  reading_level: "dimensions.readingLevel",
+  bias_representation: "dimensions.biasRepresentation",
+  factual_accuracy: "dimensions.factualAccuracy",
+  source_credibility: "dimensions.sourceCredibility",
+  licensing_ip: "dimensions.licensingIp",
+} as const;
 
 function getDimensionValue(value: unknown, key: "score" | "max"): number | string {
   if (typeof value !== "object" || value == null) {
@@ -77,7 +72,13 @@ export function RelevanceIndicator({
     );
   }
 
-  const peerCheckDisplay = adversarial != null ? peerCheckFromVerdict(adversarial.verdict) : null;
+  const peerCheckDisplay =
+    adversarial != null
+      ? {
+          label: t(PEER_CHECK_LABEL_KEYS[adversarial.verdict]),
+          badgeClass: PEER_CHECK_BADGE_CLASS[adversarial.verdict],
+        }
+      : null;
 
   // Determine color and icon based on score (0-10)
   let icon = <CheckCircle2 className="mr-1 h-3 w-3" />;
@@ -120,11 +121,14 @@ export function RelevanceIndicator({
                     <p className="text-xs font-semibold">{t("criteria")}</p>
                     <ul className="grid grid-cols-1 gap-1.5 text-xs">
                       {Object.entries(details).map(([key, value]) => {
-                        // Normalize the key e.g. "curriculum_alignment" -> "Curriculum Alignment"
-                        const label = key
-                          .split("_")
-                          .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-                          .join(" ");
+                        const dimensionKey =
+                          DIMENSION_LABEL_KEYS[key as keyof typeof DIMENSION_LABEL_KEYS];
+                        const label = dimensionKey
+                          ? t(dimensionKey)
+                          : key
+                              .split("_")
+                              .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+                              .join(" ");
                         const scoreVal = getDimensionValue(value, "score");
                         const maxVal = getDimensionValue(value, "max");
                         return (
@@ -149,7 +153,9 @@ export function RelevanceIndicator({
 
         {peerCheckDisplay ? (
           <div className="flex shrink-0 flex-row flex-wrap items-center justify-end gap-2">
-            <span className="text-xs font-medium text-slate-600 whitespace-nowrap">Peer check</span>
+            <span className="text-xs font-medium text-slate-600 whitespace-nowrap">
+              {t("peerCheck")}
+            </span>
             <Badge
               variant="outline"
               className={`text-xs max-w-[min(100%,12rem)] whitespace-normal text-left leading-snug sm:max-w-[18rem] ${peerCheckDisplay.badgeClass}`}
@@ -163,7 +169,7 @@ export function RelevanceIndicator({
       {reason ? (
         <details className="group mt-1 rounded-md border border-slate-200/80 bg-white/40 px-2 py-1.5">
           <summary className="flex w-full cursor-pointer list-none items-center justify-between gap-2 text-xs font-medium text-slate-600 outline-none marker:hidden [&::-webkit-details-marker]:hidden hover:text-slate-800 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm">
-            <span className="min-w-0 text-left">Show evaluation reason</span>
+            <span className="min-w-0 text-left">{t("showReason")}</span>
             <ChevronDown
               aria-hidden
               className="h-3.5 w-3.5 shrink-0 text-slate-500 transition-transform duration-200 group-open:rotate-180"

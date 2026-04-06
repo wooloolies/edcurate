@@ -151,7 +151,24 @@
       "unevaluated": "未评估",
       "score": "评分：{score}/10",
       "agent": "深度评估代理",
-      "criteria": "评估标准"
+      "criteria": "评估标准",
+      "peerCheck": "同行复核",
+      "peerCheckVerdicts": {
+        "approved": "推荐",
+        "approvedWithCaveats": "建议使用，但需留意",
+        "flaggedForTeacherReview": "需要教师复核",
+        "notRecommended": "不建议使用"
+      },
+      "showReason": "查看评估理由",
+      "dimensions": {
+        "curriculumAlignment": "课程契合度",
+        "pedagogicalQuality": "教学质量",
+        "readingLevel": "阅读难度",
+        "biasRepresentation": "偏见与呈现",
+        "factualAccuracy": "事实准确性",
+        "sourceCredibility": "来源可信度",
+        "licensingIp": "许可与知识产权"
+      }
     }
   },
   "nav": {

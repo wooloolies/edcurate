@@ -555,5 +555,57 @@
   "search__evaluation__criteria": "เกณฑ์การประเมิน",
   "@search__evaluation__criteria": {
     "description": "Tooltip title listing evaluation criteria"
+  },
+  "search__evaluation__peerCheck": "การตรวจทานร่วม",
+  "@search__evaluation__peerCheck": {
+    "description": "Label shown before the adversarial review verdict badge"
+  },
+  "search__evaluation__peerCheckVerdicts__approved": "แนะนำ",
+  "@search__evaluation__peerCheckVerdicts__approved": {
+    "description": "Peer check verdict label when the resource is approved"
+  },
+  "search__evaluation__peerCheckVerdicts__approvedWithCaveats": "แนะนำพร้อมข้อควรระวัง",
+  "@search__evaluation__peerCheckVerdicts__approvedWithCaveats": {
+    "description": "Peer check verdict label when the resource is approved with caveats"
+  },
+  "search__evaluation__peerCheckVerdicts__flaggedForTeacherReview": "ครูควรตรวจสอบ",
+  "@search__evaluation__peerCheckVerdicts__flaggedForTeacherReview": {
+    "description": "Peer check verdict label when the resource needs teacher review"
+  },
+  "search__evaluation__peerCheckVerdicts__notRecommended": "ไม่แนะนำ",
+  "@search__evaluation__peerCheckVerdicts__notRecommended": {
+    "description": "Peer check verdict label when the resource is not recommended"
+  },
+  "search__evaluation__showReason": "ดูเหตุผลในการประเมิน",
+  "@search__evaluation__showReason": {
+    "description": "Expandable summary label for showing the evaluation reason"
+  },
+  "search__evaluation__dimensions__curriculumAlignment": "ความสอดคล้องกับหลักสูตร",
+  "@search__evaluation__dimensions__curriculumAlignment": {
+    "description": "Evaluation dimension label for curriculum alignment"
+  },
+  "search__evaluation__dimensions__pedagogicalQuality": "คุณภาพเชิงการสอน",
+  "@search__evaluation__dimensions__pedagogicalQuality": {
+    "description": "Evaluation dimension label for pedagogical quality"
+  },
+  "search__evaluation__dimensions__readingLevel": "ระดับการอ่าน",
+  "@search__evaluation__dimensions__readingLevel": {
+    "description": "Evaluation dimension label for reading level"
+  },
+  "search__evaluation__dimensions__biasRepresentation": "อคติและการนำเสนอ",
+  "@search__evaluation__dimensions__biasRepresentation": {
+    "description": "Evaluation dimension label for bias and representation"
+  },
+  "search__evaluation__dimensions__factualAccuracy": "ความถูกต้องของข้อมูล",
+  "@search__evaluation__dimensions__factualAccuracy": {
+    "description": "Evaluation dimension label for factual accuracy"
+  },
+  "search__evaluation__dimensions__sourceCredibility": "ความน่าเชื่อถือของแหล่งข้อมูล",
+  "@search__evaluation__dimensions__sourceCredibility": {
+    "description": "Evaluation dimension label for source credibility"
+  },
+  "search__evaluation__dimensions__licensingIp": "ใบอนุญาตและทรัพย์สินทางปัญญา",
+  "@search__evaluation__dimensions__licensingIp": {
+    "description": "Evaluation dimension label for licensing and intellectual property"
   }
 }

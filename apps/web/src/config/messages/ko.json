@@ -151,7 +151,24 @@
       "unevaluated": "미평가",
       "score": "점수: {score}/10",
       "agent": "심층 평가 에이전트",
-      "criteria": "평가 기준"
+      "criteria": "평가 기준",
+      "peerCheck": "동료 검토",
+      "peerCheckVerdicts": {
+        "approved": "추천",
+        "approvedWithCaveats": "유의사항과 함께 추천",
+        "flaggedForTeacherReview": "교사 검토 필요",
+        "notRecommended": "추천하지 않음"
+      },
+      "showReason": "평가 이유 보기",
+      "dimensions": {
+        "curriculumAlignment": "교육과정 정합성",
+        "pedagogicalQuality": "교수학적 품질",
+        "readingLevel": "읽기 수준",
+        "biasRepresentation": "편향 및 표현",
+        "factualAccuracy": "사실 정확성",
+        "sourceCredibility": "출처 신뢰도",
+        "licensingIp": "라이선스 및 지식재산권"
+      }
     }
   },
   "nav": {
