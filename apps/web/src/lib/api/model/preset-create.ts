@@ -27,7 +27,6 @@ export interface PresetCreate {
      * @maxLength 50
      */
   year_level: string;
-  topic?: string | null;
   /**
      * @minLength 1
      * @maxLength 100

@@ -244,10 +244,6 @@
   "@presets__fields__yearLevel": {
     "description": "Field label for year level"
   },
-  "presets__fields__topic": "주제",
-  "@presets__fields__topic": {
-    "description": "Field label for topic"
-  },
   "presets__fields__country": "국가",
   "@presets__fields__country": {
     "description": "Field label for country"
@@ -423,10 +419,6 @@
   "presets__placeholders__yearLevel": "예: 9학년",
   "@presets__placeholders__yearLevel": {
     "description": "Placeholder for year level"
-  },
-  "presets__placeholders__topic": "예: 해안 침식",
-  "@presets__placeholders__topic": {
-    "description": "Placeholder for topic"
   },
   "presets__placeholders__country": "예: 호주",
   "@presets__placeholders__country": {

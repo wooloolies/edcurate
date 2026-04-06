@@ -268,10 +268,6 @@
   "@presets__fields__yearLevel": {
     "description": "Field label for year level"
   },
-  "presets__fields__topic": "Topic",
-  "@presets__fields__topic": {
-    "description": "Field label for topic"
-  },
   "presets__fields__country": "Country",
   "@presets__fields__country": {
     "description": "Field label for country"
@@ -447,10 +443,6 @@
   "presets__placeholders__yearLevel": "e.g., Year 9",
   "@presets__placeholders__yearLevel": {
     "description": "Placeholder for year level"
-  },
-  "presets__placeholders__topic": "e.g., Coastal erosion",
-  "@presets__placeholders__topic": {
-    "description": "Placeholder for topic"
   },
   "presets__placeholders__country": "e.g., Australia",
   "@presets__placeholders__country": {

@@ -244,10 +244,6 @@
   "@presets__fields__yearLevel": {
     "description": "Field label for year level"
   },
-  "presets__fields__topic": "หัวข้อ",
-  "@presets__fields__topic": {
-    "description": "Field label for topic"
-  },
   "presets__fields__country": "ประเทศ",
   "@presets__fields__country": {
     "description": "Field label for country"
@@ -423,10 +419,6 @@
   "presets__placeholders__yearLevel": "เช่น ม.3",
   "@presets__placeholders__yearLevel": {
     "description": "Placeholder for year level"
-  },
-  "presets__placeholders__topic": "เช่น การกัดเซาะชายฝั่ง",
-  "@presets__placeholders__topic": {
-    "description": "Placeholder for topic"
   },
   "presets__placeholders__country": "เช่น ออสเตรเลีย",
   "@presets__placeholders__country": {

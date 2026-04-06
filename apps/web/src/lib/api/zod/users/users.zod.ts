@@ -14,7 +14,7 @@ import * as zod from 'zod';
 export const getCurrentUserProfileApiUsersMeGetResponseEmailVerifiedDefault = false;
 
 export const GetCurrentUserProfileApiUsersMeGetResponse = zod.object({
-  "id": zod.string(),
+  "id": zod.uuid(),
   "email": zod.string(),
   "name": zod.union([zod.string(),zod.null()]).optional(),
   "image": zod.union([zod.string(),zod.null()]).optional(),

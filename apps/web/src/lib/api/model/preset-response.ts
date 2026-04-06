@@ -17,7 +17,6 @@ export interface PresetResponse {
   curriculum_framework: string | null;
   subject: string;
   year_level: string;
-  topic: string | null;
   country: string;
   state_region: string | null;
   city: string | null;

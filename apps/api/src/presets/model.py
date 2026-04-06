@@ -84,8 +84,6 @@ class ClassroomPreset(Base):
     curriculum_framework: Mapped[str | None] = mapped_column(String(255), nullable=True)
     subject: Mapped[str] = mapped_column(String(255), nullable=False)
     year_level: Mapped[str] = mapped_column(String(50), nullable=False)
-    topic: Mapped[str | None] = mapped_column(String(500), nullable=True)
-
     country: Mapped[str] = mapped_column(String(100), nullable=False)
     state_region: Mapped[str | None] = mapped_column(String(100), nullable=True)
     city: Mapped[str | None] = mapped_column(String(100), nullable=True)

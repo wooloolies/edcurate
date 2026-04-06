@@ -52,8 +52,7 @@ class YoutubeProvider(SearchProvider):
         if not settings.YOUTUBE_API_KEY:
             return []
 
-        topic = context.topic or ""
-        built_query = f"{topic} {query} {context.subject} lesson".strip()
+        built_query = f"{query} {context.subject} lesson".strip()
 
         params: dict[str, str | int] = {
             "key": settings.YOUTUBE_API_KEY,

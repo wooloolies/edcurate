@@ -1226,18 +1226,6 @@
             "minLength": 1,
             "title": "Year Level"
           },
-          "topic": {
-            "anyOf": [
-              {
-                "type": "string",
-                "maxLength": 500
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Topic"
-          },
           "country": {
             "type": "string",
             "maxLength": 100,
@@ -1433,17 +1421,6 @@
             "type": "string",
             "title": "Year Level"
           },
-          "topic": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Topic"
-          },
           "country": {
             "type": "string",
             "title": "Country"
@@ -1575,7 +1552,6 @@
           "curriculum_framework",
           "subject",
           "year_level",
-          "topic",
           "country",
           "state_region",
           "city",
@@ -1631,18 +1607,6 @@
             "maxLength": 50,
             "minLength": 1,
             "title": "Year Level"
-          },
-          "topic": {
-            "anyOf": [
-              {
-                "type": "string",
-                "maxLength": 500
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Topic"
           },
           "country": {
             "type": "string",
@@ -2115,6 +2079,7 @@
         "properties": {
           "id": {
             "type": "string",
+            "format": "uuid",
             "title": "Id"
           },
           "email": {

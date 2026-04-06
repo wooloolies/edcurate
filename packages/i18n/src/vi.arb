@@ -244,10 +244,6 @@
   "@presets__fields__yearLevel": {
     "description": "Field label for year level"
   },
-  "presets__fields__topic": "Chủ đề",
-  "@presets__fields__topic": {
-    "description": "Field label for topic"
-  },
   "presets__fields__country": "Quốc gia",
   "@presets__fields__country": {
     "description": "Field label for country"
@@ -423,10 +419,6 @@
   "presets__placeholders__yearLevel": "ví dụ: Lớp 9",
   "@presets__placeholders__yearLevel": {
     "description": "Placeholder for year level"
-  },
-  "presets__placeholders__topic": "ví dụ: Xói mòn bờ biển",
-  "@presets__placeholders__topic": {
-    "description": "Placeholder for topic"
   },
   "presets__placeholders__country": "ví dụ: Úc",
   "@presets__placeholders__country": {

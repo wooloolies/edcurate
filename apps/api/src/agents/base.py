@@ -43,7 +43,6 @@ def format_teacher_context(preset: ClassroomPreset) -> str:
         f"- Subject: {preset.subject}\n"
         f"- Year Level: {preset.year_level}\n"
         f"- Curriculum: {preset.curriculum_framework or 'Not specified'}\n"
-        f"- Topic: {preset.topic or 'Not specified'}\n"
         f"- Country: {preset.country}\n"
         f"- Language: {preset.teaching_language}\n"
         f"- Student Interests: {interests or 'Not specified'}\n"

@@ -244,10 +244,6 @@
   "@presets__fields__yearLevel": {
     "description": "Field label for year level"
   },
-  "presets__fields__topic": "主题",
-  "@presets__fields__topic": {
-    "description": "Field label for topic"
-  },
   "presets__fields__country": "国家",
   "@presets__fields__country": {
     "description": "Field label for country"
@@ -423,10 +419,6 @@
   "presets__placeholders__yearLevel": "例如：九年级",
   "@presets__placeholders__yearLevel": {
     "description": "Placeholder for year level"
-  },
-  "presets__placeholders__topic": "例如：海岸侵蚀",
-  "@presets__placeholders__topic": {
-    "description": "Placeholder for topic"
   },
   "presets__placeholders__country": "例如：澳大利亚",
   "@presets__placeholders__country": {

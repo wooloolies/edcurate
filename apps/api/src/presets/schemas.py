@@ -28,7 +28,6 @@ class PresetCreate(BaseModel):
     curriculum_framework: str | None = Field(default=None, max_length=255)
     subject: str = Field(min_length=1, max_length=255)
     year_level: str = Field(min_length=1, max_length=50)
-    topic: str | None = Field(default=None, max_length=500)
 
     country: str = Field(min_length=1, max_length=100)
     state_region: str | None = Field(default=None, max_length=100)
@@ -58,7 +57,6 @@ class PresetUpdate(BaseModel):
     curriculum_framework: str | None = Field(default=None, max_length=255)
     subject: str = Field(min_length=1, max_length=255)
     year_level: str = Field(min_length=1, max_length=50)
-    topic: str | None = Field(default=None, max_length=500)
 
     country: str = Field(min_length=1, max_length=100)
     state_region: str | None = Field(default=None, max_length=100)
@@ -92,7 +90,6 @@ class PresetResponse(BaseModel):
     curriculum_framework: str | None
     subject: str
     year_level: str
-    topic: str | None
 
     country: str
     state_region: str | None

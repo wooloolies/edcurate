@@ -20,8 +20,6 @@ export const createPresetApiPresetsPostBodySubjectMax = 255;
 
 export const createPresetApiPresetsPostBodyYearLevelMax = 50;
 
-export const createPresetApiPresetsPostBodyTopicOneMax = 500;
-
 export const createPresetApiPresetsPostBodyCountryMax = 100;
 
 export const createPresetApiPresetsPostBodyStateRegionOneMax = 100;
@@ -62,7 +60,6 @@ export const CreatePresetApiPresetsPostBody = zod.object({
   "curriculum_framework": zod.union([zod.string().max(createPresetApiPresetsPostBodyCurriculumFrameworkOneMax),zod.null()]).optional(),
   "subject": zod.string().min(1).max(createPresetApiPresetsPostBodySubjectMax),
   "year_level": zod.string().min(1).max(createPresetApiPresetsPostBodyYearLevelMax),
-  "topic": zod.union([zod.string().max(createPresetApiPresetsPostBodyTopicOneMax),zod.null()]).optional(),
   "country": zod.string().min(1).max(createPresetApiPresetsPostBodyCountryMax),
   "state_region": zod.union([zod.string().max(createPresetApiPresetsPostBodyStateRegionOneMax),zod.null()]).optional(),
   "city": zod.union([zod.string().max(createPresetApiPresetsPostBodyCityOneMax),zod.null()]).optional(),
@@ -107,7 +104,6 @@ export const ListPresetsApiPresetsGetResponse = zod.object({
   "curriculum_framework": zod.union([zod.string(),zod.null()]),
   "subject": zod.string(),
   "year_level": zod.string(),
-  "topic": zod.union([zod.string(),zod.null()]),
   "country": zod.string(),
   "state_region": zod.union([zod.string(),zod.null()]),
   "city": zod.union([zod.string(),zod.null()]),
@@ -150,7 +146,6 @@ export const GetPresetApiPresetsPresetIdGetResponse = zod.object({
   "curriculum_framework": zod.union([zod.string(),zod.null()]),
   "subject": zod.string(),
   "year_level": zod.string(),
-  "topic": zod.union([zod.string(),zod.null()]),
   "country": zod.string(),
   "state_region": zod.union([zod.string(),zod.null()]),
   "city": zod.union([zod.string(),zod.null()]),
@@ -184,8 +179,6 @@ export const updatePresetApiPresetsPresetIdPutBodyCurriculumFrameworkOneMax = 25
 export const updatePresetApiPresetsPresetIdPutBodySubjectMax = 255;
 
 export const updatePresetApiPresetsPresetIdPutBodyYearLevelMax = 50;
-
-export const updatePresetApiPresetsPresetIdPutBodyTopicOneMax = 500;
 
 export const updatePresetApiPresetsPresetIdPutBodyCountryMax = 100;
 
@@ -227,7 +220,6 @@ export const UpdatePresetApiPresetsPresetIdPutBody = zod.object({
   "curriculum_framework": zod.union([zod.string().max(updatePresetApiPresetsPresetIdPutBodyCurriculumFrameworkOneMax),zod.null()]).optional(),
   "subject": zod.string().min(1).max(updatePresetApiPresetsPresetIdPutBodySubjectMax),
   "year_level": zod.string().min(1).max(updatePresetApiPresetsPresetIdPutBodyYearLevelMax),
-  "topic": zod.union([zod.string().max(updatePresetApiPresetsPresetIdPutBodyTopicOneMax),zod.null()]).optional(),
   "country": zod.string().min(1).max(updatePresetApiPresetsPresetIdPutBodyCountryMax),
   "state_region": zod.union([zod.string().max(updatePresetApiPresetsPresetIdPutBodyStateRegionOneMax),zod.null()]).optional(),
   "city": zod.union([zod.string().max(updatePresetApiPresetsPresetIdPutBodyCityOneMax),zod.null()]).optional(),
@@ -255,7 +247,6 @@ export const UpdatePresetApiPresetsPresetIdPutResponse = zod.object({
   "curriculum_framework": zod.union([zod.string(),zod.null()]),
   "subject": zod.string(),
   "year_level": zod.string(),
-  "topic": zod.union([zod.string(),zod.null()]),
   "country": zod.string(),
   "state_region": zod.union([zod.string(),zod.null()]),
   "city": zod.union([zod.string(),zod.null()]),

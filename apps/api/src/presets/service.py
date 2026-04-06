@@ -22,7 +22,6 @@ async def create_preset(
         curriculum_framework=data.curriculum_framework,
         subject=data.subject,
         year_level=data.year_level,
-        topic=data.topic,
         country=data.country,
         state_region=data.state_region,
         city=data.city,
@@ -131,7 +130,6 @@ async def update_preset(
     preset.curriculum_framework = data.curriculum_framework
     preset.subject = data.subject
     preset.year_level = data.year_level
-    preset.topic = data.topic
     preset.country = data.country
     preset.state_region = data.state_region
     preset.city = data.city

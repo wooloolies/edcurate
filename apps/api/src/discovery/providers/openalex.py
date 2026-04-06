@@ -46,8 +46,7 @@ class OpenAlexProvider(SearchProvider):
         context: ClassroomPreset,
         limit: int,
     ) -> list[ResourceCard]:
-        topic = context.topic or ""
-        built_query = f"{topic} {query}".strip() if topic else query
+        built_query = query
 
         exclusion_filters = ",".join(
             f"primary_location.source.publisher_lineage:!{pid}"
