@@ -253,7 +253,7 @@
           "authentication"
         ],
         "summary": "Oauth Login",
-        "description": "OAuth login \u2014 verify provider token, create/update user.",
+        "description": "OAuth login — verify provider token, create/update user.",
         "operationId": "oauth_login_api_auth_login_post",
         "requestBody": {
           "content": {
@@ -337,7 +337,7 @@
           "authentication"
         ],
         "summary": "Logout",
-        "description": "Logout \u2014 client should remove tokens from localStorage.",
+        "description": "Logout — client should remove tokens from localStorage.",
         "operationId": "logout_api_auth_logout_post",
         "responses": {
           "204": {
@@ -1260,7 +1260,7 @@
           "review_summary"
         ],
         "title": "AdversarialReviewResult",
-        "description": "Output of Agent 4 \u2014 challenges Agent 3 scores and surfaces risks."
+        "description": "Output of Agent 4 — challenges Agent 3 scores and surfaces risks."
       },
       "BatchEvaluateRequest": {
         "properties": {
@@ -2498,7 +2498,7 @@
           "message"
         ],
         "title": "RegisterResponse",
-        "description": "Registration response \u2014 tokens if no verification needed."
+        "description": "Registration response — tokens if no verification needed."
       },
       "ResendVerificationRequest": {
         "properties": {
