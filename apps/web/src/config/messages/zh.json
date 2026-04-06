@@ -87,9 +87,9 @@
       "additionalNotes": "补充说明"
     },
     "sources": {
-      "ddgs": "DuckDuckGo",
-      "youtube": "YouTube",
-      "openalex": "OpenAlex"
+      "ddgs": "网页",
+      "youtube": "视频",
+      "openalex": "学术"
     },
     "placeholders": {
       "name": "例如：九年级地理 - 凯恩斯",
@@ -121,7 +121,7 @@
       "all": "全部",
       "web": "网页",
       "video": "视频",
-      "papers": "论文"
+      "papers": "学术"
     },
     "card": {
       "citations": "引用",

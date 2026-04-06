@@ -56,9 +56,13 @@ export function PresetCard({ preset }: PresetCardProps) {
       </CardHeader>
       <CardContent>
         <div className="mb-3 text-xs text-muted-foreground">
-          {weights.ddgs != null && `DDGS ${Math.round(weights.ddgs * 100)}%`} &middot;{" "}
-          {weights.youtube != null && `YT ${Math.round(weights.youtube * 100)}%`} &middot;{" "}
-          {weights.openalex != null && `OA ${Math.round(weights.openalex * 100)}%`}
+          {weights.ddgs != null && `${t("sources.ddgs")} ${Math.round(weights.ddgs * 100)}%`}{" "}
+          &middot;{" "}
+          {weights.youtube != null &&
+            `${t("sources.youtube")} ${Math.round(weights.youtube * 100)}%`}{" "}
+          &middot;{" "}
+          {weights.openalex != null &&
+            `${t("sources.openalex")} ${Math.round(weights.openalex * 100)}%`}
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm" asChild>

@@ -41,7 +41,7 @@ export function OpenAlexCard({ resource, adversarial, action }: OpenAlexCardProp
           </CardTitle>
           <div className="flex items-center gap-2 shrink-0">
             <Badge variant="outline" className="border-blue-200 text-blue-700">
-              OpenAlex
+              {t("tabs.papers")}
             </Badge>
             {action}
           </div>

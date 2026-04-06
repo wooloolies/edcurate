@@ -87,9 +87,9 @@
       "additionalNotes": "บันทึกเพิ่มเติม"
     },
     "sources": {
-      "ddgs": "DuckDuckGo",
-      "youtube": "YouTube",
-      "openalex": "OpenAlex"
+      "ddgs": "เว็บ",
+      "youtube": "วิดีโอ",
+      "openalex": "วิชาการ"
     },
     "placeholders": {
       "name": "เช่น ภูมิศาสตร์ ม.3 - แคนส์",
@@ -121,7 +121,7 @@
       "all": "ทั้งหมด",
       "web": "เว็บ",
       "video": "วิดีโอ",
-      "papers": "บทความวิชาการ"
+      "papers": "วิชาการ"
     },
     "card": {
       "citations": "การอ้างอิง",

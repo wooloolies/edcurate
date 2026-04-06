@@ -1,4 +1,5 @@
 import { ExternalLink, Play } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,6 +13,7 @@ interface YoutubeCardProps {
 }
 
 export function YoutubeCard({ resource, adversarial, action }: YoutubeCardProps) {
+  const t = useTranslations("search");
   const meta = resource.metadata as {
     channel?: string;
     duration?: string;
@@ -37,7 +39,7 @@ export function YoutubeCard({ resource, adversarial, action }: YoutubeCardProps)
           </CardTitle>
           <div className="flex items-center gap-2 shrink-0">
             <Badge variant="outline" className="border-red-200 text-red-700">
-              YouTube
+              {t("tabs.video")}
             </Badge>
             {action}
           </div>

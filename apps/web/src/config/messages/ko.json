@@ -87,9 +87,9 @@
       "additionalNotes": "추가 메모"
     },
     "sources": {
-      "ddgs": "DuckDuckGo",
-      "youtube": "YouTube",
-      "openalex": "OpenAlex"
+      "ddgs": "웹",
+      "youtube": "비디오",
+      "openalex": "학술"
     },
     "placeholders": {
       "name": "예: 9학년 지리 - 케언스",
@@ -121,7 +121,7 @@
       "all": "전체",
       "web": "웹",
       "video": "동영상",
-      "papers": "논문"
+      "papers": "학술"
     },
     "card": {
       "citations": "인용",

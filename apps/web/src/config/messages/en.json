@@ -87,9 +87,9 @@
       "additionalNotes": "Additional Notes"
     },
     "sources": {
-      "ddgs": "DuckDuckGo",
-      "youtube": "YouTube",
-      "openalex": "OpenAlex"
+      "ddgs": "Web",
+      "youtube": "Video",
+      "openalex": "Academic"
     },
     "placeholders": {
       "name": "e.g., Year 9 Geography - Cairns",
@@ -121,7 +121,7 @@
       "all": "All",
       "web": "Web",
       "video": "Video",
-      "papers": "Papers"
+      "papers": "Academic"
     },
     "card": {
       "citations": "citations",

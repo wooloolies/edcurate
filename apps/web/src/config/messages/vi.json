@@ -87,9 +87,9 @@
       "additionalNotes": "Ghi chú bổ sung"
     },
     "sources": {
-      "ddgs": "DuckDuckGo",
-      "youtube": "YouTube",
-      "openalex": "OpenAlex"
+      "ddgs": "Web",
+      "youtube": "Video",
+      "openalex": "Học thuật"
     },
     "placeholders": {
       "name": "ví dụ: Địa lý lớp 9 - Cairns",
@@ -121,7 +121,7 @@
       "all": "Tất cả",
       "web": "Web",
       "video": "Video",
-      "papers": "Bài báo"
+      "papers": "Học thuật"
     },
     "card": {
       "citations": "lượt trích dẫn",
