@@ -6,6 +6,7 @@ from sqlalchemy.engine import Connection
 from alembic import context
 from src.lib.config import escape_alembic_url, settings
 from src.lib.database import Base
+from src.curriculum.model import CurriculumEntry  # noqa: F401
 from src.presets.model import ClassroomPreset  # noqa: F401
 from src.saved_resources.model import SavedResource  # noqa: F401
 from src.users.model import User  # noqa: F401
