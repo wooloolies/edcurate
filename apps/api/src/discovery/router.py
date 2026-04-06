@@ -5,8 +5,8 @@ import uuid
 from fastapi import APIRouter, HTTPException, Query, Request, status
 from sqlalchemy import select
 
+from src.agents.schemas import EvaluatedSearchResponse
 from src.discovery import service
-from src.evaluation.schemas import EvaluatedSearchResponse
 from src.lib.auth import decode_token
 from src.lib.dependencies import CurrentUser, DBSession
 from src.lib.rate_limit import rate_limit

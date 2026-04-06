@@ -5,23 +5,23 @@ import hashlib
 import uuid
 from typing import Literal
 
-from src.discovery.providers.ddgs import DdgsProvider
-from src.discovery.providers.openalex import OpenAlexProvider
-from src.discovery.providers.youtube import YoutubeProvider
-from src.discovery.schemas import ResourceCard, SourceError
-from src.evaluation.adversarial_agent import adversarial_review_resource
-from src.evaluation.adversarial_retrieval import (
+from src.agents.evaluation.adversarial_agent import adversarial_review_resource
+from src.agents.evaluation.adversarial_retrieval import (
     ADV_RETRIEVAL_LIMIT,
     bucket_chunks_for_adversarial,
     build_adversarial_hybrid_query_text,
 )
-from src.evaluation.agent import evaluate_resource
-from src.evaluation.reconciler import reconcile
-from src.evaluation.schemas import (
+from src.agents.evaluation.evaluation_agent import evaluate_resource
+from src.agents.evaluation.reconciler import reconcile
+from src.agents.schemas import (
     AdversarialReviewResult,
     EvaluatedSearchResponse,
     EvaluationResult,
 )
+from src.discovery.providers.ddgs import DdgsProvider
+from src.discovery.providers.openalex import OpenAlexProvider
+from src.discovery.providers.youtube import YoutubeProvider
+from src.discovery.schemas import ResourceCard, SourceError
 from src.lib.config import settings
 from src.lib.logging import get_logger
 from src.presets.model import ClassroomPreset

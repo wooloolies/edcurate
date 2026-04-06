@@ -3,11 +3,10 @@
 Runs blind in parallel with Agent 3.
 """
 
-from src.agents.base import DIMENSIONS_SET, BaseAgent, format_teacher_context
+from src.agents.base import BaseAgent, format_teacher_context
 from src.agents.schemas import (
     AdversarialFlag,
     AdversarialReviewResult,
-    DimensionScore,
 )
 from src.presets.model import ClassroomPreset
 
@@ -30,15 +29,18 @@ _VALID_VERDICT = frozenset(
     }
 )
 
-_SYSTEM_PROMPT = """You are an Adversarial Review Agent for educational resources.
-You independently assess a resource for hidden risks, biases, accuracy gaps,
-safety concerns, and licensing traps based on its content passages.
+_SYSTEM_PROMPT = """\
+You are an Adversarial Review Agent for educational resources.
+You independently analyze resource content for risks and issues.
+You do NOT have access to any prior evaluation — form your own judgement
+from the resource passages provided.
 You MUST return ONLY valid JSON.
-Be constructive: flag real issues; do not invent problems.
-If evidence is thin, say so in review_summary.
+Be constructive: flag real issues backed by evidence from the passages.
+If evidence is thin, say so in review_summary and set verdict to "approved".\
 """
 
-_USER_TEMPLATE = """TEACHER CONTEXT:
+_USER_TEMPLATE = """\
+TEACHER CONTEXT:
 {teacher_context}
 
 RESOURCE:
@@ -53,26 +55,31 @@ PASSAGES — framing / representation sensitivity (retrieved):
 {framing_chunks}
 
 Tasks:
-1. Assess the resource passages for hidden bias, accuracy gaps,
-   safety edges, licensing traps, and potential false positives
-   (content that looks educational but is misleading).
+1. Analyze the passages independently for these 5 risk categories:
+   - false_positive: Content that appears educational but is misleading,
+     inappropriate for the year level, or mismatched to the curriculum.
+   - hidden_bias: Subtle framing issues, representation gaps,
+     culturally insensitive language (e.g. passive voice around
+     colonisation, stereotyping, outdated terminology).
+   - accuracy_gap: Outdated data, superseded findings, unverified
+     claims, missing citations for strong assertions.
+   - safety: Content requiring warnings or teacher review for the
+     target year level (mental health, violence, controversial topics).
+   - licensing_trap: Misidentified permissions, mixed licensing
+     (e.g. CC text but Getty images), restrictive terms.
 2. verdict must be one of: approved | approved_with_caveats |
    flagged_for_teacher_review | not_recommended
 3. flags: list of objects with category
    (false_positive|hidden_bias|accuracy_gap|safety|licensing_trap),
    severity (high|medium|low), explanation, suggested_action.
-4. score_adjustments: for any of the 7 dimensions you believe should be
-   penalised, include an entry with score (1-10), max 10, reason.
-   Dimensions: curriculum_alignment, pedagogical_quality, reading_level,
-   bias_representation, factual_accuracy, source_credibility, licensing_ip.
 
 Return ONLY this JSON:
 {{
   "verdict": "...",
   "flags": [],
-  "score_adjustments": {{}},
   "review_summary": "..."
-}}"""
+}}\
+"""
 
 
 class AdversarialAgent(BaseAgent[AdversarialReviewResult]):
@@ -121,29 +128,12 @@ class AdversarialAgent(BaseAgent[AdversarialReviewResult]):
                     )
                 )
 
-        adjustments: dict[str, DimensionScore] = {}
-        raw_adj = data.get("score_adjustments", {})
-        if isinstance(raw_adj, dict):
-            for key, val in raw_adj.items():
-                if key not in DIMENSIONS_SET or not isinstance(val, dict):
-                    continue
-                try:
-                    adjustments[key] = DimensionScore(
-                        score=int(val.get("score", 5)),
-                        max=int(val.get("max", 10)),
-                        reason=str(
-                            val.get("reason", "Adjusted after adversarial review.")
-                        ),
-                    )
-                except (TypeError, ValueError):
-                    continue
-
         summary = str(data.get("review_summary", "")).strip() or "No summary provided."
 
         return AdversarialReviewResult(
             verdict=verdict,  # type: ignore[arg-type]
             flags=flags,
-            score_adjustments=adjustments,
+            score_adjustments={},
             review_summary=summary,
         )
 
