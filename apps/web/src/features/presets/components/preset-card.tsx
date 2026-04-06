@@ -68,7 +68,7 @@ export function PresetCard({ preset }: PresetCardProps) {
             </Link>
           </Button>
           <Button variant="outline" size="sm" asChild>
-            <Link href={`/dashboard/search?preset_id=${preset.id}`}>
+            <Link href={`/dashboard?tab=search&preset_id=${preset.id}`}>
               <Search className="mr-1 h-3 w-3" />
               {t("searchWithPreset")}
             </Link>
