@@ -1,4 +1,10 @@
-"""Agent 4 — Adversarial review of Deep Evaluation results (single Gemini pass)."""
+"""Agent 4 — Blind adversarial review of educational resources (single Gemini pass).
+
+This agent evaluates resources INDEPENDENTLY — it never sees Agent 3's scores.
+It focuses on 5 risk categories: false_positive, hidden_bias, accuracy_gap,
+safety, and licensing_trap.  A deterministic reconciler (reconciler.py) later
+merges its flags with Agent 3's scores.
+"""
 
 import asyncio
 import json
@@ -6,7 +12,7 @@ import json
 from google import genai
 from google.genai import types
 
-from src.evaluation.schemas import AdversarialReviewResult, EvaluationResult
+from src.evaluation.schemas import AdversarialReviewResult
 from src.lib.config import settings
 from src.lib.logging import get_logger
 from src.presets.model import ClassroomPreset
@@ -14,18 +20,6 @@ from src.presets.model import ClassroomPreset
 logger = get_logger(__name__)
 
 _MODEL = "gemini-2.5-flash"
-
-_DIMENSIONS = frozenset(
-    {
-        "curriculum_alignment",
-        "pedagogical_quality",
-        "reading_level",
-        "bias_representation",
-        "factual_accuracy",
-        "source_credibility",
-        "licensing_ip",
-    }
-)
 
 _VALID_CATEGORIES = frozenset(
     {
@@ -46,14 +40,18 @@ _VALID_VERDICT = frozenset(
     }
 )
 
-_SYSTEM_PROMPT = """You are an Adversarial Review Agent for educational resources.
-You critically review another model's 7-dimension evaluation.
+_SYSTEM_PROMPT = """\
+You are an Adversarial Review Agent for educational resources.
+You independently analyze resource content for risks and issues.
+You do NOT have access to any prior evaluation — form your own judgement
+from the resource passages provided.
 You MUST return ONLY valid JSON.
-Be constructive: flag real issues; do not invent problems.
-If evidence is thin, say so in review_summary.
+Be constructive: flag real issues backed by evidence from the passages.
+If evidence is thin, say so in review_summary and set verdict to "approved".\
 """
 
-_USER_TEMPLATE = """TEACHER CONTEXT:
+_USER_TEMPLATE = """\
+TEACHER CONTEXT:
 - Subject: {subject}
 - Year Level: {year_level}
 - Curriculum: {curriculum}
@@ -66,9 +64,6 @@ RESOURCE:
 - URL: {url}
 - Source: {source}
 
-AGENT_3_EVALUATION_JSON:
-{eval_json}
-
 PASSAGES — factual / verifiable claims (retrieved):
 {claim_chunks}
 
@@ -76,13 +71,21 @@ PASSAGES — framing / representation sensitivity (retrieved):
 {framing_chunks}
 
 Tasks:
-1. Check for false positives in Agent 3's scores, hidden bias, accuracy gaps,
-   safety edges, licensing traps.
-2. Only include score_adjustments for dimensions you would change; each entry
-   must have score (1-10), max 10, reason.
-3. verdict must be one of: approved | approved_with_caveats |
+1. Analyze the passages independently for these 5 risk categories:
+   - false_positive: Content that appears educational but is misleading,
+     inappropriate for the year level, or mismatched to the curriculum.
+   - hidden_bias: Subtle framing issues, representation gaps,
+     culturally insensitive language (e.g. passive voice around
+     colonisation, stereotyping, outdated terminology).
+   - accuracy_gap: Outdated data, superseded findings, unverified
+     claims, missing citations for strong assertions.
+   - safety: Content requiring warnings or teacher review for the
+     target year level (mental health, violence, controversial topics).
+   - licensing_trap: Misidentified permissions, mixed licensing
+     (e.g. CC text but Getty images), restrictive terms.
+2. verdict must be one of: approved | approved_with_caveats |
    flagged_for_teacher_review | not_recommended
-4. flags: list of objects with category
+3. flags: list of objects with category
    (false_positive|hidden_bias|accuracy_gap|safety|licensing_trap),
    severity (high|medium|low), explanation, suggested_action.
 
@@ -90,9 +93,9 @@ Return ONLY this JSON:
 {{
   "verdict": "...",
   "flags": [],
-  "score_adjustments": {{}},
   "review_summary": "..."
-}}"""
+}}\
+"""
 
 
 def _get_client() -> genai.Client:
@@ -130,37 +133,19 @@ def _parse_review(data: dict[str, object]) -> AdversarialReviewResult:
                 }
             )
 
-    adjustments_payload: dict[str, dict[str, object]] = {}
-    raw_adj = data.get("score_adjustments", {})
-    if isinstance(raw_adj, dict):
-        for key, val in raw_adj.items():
-            if key not in _DIMENSIONS or not isinstance(val, dict):
-                continue
-            try:
-                adjustments_payload[key] = {
-                    "score": int(val.get("score", 5)),
-                    "max": int(val.get("max", 10)),
-                    "reason": str(
-                        val.get("reason", "Adjusted after adversarial review.")
-                    ),
-                }
-            except (TypeError, ValueError):
-                continue
-
     summary = str(data.get("review_summary", "")).strip() or "No summary provided."
 
     return AdversarialReviewResult.model_validate(
         {
             "verdict": verdict,
             "flags": flags_payload,
-            "score_adjustments": adjustments_payload,
+            "score_adjustments": {},
             "review_summary": summary,
         }
     )
 
 
 async def adversarial_review_resource(
-    evaluation: EvaluationResult,
     claim_chunks_text: str,
     framing_chunks_text: str,
     title: str,
@@ -168,11 +153,12 @@ async def adversarial_review_resource(
     source: str,
     preset: ClassroomPreset,
 ) -> AdversarialReviewResult | None:
-    """Run Agent 4 for one resource. Returns None on failure."""
-    eval_json = json.dumps(
-        evaluation.model_dump(mode="json", exclude={"adversarial"}),
-        indent=2,
-    )
+    """Run Agent 4 (blind) for one resource. Returns None on failure.
+
+    This function does NOT receive Agent 3's evaluation — it forms an
+    independent assessment based solely on the resource passages and
+    the teacher's classroom context.
+    """
     prompt = _USER_TEMPLATE.format(
         subject=preset.subject,
         year_level=preset.year_level,
@@ -183,7 +169,6 @@ async def adversarial_review_resource(
         title=title,
         url=url,
         source=source,
-        eval_json=eval_json[:12000],
         claim_chunks=claim_chunks_text[:8000],
         framing_chunks=framing_chunks_text[:8000],
     )
