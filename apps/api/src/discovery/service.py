@@ -18,10 +18,11 @@ from src.agents.schemas import (
     EvaluatedSearchResponse,
     EvaluationResult,
 )
+from src.agents.search.search_query_agent import SearchQueryAgent
 from src.discovery.providers.ddgs import DdgsProvider
 from src.discovery.providers.openalex import OpenAlexProvider
 from src.discovery.providers.youtube import YoutubeProvider
-from src.discovery.schemas import ResourceCard, SourceError
+from src.discovery.schemas import GeneratedSearchQueries, ResourceCard, SourceError
 from src.lib.config import settings
 from src.lib.logging import get_logger
 from src.presets.model import ClassroomPreset
@@ -82,6 +83,55 @@ def _build_eval_query(preset: ClassroomPreset, query: str) -> str:
         f"Teaching Language: {preset.teaching_language}\n"
         f"Search Query: {query}"
     )
+
+
+_SNIPPET_EMBED_LIMIT = 4000
+
+
+async def _sort_by_relevance(
+    eval_query_text: str,
+    results_by_source: dict[str, list[ResourceCard]],
+) -> tuple[dict[str, list[ResourceCard]], list[float] | None]:
+    """Sort each provider's results by cosine similarity to the eval query.
+
+    Returns the (possibly reordered) results dict and the eval_vector for
+    reuse in the RAG pipeline.  On failure, returns the original order and
+    eval_vector=None.
+    """
+    try:
+        eval_vector = await embed_single(eval_query_text)
+    except Exception as e:
+        logger.warning("Pre-sort embedding failed — skipping sort", error=str(e))
+        return results_by_source, None
+
+    sorted_results: dict[str, list[ResourceCard]] = {}
+    for source, cards in results_by_source.items():
+        if not cards:
+            sorted_results[source] = cards
+            continue
+
+        texts = [f"{c.title}. {c.snippet}"[:_SNIPPET_EMBED_LIMIT] for c in cards]
+        try:
+            vectors = await embed_texts(texts)
+        except Exception as e:
+            logger.warning(
+                "Pre-sort snippet embedding failed — keeping original order",
+                source=source,
+                error=str(e),
+            )
+            sorted_results[source] = cards
+            continue
+
+        # Cosine similarity via dot product
+        # (text-embedding-004 returns normalized vectors)
+        scored = []
+        for card, vec in zip(cards, vectors, strict=True):
+            score = sum(a * b for a, b in zip(eval_vector, vec, strict=True))
+            scored.append((score, card))
+        scored.sort(key=lambda t: t[0], reverse=True)
+        sorted_results[source] = [card for _, card in scored]
+
+    return sorted_results, eval_vector
 
 
 async def _run_rag_pipeline(
@@ -335,6 +385,34 @@ async def search_resources(
     search_id = str(uuid.uuid4())
     limits = _calculate_limits(preset.source_weights)
 
+    # Generate provider-tailored queries via the search query agent.
+    # Falls back to None (provider defaults) on timeout or failure.
+    query_map: dict[str, list[str] | None] = {s: None for s in _SOURCE_KEYS}
+    generated_queries: GeneratedSearchQueries | None = None
+    try:
+        generated_queries = await asyncio.wait_for(
+            SearchQueryAgent().run(query=query, preset=preset),
+            timeout=10.0,
+        )
+        if generated_queries is not None:
+            # Empty lists fall back to None so providers use their defaults
+            query_map["ddgs"] = generated_queries.ddgs or None
+            query_map["youtube"] = generated_queries.youtube or None
+            query_map["openalex"] = generated_queries.openalex or None
+            logger.info(
+                "Search query agent succeeded",
+                ddgs_queries=generated_queries.ddgs,
+                youtube_queries=generated_queries.youtube,
+                openalex_queries=generated_queries.openalex,
+            )
+    except TimeoutError:
+        logger.warning("Search query agent timed out - using provider defaults")
+    except Exception as e:
+        logger.warning(
+            "Search query agent failed - using provider defaults",
+            error=str(e),
+        )
+
     providers = {
         "ddgs": DdgsProvider(),
         "youtube": YoutubeProvider(),
@@ -342,7 +420,9 @@ async def search_resources(
     }
 
     tasks = [
-        providers[source].search(query, preset, limits[source])
+        providers[source].search(
+            query, preset, limits[source], queries=query_map[source]
+        )
         for source in _SOURCE_KEYS
     ]
 
@@ -411,9 +491,9 @@ async def search_resources(
 
     # Sort results by relevance_score descending (putting None values at the end)
     all_results.sort(
-        key=lambda card: card.relevance_score
-        if card.relevance_score is not None
-        else -1.0,
+        key=lambda card: (
+            card.relevance_score if card.relevance_score is not None else -1.0
+        ),
         reverse=True,
     )
 
@@ -425,6 +505,7 @@ async def search_resources(
         results=all_results,
         errors=errors,
         evaluations=evaluations,
+        generated_queries=generated_queries,
     )
 
     await _set_cached(cache_key, response)
