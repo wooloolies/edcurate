@@ -1,3 +1,5 @@
 {
-  "ignoreCommand": "[ \"$VERCEL_ENV\" = \"preview\" ]"
+  "git": {
+    "deploymentEnabled": false
+  }
 }
