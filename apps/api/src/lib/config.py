@@ -1,3 +1,4 @@
+import os
 from functools import lru_cache
 from typing import Literal
 
@@ -62,6 +63,7 @@ class Settings(BaseSettings):
     # AI (optional)
     AI_PROVIDER: Literal["gemini", "openai"] = "gemini"
     GOOGLE_CLOUD_PROJECT: str | None = None
+    GOOGLE_APPLICATION_CREDENTIALS: str | None = None
     GEMINI_API_KEY: str | None = None
     OPENAI_API_KEY: str | None = None
 
@@ -83,6 +85,12 @@ class Settings(BaseSettings):
 
     @model_validator(mode="after")
     def _check_secrets(self) -> "Settings":
+        if self.GOOGLE_APPLICATION_CREDENTIALS:
+            # Set environment variable for Google SDKs
+            os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = (
+                self.GOOGLE_APPLICATION_CREDENTIALS
+            )
+
         if not self.DATABASE_URL_SYNC or (
             self.DATABASE_URL_SYNC == LOCAL_DATABASE_URL_SYNC
             and self.DATABASE_URL != LOCAL_DATABASE_URL

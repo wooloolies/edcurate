@@ -6,3 +6,5 @@ venv/
 .env
 .mypy_cache/
 .pytest_cache/
+.credentials/
+.credentials/
