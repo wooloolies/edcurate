@@ -46,13 +46,22 @@ export function PresetFormClient({ presetId }: PresetFormClientProps) {
 
   const [form, setForm] = useState<PresetCreate>(() => ({
     name: "",
+    curriculum_framework: "",
     subject: "",
     year_level: "",
     country: "",
+    state_region: "",
+    city: "",
     teaching_language: "en",
-    source_weights: DEFAULT_WEIGHTS,
+    class_size: null,
+    eal_d_students: null,
+    reading_support_students: null,
+    extension_students: null,
     student_interests: [],
     language_backgrounds: [],
+    average_reading_level: "",
+    source_weights: DEFAULT_WEIGHTS,
+    additional_notes: "",
   }));
 
   // Sync form when existing data loads
@@ -60,23 +69,22 @@ export function PresetFormClient({ presetId }: PresetFormClientProps) {
   if (existing && !synced) {
     setForm({
       name: existing.name,
-      curriculum_framework: existing.curriculum_framework,
+      curriculum_framework: existing.curriculum_framework ?? "",
       subject: existing.subject,
       year_level: existing.year_level,
-      topic: existing.topic,
       country: existing.country,
-      state_region: existing.state_region,
-      city: existing.city,
-      teaching_language: existing.teaching_language,
-      class_size: existing.class_size,
-      eal_d_students: existing.eal_d_students,
-      reading_support_students: existing.reading_support_students,
-      extension_students: existing.extension_students,
+      state_region: existing.state_region ?? "",
+      city: existing.city ?? "",
+      teaching_language: existing.teaching_language ?? "en",
+      class_size: existing.class_size ?? null,
+      eal_d_students: existing.eal_d_students ?? null,
+      reading_support_students: existing.reading_support_students ?? null,
+      extension_students: existing.extension_students ?? null,
       student_interests: (existing.student_interests as string[]) ?? [],
       language_backgrounds: (existing.language_backgrounds as string[]) ?? [],
-      average_reading_level: existing.average_reading_level,
+      average_reading_level: existing.average_reading_level ?? "",
       source_weights: coerceSourceWeights(existing.source_weights),
-      additional_notes: existing.additional_notes,
+      additional_notes: existing.additional_notes ?? "",
     });
     setSynced(true);
   }
@@ -86,7 +94,7 @@ export function PresetFormClient({ presetId }: PresetFormClientProps) {
 
   const setInt = (key: keyof PresetCreate, raw: string) => {
     const n = parseInt(raw, 10);
-    set(key, raw === "" ? undefined : Number.isNaN(n) ? undefined : n);
+    set(key, raw === "" ? null : Number.isNaN(n) ? null : n);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -131,7 +139,7 @@ export function PresetFormClient({ presetId }: PresetFormClientProps) {
             <Input
               id="curriculum_framework"
               value={form.curriculum_framework ?? ""}
-              onChange={(e) => set("curriculum_framework", e.target.value || undefined)}
+              onChange={(e) => set("curriculum_framework", e.target.value)}
               placeholder={t("placeholders.curriculumFramework")}
             />
           </div>
@@ -153,15 +161,6 @@ export function PresetFormClient({ presetId }: PresetFormClientProps) {
               onChange={(e) => set("year_level", e.target.value)}
               placeholder={t("placeholders.yearLevel")}
               required
-            />
-          </div>
-          <div>
-            <Label htmlFor="topic">{t("fields.topic")}</Label>
-            <Input
-              id="topic"
-              value={form.topic ?? ""}
-              onChange={(e) => set("topic", e.target.value || undefined)}
-              placeholder={t("placeholders.topic")}
             />
           </div>
         </div>
@@ -187,7 +186,7 @@ export function PresetFormClient({ presetId }: PresetFormClientProps) {
             <Input
               id="state_region"
               value={form.state_region ?? ""}
-              onChange={(e) => set("state_region", e.target.value || undefined)}
+              onChange={(e) => set("state_region", e.target.value)}
               placeholder={t("placeholders.stateRegion")}
             />
           </div>
@@ -196,7 +195,7 @@ export function PresetFormClient({ presetId }: PresetFormClientProps) {
             <Input
               id="city"
               value={form.city ?? ""}
-              onChange={(e) => set("city", e.target.value || undefined)}
+              onChange={(e) => set("city", e.target.value)}
               placeholder={t("placeholders.city")}
             />
           </div>
@@ -263,7 +262,7 @@ export function PresetFormClient({ presetId }: PresetFormClientProps) {
           <Input
             id="average_reading_level"
             value={form.average_reading_level ?? ""}
-            onChange={(e) => set("average_reading_level", e.target.value || undefined)}
+            onChange={(e) => set("average_reading_level", e.target.value)}
             placeholder={t("placeholders.averageReadingLevel")}
           />
         </div>
@@ -303,7 +302,7 @@ export function PresetFormClient({ presetId }: PresetFormClientProps) {
           className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
           rows={3}
           value={form.additional_notes ?? ""}
-          onChange={(e) => set("additional_notes", e.target.value || undefined)}
+          onChange={(e) => set("additional_notes", e.target.value)}
           placeholder={t("placeholders.additionalNotes")}
         />
       </fieldset>
