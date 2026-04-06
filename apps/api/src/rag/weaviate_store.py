@@ -21,6 +21,9 @@ def _get_client() -> weaviate.WeaviateClient:
     api_key = settings.WEAVIATE_API_KEY
 
     if api_key:
+        logger.info(
+            "Connecting to Weaviate with custom credentials", url=url, api_key=api_key
+        )
         return weaviate.connect_to_custom(
             http_host=url.replace("http://", "").replace("https://", "").split(":")[0],
             http_port=int(url.split(":")[-1]) if ":" in url.split("//")[-1] else 8080,
@@ -30,6 +33,8 @@ def _get_client() -> weaviate.WeaviateClient:
             grpc_secure=url.startswith("https"),
             auth_credentials=weaviate.auth.AuthApiKey(api_key),
         )
+    else:
+        logger.info("Connecting to Weaviate with local credentials", url=url)
     return weaviate.connect_to_local(
         host=url.replace("http://", "").replace("https://", "").split(":")[0],
         port=int(url.split(":")[-1]) if ":" in url.split("//")[-1] else 8080,

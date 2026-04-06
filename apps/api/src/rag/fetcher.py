@@ -11,11 +11,10 @@ from urllib.parse import urljoin, urlparse
 
 import httpx
 import trafilatura
-from google import genai
 from google.genai import types
 from youtube_transcript_api import YouTubeTranscriptApi
 
-from src.lib.config import settings
+from src.agents.base import get_gemini_client
 from src.lib.logging import get_logger
 
 if TYPE_CHECKING:
@@ -229,11 +228,7 @@ _SUMMARIZE_MODEL = "gemini-2.5-flash"
 async def _summarize_transcript(transcript: str, title: str) -> str:
     """Summarize raw transcript into a structured educational abstract via Gemini."""
     try:
-        client = genai.Client(
-            vertexai=True,
-            project=settings.GOOGLE_CLOUD_PROJECT,
-            location="us-central1",
-        )
+        client = get_gemini_client()
 
         prompt = _SUMMARIZE_PROMPT.format(
             title=title,

@@ -2,23 +2,12 @@
 
 import asyncio
 
-from google import genai
-
-from src.lib.config import settings
+from src.agents.base import get_gemini_client
 from src.lib.logging import get_logger
 
 logger = get_logger(__name__)
 
 _MODEL = "text-embedding-004"
-
-
-def _get_client() -> genai.Client:
-    """Create a Vertex AI client using Application Default Credentials."""
-    return genai.Client(
-        vertexai=True,
-        project=settings.GOOGLE_CLOUD_PROJECT,
-        location="us-central1",
-    )
 
 
 async def embed_texts(texts: list[str]) -> list[list[float]]:
@@ -33,7 +22,7 @@ async def embed_texts(texts: list[str]) -> list[list[float]]:
     if not texts:
         return []
 
-    client = _get_client()
+    client = get_gemini_client()
 
     try:
         result = await asyncio.to_thread(
