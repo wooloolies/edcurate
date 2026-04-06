@@ -261,7 +261,7 @@ async def add_custom_link(
             select(SavedResource).where(
                 SavedResource.user_id == user_id,
                 SavedResource.preset_id == request.preset_id,
-                SavedResource.search_query == "custom",
+                SavedResource.search_query == request.search_query,
                 SavedResource.resource_url == str(request.url),
             )
         )
