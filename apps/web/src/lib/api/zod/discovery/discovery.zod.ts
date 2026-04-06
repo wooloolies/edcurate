@@ -27,6 +27,7 @@ export const searchApiDiscoverySearchGetResponseResultsItemMetadataOneSourceDefa
 export const searchApiDiscoverySearchGetResponseResultsItemMetadataTwoSourceDefault = `youtube`;
 export const searchApiDiscoverySearchGetResponseResultsItemMetadataTwoDurationDefault = ``;
 export const searchApiDiscoverySearchGetResponseResultsItemMetadataThreeSourceDefault = `openalex`;
+export const searchApiDiscoverySearchGetResponseResultsItemMetadataFourSourceDefault = `custom`;
 export const searchApiDiscoverySearchGetResponseEvaluationsItemOverallScoreMin = 0;
 export const searchApiDiscoverySearchGetResponseEvaluationsItemOverallScoreMax = 10;
 
@@ -45,7 +46,7 @@ export const SearchApiDiscoverySearchGetResponse = zod.object({
   "results": zod.array(zod.object({
   "title": zod.string(),
   "url": zod.string(),
-  "source": zod.enum(['ddgs', 'youtube', 'openalex']),
+  "source": zod.enum(['ddgs', 'youtube', 'openalex', 'custom']),
   "type": zod.enum(['webpage', 'video', 'paper']),
   "snippet": zod.string(),
   "thumbnail_url": zod.union([zod.string(),zod.null()]).optional(),
@@ -69,13 +70,19 @@ export const SearchApiDiscoverySearchGetResponse = zod.object({
   "citation_count": zod.union([zod.number(),zod.null()]).optional(),
   "doi": zod.union([zod.string(),zod.null()]).optional(),
   "published_date": zod.union([zod.string(),zod.null()]).optional()
-}).describe('Metadata from OpenAlex works results.')]),
+}).describe('Metadata from OpenAlex works results.'),zod.object({
+  "source": zod.literal("custom").default(searchApiDiscoverySearchGetResponseResultsItemMetadataFourSourceDefault),
+  "domain": zod.string(),
+  "og_title": zod.union([zod.string(),zod.null()]).optional(),
+  "og_description": zod.union([zod.string(),zod.null()]).optional(),
+  "og_image": zod.union([zod.string(),zod.null()]).optional()
+}).describe('Metadata from manually added custom links.')]),
   "relevance_score": zod.union([zod.number(),zod.null()]).optional(),
   "relevance_reason": zod.union([zod.string(),zod.null()]).optional(),
   "evaluation_details": zod.union([zod.record(zod.string(), zod.record(zod.string(), zod.unknown())),zod.null()]).optional().describe('Detailed dimension scores')
 }).describe('Normalised resource card returned by all providers.')),
   "errors": zod.array(zod.object({
-  "source": zod.enum(['ddgs', 'youtube', 'openalex']),
+  "source": zod.enum(['ddgs', 'youtube', 'openalex', 'custom']),
   "message": zod.string()
 }).describe('Error from a single search provider.')),
   "evaluations": zod.array(zod.object({

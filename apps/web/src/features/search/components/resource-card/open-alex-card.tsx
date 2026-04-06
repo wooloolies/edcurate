@@ -9,9 +9,10 @@ import type { AdversarialReviewResult, ResourceCard } from "@/lib/api/model";
 interface OpenAlexCardProps {
   resource: ResourceCard;
   adversarial?: AdversarialReviewResult | null;
+  action?: React.ReactNode;
 }
 
-export function OpenAlexCard({ resource, adversarial }: OpenAlexCardProps) {
+export function OpenAlexCard({ resource, adversarial, action }: OpenAlexCardProps) {
   const t = useTranslations("search");
 
   const meta = resource.metadata as {
@@ -38,9 +39,12 @@ export function OpenAlexCard({ resource, adversarial }: OpenAlexCardProps) {
               <ExternalLink className="ml-1 inline h-3 w-3" />
             </a>
           </CardTitle>
-          <Badge variant="outline" className="shrink-0 border-blue-200 text-blue-700">
-            OpenAlex
-          </Badge>
+          <div className="flex items-center gap-2 shrink-0">
+            <Badge variant="outline" className="border-blue-200 text-blue-700">
+              OpenAlex
+            </Badge>
+            {action}
+          </div>
         </div>
         <div className="flex flex-wrap gap-x-2 text-xs text-muted-foreground">
           {meta.authors && meta.authors.length > 0 && (

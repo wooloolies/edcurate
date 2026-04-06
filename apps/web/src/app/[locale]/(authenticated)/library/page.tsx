@@ -1,0 +1,20 @@
+import { getTranslations } from "next-intl/server";
+
+import { LibraryPageClient } from "@/features/library/components/library-page-client";
+
+export async function generateMetadata({ params: { locale } }: { params: { locale: string } }) {
+  const t = await getTranslations({ locale, namespace: "common" });
+
+  return {
+    title: t("menu.library"),
+    description: "Your saved educational resources library",
+  };
+}
+
+export default function LibraryPage() {
+  return (
+    <div className="container py-8">
+      <LibraryPageClient />
+    </div>
+  );
+}

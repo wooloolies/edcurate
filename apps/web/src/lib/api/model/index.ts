@@ -5,15 +5,19 @@
  * OpenAPI spec version: 0.1.0
  */
 
+export * from './add-custom-link-request';
 export * from './adversarial-flag-category';
 export * from './adversarial-flag-severity';
 export * from './adversarial-flag';
 export * from './adversarial-review-result-score-adjustments';
 export * from './adversarial-review-result-verdict';
 export * from './adversarial-review-result';
+export * from './batch-evaluate-request';
+export * from './custom-metadata';
 export * from './ddgs-metadata';
 export * from './dimension-score';
 export * from './email-login-request';
+export * from './evaluate-saved-resources-endpoint-api-saved-evaluate-post200';
 export * from './evaluated-search-response-counts-by-source';
 export * from './evaluated-search-response';
 export * from './evaluation-result-recommended-use';
@@ -24,6 +28,7 @@ export * from './health-response-status';
 export * from './health-response';
 export * from './httpvalidation-error';
 export * from './list-presets-api-presets-get-params';
+export * from './list-saved-resources-endpoint-api-saved-get-params';
 export * from './liveness-check-health-live-get200';
 export * from './oauth-login-request-provider';
 export * from './oauth-login-request';
@@ -32,6 +37,7 @@ export * from './paginated-response-preset-response';
 export * from './pagination-meta';
 export * from './preset-create';
 export * from './preset-default-response';
+export * from './preset-group';
 export * from './preset-response-source-weights';
 export * from './preset-response';
 export * from './preset-update';
@@ -45,6 +51,9 @@ export * from './resource-card-evaluation-details';
 export * from './resource-card-source';
 export * from './resource-card-type';
 export * from './resource-card';
+export * from './save-resource-request';
+export * from './saved-resource-list-response';
+export * from './saved-resource-response';
 export * from './search-api-discovery-search-get-params';
 export * from './service-status-status';
 export * from './service-status';

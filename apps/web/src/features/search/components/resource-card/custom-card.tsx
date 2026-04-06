@@ -1,24 +1,18 @@
-import { ExternalLink, Play } from "lucide-react";
+import { ExternalLink, Link as LinkIcon } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { RelevanceIndicator } from "@/features/search/components/resource-card/relevance-indicator";
 import type { AdversarialReviewResult, ResourceCard } from "@/lib/api/model";
 
-interface YoutubeCardProps {
+interface CustomCardProps {
   resource: ResourceCard;
   adversarial?: AdversarialReviewResult | null;
   action?: React.ReactNode;
 }
 
-export function YoutubeCard({ resource, adversarial, action }: YoutubeCardProps) {
-  const meta = resource.metadata as {
-    channel?: string;
-    duration?: string;
-    view_count?: number;
-    published_date?: string;
-  };
-
+export function CustomCard({ resource, adversarial, action }: CustomCardProps) {
+  const meta = resource.metadata as { domain?: string };
   return (
     <Card>
       <CardHeader className="pb-2">
@@ -30,21 +24,19 @@ export function YoutubeCard({ resource, adversarial, action }: YoutubeCardProps)
               rel="noopener noreferrer"
               className="hover:underline"
             >
-              <Play className="mr-1.5 inline h-4 w-4 text-red-500" />
+              <LinkIcon className="mr-1.5 inline h-4 w-4 text-muted-foreground" />
               {resource.title}
               <ExternalLink className="ml-1 inline h-3 w-3" />
             </a>
           </CardTitle>
           <div className="flex items-center gap-2 shrink-0">
-            <Badge variant="outline" className="border-red-200 text-red-700">
-              YouTube
-            </Badge>
+            <Badge variant="secondary">Custom</Badge>
             {action}
           </div>
         </div>
-        {!!meta.channel && <p className="text-xs text-muted-foreground">{meta.channel}</p>}
+        {!!meta.domain && <p className="text-xs text-muted-foreground">{meta.domain}</p>}
       </CardHeader>
-      <CardContent className="flex flex-col gap-3">
+      <CardContent>
         <div className="flex flex-col gap-3 sm:flex-row">
           {!!resource.thumbnail_url && (
             <img

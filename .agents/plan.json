@@ -1,83 +1,38 @@
 {
-  "name": "Agent 4 — Adversarial Review Agent",
-  "design_doc": "docs/plans/agent-4-adversarial-design.md",
-  "created": "2026-04-05",
-  "prerequisite": "RAG pipeline + Agent 3 (Deep Evaluation) already integrated per docs/plans/rag-evaluation-pipeline-design.md",
-  "api_contracts": {
-    "EvaluationResult": "Extends with optional `adversarial: AdversarialReviewResult | null`",
-    "AdversarialReviewResult": "{ verdict, flags[], score_adjustments{}, review_summary }",
-    "AdversarialFlag": "{ category, severity, explanation, suggested_action }",
-    "GET /discovery/search": "Same EvaluatedSearchResponse; evaluations[] may include nested adversarial"
-  },
-  "assumptions": [
-    "Hybrid single Weaviate query + client-side rerank into claim vs framing buckets",
-    "Gemini same stack as Agent 3 (Vertex, google-genai)",
-    "Step 6 in _run_rag_pipeline after evaluations sorted",
-    "Graceful degradation: adversarial=None preserves Agent 3 output"
-  ],
-  "tasks": [
-    {
-      "id": "A4-P0-1",
-      "title": "Pydantic schemas — AdversarialFlag, AdversarialReviewResult; extend EvaluationResult",
-      "agent": "backend",
-      "priority": "P0",
-      "depends_on": [],
-      "files": ["apps/api/src/evaluation/schemas.py"],
-      "acceptance": "Models validate; OpenAPI reflects nested adversarial on evaluation"
-    },
-    {
-      "id": "A4-P0-2",
-      "title": "adversarial_retrieval.py — hybrid query text + bucket_chunks_for_adversarial heuristics",
-      "agent": "backend",
-      "priority": "P0",
-      "depends_on": [],
-      "files": ["apps/api/src/evaluation/adversarial_retrieval.py"],
-      "acceptance": "Returns two capped text blocks from Weaviate chunk dicts; snippet fallback documented"
-    },
-    {
-      "id": "A4-P0-3",
-      "title": "adversarial_agent.py — Gemini JSON-only adversarial_review_resource + retry",
-      "agent": "backend",
-      "priority": "P0",
-      "depends_on": ["A4-P0-1"],
-      "files": ["apps/api/src/evaluation/adversarial_agent.py"],
-      "acceptance": "Parses to AdversarialReviewResult | None; mirrors evaluate_resource error handling"
-    },
-    {
-      "id": "A4-P1-1",
-      "title": "discovery/service.py — Step 6 parallel adversarial after Agent 3",
-      "agent": "backend",
-      "priority": "P1",
-      "depends_on": ["A4-P0-1", "A4-P0-2", "A4-P0-3"],
-      "files": ["apps/api/src/discovery/service.py"],
-      "acceptance": "Each EvaluationResult gets adversarial when pipeline succeeds; timeouts/degrade per design §5"
-    },
-    {
-      "id": "A4-P2-1",
-      "title": "Regenerate OpenAPI + apps/web gen:api",
-      "agent": "frontend",
-      "priority": "P2",
-      "depends_on": ["A4-P1-1"],
-      "files": ["apps/api/openapi.json", "apps/web/src/lib/api/**"],
-      "acceptance": "Types include adversarial fields on evaluation"
-    },
-    {
-      "id": "A4-P2-2",
-      "title": "UI — show verdict, flags, score adjustments on evaluated resources",
-      "agent": "frontend",
-      "priority": "P2",
-      "depends_on": ["A4-P2-1"],
-      "files": ["apps/web/src/**/*resource*", "apps/web/src/**/*evaluation*"],
-      "acceptance": "Teacher can see adversarial output for top evaluated cards (minimal viable display)"
-    },
-    {
-      "id": "A4-P3-1",
-      "title": "QA review — security, performance, a11y spot-check on new surfaces",
-      "agent": "qa",
-      "priority": "P3",
-      "depends_on": ["A4-P2-2"],
-      "files": [],
-      "acceptance": "No CRITICAL issues; findings logged in memory or issue list"
-    }
-  ]
+  "feature": "Saved Resources",
+  "priority_tiers": {
+    "P0": [
+      {
+        "id": "db-1",
+        "agent": "oma-db",
+        "task": "Implement the database schema for Saved Resources",
+        "description": "Create the `SavedResource` model in `apps/api/src/presets/model.py` (or a dedicated `saved_resources/model.py` if preferred but since it FKs to presets maybe separate file). Generate Alembic migrations. The table involves JSONB columns for `resource_data` and `evaluation_data`."
+      },
+      {
+        "id": "be-1",
+        "agent": "oma-backend",
+        "task": "Update schemas and backend models",
+        "description": "Update `apps/api/src/discovery/schemas.py` to add `custom` to the `source` literal and create `CustomMetadata`. Update Pydantic response models for SavedResource.",
+        "dependencies": ["db-1"]
+      }
+    ],
+    "P1": [
+      {
+        "id": "be-2",
+        "agent": "oma-backend",
+        "task": "Implement Saved Resources API endpoints",
+        "description": "Implement `POST /api/saved`, `DELETE /api/saved/{id}`, `GET /api/saved`, `POST /api/saved/link`, and `POST /api/saved/evaluate`. Handle idempotent inserts, custom link fetching/scraping, and routing it to the _run_rag_pipeline. Create `apps/api/src/saved_resources/router.py` and `service.py`. Register the router in `main.py`.",
+        "dependencies": ["be-1"]
+      }
+    ],
+    "P2": [
+      {
+        "id": "fe-1",
+        "agent": "oma-frontend",
+        "task": "Generate API client & Implement Frontend features",
+        "description": "Run `bun run gen:api` in `apps/web`. Implement the Bookmark toggle on `ResourceCard`. Add the Sidebar drawer to the search page. Create the new `/library` page with 'Add Link' functionality and evaluation batch jobs.",
+        "dependencies": ["be-2"]
+      }
+    ]
+  }
 }

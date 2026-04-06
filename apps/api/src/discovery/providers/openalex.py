@@ -31,10 +31,7 @@ def _reconstruct_abstract(
         for position in positions:
             position_to_word[position] = word
 
-    return " ".join(
-        position_to_word[position]
-        for position in sorted(position_to_word)
-    )
+    return " ".join(position_to_word[position] for position in sorted(position_to_word))
 
 
 class OpenAlexProvider(SearchProvider):

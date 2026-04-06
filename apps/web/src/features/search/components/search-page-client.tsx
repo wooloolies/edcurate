@@ -141,6 +141,7 @@ export function SearchPageClient() {
                         key={resource.url}
                         resource={resource}
                         adversarial={adversarialByUrl.get(resource.url)}
+                        presetId={presetId ?? undefined}
                       />
                     ))}
                     {unevaluated.length > 0 ? (
@@ -159,15 +160,18 @@ export function SearchPageClient() {
                             ? t("hideUnscored")
                             : t("showUnscored", { count: unevaluated.length })}
                         </Button>
-                        {showUnscored
-                          ? unevaluated.map((resource) => (
+                        {showUnscored ? (
+                          <div className="space-y-3 pt-2">
+                            {unevaluated.map((resource) => (
                               <ResourceCardRenderer
                                 key={resource.url}
                                 resource={resource}
                                 adversarial={adversarialByUrl.get(resource.url)}
+                                presetId={presetId ?? undefined}
                               />
-                            ))
-                          : null}
+                            ))}
+                          </div>
+                        ) : null}
                       </>
                     ) : null}
                   </>

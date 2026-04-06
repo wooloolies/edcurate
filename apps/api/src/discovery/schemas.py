@@ -38,9 +38,19 @@ class OpenAlexMetadata(BaseModel):
     published_date: str | None = None
 
 
+class CustomMetadata(BaseModel):
+    """Metadata from manually added custom links."""
+
+    source: Literal["custom"] = "custom"
+    domain: str
+    og_title: str | None = None
+    og_description: str | None = None
+    og_image: str | None = None
+
+
 # Discriminated union for metadata
 ResourceMetadata = Annotated[
-    DdgsMetadata | YoutubeMetadata | OpenAlexMetadata,
+    DdgsMetadata | YoutubeMetadata | OpenAlexMetadata | CustomMetadata,
     Field(discriminator="source"),
 ]
 
@@ -50,7 +60,7 @@ class ResourceCard(BaseModel):
 
     title: str
     url: str
-    source: Literal["ddgs", "youtube", "openalex"]
+    source: Literal["ddgs", "youtube", "openalex", "custom"]
     type: Literal["webpage", "video", "paper"]
     snippet: str
     thumbnail_url: str | None = None
@@ -65,7 +75,7 @@ class ResourceCard(BaseModel):
 class SourceError(BaseModel):
     """Error from a single search provider."""
 
-    source: Literal["ddgs", "youtube", "openalex"]
+    source: Literal["ddgs", "youtube", "openalex", "custom"]
     message: str
 
 

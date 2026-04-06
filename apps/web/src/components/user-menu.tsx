@@ -14,8 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useGetCurrentUserProfileApiUsersMeGet } from "@/lib/api/users/users";
-import { signOutAndClearBackendTokens } from "@/lib/auth/auth-client";
-import { hasBackendAccessToken } from "@/lib/auth/auth-client";
+import { hasBackendAccessToken, signOutAndClearBackendTokens } from "@/lib/auth/auth-client";
 import { useRouter } from "@/lib/i18n/routing";
 
 function getInitials(name: string | null | undefined): string {
@@ -37,7 +36,11 @@ export function UserMenu() {
     setHasToken(hasBackendAccessToken());
   }, []);
 
-  const { data: user, error, isLoading } = useGetCurrentUserProfileApiUsersMeGet({
+  const {
+    data: user,
+    error,
+    isLoading,
+  } = useGetCurrentUserProfileApiUsersMeGet({
     query: { enabled: hasToken, staleTime: 1000 * 60 * 30 },
   });
 
@@ -60,9 +63,13 @@ export function UserMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button type="button" aria-label={user.name ?? t("profile")} className="cursor-pointer rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring">
+        <button
+          type="button"
+          aria-label={user.name ?? t("profile")}
+          className="cursor-pointer rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
           <Avatar>
-            {user.image && <AvatarImage src={user.image} alt={user.name ?? ""} />}
+            {user.image ? <AvatarImage src={user.image} alt={user.name ?? ""} /> : null}
             <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
           </Avatar>
         </button>
@@ -79,9 +86,7 @@ export function UserMenu() {
           {t("profile")}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onSelect={handleLogout}>
-          {t("logout")}
-        </DropdownMenuItem>
+        <DropdownMenuItem onSelect={handleLogout}>{t("logout")}</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

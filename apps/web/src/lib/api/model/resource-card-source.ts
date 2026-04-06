@@ -12,4 +12,5 @@ export const ResourceCardSource = {
   ddgs: 'ddgs',
   youtube: 'youtube',
   openalex: 'openalex',
+  custom: 'custom',
 } as const;

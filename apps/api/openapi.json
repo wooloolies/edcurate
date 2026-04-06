@@ -253,7 +253,7 @@
           "authentication"
         ],
         "summary": "Oauth Login",
-        "description": "OAuth login — verify provider token, create/update user.",
+        "description": "OAuth login \u2014 verify provider token, create/update user.",
         "operationId": "oauth_login_api_auth_login_post",
         "requestBody": {
           "content": {
@@ -337,7 +337,7 @@
           "authentication"
         ],
         "summary": "Logout",
-        "description": "Logout — client should remove tokens from localStorage.",
+        "description": "Logout \u2014 client should remove tokens from localStorage.",
         "operationId": "logout_api_auth_logout_post",
         "responses": {
           "204": {
@@ -694,10 +694,257 @@
           }
         }
       }
+    },
+    "/api/saved": {
+      "get": {
+        "tags": [
+          "saved_resources"
+        ],
+        "summary": "List Saved Resources Endpoint",
+        "description": "List grouped saved resources in the library.",
+        "operationId": "list_saved_resources_endpoint_api_saved_get",
+        "parameters": [
+          {
+            "name": "preset_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Preset Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SavedResourceListResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "saved_resources"
+        ],
+        "summary": "Toggle Save Resource Endpoint",
+        "description": "Toggle save a resource from discovery defaults to idempotent insert.",
+        "operationId": "toggle_save_resource_endpoint_api_saved_post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SaveResourceRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SavedResourceResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/saved/{id}": {
+      "delete": {
+        "tags": [
+          "saved_resources"
+        ],
+        "summary": "Delete Saved Resource Endpoint",
+        "description": "Remove a saved resource from library.",
+        "operationId": "delete_saved_resource_endpoint_api_saved__id__delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/saved/link": {
+      "post": {
+        "tags": [
+          "saved_resources"
+        ],
+        "summary": "Add Custom Link Endpoint",
+        "description": "Add and scrape a custom link.",
+        "operationId": "add_custom_link_endpoint_api_saved_link_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddCustomLinkRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SavedResourceResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/saved/evaluate": {
+      "post": {
+        "tags": [
+          "saved_resources"
+        ],
+        "summary": "Evaluate Saved Resources Endpoint",
+        "description": "Batch evaluate unevaluated library resources within a preset.",
+        "operationId": "evaluate_saved_resources_endpoint_api_saved_evaluate_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BatchEvaluateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response Evaluate Saved Resources Endpoint Api Saved Evaluate Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
+      "AddCustomLinkRequest": {
+        "properties": {
+          "preset_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Preset Id"
+          },
+          "url": {
+            "type": "string",
+            "maxLength": 2083,
+            "minLength": 1,
+            "format": "uri",
+            "title": "Url"
+          },
+          "title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          }
+        },
+        "type": "object",
+        "required": [
+          "preset_id",
+          "url"
+        ],
+        "title": "AddCustomLinkRequest"
+      },
       "AdversarialFlag": {
         "properties": {
           "category": {
@@ -776,7 +1023,74 @@
           "review_summary"
         ],
         "title": "AdversarialReviewResult",
-        "description": "Output of Agent 4 — challenges Agent 3 scores and surfaces risks."
+        "description": "Output of Agent 4 \u2014 challenges Agent 3 scores and surfaces risks."
+      },
+      "BatchEvaluateRequest": {
+        "properties": {
+          "preset_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Preset Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "preset_id"
+        ],
+        "title": "BatchEvaluateRequest"
+      },
+      "CustomMetadata": {
+        "properties": {
+          "source": {
+            "type": "string",
+            "const": "custom",
+            "title": "Source",
+            "default": "custom"
+          },
+          "domain": {
+            "type": "string",
+            "title": "Domain"
+          },
+          "og_title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Og Title"
+          },
+          "og_description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Og Description"
+          },
+          "og_image": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Og Image"
+          }
+        },
+        "type": "object",
+        "required": [
+          "domain"
+        ],
+        "title": "CustomMetadata",
+        "description": "Metadata from manually added custom links."
       },
       "DdgsMetadata": {
         "properties": {
@@ -1382,6 +1696,49 @@
         "title": "PresetDefaultResponse",
         "description": "Minimal response after setting a preset as default."
       },
+      "PresetGroup": {
+        "properties": {
+          "preset_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Preset Id"
+          },
+          "preset_name": {
+            "type": "string",
+            "title": "Preset Name"
+          },
+          "preset_subject": {
+            "type": "string",
+            "title": "Preset Subject"
+          },
+          "preset_topic": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Preset Topic"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/SavedResourceResponse"
+            },
+            "type": "array",
+            "title": "Items"
+          }
+        },
+        "type": "object",
+        "required": [
+          "preset_id",
+          "preset_name",
+          "preset_subject",
+          "items"
+        ],
+        "title": "PresetGroup"
+      },
       "PresetResponse": {
         "properties": {
           "id": {
@@ -1827,7 +2184,7 @@
           "message"
         ],
         "title": "RegisterResponse",
-        "description": "Registration response — tokens if no verification needed."
+        "description": "Registration response \u2014 tokens if no verification needed."
       },
       "ResendVerificationRequest": {
         "properties": {
@@ -1858,7 +2215,8 @@
             "enum": [
               "ddgs",
               "youtube",
-              "openalex"
+              "openalex",
+              "custom"
             ],
             "title": "Source"
           },
@@ -1896,12 +2254,16 @@
               },
               {
                 "$ref": "#/components/schemas/OpenAlexMetadata"
+              },
+              {
+                "$ref": "#/components/schemas/CustomMetadata"
               }
             ],
             "title": "Metadata",
             "discriminator": {
               "propertyName": "source",
               "mapping": {
+                "custom": "#/components/schemas/CustomMetadata",
                 "ddgs": "#/components/schemas/DdgsMetadata",
                 "openalex": "#/components/schemas/OpenAlexMetadata",
                 "youtube": "#/components/schemas/YoutubeMetadata"
@@ -1959,6 +2321,91 @@
         "title": "ResourceCard",
         "description": "Normalised resource card returned by all providers."
       },
+      "SaveResourceRequest": {
+        "properties": {
+          "preset_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Preset Id"
+          },
+          "resource": {
+            "$ref": "#/components/schemas/ResourceCard"
+          }
+        },
+        "type": "object",
+        "required": [
+          "preset_id",
+          "resource"
+        ],
+        "title": "SaveResourceRequest"
+      },
+      "SavedResourceListResponse": {
+        "properties": {
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "groups": {
+            "items": {
+              "$ref": "#/components/schemas/PresetGroup"
+            },
+            "type": "array",
+            "title": "Groups"
+          }
+        },
+        "type": "object",
+        "required": [
+          "total",
+          "groups"
+        ],
+        "title": "SavedResourceListResponse"
+      },
+      "SavedResourceResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "preset_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Preset Id"
+          },
+          "resource_url": {
+            "type": "string",
+            "title": "Resource Url"
+          },
+          "resource_data": {
+            "$ref": "#/components/schemas/ResourceCard"
+          },
+          "evaluation_data": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/EvaluationResult"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "saved_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Saved At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "preset_id",
+          "resource_url",
+          "resource_data",
+          "evaluation_data",
+          "saved_at"
+        ],
+        "title": "SavedResourceResponse"
+      },
       "ServiceStatus": {
         "properties": {
           "status": {
@@ -2006,7 +2453,8 @@
             "enum": [
               "ddgs",
               "youtube",
-              "openalex"
+              "openalex",
+              "custom"
             ],
             "title": "Source"
           },

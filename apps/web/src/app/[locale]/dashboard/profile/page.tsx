@@ -37,7 +37,7 @@ export default function ProfilePage() {
       <Card>
         <CardHeader className="items-center">
           <Avatar size="lg" className="size-20">
-            {user.image && <AvatarImage src={user.image} alt={user.name ?? ""} />}
+            {user.image ? <AvatarImage src={user.image} alt={user.name ?? ""} /> : null}
             <AvatarFallback className="text-2xl">{getInitials(user.name)}</AvatarFallback>
           </Avatar>
           <CardTitle className="mt-4 text-xl">{user.name ?? user.email}</CardTitle>
@@ -47,12 +47,12 @@ export default function ProfilePage() {
             <span className="text-sm text-muted-foreground">{t("email")}</span>
             <span className="text-sm">{user.email}</span>
           </div>
-          {user.name && (
+          {user.name ? (
             <div className="flex items-center justify-between">
               <span className="text-sm text-muted-foreground">{t("name")}</span>
               <span className="text-sm">{user.name}</span>
             </div>
-          )}
+          ) : null}
           <div className="flex items-center justify-between">
             <span className="text-sm text-muted-foreground">
               {user.email_verified ? t("emailVerified") : t("emailNotVerified")}
@@ -69,9 +69,7 @@ export default function ProfilePage() {
           </div>
           <div className="flex items-center justify-between">
             <span className="text-sm text-muted-foreground">{t("memberSince")}</span>
-            <span className="text-sm">
-              {new Date(user.created_at).toLocaleDateString()}
-            </span>
+            <span className="text-sm">{new Date(user.created_at).toLocaleDateString()}</span>
           </div>
         </CardContent>
       </Card>

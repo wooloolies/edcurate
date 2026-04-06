@@ -9,9 +9,10 @@ import type { AdversarialReviewResult, ResourceCard } from "@/lib/api/model";
 interface DdgsCardProps {
   resource: ResourceCard;
   adversarial?: AdversarialReviewResult | null;
+  action?: React.ReactNode;
 }
 
-export function DdgsCard({ resource, adversarial }: DdgsCardProps) {
+export function DdgsCard({ resource, adversarial, action }: DdgsCardProps) {
   const t = useTranslations("search");
 
   const meta = resource.metadata as { domain?: string };
@@ -31,9 +32,10 @@ export function DdgsCard({ resource, adversarial }: DdgsCardProps) {
               <ExternalLink className="ml-1 inline h-3 w-3" />
             </a>
           </CardTitle>
-          <Badge variant="outline" className="shrink-0">
-            {t("tabs.web")}
-          </Badge>
+          <div className="flex items-center gap-2 shrink-0">
+            <Badge variant="outline">{t("tabs.web")}</Badge>
+            {action}
+          </div>
         </div>
         {!!meta.domain && <p className="text-xs text-muted-foreground">{meta.domain}</p>}
       </CardHeader>

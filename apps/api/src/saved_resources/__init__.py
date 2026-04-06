@@ -1,0 +1,1 @@
+"""Saved resources module."""

@@ -96,8 +96,8 @@ class YoutubeProvider(SearchProvider):
             ) or thumbnails.get("default", {}).get("url")
 
             details = video_details.get(video_id, {})
-            full_description = (
-                details.get("description") or snippet.get("description", "")
+            full_description = details.get("description") or snippet.get(
+                "description", ""
             )
 
             cards.append(
@@ -120,9 +120,7 @@ class YoutubeProvider(SearchProvider):
             )
         return cards
 
-    async def _fetch_video_details(
-        self, video_ids: list[str]
-    ) -> dict[str, dict]:
+    async def _fetch_video_details(self, video_ids: list[str]) -> dict[str, dict]:
         """Batch-fetch video details (snippet, contentDetails, statistics)."""
         if not video_ids or not settings.YOUTUBE_API_KEY:
             return {}
