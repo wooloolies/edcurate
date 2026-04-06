@@ -60,8 +60,8 @@ export function UserMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button type="button" aria-label={user.name ?? t("profile")} className="rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring">
-          <Avatar size="sm">
+        <button type="button" aria-label={user.name ?? t("profile")} className="cursor-pointer rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring">
+          <Avatar>
             {user.image && <AvatarImage src={user.image} alt={user.name ?? ""} />}
             <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
           </Avatar>
