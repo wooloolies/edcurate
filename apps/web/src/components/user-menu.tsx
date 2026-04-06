@@ -1,6 +1,8 @@
 "use client";
 
+import { useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
+import { useEffect, useState } from "react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -11,7 +13,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { signOutAndClearBackendTokens, useSession } from "@/lib/auth/auth-client";
+import { useGetCurrentUserProfileApiUsersMeGet } from "@/lib/api/users/users";
+import { signOutAndClearBackendTokens } from "@/lib/auth/auth-client";
+import { hasBackendAccessToken } from "@/lib/auth/auth-client";
 import { useRouter } from "@/lib/i18n/routing";
 
 function getInitials(name: string | null | undefined): string {
@@ -24,16 +28,32 @@ function getInitials(name: string | null | undefined): string {
 }
 
 export function UserMenu() {
-  const { data: session } = useSession();
   const router = useRouter();
+  const queryClient = useQueryClient();
   const t = useTranslations("userMenu");
+  const [hasToken, setHasToken] = useState(false);
 
-  if (!session?.user) return null;
+  useEffect(() => {
+    setHasToken(hasBackendAccessToken());
+  }, []);
 
-  const { user } = session;
+  const { data: user, error, isLoading } = useGetCurrentUserProfileApiUsersMeGet({
+    query: { enabled: hasToken, staleTime: 1000 * 60 * 30 },
+  });
+
+  if (isLoading && hasToken) {
+    return <span className="size-6 animate-pulse rounded-full bg-muted" />;
+  }
+
+  if (error) {
+    console.error("[UserMenu] API error:", error);
+  }
+
+  if (!user) return null;
 
   async function handleLogout() {
     await signOutAndClearBackendTokens();
+    queryClient.clear();
     router.push("/login");
   }
 

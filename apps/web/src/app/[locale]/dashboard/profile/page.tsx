@@ -17,7 +17,9 @@ function getInitials(name: string | null | undefined): string {
 
 export default function ProfilePage() {
   const t = useTranslations("profile");
-  const { data: user, isLoading } = useGetCurrentUserProfileApiUsersMeGet();
+  const { data: user, isLoading } = useGetCurrentUserProfileApiUsersMeGet({
+    query: { staleTime: 1000 * 60 * 30 },
+  });
 
   if (isLoading) {
     return (

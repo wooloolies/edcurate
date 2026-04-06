@@ -38,7 +38,7 @@ class UserResponse(BaseModel):
 
     model_config = {"from_attributes": True}
 
-    id: str
+    id: uuid_lib.UUID
     email: str
     name: str | None = None
     image: str | None = None
