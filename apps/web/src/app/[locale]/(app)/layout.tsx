@@ -9,7 +9,6 @@ const TABS = [
   { key: "presets", href: "/presets" },
   { key: "search", href: "/search" },
   { key: "library", href: "/library" },
-  { key: "team", href: "/team" },
 ] as const;
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {

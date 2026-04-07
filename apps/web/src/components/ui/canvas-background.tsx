@@ -203,16 +203,11 @@ export function CanvasBackground() {
           <filter id="digital-goo">
             {/* 1. Fluid Base */}
             <feGaussianBlur in="SourceGraphic" stdDeviation="15" result="blur" />
-            <feColorMatrix 
-              in="blur" 
-              mode="matrix" 
-              values="
-                1 0 0 0 0  
-                0 1 0 0 0  
-                0 0 1 0 0  
-                0 0 0 25 -11
-              " 
-              result="goo" 
+            <feColorMatrix
+              in="blur"
+              mode="matrix"
+              values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 25 -11"
+              result="goo"
             />
             {/* 2. Hollow Outline Framework */}
             <feMorphology in="goo" operator="dilate" radius="2" result="larger_goo" />
