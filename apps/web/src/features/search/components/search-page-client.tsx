@@ -13,8 +13,8 @@ import { CompactProgressBar } from "@/features/search/components/compact-progres
 import { ErrorBanner } from "@/features/search/components/error-banner";
 import { EvaluationProgress } from "@/features/search/components/evaluation-progress";
 import { GeneratedQueriesPanel } from "@/features/search/components/generated-queries";
-import { ResourceCardSkeleton } from "@/features/search/components/skeleton/resource-card-skeleton";
 import { SearchResultsGrid } from "@/features/search/components/search-results-grid";
+import { ResourceCardSkeleton } from "@/features/search/components/skeleton/resource-card-skeleton";
 import { useSearchStream } from "@/features/search/hooks/use-search-stream";
 import { useSearchApiDiscoverySearchGet } from "@/lib/api/discovery/discovery";
 import type { JudgmentResult, ResourceCard } from "@/lib/api/model";
@@ -169,7 +169,7 @@ export function SearchPageClient() {
     return c;
   }, [results, stream.partialResults]);
 
-  const displayTotalCount = results?.total_results ?? (stream.partialResults?.length ?? 0);
+  const displayTotalCount = results?.total_results ?? stream.partialResults?.length ?? 0;
 
   const hasContent = results || stream.isStreaming || isFetching || !!stream.partialResults;
 

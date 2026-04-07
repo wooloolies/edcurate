@@ -1,7 +1,7 @@
 "use client";
 
-import { useTranslations } from "next-intl";
 import { Loader2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import type { Stage, StageStatus } from "@/features/search/types/search-stream";
 
@@ -103,9 +103,7 @@ export function CompactProgressBar({
         />
       </div>
 
-      <span className="shrink-0 tabular-nums text-sm font-medium text-blue-600">
-        {percent}%
-      </span>
+      <span className="shrink-0 tabular-nums text-sm font-medium text-blue-600">{percent}%</span>
     </div>
   );
 }

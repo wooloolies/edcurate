@@ -40,7 +40,13 @@ type Action =
 function reduce(state: SearchStreamState, action: Action): SearchStreamState {
   switch (action.type) {
     case "START":
-      return { ...INITIAL_STREAM_STATE, resourceProgress: new Map(), partialJudgments: new Map(), evaluationIds: new Map(), isStreaming: true };
+      return {
+        ...INITIAL_STREAM_STATE,
+        resourceProgress: new Map(),
+        partialJudgments: new Map(),
+        evaluationIds: new Map(),
+        isStreaming: true,
+      };
 
     case "STAGE_EVENT": {
       const { stage, status, resource_url, cached, data } = action.payload;

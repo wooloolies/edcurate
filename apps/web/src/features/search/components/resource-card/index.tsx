@@ -72,13 +72,31 @@ export function ResourceCardRenderer({
 
   switch (resource.source) {
     case "ddgs":
-      return <DdgsCard index={index} resource={resource} action={action} isEvaluating={isEvaluating} />;
+      return (
+        <DdgsCard index={index} resource={resource} action={action} isEvaluating={isEvaluating} />
+      );
     case "youtube":
-      return <YoutubeCard index={index} resource={resource} action={action} isEvaluating={isEvaluating} />;
+      return (
+        <YoutubeCard
+          index={index}
+          resource={resource}
+          action={action}
+          isEvaluating={isEvaluating}
+        />
+      );
     case "openalex":
-      return <OpenAlexCard index={index} resource={resource} action={action} isEvaluating={isEvaluating} />;
+      return (
+        <OpenAlexCard
+          index={index}
+          resource={resource}
+          action={action}
+          isEvaluating={isEvaluating}
+        />
+      );
     case "custom":
-      return <CustomCard index={index} resource={resource} action={action} isEvaluating={isEvaluating} />;
+      return (
+        <CustomCard index={index} resource={resource} action={action} isEvaluating={isEvaluating} />
+      );
     default:
       return null;
   }

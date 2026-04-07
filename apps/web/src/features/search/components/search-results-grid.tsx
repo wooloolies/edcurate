@@ -8,8 +8,8 @@ import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ResourceCardRenderer } from "@/features/search/components/resource-card";
 import { SuggestedCollectionsRail } from "@/features/search/components/suggested-collections-rail";
-import type { JudgmentResult, ResourceCard } from "@/lib/api/model";
 import type { ResourceAgentProgress } from "@/features/search/types/search-stream";
+import type { JudgmentResult, ResourceCard } from "@/lib/api/model";
 
 interface SearchResultsGridProps {
   results: ResourceCard[];
@@ -90,7 +90,9 @@ export function SearchResultsGrid({
             <Play className="h-4 w-4" />
             <span>{t("tabs.video")}</span>
           </div>
-          <span className="w-8 text-right text-xs tabular-nums text-slate-400">({counts.youtube ?? 0})</span>
+          <span className="w-8 text-right text-xs tabular-nums text-slate-400">
+            ({counts.youtube ?? 0})
+          </span>
         </button>
         <button
           type="button"
@@ -101,7 +103,9 @@ export function SearchResultsGrid({
             <Globe className="h-4 w-4" />
             <span>{t("tabs.web")}</span>
           </div>
-          <span className="w-8 text-right text-xs tabular-nums text-slate-400">({counts.ddgs ?? 0})</span>
+          <span className="w-8 text-right text-xs tabular-nums text-slate-400">
+            ({counts.ddgs ?? 0})
+          </span>
         </button>
         <button
           type="button"
@@ -112,7 +116,9 @@ export function SearchResultsGrid({
             <BookOpen className="h-4 w-4" />
             <span>{t("tabs.papers")}</span>
           </div>
-          <span className="w-8 text-right text-xs tabular-nums text-slate-400">({counts.openalex ?? 0})</span>
+          <span className="w-8 text-right text-xs tabular-nums text-slate-400">
+            ({counts.openalex ?? 0})
+          </span>
         </button>
       </aside>
 
