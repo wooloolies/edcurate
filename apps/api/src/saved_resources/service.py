@@ -3,6 +3,7 @@ from collections import defaultdict
 from typing import Any
 
 from fastapi import HTTPException, status
+from pydantic import BaseModel
 from sqlalchemy import func, select
 from sqlalchemy.dialects.postgresql import insert
 
@@ -26,8 +27,10 @@ from src.saved_resources.schemas import (
 
 
 def _dump_eval_data(
-    evaluation_data: dict[str, Any] | None, resource: ResourceCard
+    evaluation_data: dict[str, Any] | BaseModel | None,
 ) -> dict[str, Any] | None:
+    if isinstance(evaluation_data, BaseModel):
+        return evaluation_data.model_dump(mode="json")
     return evaluation_data
 
 
@@ -57,7 +60,7 @@ async def save_resource(
         db.add(col)
         await db.flush()
 
-    eval_data = _dump_eval_data(request.evaluation_data, request.resource)
+    eval_data = _dump_eval_data(request.evaluation_data)
 
     stmt = (
         insert(SavedResource)
@@ -132,7 +135,6 @@ async def create_collection(
                     if request.evaluation_data_list
                     and idx < len(request.evaluation_data_list)
                     else None,
-                    r,
                 ),
             }
             for idx, r in enumerate(request.resources)
@@ -307,7 +309,7 @@ async def save_to_collection(
     if not col:
         raise HTTPException(status_code=404, detail="Collection not found")
 
-    eval_data = _dump_eval_data(request.evaluation_data, request.resource)
+    eval_data = _dump_eval_data(request.evaluation_data)
 
     stmt = (
         insert(SavedResource)

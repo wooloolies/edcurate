@@ -309,6 +309,7 @@ async def readiness_check() -> dict[str, str]:
 from src.auth.router import router as auth_router  # noqa: E402
 from src.curriculum.router import router as curriculum_router  # noqa: E402
 from src.discovery.router import router as discovery_router  # noqa: E402
+from src.localizer.router import router as localizer_router  # noqa: E402
 from src.presets.router import router as presets_router  # noqa: E402
 from src.saved_resources.router import router as saved_resources_router  # noqa: E402
 from src.users.router import router as users_router  # noqa: E402
@@ -321,3 +322,4 @@ app.include_router(discovery_router, prefix="/api/discovery", tags=["discovery"]
 app.include_router(
     saved_resources_router, prefix="/api/saved", tags=["saved_resources"]
 )
+app.include_router(localizer_router, prefix="/api/localizer", tags=["localizer"])
