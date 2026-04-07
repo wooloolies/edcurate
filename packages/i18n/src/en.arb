@@ -1325,5 +1325,37 @@
   "search__suggestedCollections__syncSuccess": "Collection synced!",
   "@search__suggestedCollections__syncSuccess": {
     "description": "Success message when syncing collection"
+  },
+  "search__saveCollection__title": "Save to Collection",
+  "@search__saveCollection__title": {
+    "description": "Dialog title for saving resources to a collection"
+  },
+  "search__saveCollection__description": "Group your selected resources into a named collection.",
+  "@search__saveCollection__description": {
+    "description": "Dialog description for saving resources to a collection"
+  },
+  "search__saveCollection__nameLabel": "Collection Name",
+  "@search__saveCollection__nameLabel": {
+    "description": "Label for collection name input"
+  },
+  "search__saveCollection__namePlaceholder": "e.g., Physics 101",
+  "@search__saveCollection__namePlaceholder": {
+    "description": "Placeholder for collection name input"
+  },
+  "search__saveCollection__privacyLabel": "Privacy",
+  "@search__saveCollection__privacyLabel": {
+    "description": "Label for privacy toggle"
+  },
+  "search__saveCollection__private": "Private",
+  "@search__saveCollection__private": {
+    "description": "Private privacy option"
+  },
+  "search__saveCollection__public": "Public",
+  "@search__saveCollection__public": {
+    "description": "Public privacy option"
+  },
+  "search__saveCollection__publicWarning": "Are you sure you want to make this public? Anyone will be able to discover these resources in suggested collections.",
+  "@search__saveCollection__publicWarning": {
+    "description": "Warning message when making collection public"
   }
 }
