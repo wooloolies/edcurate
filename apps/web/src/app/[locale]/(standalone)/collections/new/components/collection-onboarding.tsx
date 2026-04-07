@@ -340,6 +340,7 @@ export function CollectionOnboarding() {
                   placeholder="e.g. 25"
                   value={classSize}
                   onChange={(e) => setClassSize(e.target.value)}
+                  autoFocus={currentStep === 2}
                   className="w-full appearance-none bg-white border-2 border-gray-200 rounded-2xl px-6 py-4 text-sm font-semibold text-[#111827] hover:border-gray-300 focus:outline-none focus:border-[#B7FF70] transition-colors shadow-sm placeholder:text-gray-400 placeholder:font-normal mt-3"
                 />
               </label>
