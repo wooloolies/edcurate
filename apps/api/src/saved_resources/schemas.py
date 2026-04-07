@@ -12,7 +12,7 @@ class SaveResourceRequest(BaseModel):
     preset_id: uuid.UUID
     search_query: str
     resource: ResourceCard
-    evaluation_data: dict[str, Any] | None = None
+    evaluation_data: JudgmentResult | dict[str, Any] | None = None
 
 
 class LibraryCollectionCreate(BaseModel):

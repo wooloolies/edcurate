@@ -1,11 +1,11 @@
 import asyncio
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy import select, text
 
-from src.main import app
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
+from sqlalchemy.orm import sessionmaker
+
 from src.lib.config import settings
-from src.saved_resources.model import SavedResource, LibraryCollection
+from src.saved_resources.model import LibraryCollection, SavedResource
 
 
 async def run_migration():
@@ -24,7 +24,8 @@ async def run_migration():
             return
 
         print(
-            f"Found {len(items)} items to migrate. Grouping by user/preset/search_query..."
+            f"Found {len(items)} items to migrate. "
+            "Grouping by user/preset/search_query..."
         )
 
         groups = {}

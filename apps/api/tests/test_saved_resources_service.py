@@ -6,6 +6,7 @@ import httpx
 import pytest
 from sqlalchemy.dialects import postgresql
 
+from src.agents.schemas import JudgmentResult, MetricResult
 from src.discovery.schemas import CustomMetadata, ResourceCard
 from src.saved_resources.schemas import AddCustomLinkRequest
 from src.saved_resources.service import _dump_eval_data, add_custom_link
@@ -76,16 +77,21 @@ class _DB:
 
 
 def test_dump_eval_data_returns_none() -> None:
-    """_dump_eval_data always returns None — evaluation is now server-side only."""
-    resource = ResourceCard(
-        title="Fractions resource",
-        url="https://example.com/fractions",
-        source="custom",
-        type="webpage",
-        snippet="example.com",
-        metadata=CustomMetadata(domain="example.com"),
+    assert _dump_eval_data(None) is None
+
+
+def test_dump_eval_data_serializes_judgment_result() -> None:
+    judgment = JudgmentResult(
+        resource_url="https://example.com/matrix",
+        verdict="skip_it",
+        confidence="high",
+        curriculum_fit=MetricResult(rating="weak", reason="Too advanced"),
+        accessibility=MetricResult(rating="weak", reason="Too advanced"),
+        trustworthiness=MetricResult(rating="adequate", reason="Accurate"),
+        reasoning_chain="Matrices are out of scope for Year 7.",
     )
-    assert _dump_eval_data(None, resource) is None
+
+    assert _dump_eval_data(judgment) == judgment.model_dump(mode="json")
 
 
 @pytest.mark.asyncio
