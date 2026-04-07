@@ -197,9 +197,7 @@ async def _run_rag_pipeline(
                 vectors=vectors,
             )
         except Exception as e:
-            logger.error(
-                "Chunk embedding/upsert failed", url=card.url, error=str(e)
-            )
+            logger.error("Chunk embedding/upsert failed", url=card.url, error=str(e))
 
     # Step 4: Embed queries — reuse eval_vector if provided by pre-sort
     hybrid_text = build_adversarial_hybrid_query_text(preset, query)
@@ -297,13 +295,9 @@ async def _run_rag_pipeline(
                 url=card.url,
                 error=str(risk_result),
             )
-            risk_result = RiskScanResult(
-                flags=[], summary="Risk scan unavailable."
-            )
+            risk_result = RiskScanResult(flags=[], summary="Risk scan unavailable.")
         elif not isinstance(risk_result, RiskScanResult):
-            risk_result = RiskScanResult(
-                flags=[], summary="Risk scan unavailable."
-            )
+            risk_result = RiskScanResult(flags=[], summary="Risk scan unavailable.")
 
         # Call 3 — Final Judge (sequential, sees both outputs)
         judgment = await judge_resource(
@@ -606,8 +600,7 @@ async def search_resources_stream(
             )
     except TimeoutError:
         logger.warning(
-            "Search query agent timed out (stream)"
-            " - using provider defaults"
+            "Search query agent timed out (stream) - using provider defaults"
         )
     except Exception as e:
         logger.warning(

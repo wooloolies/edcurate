@@ -1,5 +1,6 @@
 import uuid
 from datetime import datetime
+from typing import Any
 
 from pydantic import BaseModel, ConfigDict, HttpUrl
 
@@ -11,6 +12,7 @@ class SaveResourceRequest(BaseModel):
     preset_id: uuid.UUID
     search_query: str
     resource: ResourceCard
+    evaluation_data: dict[str, Any] | None = None
 
 
 class LibraryCollectionCreate(BaseModel):
@@ -19,6 +21,7 @@ class LibraryCollectionCreate(BaseModel):
     name: str
     is_public: bool = False
     resources: list[ResourceCard]
+    evaluation_data_list: list[JudgmentResult | None] | None = None
 
 
 class LibraryCollectionUpdate(BaseModel):
@@ -41,7 +44,7 @@ class LibraryCollectionResponse(BaseModel):
 class SaveResourceToCollectionRequest(BaseModel):
     collection_id: uuid.UUID
     resource: ResourceCard
-    evaluation_data: EvaluationResult | None = None
+    evaluation_data: JudgmentResult | None = None
 
 
 class AddCustomLinkRequest(BaseModel):

@@ -53,6 +53,15 @@ class _DB:
         self._saved = saved
         self.calls: list[object] = []
 
+    def add(self, _instance: object) -> None:
+        pass
+
+    async def flush(self) -> None:
+        pass
+
+    async def commit(self) -> None:
+        pass
+
     async def execute(self, statement: object) -> object:
         self.calls.append(statement)
         match len(self.calls):
@@ -76,7 +85,7 @@ def test_dump_eval_data_returns_none() -> None:
         snippet="example.com",
         metadata=CustomMetadata(domain="example.com"),
     )
-    assert _dump_eval_data(resource) is None
+    assert _dump_eval_data(None, resource) is None
 
 
 @pytest.mark.asyncio
@@ -91,7 +100,10 @@ async def test_add_custom_link_duplicate_uses_request_search_query(
 
     monkeypatch.setattr(httpx, "AsyncClient", _FakeAsyncClient)
 
-    preset = SimpleNamespace(id=preset_id, user_id=user_id)
+    col_id = uuid4()
+    col = SimpleNamespace(
+        id=col_id, preset_id=preset_id, search_query=search_query, user_id=user_id
+    )
     resource_data = ResourceCard(
         title="Fractions resource",
         url=resource_url,
@@ -114,7 +126,7 @@ async def test_add_custom_link_duplicate_uses_request_search_query(
         evaluation_data=None,
         saved_at=datetime.now(UTC),
     )
-    db = _DB(preset, saved)
+    db = _DB(col, saved)
 
     response = await add_custom_link(
         db,
@@ -133,5 +145,4 @@ async def test_add_custom_link_duplicate_uses_request_search_query(
     fallback_sql = str(fallback_query)
 
     assert response.id == saved_id
-    assert f"saved_resources.search_query = '{search_query}'" in fallback_sql
-    assert "saved_resources.search_query = 'custom'" not in fallback_sql
+    assert f"saved_resources.collection_id = '{col_id}'" in fallback_sql

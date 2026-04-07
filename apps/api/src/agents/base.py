@@ -14,6 +14,7 @@ from src.presets.model import ClassroomPreset
 
 logger = get_logger(__name__)
 
+
 def get_gemini_client() -> genai.Client:
     """Create a Vertex AI Gemini client using Application Default Credentials."""
     return genai.Client(

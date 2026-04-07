@@ -204,9 +204,7 @@ class FinalJudge(BaseAgent[JudgmentResult]):
                         category=cat,
                         severity=sev,
                         evidence_quote=evidence or "—",
-                        explanation=(
-                            str(item.get("explanation", "")).strip() or "—"
-                        ),
+                        explanation=(str(item.get("explanation", "")).strip() or "—"),
                         suggested_action=(
                             str(item.get("suggested_action", "")).strip() or "—"
                         ),
@@ -222,19 +220,14 @@ class FinalJudge(BaseAgent[JudgmentResult]):
                     adaptations.append(
                         AdaptationSuggestion(
                             action=str(item["action"]).strip(),
-                            rationale=str(item.get("rationale", "")).strip()
-                            or "—",
+                            rationale=str(item.get("rationale", "")).strip() or "—",
                         )
                     )
 
-        reasoning = str(
-            data.get("reasoning_chain", "No reasoning provided.")
-        ).strip()
+        reasoning = str(data.get("reasoning_chain", "No reasoning provided.")).strip()
 
         override = data.get("override_notes")
-        override_notes = (
-            str(override).strip() if override is not None else None
-        )
+        override_notes = str(override).strip() if override is not None else None
 
         # resource_url is set by the caller via model_copy
         return JudgmentResult(

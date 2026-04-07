@@ -85,9 +85,7 @@ class ResourceCard(BaseModel):
     metadata: ResourceMetadata
     relevance_score: float | None = None
     relevance_reason: str | None = None
-    verdict: str | None = Field(
-        default=None, description="use_it | adapt_it | skip_it"
-    )
+    verdict: str | None = Field(default=None, description="use_it | adapt_it | skip_it")
 
 
 class SourceError(BaseModel):

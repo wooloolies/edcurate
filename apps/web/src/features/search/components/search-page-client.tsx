@@ -29,7 +29,7 @@ import type { JudgmentResult, ResourceCard } from "@/lib/api/model";
 import { useListPresetsApiPresetsGet } from "@/lib/api/presets/presets";
 import {
   getListSavedResourcesEndpointApiSavedGetQueryKey,
-  useBulkSaveResourcesEndpointApiSavedBulkPost,
+  useCreateCollectionEndpointApiSavedCollectionsPost,
   useListSavedResourcesEndpointApiSavedGet,
 } from "@/lib/api/saved-resources/saved-resources";
 
@@ -44,8 +44,8 @@ export function SearchPageClient() {
   const presets = presetsData?.data ?? [];
 
   const { data: savedData } = useListSavedResourcesEndpointApiSavedGet();
-  const { mutateAsync: bulkSave, isPending: isSaving } =
-    useBulkSaveResourcesEndpointApiSavedBulkPost();
+  const { mutateAsync: createCollection, isPending: isSaving } =
+    useCreateCollectionEndpointApiSavedCollectionsPost();
   const [selectedResources, setSelectedResources] = useState<Map<string, ResourceCard>>(new Map());
 
   // Build a set of already-saved URLs for the active preset
@@ -54,8 +54,8 @@ export function SearchPageClient() {
     if (presetId && savedData?.groups) {
       for (const group of savedData.groups) {
         if (group.preset_id === presetId) {
-          for (const qGroup of group.query_groups) {
-            for (const item of qGroup.items) {
+          for (const col of group.collections) {
+            for (const item of col.items) {
               urls.add(item.resource_url);
             }
           }
@@ -83,11 +83,17 @@ export function SearchPageClient() {
     if (!presetId || selectedResources.size === 0) return;
     try {
       const resourcesList = Array.from(selectedResources.values());
-      await bulkSave({
+      const evaluationDataList = resourcesList.map(
+        (resource) => judgmentByUrl.get(resource.url) ?? null
+      );
+      await createCollection({
         data: {
           preset_id: presetId,
           search_query: searchQuery || "custom",
+          name: `Search: ${searchQuery || "custom"}`,
+          is_public: false,
           resources: resourcesList,
+          evaluation_data_list: evaluationDataList,
         },
       });
       setSelectedResources(new Map());

@@ -108,7 +108,6 @@ async def create_collection(
             status_code=status.HTTP_404_NOT_FOUND, detail="Preset not found"
         )
 
-
     collection = LibraryCollection(
         user_id=user_id,
         preset_id=request.preset_id,
@@ -292,7 +291,6 @@ async def get_suggested_collections(
             matched_by="TFIDF",
         )
         for c in collections
-
     ]
 
 
