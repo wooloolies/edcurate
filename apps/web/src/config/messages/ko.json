@@ -38,7 +38,12 @@
     "resendCooldown": "{seconds}초 후 재전송 가능",
     "backToSignIn": "로그인으로 돌아가기",
     "invalidCredentials": "이메일 또는 비밀번호가 올바르지 않습니다",
-    "emailNotVerified": "먼저 이메일을 인증해 주세요"
+    "emailNotVerified": "먼저 이메일을 인증해 주세요",
+    "returnToHome": "돌아가기",
+    "heroQuoteLine1": "더 빠르게 큐레이션 하세요.",
+    "heroQuoteLine2": "더 나은 가르침을 경험하세요.",
+    "featureDescription": "큐레이션된 자료를 수집하고, 평가하며, 교육 자료를 종합할 수 있습니다.",
+    "orContinueWith": "또는 다음으로 계속하기"
   },
   "team": {
     "title": "팀 소개",
@@ -241,7 +246,10 @@
   "home": {
     "team": "팀 소개",
     "login": "로그인",
-    "tagline": "교사를 위한 맥락 인식 기반 자료 탐색 및 적용"
+    "tagline": "교사를 위한 맥락 인식 기반 자료 탐색 및 적용",
+    "heroTitlePart1": "교사를 위한",
+    "heroTitlePart2": "지능형 어댑션 엔진",
+    "startResearch": "리서치 시작하기"
   },
   "errors": {
     "title": "오류",

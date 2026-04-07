@@ -38,7 +38,12 @@
     "resendCooldown": "{seconds}秒后可重新发送",
     "backToSignIn": "返回登录",
     "invalidCredentials": "邮箱或密码不正确",
-    "emailNotVerified": "请先验证您的邮箱"
+    "emailNotVerified": "请先验证您的邮箱",
+    "returnToHome": "返回",
+    "heroQuoteLine1": "更快地策展。",
+    "heroQuoteLine2": "更好地教学。",
+    "featureDescription": "访问收集策展资源、评估和综合您的资源的能力。",
+    "orContinueWith": "或继续使用"
   },
   "team": {
     "title": "我们的团队",
@@ -241,7 +246,10 @@
   "home": {
     "team": "团队",
     "login": "登录",
-    "tagline": "面向教师的情境感知资源发现与适配"
+    "tagline": "面向教师的情境感知资源发现与适配",
+    "heroTitlePart1": "智能适配引擎",
+    "heroTitlePart2": "助力教师",
+    "startResearch": "开始您的研究"
   },
   "errors": {
     "title": "错误",

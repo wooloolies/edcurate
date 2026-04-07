@@ -412,6 +412,18 @@
   "@home__tagline": {
     "description": "Homepage tagline"
   },
+  "home__heroTitlePart1": "교사를 위한",
+  "@home__heroTitlePart1": {
+    "description": "First part of the homepage hero title"
+  },
+  "home__heroTitlePart2": "지능형 어댑션 엔진",
+  "@home__heroTitlePart2": {
+    "description": "Second part of the homepage hero title"
+  },
+  "home__startResearch": "리서치 시작하기",
+  "@home__startResearch": {
+    "description": "Homepage button to start research"
+  },
   "errors__title": "오류",
   "@errors__title": {
     "description": "Generic error page title"
@@ -839,5 +851,25 @@
   "dashboard__quickActions": "빠른 작업",
   "@dashboard__quickActions": {
     "description": "Dashboard quick actions section title"
+  },
+  "login__returnToHome": "돌아가기",
+  "@login__returnToHome": {
+    "description": "Button text to return to the home page"
+  },
+  "login__heroQuoteLine1": "더 빠르게 큐레이션 하세요.",
+  "@login__heroQuoteLine1": {
+    "description": "First line of the hero quote on the login page"
+  },
+  "login__heroQuoteLine2": "더 나은 가르침을 경험하세요.",
+  "@login__heroQuoteLine2": {
+    "description": "Second line of the hero quote on the login page"
+  },
+  "login__featureDescription": "큐레이션된 자료를 수집하고, 평가하며, 교육 자료를 종합할 수 있습니다.",
+  "@login__featureDescription": {
+    "description": "Description of features shown on the login page"
+  },
+  "login__orContinueWith": "또는 다음으로 계속하기",
+  "@login__orContinueWith": {
+    "description": "Divider text for social login options"
   }
 }

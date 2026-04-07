@@ -412,6 +412,18 @@
   "@home__tagline": {
     "description": "Homepage tagline"
   },
+  "home__heroTitlePart1": "เครื่องมือการปรับใช้",
+  "@home__heroTitlePart1": {
+    "description": "First part of the homepage hero title"
+  },
+  "home__heroTitlePart2": "สำหรับครูผู้สอน",
+  "@home__heroTitlePart2": {
+    "description": "Second part of the homepage hero title"
+  },
+  "home__startResearch": "เริ่มการวิจัยของคุณ",
+  "@home__startResearch": {
+    "description": "Homepage button to start research"
+  },
   "errors__title": "ข้อผิดพลาด",
   "@errors__title": {
     "description": "Generic error page title"
@@ -815,11 +827,49 @@
     "description": "Profile join date label"
   },
   "dashboard__title": "แดชบอร์ด",
-  "@dashboard__title": { "description": "Dashboard page title" },
+  "@dashboard__title": {
+    "description": "Dashboard page title"
+  },
   "dashboard__presetsToday": "พรีเซ็ตที่สร้างวันนี้ {count} รายการ",
-  "@dashboard__presetsToday": { "description": "Number of presets created today", "placeholders": { "count": { "type": "int" } } },
+  "@dashboard__presetsToday": {
+    "description": "Number of presets created today",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "dashboard__presetsTotal": "พรีเซ็ตทั้งหมด {count} รายการ",
-  "@dashboard__presetsTotal": { "description": "Total number of presets", "placeholders": { "count": { "type": "int" } } },
+  "@dashboard__presetsTotal": {
+    "description": "Total number of presets",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "dashboard__quickActions": "การดำเนินการด่วน",
-  "@dashboard__quickActions": { "description": "Dashboard quick actions section title" }
+  "@dashboard__quickActions": {
+    "description": "Dashboard quick actions section title"
+  },
+  "login__returnToHome": "กลับ",
+  "@login__returnToHome": {
+    "description": "Button text to return to the home page"
+  },
+  "login__heroQuoteLine1": "เลือกสรรเนื้อหาได้เร็วกว่า",
+  "@login__heroQuoteLine1": {
+    "description": "First line of the hero quote on the login page"
+  },
+  "login__heroQuoteLine2": "สอนได้ดียิ่งขึ้น",
+  "@login__heroQuoteLine2": {
+    "description": "Second line of the hero quote on the login page"
+  },
+  "login__featureDescription": "เข้าถึงความสามารถในการรวบรวมทรัพยากรที่คัดสรรแล้ว ประเมิน และสังเคราะห์ทรัพยากรของคุณ",
+  "@login__featureDescription": {
+    "description": "Description of features shown on the login page"
+  },
+  "login__orContinueWith": "หรือดำเนินการต่อด้วย",
+  "@login__orContinueWith": {
+    "description": "Divider text for social login options"
+  }
 }

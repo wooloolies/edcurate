@@ -38,7 +38,12 @@
     "resendCooldown": "Gửi lại sau {seconds} giây",
     "backToSignIn": "Quay lại đăng nhập",
     "invalidCredentials": "Email hoặc mật khẩu không đúng",
-    "emailNotVerified": "Vui lòng xác minh email trước khi đăng nhập"
+    "emailNotVerified": "Vui lòng xác minh email trước khi đăng nhập",
+    "returnToHome": "Quay lại",
+    "heroQuoteLine1": "Tuyển chọn nhanh hơn.",
+    "heroQuoteLine2": "Dạy tốt hơn.",
+    "featureDescription": "Truy cập khả năng thu thập tài nguyên đã được tuyển chọn, đánh giá và tổng hợp tài nguyên của bạn.",
+    "orContinueWith": "hoặc tiếp tục với"
   },
   "team": {
     "title": "Đội ngũ của chúng tôi",
@@ -241,7 +246,10 @@
   "home": {
     "team": "Đội ngũ",
     "login": "Đăng nhập",
-    "tagline": "Khám phá và điều chỉnh tài nguyên theo ngữ cảnh dành cho giáo viên"
+    "tagline": "Khám phá và điều chỉnh tài nguyên theo ngữ cảnh dành cho giáo viên",
+    "heroTitlePart1": "Công cụ thích ứng thông minh",
+    "heroTitlePart2": "cho giáo viên",
+    "startResearch": "Bắt đầu nghiên cứu"
   },
   "errors": {
     "title": "Lỗi",

@@ -412,6 +412,18 @@
   "@home__tagline": {
     "description": "Homepage tagline"
   },
+  "home__heroTitlePart1": "智能适配引擎",
+  "@home__heroTitlePart1": {
+    "description": "First part of the homepage hero title"
+  },
+  "home__heroTitlePart2": "助力教师",
+  "@home__heroTitlePart2": {
+    "description": "Second part of the homepage hero title"
+  },
+  "home__startResearch": "开始您的研究",
+  "@home__startResearch": {
+    "description": "Homepage button to start research"
+  },
   "errors__title": "错误",
   "@errors__title": {
     "description": "Generic error page title"
@@ -815,11 +827,49 @@
     "description": "Profile join date label"
   },
   "dashboard__title": "仪表盘",
-  "@dashboard__title": { "description": "Dashboard page title" },
+  "@dashboard__title": {
+    "description": "Dashboard page title"
+  },
   "dashboard__presetsToday": "今日创建 {count} 个预设",
-  "@dashboard__presetsToday": { "description": "Number of presets created today", "placeholders": { "count": { "type": "int" } } },
+  "@dashboard__presetsToday": {
+    "description": "Number of presets created today",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "dashboard__presetsTotal": "共 {count} 个预设",
-  "@dashboard__presetsTotal": { "description": "Total number of presets", "placeholders": { "count": { "type": "int" } } },
+  "@dashboard__presetsTotal": {
+    "description": "Total number of presets",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "dashboard__quickActions": "快捷操作",
-  "@dashboard__quickActions": { "description": "Dashboard quick actions section title" }
+  "@dashboard__quickActions": {
+    "description": "Dashboard quick actions section title"
+  },
+  "login__returnToHome": "返回",
+  "@login__returnToHome": {
+    "description": "Button text to return to the home page"
+  },
+  "login__heroQuoteLine1": "更快地策展。",
+  "@login__heroQuoteLine1": {
+    "description": "First line of the hero quote on the login page"
+  },
+  "login__heroQuoteLine2": "更好地教学。",
+  "@login__heroQuoteLine2": {
+    "description": "Second line of the hero quote on the login page"
+  },
+  "login__featureDescription": "访问收集策展资源、评估和综合您的资源的能力。",
+  "@login__featureDescription": {
+    "description": "Description of features shown on the login page"
+  },
+  "login__orContinueWith": "或继续使用",
+  "@login__orContinueWith": {
+    "description": "Divider text for social login options"
+  }
 }

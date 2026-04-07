@@ -80,3 +80,18 @@ body {
   background-color: var(--background);
   color: var(--foreground);
 }
+
+.digital-grid-bg {
+  background-image: radial-gradient(circle, #cbd5e1 1.5px, transparent 1.5px);
+  background-size: 32px 32px;
+  animation: pan-right 20s linear infinite;
+}
+
+@keyframes pan-right {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 32px 0;
+  }
+}

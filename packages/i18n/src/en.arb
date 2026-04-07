@@ -436,6 +436,18 @@
   "@home__tagline": {
     "description": "Homepage tagline"
   },
+  "home__heroTitlePart1": "Intelligent adaption engine",
+  "@home__heroTitlePart1": {
+    "description": "First part of the homepage hero title"
+  },
+  "home__heroTitlePart2": "for teachers",
+  "@home__heroTitlePart2": {
+    "description": "Second part of the homepage hero title"
+  },
+  "home__startResearch": "Start your research",
+  "@home__startResearch": {
+    "description": "Homepage button to start research"
+  },
   "errors__title": "Error",
   "@errors__title": {
     "description": "Generic error page title"
@@ -863,5 +875,25 @@
   "dashboard__quickActions": "Quick Actions",
   "@dashboard__quickActions": {
     "description": "Dashboard quick actions section title"
+  },
+  "login__returnToHome": "Return",
+  "@login__returnToHome": {
+    "description": "Button text to return to the home page"
+  },
+  "login__heroQuoteLine1": "Curate faster.",
+  "@login__heroQuoteLine1": {
+    "description": "First line of the hero quote on the login page"
+  },
+  "login__heroQuoteLine2": "Teach better.",
+  "@login__heroQuoteLine2": {
+    "description": "Second line of the hero quote on the login page"
+  },
+  "login__featureDescription": "Access ability to collect curated resource, evaluate and synthesize your resources.",
+  "@login__featureDescription": {
+    "description": "Description of features shown on the login page"
+  },
+  "login__orContinueWith": "or continue with",
+  "@login__orContinueWith": {
+    "description": "Divider text for social login options"
   }
 }

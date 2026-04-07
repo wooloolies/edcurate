@@ -412,6 +412,18 @@
   "@home__tagline": {
     "description": "Homepage tagline"
   },
+  "home__heroTitlePart1": "Công cụ thích ứng thông minh",
+  "@home__heroTitlePart1": {
+    "description": "First part of the homepage hero title"
+  },
+  "home__heroTitlePart2": "cho giáo viên",
+  "@home__heroTitlePart2": {
+    "description": "Second part of the homepage hero title"
+  },
+  "home__startResearch": "Bắt đầu nghiên cứu",
+  "@home__startResearch": {
+    "description": "Homepage button to start research"
+  },
   "errors__title": "Lỗi",
   "@errors__title": {
     "description": "Generic error page title"
@@ -815,11 +827,49 @@
     "description": "Profile join date label"
   },
   "dashboard__title": "Bảng điều khiển",
-  "@dashboard__title": { "description": "Dashboard page title" },
+  "@dashboard__title": {
+    "description": "Dashboard page title"
+  },
   "dashboard__presetsToday": "{count} preset tạo hôm nay",
-  "@dashboard__presetsToday": { "description": "Number of presets created today", "placeholders": { "count": { "type": "int" } } },
+  "@dashboard__presetsToday": {
+    "description": "Number of presets created today",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "dashboard__presetsTotal": "Tổng cộng {count} preset",
-  "@dashboard__presetsTotal": { "description": "Total number of presets", "placeholders": { "count": { "type": "int" } } },
+  "@dashboard__presetsTotal": {
+    "description": "Total number of presets",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "dashboard__quickActions": "Thao tác nhanh",
-  "@dashboard__quickActions": { "description": "Dashboard quick actions section title" }
+  "@dashboard__quickActions": {
+    "description": "Dashboard quick actions section title"
+  },
+  "login__returnToHome": "Quay lại",
+  "@login__returnToHome": {
+    "description": "Button text to return to the home page"
+  },
+  "login__heroQuoteLine1": "Tuyển chọn nhanh hơn.",
+  "@login__heroQuoteLine1": {
+    "description": "First line of the hero quote on the login page"
+  },
+  "login__heroQuoteLine2": "Dạy tốt hơn.",
+  "@login__heroQuoteLine2": {
+    "description": "Second line of the hero quote on the login page"
+  },
+  "login__featureDescription": "Truy cập khả năng thu thập tài nguyên đã được tuyển chọn, đánh giá và tổng hợp tài nguyên của bạn.",
+  "@login__featureDescription": {
+    "description": "Description of features shown on the login page"
+  },
+  "login__orContinueWith": "hoặc tiếp tục với",
+  "@login__orContinueWith": {
+    "description": "Divider text for social login options"
+  }
 }
