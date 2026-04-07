@@ -147,7 +147,7 @@ export function CollectionOnboarding() {
   };
 
   const selectClass =
-    "w-full appearance-none bg-white border-2 border-gray-200 rounded-2xl px-6 py-4 text-sm font-semibold text-[#111827] cursor-pointer hover:border-gray-300 focus:outline-none focus:border-[#B7FF70] transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed";
+    "w-full appearance-none bg-white border-2 border-gray-200 rounded-2xl px-6 py-4 text-sm font-semibold text-brand-ink cursor-pointer hover:border-gray-300 focus:outline-none focus:border-brand-green transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed";
 
   return (
     <div className="w-full max-w-4xl bg-white rounded-[2.5rem] shadow-xl shadow-black/[0.03] ring-1 ring-black/5 p-10 md:p-14 transition-all duration-300">
@@ -174,13 +174,13 @@ export function CollectionOnboarding() {
                   setIsEditingPreset(false);
                 }
               }}
-              className="text-2xl font-bold text-[#111827] outline-none border-b-2 border-[#B7FF70] bg-transparent w-40"
+              className="text-2xl font-bold text-brand-ink outline-none border-b-2 border-brand-green bg-transparent w-40"
               aria-label="Edit collection name"
             />
           ) : (
             <button
               type="button"
-              className="text-2xl font-bold text-[#111827] cursor-pointer hover:opacity-80 transition-opacity bg-transparent border-none p-0"
+              className="text-2xl font-bold text-brand-ink cursor-pointer hover:opacity-80 transition-opacity bg-transparent border-none p-0"
               onClick={() => setIsEditingPreset(true)}
             >
               {presetName}
@@ -198,7 +198,7 @@ export function CollectionOnboarding() {
           )}
         </div>
 
-        <div className="text-lg font-semibold text-[#111827] tracking-tight" aria-live="polite">
+        <div className="text-lg font-semibold text-brand-ink tracking-tight" aria-live="polite">
           Step {currentStep}/3
         </div>
       </div>
@@ -212,13 +212,13 @@ export function CollectionOnboarding() {
         aria-valuemax={3}
       >
         <div
-          className={`h-full w-1/3 rounded-full transition-colors duration-500 ${currentStep >= 1 ? "bg-[#B7FF70]" : "bg-gray-200"}`}
+          className={`h-full w-1/3 rounded-full transition-colors duration-500 ${currentStep >= 1 ? "bg-brand-green" : "bg-gray-200"}`}
         />
         <div
-          className={`h-full w-1/3 rounded-full transition-colors duration-500 ${currentStep >= 2 ? "bg-[#B7FF70]" : "bg-gray-200"}`}
+          className={`h-full w-1/3 rounded-full transition-colors duration-500 ${currentStep >= 2 ? "bg-brand-green" : "bg-gray-200"}`}
         />
         <div
-          className={`h-full w-1/3 rounded-full transition-colors duration-500 ${currentStep >= 3 ? "bg-[#B7FF70]" : "bg-gray-200"}`}
+          className={`h-full w-1/3 rounded-full transition-colors duration-500 ${currentStep >= 3 ? "bg-brand-green" : "bg-gray-200"}`}
         />
       </div>
 
@@ -226,7 +226,7 @@ export function CollectionOnboarding() {
       {currentStep === 1 && (
         <div className="space-y-12 mb-16 animate-in fade-in slide-in-from-bottom-4 duration-500">
           <div className="flex flex-col gap-2 items-center text-center max-w-2xl mx-auto">
-            <h3 className="text-3xl md:text-4xl font-bold text-[#111827] tracking-tight text-center">
+            <h3 className="text-3xl md:text-4xl font-bold text-brand-ink tracking-tight text-center">
               Tell us about your curriculum
             </h3>
             <p className="text-gray-500 text-sm font-medium text-center w-full max-w-sm mx-auto leading-relaxed">
@@ -237,7 +237,7 @@ export function CollectionOnboarding() {
           <div className="flex flex-col gap-8">
             {/* Country */}
             <div className="w-full">
-              <label className="block text-xl font-bold text-[#111827] mb-3 text-left">
+              <label className="block text-xl font-bold text-brand-ink mb-3 text-left">
                 Country
                 <div className="relative mt-3">
                   <select
@@ -261,7 +261,7 @@ export function CollectionOnboarding() {
 
             {/* Curriculum Framework */}
             <div className="w-full">
-              <label className="block text-xl font-bold text-[#111827] mb-3 text-left">
+              <label className="block text-xl font-bold text-brand-ink mb-3 text-left">
                 Curriculum Framework
                 <div className="relative mt-3">
                   <select
@@ -287,7 +287,7 @@ export function CollectionOnboarding() {
             {/* Grade / Year Level */}
             {grades && grades.length > 0 && (
               <div className="w-full">
-                <span className="block text-xl font-bold text-[#111827] mb-4 text-left">
+                <span className="block text-xl font-bold text-brand-ink mb-4 text-left">
                   Year Level
                 </span>
                 <div className="grid grid-cols-3 gap-4">
@@ -300,7 +300,7 @@ export function CollectionOnboarding() {
                         onClick={() => setGrade(g.name)}
                         className={`px-8 py-3 rounded-[2rem] font-semibold text-lg transition-all border-2 flex items-center justify-center cursor-pointer ${
                           isSelected
-                            ? "border-[#B7FF70] bg-[#B7FF70] text-[#111827] shadow-md"
+                            ? "border-brand-green bg-brand-green text-brand-ink shadow-md"
                             : "border-gray-200 text-gray-600 hover:border-gray-300 hover:bg-gray-50 bg-white"
                         }`}
                         aria-pressed={isSelected}
@@ -320,7 +320,7 @@ export function CollectionOnboarding() {
       {currentStep === 2 && (
         <div className="space-y-12 mb-16 animate-in fade-in slide-in-from-bottom-4 duration-500">
           <div className="flex flex-col gap-2 items-center text-center max-w-2xl mx-auto">
-            <h3 className="text-3xl md:text-4xl font-bold text-[#111827] tracking-tight text-center">
+            <h3 className="text-3xl md:text-4xl font-bold text-brand-ink tracking-tight text-center">
               How large is your class?
             </h3>
             <p className="text-gray-500 text-sm font-medium text-center max-w-md mx-auto leading-relaxed">
@@ -331,7 +331,7 @@ export function CollectionOnboarding() {
           <div className="flex flex-col gap-8 max-w-xl mx-auto">
             {/* Class Size */}
             <div className="w-full">
-              <label className="block text-xl font-bold text-[#111827] mb-3 text-left">
+              <label className="block text-xl font-bold text-brand-ink mb-3 text-left">
                 Class Size
                 <input
                   type="number"
@@ -341,14 +341,14 @@ export function CollectionOnboarding() {
                   value={classSize}
                   onChange={(e) => setClassSize(e.target.value)}
                   autoFocus={currentStep === 2}
-                  className="w-full appearance-none bg-white border-2 border-gray-200 rounded-2xl px-6 py-4 text-sm font-semibold text-[#111827] hover:border-gray-300 focus:outline-none focus:border-[#B7FF70] transition-colors shadow-sm placeholder:text-gray-400 placeholder:font-normal mt-3"
+                  className="w-full appearance-none bg-white border-2 border-gray-200 rounded-2xl px-6 py-4 text-sm font-semibold text-brand-ink hover:border-gray-300 focus:outline-none focus:border-brand-green transition-colors shadow-sm placeholder:text-gray-400 placeholder:font-normal mt-3"
                 />
               </label>
             </div>
 
             {/* Relevant Field (Subject from DB) */}
             <div className="w-full">
-              <label className="block text-xl font-bold text-[#111827] mb-3 text-left">
+              <label className="block text-xl font-bold text-brand-ink mb-3 text-left">
                 Relevant field
                 <div className="relative mt-3">
                   <select
@@ -377,7 +377,7 @@ export function CollectionOnboarding() {
       {currentStep === 3 && (
         <div className="space-y-12 mb-16 animate-in fade-in slide-in-from-bottom-4 duration-500">
           <div className="flex flex-col gap-2 items-center text-center max-w-2xl mx-auto">
-            <h3 className="text-3xl md:text-4xl font-bold text-[#111827] tracking-tight text-center">
+            <h3 className="text-3xl md:text-4xl font-bold text-brand-ink tracking-tight text-center">
               Any additional notes?
             </h3>
             <p className="text-gray-500 text-sm font-medium text-center max-w-md mx-auto leading-relaxed">
@@ -390,7 +390,7 @@ export function CollectionOnboarding() {
               value={additionalNotes}
               onChange={(e) => setAdditionalNotes(e.target.value)}
               placeholder="e.g., I focus heavily on divergent thinking and visual learning styles..."
-              className="w-full min-h-[220px] resize-y appearance-none bg-white border-2 border-gray-200 rounded-[2rem] p-8 text-base font-medium text-[#111827] hover:border-gray-300 focus:outline-none focus:border-[#B7FF70] transition-colors shadow-sm placeholder:text-gray-400 placeholder:font-normal leading-relaxed"
+              className="w-full min-h-[220px] resize-y appearance-none bg-white border-2 border-gray-200 rounded-[2rem] p-8 text-base font-medium text-brand-ink hover:border-gray-300 focus:outline-none focus:border-brand-green transition-colors shadow-sm placeholder:text-gray-400 placeholder:font-normal leading-relaxed"
             />
           </div>
         </div>
@@ -409,7 +409,7 @@ export function CollectionOnboarding() {
         {currentStep === 1 ? (
           <Link
             href="/"
-            className="px-8 py-3 rounded-[2rem] text-base font-semibold text-[#111827] bg-white border-2 border-[#111827] hover:!bg-[#111827] hover:!text-white transition-all duration-300 shadow-sm inline-flex items-center justify-center cursor-pointer"
+            className="px-8 py-3 rounded-[2rem] text-base font-semibold text-brand-ink bg-white border-2 border-brand-ink hover:!bg-brand-ink hover:!text-white transition-all duration-300 shadow-sm inline-flex items-center justify-center cursor-pointer"
           >
             Back
           </Link>
@@ -417,7 +417,7 @@ export function CollectionOnboarding() {
           <button
             type="button"
             onClick={handleBack}
-            className="px-8 py-3 rounded-[2rem] text-base font-semibold text-[#111827] bg-white border-2 border-[#111827] hover:!bg-[#111827] hover:!text-white transition-all duration-300 shadow-sm cursor-pointer"
+            className="px-8 py-3 rounded-[2rem] text-base font-semibold text-brand-ink bg-white border-2 border-brand-ink hover:!bg-brand-ink hover:!text-white transition-all duration-300 shadow-sm cursor-pointer"
           >
             Back
           </button>
@@ -427,7 +427,7 @@ export function CollectionOnboarding() {
           type="button"
           onClick={handleNext}
           disabled={createMutation.isPending}
-          className="px-8 py-3 rounded-[2rem] text-base font-semibold text-[#111827] bg-[#B7FF70] border-2 border-[#B7FF70] hover:!bg-[#111827] hover:!text-[#B7FF70] hover:!border-[#111827] transition-all duration-300 shadow-sm cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+          className="px-8 py-3 rounded-[2rem] text-base font-semibold text-brand-ink bg-brand-green border-2 border-brand-green hover:!bg-brand-ink hover:!text-brand-green hover:!border-brand-ink transition-all duration-300 shadow-sm cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {createMutation.isPending ? (
             <Loader2 className="w-5 h-5 animate-spin" />

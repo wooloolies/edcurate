@@ -33,7 +33,7 @@ export function LanguageSwitcher() {
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
-          className="gap-2 rounded-full backdrop-blur-xl bg-white/40 border border-white/60 hover:!bg-[#111827] hover:!text-white hover:!border-[#111827] hover:scale-105 transition-all shadow-[0_4px_32px_rgba(0,0,0,0.04)] px-5 py-2.5 h-auto text-sm font-medium text-gray-700"
+          className="gap-2 rounded-full backdrop-blur-xl bg-white/40 border border-white/60 hover:!bg-brand-ink hover:!text-white hover:!border-brand-ink hover:scale-105 transition-all shadow-[0_4px_32px_rgba(0,0,0,0.04)] px-5 py-2.5 h-auto text-sm font-medium text-gray-700"
         >
           <Globe className="size-4" />
         </Button>

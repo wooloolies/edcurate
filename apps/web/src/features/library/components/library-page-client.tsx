@@ -34,8 +34,10 @@ import { ResourceCardRenderer } from "@/features/search/components/resource-card
 import type {
   CollectionGroup,
   GenerateArtifactRequestArtifactType,
+  GeneratedArtifactResponse,
   SavedResourceResponse,
 } from "@/lib/api/model";
+import { useListArtifactsEndpointApiLocalizerGet } from "@/lib/api/localizer/localizer";
 import {
   getListSavedResourcesEndpointApiSavedGetQueryKey,
   useAddCustomLinkEndpointApiSavedLinkPost,
@@ -240,7 +242,7 @@ export function LibraryPageClient() {
             void handleEvaluateSingle(item.id);
           }}
           disabled={isEvaluatingThis}
-          className="inline-flex items-center justify-center rounded-full bg-[#B7FF70] px-3.5 py-1.5 text-xs font-medium text-[#111827] transition-all hover:bg-[#111827] hover:text-white disabled:opacity-50"
+          className="inline-flex items-center justify-center rounded-full bg-brand-green px-3.5 py-1.5 text-xs font-medium text-brand-ink transition-all hover:bg-brand-ink hover:text-white disabled:opacity-50"
         >
           <Wand2 className="mr-1.5 h-3 w-3" />
           {isEvaluatingThis ? "Evaluating..." : item.evaluation_data ? "Re-evaluate" : "Evaluate"}
@@ -296,25 +298,25 @@ export function LibraryPageClient() {
                   aria-label={`${isOpen ? "Collapse" : "Expand"} ${col.name} collection`}
                 >
                   <ChevronRight
-                    className={`h-4 w-4 shrink-0 text-[#111827]/40 transition-transform duration-200 ${
+                    className={`h-4 w-4 shrink-0 text-brand-ink/40 transition-transform duration-200 ${
                       isOpen ? "rotate-90" : "rotate-0"
                     }`}
                   />
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
-                      <h3 className="truncate text-[15px] font-semibold text-[#111827]">
+                      <h3 className="truncate text-[15px] font-semibold text-brand-ink">
                         {col.name}
                       </h3>
                       {col.is_public ? (
-                        <Globe className="h-3.5 w-3.5 shrink-0 text-[#B7FF70]" />
+                        <Globe className="h-3.5 w-3.5 shrink-0 text-brand-green" />
                       ) : (
-                        <Lock className="h-3.5 w-3.5 shrink-0 text-[#111827]/25" />
+                        <Lock className="h-3.5 w-3.5 shrink-0 text-brand-ink/25" />
                       )}
                     </div>
-                    <p className="mt-0.5 text-xs text-[#111827]/45">
+                    <p className="mt-0.5 text-xs text-brand-ink/45">
                       {colGroup.items.length} resource{colGroup.items.length === 1 ? "" : "s"}
                       {unevaluatedCount > 0 && (
-                        <span className="ml-1.5 rounded-full bg-[#B7FF70]/30 px-2 py-0.5 text-[11px] font-medium text-[#111827]/70">
+                        <span className="ml-1.5 rounded-full bg-brand-green/30 px-2 py-0.5 text-[11px] font-medium text-brand-ink/70">
                           {unevaluatedCount} unevaluated
                         </span>
                       )}
@@ -330,20 +332,20 @@ export function LibraryPageClient() {
                     className="flex items-center gap-2"
                   >
                     <Input
-                      className="h-8 rounded-xl border-[#111827]/10 bg-white text-sm focus-visible:ring-[#B7FF70]"
+                      className="h-8 rounded-xl border-brand-ink/10 bg-white text-sm focus-visible:ring-brand-green"
                       value={renamingValue}
                       onChange={(e) => setRenamingValue(e.target.value)}
                       autoFocus
                     />
                     <button
                       type="submit"
-                      className="rounded-full bg-[#B7FF70] px-3.5 py-1.5 text-xs font-medium text-[#111827] transition-colors hover:bg-[#111827] hover:text-white"
+                      className="rounded-full bg-brand-green px-3.5 py-1.5 text-xs font-medium text-brand-ink transition-colors hover:bg-brand-ink hover:text-white"
                     >
                       Save
                     </button>
                     <button
                       type="button"
-                      className="rounded-full px-3 py-1.5 text-xs text-[#111827]/50 transition-colors hover:bg-[#111827]/5 hover:text-[#111827]"
+                      className="rounded-full px-3 py-1.5 text-xs text-brand-ink/50 transition-colors hover:bg-brand-ink/5 hover:text-brand-ink"
                       onClick={() => setRenamingCollectionId(null)}
                     >
                       Cancel
@@ -353,7 +355,7 @@ export function LibraryPageClient() {
                   <>
                     <button
                       type="button"
-                      className="inline-flex items-center rounded-full px-3 py-1.5 text-xs font-medium text-[#111827]/60 transition-colors hover:bg-[#111827]/5 hover:text-[#111827]"
+                      className="inline-flex items-center rounded-full px-3 py-1.5 text-xs font-medium text-brand-ink/60 transition-colors hover:bg-brand-ink/5 hover:text-brand-ink"
                       onClick={(e) => {
                         e.stopPropagation();
                         if (isAddLinkOpen) {
@@ -375,7 +377,7 @@ export function LibraryPageClient() {
                     {unevaluatedCount > 0 && (
                       <button
                         type="button"
-                        className="inline-flex items-center rounded-full bg-[#B7FF70] px-3.5 py-1.5 text-xs font-medium text-[#111827] transition-all hover:bg-[#111827] hover:text-white disabled:opacity-50"
+                        className="inline-flex items-center rounded-full bg-brand-green px-3.5 py-1.5 text-xs font-medium text-brand-ink transition-all hover:bg-brand-ink hover:text-white disabled:opacity-50"
                         onClick={() => void handleEvaluateGroup(presetId, searchQuery)}
                         disabled={isEvaluatingGroup || isBatchEvaluating}
                       >
@@ -388,7 +390,7 @@ export function LibraryPageClient() {
                       <DropdownMenuTrigger asChild>
                         <button
                           type="button"
-                          className="rounded-full p-2 text-[#111827]/40 transition-colors hover:bg-[#111827]/5 hover:text-[#111827]"
+                          className="rounded-full p-2 text-brand-ink/40 transition-colors hover:bg-brand-ink/5 hover:text-brand-ink"
                         >
                           <MoreHorizontal className="h-4 w-4" />
                         </button>
@@ -426,10 +428,10 @@ export function LibraryPageClient() {
                   <DropdownMenuTrigger asChild>
                     <button
                       type="button"
-                      className="inline-flex items-center rounded-full border border-[#111827]/10 bg-white px-3 py-1.5 text-xs font-medium text-[#111827]/70 shadow-sm transition-all hover:border-[#B7FF70] hover:shadow-[0_0_0_1px_rgba(183,255,112,0.3)]"
+                      className="inline-flex items-center rounded-full border border-brand-ink/10 bg-white px-3 py-1.5 text-xs font-medium text-brand-ink/70 shadow-sm transition-all hover:border-brand-green hover:shadow-[0_0_0_1px_rgba(183,255,112,0.3)]"
                       onClick={(e) => e.stopPropagation()}
                     >
-                      <Sparkles className="mr-1 h-3.5 w-3.5 text-[#B7FF70]" /> Generate
+                      <Sparkles className="mr-1 h-3.5 w-3.5 text-brand-green" /> Generate
                     </button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="rounded-xl">
@@ -465,7 +467,7 @@ export function LibraryPageClient() {
                 className="mt-4 flex gap-2"
               >
                 <Input
-                  className="h-9 rounded-xl border-[#111827]/10 bg-white text-sm focus-visible:ring-[#B7FF70]"
+                  className="h-9 rounded-xl border-brand-ink/10 bg-white text-sm focus-visible:ring-brand-green"
                   placeholder="https://example.com/useful-link"
                   value={linkUrl}
                   onChange={(e) => setLinkUrl(e.target.value)}
@@ -475,7 +477,7 @@ export function LibraryPageClient() {
                 <button
                   type="submit"
                   disabled={!linkUrl || isAdding}
-                  className="inline-flex shrink-0 items-center rounded-full bg-[#B7FF70] px-4 py-2 text-xs font-medium text-[#111827] transition-all hover:bg-[#111827] hover:text-white disabled:opacity-50"
+                  className="inline-flex shrink-0 items-center rounded-full bg-brand-green px-4 py-2 text-xs font-medium text-brand-ink transition-all hover:bg-brand-ink hover:text-white disabled:opacity-50"
                 >
                   <Plus className="mr-1 h-3.5 w-3.5" /> Add
                 </button>
@@ -484,7 +486,7 @@ export function LibraryPageClient() {
           </div>
 
           <CollapsibleContent>
-            <div className="border-t border-[#111827]/5 px-5 py-5">
+            <div className="border-t border-brand-ink/5 px-5 py-5">
               <div className="grid gap-4 sm:grid-cols-1 lg:grid-cols-2">
                 {sortedItems.map((item: SavedResourceResponse, idx: number) => (
                   <ResourceCardRenderer
@@ -508,33 +510,30 @@ export function LibraryPageClient() {
   };
 
   return (
-    <div
-      className="-mt-6 min-h-[calc(100vh-3.5rem)] bg-[#F8F9FA] px-4 py-10 md:px-8"
-      style={{ width: "100vw", marginLeft: "calc(-50vw + 50%)" }}
-    >
-      <div className="mx-auto w-full max-w-7xl">
+    <div className="w-full">
+      <div className="w-full">
         {/* Hero header */}
         <div className="mb-10">
-          <h1 className="text-4xl font-bold tracking-tight text-[#111827] md:text-5xl">
+          <h1 className="text-4xl font-bold tracking-tight text-brand-ink md:text-5xl">
             Your Library
           </h1>
-          <p className="mt-2 text-[15px] text-[#111827]/50">
+          <p className="mt-2 text-[15px] text-brand-ink/50">
             Curated resources across your teaching collections
           </p>
         </div>
 
         {groups.length === 0 && !isLoading ? (
           <div className="flex flex-col items-center justify-center rounded-3xl border border-white/80 bg-white/60 py-24 text-center backdrop-blur-sm">
-            <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-[#B7FF70]/20">
-              <Bookmark className="h-8 w-8 text-[#111827]/30" />
+            <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-brand-green/20">
+              <Bookmark className="h-8 w-8 text-brand-ink/30" />
             </div>
-            <p className="text-xl font-semibold text-[#111827]">Your library is empty</p>
-            <p className="mt-2 max-w-sm text-sm text-[#111827]/50">
+            <p className="text-xl font-semibold text-brand-ink">Your library is empty</p>
+            <p className="mt-2 max-w-sm text-sm text-brand-ink/50">
               Save resources from your search results to build your curated collection.
             </p>
             <Link
               href="/search"
-              className="mt-8 inline-flex items-center rounded-full bg-[#B7FF70] px-8 py-3 text-sm font-semibold text-[#111827] shadow-sm transition-all hover:bg-[#111827] hover:text-white hover:shadow-[0_8px_32px_rgba(183,255,112,0.3)]"
+              className="mt-8 inline-flex items-center rounded-full bg-brand-green px-8 py-3 text-sm font-semibold text-brand-ink shadow-sm transition-all hover:bg-brand-ink hover:text-white hover:shadow-[0_8px_32px_rgba(183,255,112,0.3)]"
             >
               <Search className="mr-2 h-4 w-4" />
               Start Searching
@@ -553,13 +552,13 @@ export function LibraryPageClient() {
                     onClick={() => setActiveTab(group.preset_id)}
                     className={`rounded-[1.75rem] px-5 py-2 text-sm font-medium transition-all ${
                       isActive
-                        ? "bg-[#111827] text-white shadow-sm"
-                        : "text-[#111827]/60 hover:bg-white/80 hover:text-[#111827]"
+                        ? "bg-brand-ink text-white shadow-sm"
+                        : "text-brand-ink/60 hover:bg-white/80 hover:text-brand-ink"
                     }`}
                   >
                     {group.preset_name}
                     <span
-                      className={`ml-1.5 text-xs ${isActive ? "text-white/60" : "text-[#111827]/30"}`}
+                      className={`ml-1.5 text-xs ${isActive ? "text-white/60" : "text-brand-ink/30"}`}
                     >
                       {group.collections.length}
                     </span>

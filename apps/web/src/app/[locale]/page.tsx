@@ -15,7 +15,7 @@ export default async function HomePage({ params }: HomePageProps) {
   const t = await getTranslations("home");
 
   return (
-    <div className="relative h-dvh bg-[#F8F9FA] overflow-hidden text-[#111827] font-sans flex flex-col">
+    <div className="relative h-dvh bg-brand-surface overflow-hidden text-brand-ink font-sans flex flex-col">
       {/* Interactive clustering canvas background */}
       <CanvasBackground />
 
@@ -23,7 +23,7 @@ export default async function HomePage({ params }: HomePageProps) {
 
       <main className="relative z-10 flex flex-1 flex-col items-center justify-center px-4">
         {/* Main hero typography matches the ultra-clean flat aesthetic */}
-        <h1 className="text-5xl md:text-[4.5rem] font-bold tracking-tight text-center max-w-4xl leading-[1.05] text-[#111827]">
+        <h1 className="text-5xl md:text-[4.5rem] font-bold tracking-tight text-center max-w-4xl leading-[1.05] text-brand-ink">
           {t("heroTitlePart1")} <br /> {t("heroTitlePart2")}
         </h1>
 
@@ -34,13 +34,13 @@ export default async function HomePage({ params }: HomePageProps) {
         {/* Feature Tags */}
         <div className="flex flex-wrap items-center justify-center gap-3 mt-10">
           <div className="px-5 py-2.5 rounded-full bg-white/60 border border-white/80 shadow-sm backdrop-blur-md transition-transform hover:scale-105 cursor-default">
-            <span className="text-sm font-bold text-[#111827]">{t("featureTagYear")}</span>
+            <span className="text-sm font-bold text-brand-ink">{t("featureTagYear")}</span>
           </div>
           <div className="px-5 py-2.5 rounded-full bg-white/60 border border-white/80 shadow-sm backdrop-blur-md transition-transform hover:scale-105 cursor-default">
-            <span className="text-sm font-bold text-[#111827]">{t("featureTagDesigner")}</span>
+            <span className="text-sm font-bold text-brand-ink">{t("featureTagDesigner")}</span>
           </div>
           <div className="px-5 py-2.5 rounded-full bg-white/60 border border-white/80 shadow-sm backdrop-blur-md transition-transform hover:scale-105 cursor-default">
-            <span className="text-sm font-bold text-[#111827]">{t("featureTagGlobal")}</span>
+            <span className="text-sm font-bold text-brand-ink">{t("featureTagGlobal")}</span>
           </div>
         </div>
       </main>

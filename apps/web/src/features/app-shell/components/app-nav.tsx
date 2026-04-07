@@ -17,21 +17,24 @@ export function AppNav({ tabs }: AppNavProps) {
   const pathname = usePathname();
 
   return (
-    <div className="flex flex-1 gap-1">
-      {tabs.map((tab) => (
-        <Link
-          key={tab.key}
-          href={tab.href}
-          className={cn(
-            "cursor-pointer rounded-md px-3 py-2 text-sm font-medium transition-colors",
-            pathname.startsWith(tab.href)
-              ? "bg-accent text-accent-foreground"
-              : "text-muted-foreground hover:bg-accent/50 hover:text-accent-foreground"
-          )}
-        >
-          {tab.label}
-        </Link>
-      ))}
+    <div className="flex flex-1 items-center gap-1">
+      {tabs.map((tab) => {
+        const isActive = pathname.startsWith(tab.href);
+        return (
+          <Link
+            key={tab.key}
+            href={tab.href}
+            className={cn(
+              "cursor-pointer rounded-full px-4 py-1.5 text-sm font-medium transition-all",
+              isActive
+                ? "bg-brand-ink text-white shadow-sm"
+                : "text-gray-500 hover:text-brand-ink hover:bg-white/80"
+            )}
+          >
+            {tab.label}
+          </Link>
+        );
+      })}
     </div>
   );
 }

@@ -48,7 +48,7 @@ export default function ContactPage() {
   }
 
   return (
-    <div className="relative min-h-screen bg-[#F8F9FA] overflow-hidden text-[#111827] font-sans">
+    <div className="relative min-h-screen bg-brand-surface overflow-hidden text-brand-ink font-sans">
       <CanvasBackground />
       <Header />
 

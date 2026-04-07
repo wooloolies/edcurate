@@ -16,10 +16,13 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const tRoot = useTranslations();
 
   return (
-    <div className="min-h-screen">
-      <nav className="border-b bg-background">
-        <div className="mx-auto flex h-14 max-w-7xl items-center gap-6 px-4">
-          <Link href="/dashboard" className="text-lg font-bold">
+    <div className="min-h-screen bg-brand-surface">
+      <header className="sticky top-0 z-50 px-4 pt-4 pb-2 md:px-8 md:pt-6">
+        <nav className="mx-auto flex max-w-5xl items-center gap-6 rounded-[2.5rem] bg-white/60 px-6 py-2.5 backdrop-blur-xl shadow-[0_4px_32px_rgba(0,0,0,0.04)] border border-white/60">
+          <Link
+            href="/dashboard"
+            className="font-bold text-xl tracking-tight text-brand-ink mr-2"
+          >
             {tRoot("title")}
           </Link>
           <AppNav
@@ -28,10 +31,12 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               label: t(tab.key),
             }))}
           />
-          <LanguageSwitcher />
-          <UserMenu />
-        </div>
-      </nav>
+          <div className="flex items-center gap-3 ml-auto">
+            <LanguageSwitcher />
+            <UserMenu />
+          </div>
+        </nav>
+      </header>
       <main className="mx-auto max-w-7xl px-4 py-6">{children}</main>
     </div>
   );
