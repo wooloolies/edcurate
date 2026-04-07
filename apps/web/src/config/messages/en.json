@@ -311,6 +311,16 @@
       "previewDescription": "Review this collection before cloning it to your library.",
       "syncCollection": "Sync Collection",
       "syncSuccess": "Collection synced!"
+    },
+    "saveCollection": {
+      "title": "Save to Collection",
+      "description": "Group your selected resources into a named collection.",
+      "nameLabel": "Collection Name",
+      "namePlaceholder": "e.g., Physics 101",
+      "privacyLabel": "Privacy",
+      "private": "Private",
+      "public": "Public",
+      "publicWarning": "Are you sure you want to make this public? Anyone will be able to discover these resources in suggested collections."
     }
   },
   "nav": {

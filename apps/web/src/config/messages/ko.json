@@ -293,6 +293,16 @@
         "accessibility": "접근성",
         "cultural_sensitivity": "문화적 민감성"
       }
+    },
+    "saveCollection": {
+      "title": "컬렉션에 저장",
+      "description": "선택한 리소스를 이름이 지정된 컬렉션으로 그룹화합니다.",
+      "nameLabel": "컬렉션 이름",
+      "namePlaceholder": "예: 물리학 101",
+      "privacyLabel": "공개 설정",
+      "private": "비공개",
+      "public": "공개",
+      "publicWarning": "정말 공개하시겠습니까? 누구나 추천 컬렉션에서 이 리소스를 발견할 수 있게 됩니다."
     }
   },
   "nav": {

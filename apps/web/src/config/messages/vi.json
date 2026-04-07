@@ -293,6 +293,16 @@
         "accessibility": "Khả năng tiếp cận",
         "cultural_sensitivity": "Nhạy cảm văn hóa"
       }
+    },
+    "saveCollection": {
+      "title": "Lưu vào bộ sưu tập",
+      "description": "Nhóm các tài nguyên đã chọn vào bộ sưu tập có tên.",
+      "nameLabel": "Tên bộ sưu tập",
+      "namePlaceholder": "Ví dụ: Vật lý 101",
+      "privacyLabel": "Quyền riêng tư",
+      "private": "Riêng tư",
+      "public": "Công khai",
+      "publicWarning": "Bạn có chắc muốn công khai? Mọi người sẽ có thể tìm thấy các tài nguyên này trong bộ sưu tập gợi ý."
     }
   },
   "nav": {

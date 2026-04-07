@@ -293,6 +293,16 @@
         "accessibility": "可及性",
         "cultural_sensitivity": "文化敏感性"
       }
+    },
+    "saveCollection": {
+      "title": "保存到收藏集",
+      "description": "将选定的资源归入一个命名收藏集。",
+      "nameLabel": "收藏集名称",
+      "namePlaceholder": "例如：物理 101",
+      "privacyLabel": "隐私设置",
+      "private": "私密",
+      "public": "公开",
+      "publicWarning": "确定要公开吗？所有人都可以在推荐收藏集中发现这些资源。"
     }
   },
   "nav": {
