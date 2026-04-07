@@ -168,8 +168,10 @@ export function SearchPageClient() {
   const filterBySource = (source?: string) =>
     source ? allResults.filter((r) => r.source === source) : allResults;
 
+  const hasContent = results || stream.isStreaming || isFetching;
+
   return (
-    <div className="w-full max-w-4xl space-y-6">
+    <div className={`w-full max-w-4xl space-y-6 ${!hasContent ? "my-auto" : ""}`}>
       {/* Preset Header */}
       <div className="flex flex-col mb-2 pl-2">
         <div className="flex items-center gap-3">
