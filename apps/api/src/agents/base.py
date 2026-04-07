@@ -14,19 +14,6 @@ from src.presets.model import ClassroomPreset
 
 logger = get_logger(__name__)
 
-DIMENSIONS = (
-    "curriculum_alignment",
-    "pedagogical_quality",
-    "reading_level",
-    "bias_representation",
-    "factual_accuracy",
-    "source_credibility",
-    "licensing_ip",
-)
-
-DIMENSIONS_SET = frozenset(DIMENSIONS)
-
-
 def get_gemini_client() -> genai.Client:
     """Create a Vertex AI Gemini client using Application Default Credentials."""
     return genai.Client(

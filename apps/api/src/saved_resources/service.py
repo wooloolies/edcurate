@@ -6,7 +6,6 @@ from fastapi import HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.dialects.postgresql import insert
 
-from src.agents.schemas import EvaluationResult
 from src.discovery.schemas import ResourceCard
 from src.lib.dependencies import DBSession
 from src.presets.model import ClassroomPreset
@@ -73,21 +72,15 @@ async def save_resource(
     return SavedResourceResponse.model_validate(saved)
 
 
-def _build_eval_data(resource: ResourceCard) -> dict[str, Any] | None:
-    if resource.relevance_score is None:
-        return None
-    from src.agents.schemas import DimensionScore
+def _build_eval_data(resource: ResourceCard) -> dict | None:
+    """Return stored judgment data if the resource was already evaluated.
 
-    return EvaluationResult(
-        resource_url=resource.url,
-        overall_score=resource.relevance_score,
-        relevance_reason=resource.relevance_reason or "",
-        recommended_use="supplementary",
-        scores={
-            k: DimensionScore(**v)
-            for k, v in (resource.evaluation_details or {}).items()
-        },
-    ).model_dump(mode="json")
+    In the new 3-call pipeline, full JudgmentResult is attached during search.
+    When saving a resource that hasn't been evaluated yet, return None —
+    the user can trigger evaluation later via the /evaluate endpoints.
+    """
+    # No evaluation data available at save time for non-evaluated resources
+    return None
 
 
 def _dump_eval_data(

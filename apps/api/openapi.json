@@ -867,61 +867,8 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/EvaluatedSearchResponse"
+                  "$ref": "#/components/schemas/JudgedSearchResponse"
                 }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/discovery/search/stream": {
-      "get": {
-        "tags": [
-          "discovery"
-        ],
-        "summary": "Search Stream",
-        "description": "SSE stream of search pipeline progress.\n\nEmits `SearchStageEvent` messages under the `stage` event name as the\nmulti-agent pipeline executes.  Rate limited to 20 requests per minute\nper user.\n\nThe stream always terminates with a ``complete / done`` event whose\n``data`` field contains the full ``EvaluatedSearchResponse``.",
-        "operationId": "search_stream_api_discovery_search_stream_get",
-        "parameters": [
-          {
-            "name": "preset_id",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid",
-              "title": "Preset Id"
-            }
-          },
-          {
-            "name": "query",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "minLength": 1,
-              "maxLength": 500,
-              "title": "Query"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
               }
             }
           },
@@ -1239,6 +1186,25 @@
   },
   "components": {
     "schemas": {
+      "AdaptationSuggestion": {
+        "properties": {
+          "action": {
+            "type": "string",
+            "title": "Action"
+          },
+          "rationale": {
+            "type": "string",
+            "title": "Rationale"
+          }
+        },
+        "type": "object",
+        "required": [
+          "action",
+          "rationale"
+        ],
+        "title": "AdaptationSuggestion",
+        "description": "A concrete adaptation the teacher can apply."
+      },
       "AddCustomLinkRequest": {
         "properties": {
           "preset_id": {
@@ -1277,86 +1243,6 @@
         ],
         "title": "AddCustomLinkRequest"
       },
-      "AdversarialFlag": {
-        "properties": {
-          "category": {
-            "type": "string",
-            "enum": [
-              "false_positive",
-              "hidden_bias",
-              "accuracy_gap",
-              "safety",
-              "licensing_trap"
-            ],
-            "title": "Category"
-          },
-          "severity": {
-            "type": "string",
-            "enum": [
-              "high",
-              "medium",
-              "low"
-            ],
-            "title": "Severity"
-          },
-          "explanation": {
-            "type": "string",
-            "title": "Explanation"
-          },
-          "suggested_action": {
-            "type": "string",
-            "title": "Suggested Action"
-          }
-        },
-        "type": "object",
-        "required": [
-          "category",
-          "severity",
-          "explanation",
-          "suggested_action"
-        ],
-        "title": "AdversarialFlag",
-        "description": "Single issue raised by the adversarial reviewer."
-      },
-      "AdversarialReviewResult": {
-        "properties": {
-          "verdict": {
-            "type": "string",
-            "enum": [
-              "approved",
-              "approved_with_caveats",
-              "flagged_for_teacher_review",
-              "not_recommended"
-            ],
-            "title": "Verdict"
-          },
-          "flags": {
-            "items": {
-              "$ref": "#/components/schemas/AdversarialFlag"
-            },
-            "type": "array",
-            "title": "Flags"
-          },
-          "score_adjustments": {
-            "additionalProperties": {
-              "$ref": "#/components/schemas/DimensionScore"
-            },
-            "type": "object",
-            "title": "Score Adjustments"
-          },
-          "review_summary": {
-            "type": "string",
-            "title": "Review Summary"
-          }
-        },
-        "type": "object",
-        "required": [
-          "verdict",
-          "review_summary"
-        ],
-        "title": "AdversarialReviewResult",
-        "description": "Output of Agent 4 — challenges Agent 3 scores and surfaces risks."
-      },
       "BatchEvaluateRequest": {
         "properties": {
           "preset_id": {
@@ -1393,27 +1279,6 @@
             },
             "type": "array",
             "title": "Resources"
-          },
-          "evaluation_data_list": {
-            "anyOf": [
-              {
-                "items": {
-                  "anyOf": [
-                    {
-                      "$ref": "#/components/schemas/EvaluationResult-Input"
-                    },
-                    {
-                      "type": "null"
-                    }
-                  ]
-                },
-                "type": "array"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Evaluation Data List"
           }
         },
         "type": "object",
@@ -1558,32 +1423,6 @@
         "title": "DdgsMetadata",
         "description": "Metadata from DuckDuckGo search results."
       },
-      "DimensionScore": {
-        "properties": {
-          "score": {
-            "type": "integer",
-            "maximum": 10.0,
-            "minimum": 1.0,
-            "title": "Score"
-          },
-          "max": {
-            "type": "integer",
-            "title": "Max",
-            "default": 10
-          },
-          "reason": {
-            "type": "string",
-            "title": "Reason"
-          }
-        },
-        "type": "object",
-        "required": [
-          "score",
-          "reason"
-        ],
-        "title": "DimensionScore",
-        "description": "Score for a single evaluation dimension."
-      },
       "EmailLoginRequest": {
         "properties": {
           "email": {
@@ -1616,180 +1455,6 @@
           "saved_resource_id"
         ],
         "title": "EvaluateSingleRequest"
-      },
-      "EvaluatedSearchResponse": {
-        "properties": {
-          "query": {
-            "type": "string",
-            "title": "Query"
-          },
-          "preset_id": {
-            "type": "string",
-            "format": "uuid",
-            "title": "Preset Id"
-          },
-          "total_results": {
-            "type": "integer",
-            "title": "Total Results"
-          },
-          "counts_by_source": {
-            "additionalProperties": {
-              "type": "integer"
-            },
-            "type": "object",
-            "title": "Counts By Source"
-          },
-          "results": {
-            "items": {
-              "$ref": "#/components/schemas/ResourceCard"
-            },
-            "type": "array",
-            "title": "Results"
-          },
-          "errors": {
-            "items": {
-              "$ref": "#/components/schemas/SourceError"
-            },
-            "type": "array",
-            "title": "Errors"
-          },
-          "generated_queries": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/GeneratedSearchQueries"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          },
-          "evaluations": {
-            "items": {
-              "$ref": "#/components/schemas/EvaluationResult-Output"
-            },
-            "type": "array",
-            "title": "Evaluations"
-          }
-        },
-        "type": "object",
-        "required": [
-          "query",
-          "preset_id",
-          "total_results",
-          "counts_by_source",
-          "results",
-          "errors"
-        ],
-        "title": "EvaluatedSearchResponse",
-        "description": "Extends SearchResponse with evaluation data for the top 4 results."
-      },
-      "EvaluationResult-Input": {
-        "properties": {
-          "resource_url": {
-            "type": "string",
-            "title": "Resource Url"
-          },
-          "overall_score": {
-            "type": "number",
-            "maximum": 10.0,
-            "minimum": 0.0,
-            "title": "Overall Score"
-          },
-          "relevance_reason": {
-            "type": "string",
-            "title": "Relevance Reason"
-          },
-          "recommended_use": {
-            "type": "string",
-            "enum": [
-              "primary_resource",
-              "supplementary",
-              "reference_only"
-            ],
-            "title": "Recommended Use"
-          },
-          "scores": {
-            "additionalProperties": {
-              "$ref": "#/components/schemas/DimensionScore"
-            },
-            "type": "object",
-            "title": "Scores"
-          },
-          "adversarial": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/AdversarialReviewResult"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          }
-        },
-        "type": "object",
-        "required": [
-          "resource_url",
-          "overall_score",
-          "relevance_reason",
-          "recommended_use",
-          "scores"
-        ],
-        "title": "EvaluationResult",
-        "description": "Full evaluation of a single resource across 7 dimensions."
-      },
-      "EvaluationResult-Output": {
-        "properties": {
-          "resource_url": {
-            "type": "string",
-            "title": "Resource Url"
-          },
-          "overall_score": {
-            "type": "number",
-            "maximum": 10.0,
-            "minimum": 0.0,
-            "title": "Overall Score"
-          },
-          "relevance_reason": {
-            "type": "string",
-            "title": "Relevance Reason"
-          },
-          "recommended_use": {
-            "type": "string",
-            "enum": [
-              "primary_resource",
-              "supplementary",
-              "reference_only"
-            ],
-            "title": "Recommended Use"
-          },
-          "scores": {
-            "additionalProperties": {
-              "$ref": "#/components/schemas/DimensionScore"
-            },
-            "type": "object",
-            "title": "Scores"
-          },
-          "adversarial": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/AdversarialReviewResult"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          }
-        },
-        "type": "object",
-        "required": [
-          "resource_url",
-          "overall_score",
-          "relevance_reason",
-          "recommended_use",
-          "scores"
-        ],
-        "title": "EvaluationResult",
-        "description": "Full evaluation of a single resource across 7 dimensions."
       },
       "GeneratedSearchQueries": {
         "properties": {
@@ -1886,6 +1551,172 @@
         ],
         "title": "HealthResponse",
         "description": "Health check response with detailed service statuses."
+      },
+      "JudgedSearchResponse": {
+        "properties": {
+          "query": {
+            "type": "string",
+            "title": "Query"
+          },
+          "preset_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Preset Id"
+          },
+          "total_results": {
+            "type": "integer",
+            "title": "Total Results"
+          },
+          "counts_by_source": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Counts By Source"
+          },
+          "results": {
+            "items": {
+              "$ref": "#/components/schemas/ResourceCard"
+            },
+            "type": "array",
+            "title": "Results"
+          },
+          "errors": {
+            "items": {
+              "$ref": "#/components/schemas/SourceError"
+            },
+            "type": "array",
+            "title": "Errors"
+          },
+          "generated_queries": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/GeneratedSearchQueries"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "judgments": {
+            "items": {
+              "$ref": "#/components/schemas/JudgmentResult"
+            },
+            "type": "array",
+            "title": "Judgments"
+          }
+        },
+        "type": "object",
+        "required": [
+          "query",
+          "preset_id",
+          "total_results",
+          "counts_by_source",
+          "results",
+          "errors"
+        ],
+        "title": "JudgedSearchResponse",
+        "description": "Extends SearchResponse with judgment data for the top results."
+      },
+      "JudgmentResult": {
+        "properties": {
+          "resource_url": {
+            "type": "string",
+            "title": "Resource Url"
+          },
+          "verdict": {
+            "type": "string",
+            "enum": [
+              "use_it",
+              "adapt_it",
+              "skip_it"
+            ],
+            "title": "Verdict"
+          },
+          "confidence": {
+            "type": "string",
+            "enum": [
+              "high",
+              "moderate",
+              "low"
+            ],
+            "title": "Confidence"
+          },
+          "curriculum_fit": {
+            "$ref": "#/components/schemas/MetricResult"
+          },
+          "accessibility": {
+            "$ref": "#/components/schemas/MetricResult"
+          },
+          "trustworthiness": {
+            "$ref": "#/components/schemas/MetricResult"
+          },
+          "reasoning_chain": {
+            "type": "string",
+            "title": "Reasoning Chain"
+          },
+          "flags": {
+            "items": {
+              "$ref": "#/components/schemas/ResourceFlag"
+            },
+            "type": "array",
+            "title": "Flags"
+          },
+          "adaptations": {
+            "items": {
+              "$ref": "#/components/schemas/AdaptationSuggestion"
+            },
+            "type": "array",
+            "title": "Adaptations"
+          },
+          "override_notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Override Notes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "resource_url",
+          "verdict",
+          "confidence",
+          "curriculum_fit",
+          "accessibility",
+          "trustworthiness",
+          "reasoning_chain"
+        ],
+        "title": "JudgmentResult",
+        "description": "Final judgment combining triage + risk scan, presented to the teacher."
+      },
+      "MetricResult": {
+        "properties": {
+          "rating": {
+            "type": "string",
+            "enum": [
+              "strong",
+              "adequate",
+              "weak"
+            ],
+            "title": "Rating"
+          },
+          "reason": {
+            "type": "string",
+            "title": "Reason"
+          }
+        },
+        "type": "object",
+        "required": [
+          "rating",
+          "reason"
+        ],
+        "title": "MetricResult",
+        "description": "One of the 3 evaluation metrics."
       },
       "OAuthLoginRequest": {
         "properties": {
@@ -2867,21 +2698,17 @@
             ],
             "title": "Relevance Reason"
           },
-          "evaluation_details": {
+          "verdict": {
             "anyOf": [
               {
-                "additionalProperties": {
-                  "additionalProperties": true,
-                  "type": "object"
-                },
-                "type": "object"
+                "type": "string"
               },
               {
                 "type": "null"
               }
             ],
-            "title": "Evaluation Details",
-            "description": "Detailed dimension scores"
+            "title": "Verdict",
+            "description": "use_it | adapt_it | skip_it"
           }
         },
         "type": "object",
@@ -2896,6 +2723,52 @@
         "title": "ResourceCard",
         "description": "Normalised resource card returned by all providers."
       },
+      "ResourceFlag": {
+        "properties": {
+          "category": {
+            "type": "string",
+            "enum": [
+              "outdated_content",
+              "bias_or_framing",
+              "factual_concern",
+              "safety_concern",
+              "misleading_match"
+            ],
+            "title": "Category"
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "high",
+              "medium",
+              "low"
+            ],
+            "title": "Severity"
+          },
+          "evidence_quote": {
+            "type": "string",
+            "title": "Evidence Quote"
+          },
+          "explanation": {
+            "type": "string",
+            "title": "Explanation"
+          },
+          "suggested_action": {
+            "type": "string",
+            "title": "Suggested Action"
+          }
+        },
+        "type": "object",
+        "required": [
+          "category",
+          "severity",
+          "evidence_quote",
+          "explanation",
+          "suggested_action"
+        ],
+        "title": "ResourceFlag",
+        "description": "A single issue found by the risk scanner, backed by evidence."
+      },
       "SaveResourceRequest": {
         "properties": {
           "preset_id": {
@@ -2909,16 +2782,6 @@
           },
           "resource": {
             "$ref": "#/components/schemas/ResourceCard"
-          },
-          "evaluation_data": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/EvaluationResult-Input"
-              },
-              {
-                "type": "null"
-              }
-            ]
           }
         },
         "type": "object",
@@ -2976,7 +2839,7 @@
           "evaluation_data": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/EvaluationResult-Output"
+                "$ref": "#/components/schemas/JudgmentResult"
               },
               {
                 "type": "null"

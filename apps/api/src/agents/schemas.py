@@ -1,4 +1,4 @@
-"""Evaluation schemas — 7-dimension scoring and evaluated search response."""
+"""Evaluation schemas — triage + risk scan + final judgment."""
 
 from typing import Literal
 
@@ -6,60 +6,83 @@ from pydantic import BaseModel, Field
 
 from src.discovery.schemas import SearchResponse
 
-AdversarialFlagCategory = Literal[
-    "false_positive",
-    "hidden_bias",
-    "accuracy_gap",
-    "safety",
-    "licensing_trap",
+# ── Type aliases ─────────────────────────────────────────────────────
+Verdict = Literal["use_it", "adapt_it", "skip_it"]
+MetricRating = Literal["strong", "adequate", "weak"]
+Confidence = Literal["high", "moderate", "low"]
+FlagCategory = Literal[
+    "outdated_content",
+    "bias_or_framing",
+    "factual_concern",
+    "safety_concern",
+    "misleading_match",
 ]
-AdversarialFlagSeverity = Literal["high", "medium", "low"]
-AdversarialVerdict = Literal[
-    "approved",
-    "approved_with_caveats",
-    "flagged_for_teacher_review",
-    "not_recommended",
-]
+FlagSeverity = Literal["high", "medium", "low"]
 
 
-class DimensionScore(BaseModel):
-    """Score for a single evaluation dimension."""
+# ── Shared building blocks ───────────────────────────────────────────
+class MetricResult(BaseModel):
+    """One of the 3 evaluation metrics."""
 
-    score: int = Field(..., ge=1, le=10)
-    max: int = 10
+    rating: MetricRating
     reason: str
 
 
-class AdversarialFlag(BaseModel):
-    """Single issue raised by the adversarial reviewer."""
+class ResourceFlag(BaseModel):
+    """A single issue found by the risk scanner, backed by evidence."""
 
-    category: AdversarialFlagCategory
-    severity: AdversarialFlagSeverity
+    category: FlagCategory
+    severity: FlagSeverity
+    evidence_quote: str
     explanation: str
     suggested_action: str
 
 
-class AdversarialReviewResult(BaseModel):
-    """Output of Agent 4 — challenges Agent 3 scores and surfaces risks."""
+class AdaptationSuggestion(BaseModel):
+    """A concrete adaptation the teacher can apply."""
 
-    verdict: AdversarialVerdict
-    flags: list[AdversarialFlag] = Field(default_factory=list)
-    score_adjustments: dict[str, DimensionScore] = Field(default_factory=dict)
-    review_summary: str
+    action: str
+    rationale: str
 
 
-class EvaluationResult(BaseModel):
-    """Full evaluation of a single resource across 7 dimensions."""
+# ── Call 1 output ────────────────────────────────────────────────────
+class TriageResult(BaseModel):
+    """Output of the Triage Agent (Call 1)."""
+
+    verdict: Verdict
+    curriculum_fit: MetricResult
+    accessibility: MetricResult
+    trustworthiness: MetricResult
+    fit_reason: str
+    adaptations: list[AdaptationSuggestion] = Field(default_factory=list)
+
+
+# ── Call 2 output ────────────────────────────────────────────────────
+class RiskScanResult(BaseModel):
+    """Output of the Risk Scanner (Call 2)."""
+
+    flags: list[ResourceFlag] = Field(default_factory=list)
+    summary: str
+
+
+# ── Call 3 output (final, stored in DB) ──────────────────────────────
+class JudgmentResult(BaseModel):
+    """Final judgment combining triage + risk scan, presented to the teacher."""
 
     resource_url: str
-    overall_score: float = Field(..., ge=0.0, le=10.0)
-    relevance_reason: str
-    recommended_use: Literal["primary_resource", "supplementary", "reference_only"]
-    scores: dict[str, DimensionScore]
-    adversarial: AdversarialReviewResult | None = None
+    verdict: Verdict
+    confidence: Confidence
+    curriculum_fit: MetricResult
+    accessibility: MetricResult
+    trustworthiness: MetricResult
+    reasoning_chain: str
+    flags: list[ResourceFlag] = Field(default_factory=list)
+    adaptations: list[AdaptationSuggestion] = Field(default_factory=list)
+    override_notes: str | None = None
 
 
-class EvaluatedSearchResponse(SearchResponse):
-    """Extends SearchResponse with evaluation data for the top 4 results."""
+# ── Search response with judgments ───────────────────────────────────
+class JudgedSearchResponse(SearchResponse):
+    """Extends SearchResponse with judgment data for the top results."""
 
-    evaluations: list[EvaluationResult] = Field(default_factory=list)
+    judgments: list[JudgmentResult] = Field(default_factory=list)

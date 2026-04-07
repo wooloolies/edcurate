@@ -85,8 +85,8 @@ class ResourceCard(BaseModel):
     metadata: ResourceMetadata
     relevance_score: float | None = None
     relevance_reason: str | None = None
-    evaluation_details: dict[str, dict[str, object]] | None = Field(
-        default=None, description="Detailed dimension scores"
+    verdict: str | None = Field(
+        default=None, description="use_it | adapt_it | skip_it"
     )
 
 

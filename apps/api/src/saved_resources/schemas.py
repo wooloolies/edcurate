@@ -3,7 +3,7 @@ from datetime import datetime
 
 from pydantic import BaseModel, ConfigDict, HttpUrl
 
-from src.agents.schemas import EvaluationResult
+from src.agents.schemas import JudgmentResult
 from src.discovery.schemas import ResourceCard
 
 
@@ -45,7 +45,7 @@ class SavedResourceResponse(BaseModel):
     search_query: str
     resource_url: str
     resource_data: ResourceCard
-    evaluation_data: EvaluationResult | None
+    evaluation_data: JudgmentResult | None
     saved_at: datetime
 
 

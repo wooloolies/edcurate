@@ -6,18 +6,19 @@ import uuid
 from collections.abc import AsyncGenerator
 from typing import Literal
 
-from src.agents.evaluation.adversarial_agent import adversarial_review_resource
 from src.agents.evaluation.adversarial_retrieval import (
     ADV_RETRIEVAL_LIMIT,
     bucket_chunks_for_adversarial,
     build_adversarial_hybrid_query_text,
 )
-from src.agents.evaluation.evaluation_agent import evaluate_resource
-from src.agents.evaluation.reconciler import reconcile
+from src.agents.evaluation.final_judge import judge_resource
+from src.agents.evaluation.risk_scanner import scan_resource_risks
+from src.agents.evaluation.triage_agent import triage_resource
 from src.agents.schemas import (
-    AdversarialReviewResult,
-    EvaluatedSearchResponse,
-    EvaluationResult,
+    JudgedSearchResponse,
+    JudgmentResult,
+    RiskScanResult,
+    TriageResult,
 )
 from src.agents.search.search_query_agent import SearchQueryAgent
 from src.discovery.providers.ddgs import DdgsProvider
@@ -146,16 +147,17 @@ async def _run_rag_pipeline(
     query: str,
     search_id: str,
     eval_vector: list[float] | None = None,
-) -> list[EvaluationResult]:
-    """Run the full RAG pipeline on top-4 resources.
+) -> list[JudgmentResult]:
+    """Run the full RAG pipeline with 3-call evaluation.
 
-    1. Fetch content
-    2. Chunk
-    3. Embed chunks + store in Weaviate
-    4. Build BOTH eval query + adversarial query and embed them
-    5. For each resource: retrieve chunks → run Agent 3 + Agent 4
-       IN PARALLEL → reconcile
+    1. Fetch content + compute readability
+    2. Chunk + embed + store in Weaviate
+    3. Embed query vectors
+    4. For each resource: Call 1 (Triage) + Call 2 (Risk Scanner) in PARALLEL
+    5. Call 3 (Final Judge) sequentially with both outputs
     """
+    from src.rag.readability import compute_readability
+
     # Step 1: Ensure Weaviate collection exists
     try:
         await asyncio.to_thread(ensure_collection)
@@ -167,20 +169,22 @@ async def _run_rag_pipeline(
     fetch_tasks = [fetch_content(card) for card in cards]
     contents = await asyncio.gather(*fetch_tasks, return_exceptions=True)
 
-    # Step 3: Chunk and embed each resource
+    # Step 3: Chunk, embed, compute readability
+    readability_map: dict[str, dict[str, float]] = {}
     for card, content in zip(cards, contents, strict=True):
         if not isinstance(content, str) or not content:
-            logger.warning(
-                "Skipping resource — no content",
-                url=card.url,
-            )
+            logger.warning("Skipping resource — no content", url=card.url)
             continue
+
+        # Compute readability on full text before chunking
+        metrics = compute_readability(content)
+        if metrics:
+            readability_map[card.url] = metrics
 
         chunks = chunk_text(content, heading=card.title)
         if not chunks:
             continue
 
-        # Embed all chunks for this resource
         try:
             chunk_texts = [c.text for c in chunks]
             vectors = await embed_texts(chunk_texts)
@@ -194,9 +198,7 @@ async def _run_rag_pipeline(
             )
         except Exception as e:
             logger.error(
-                "Chunk embedding/upsert failed",
-                url=card.url,
-                error=str(e),
+                "Chunk embedding/upsert failed", url=card.url, error=str(e)
             )
 
     # Step 4: Embed queries — reuse eval_vector if provided by pre-sort
@@ -215,9 +217,12 @@ async def _run_rag_pipeline(
         logger.error("Query embedding failed", error=str(e))
         return []
 
-    # Step 5: For each resource — Agent 3 + Agent 4 in parallel, then reconcile
-    async def _process_one(card: ResourceCard) -> EvaluationResult | None:
-        """Run Agent 3 + Agent 4 in parallel for a single resource."""
+    # eval_vector is guaranteed non-None here (either passed in or just computed above)
+    assert eval_vector is not None
+
+    # Step 5: For each resource — 3-call evaluation
+    async def _process_one(card: ResourceCard) -> JudgmentResult | None:
+        """Call 1 + Call 2 in parallel, then Call 3 sequentially."""
         # Retrieve both chunk sets in parallel
         try:
             eval_retrieved, adv_retrieved = await asyncio.gather(
@@ -237,15 +242,11 @@ async def _run_rag_pipeline(
                 ),
             )
         except Exception as e:
-            logger.warning(
-                "Chunk retrieval failed",
-                url=card.url,
-                error=str(e),
-            )
+            logger.warning("Chunk retrieval failed", url=card.url, error=str(e))
             eval_retrieved = []
             adv_retrieved = []
 
-        # Build eval text
+        # Build triage text (Call 1)
         if not eval_retrieved:
             eval_chunks_text = card.snippet
         else:
@@ -253,22 +254,23 @@ async def _run_rag_pipeline(
                 str(r.get("chunk_text", "")) for r in eval_retrieved
             )
 
-        # Build adversarial texts (claim vs framing buckets)
+        # Build risk scanner texts (Call 2) — claim vs framing buckets
         claim_text, framing_text = bucket_chunks_for_adversarial(
             adv_retrieved if isinstance(adv_retrieved, list) else [],
             card.snippet,
         )
 
-        # Run Agent 3 (eval) + Agent 4 (adversarial) in PARALLEL — blind
-        eval_result, adv_result = await asyncio.gather(
-            evaluate_resource(
+        # Run Call 1 (Triage) + Call 2 (Risk Scanner) in PARALLEL — blind
+        triage_result, risk_result = await asyncio.gather(
+            triage_resource(
                 title=card.title,
                 url=card.url,
                 source=card.source,
                 chunks_text=eval_chunks_text,
                 preset=preset,
+                readability_metrics=readability_map.get(card.url),
             ),
-            adversarial_review_resource(
+            scan_resource_risks(
                 claim_chunks_text=claim_text,
                 framing_chunks_text=framing_text,
                 title=card.title,
@@ -279,30 +281,39 @@ async def _run_rag_pipeline(
             return_exceptions=True,
         )
 
-        # Handle Agent 3 failure
-        if isinstance(eval_result, Exception):
+        # Handle Call 1 failure — cannot proceed without triage
+        if isinstance(triage_result, Exception):
             logger.warning(
-                "Agent 3 evaluation failed",
-                url=card.url,
-                error=str(eval_result),
+                "Call 1 triage failed", url=card.url, error=str(triage_result)
             )
             return None
-        if not isinstance(eval_result, EvaluationResult):
+        if not isinstance(triage_result, TriageResult):
             return None
 
-        # Handle Agent 4 failure — return eval without adversarial
-        if isinstance(adv_result, Exception):
+        # Handle Call 2 failure — use empty risk scan
+        if isinstance(risk_result, Exception):
             logger.warning(
-                "Agent 4 adversarial failed — skipping reconciliation",
+                "Call 2 risk scan failed — proceeding with empty risks",
                 url=card.url,
-                error=str(adv_result),
+                error=str(risk_result),
             )
-            return eval_result
-        if not isinstance(adv_result, AdversarialReviewResult):
-            return eval_result
+            risk_result = RiskScanResult(
+                flags=[], summary="Risk scan unavailable."
+            )
+        elif not isinstance(risk_result, RiskScanResult):
+            risk_result = RiskScanResult(
+                flags=[], summary="Risk scan unavailable."
+            )
 
-        # Both succeeded — reconcile
-        return reconcile(eval_result, adv_result)
+        # Call 3 — Final Judge (sequential, sees both outputs)
+        judgment = await judge_resource(
+            triage=triage_result,
+            risk=risk_result,
+            title=card.title,
+            url=card.url,
+            preset=preset,
+        )
+        return judgment
 
     # Run all resources in parallel with timeout
     try:
@@ -311,23 +322,24 @@ async def _run_rag_pipeline(
                 *[_process_one(card) for card in cards],
                 return_exceptions=True,
             ),
-            timeout=120.0,
+            timeout=180.0,
         )
     except TimeoutError:
         logger.warning("RAG pipeline timed out")
         return []
 
-    evaluations: list[EvaluationResult] = []
+    judgments: list[JudgmentResult] = []
     for result in results:
-        if isinstance(result, EvaluationResult):
-            evaluations.append(result)
+        if isinstance(result, JudgmentResult):
+            judgments.append(result)
         elif isinstance(result, Exception):
             logger.warning("Resource processing failed", error=str(result))
 
-    # Sort by overall_score descending
-    evaluations.sort(key=lambda e: e.overall_score, reverse=True)
+    # Sort: use_it first, then adapt_it, then skip_it
+    _VERDICT_ORDER = {"use_it": 0, "adapt_it": 1, "skip_it": 2}
+    judgments.sort(key=lambda j: _VERDICT_ORDER.get(j.verdict, 3))
 
-    return evaluations
+    return judgments
 
 
 def _cache_key(preset_id: str, query: str) -> str:
@@ -337,7 +349,7 @@ def _cache_key(preset_id: str, query: str) -> str:
     return f"discovery:result:{digest}"
 
 
-async def _get_cached(key: str) -> EvaluatedSearchResponse | None:
+async def _get_cached(key: str) -> JudgedSearchResponse | None:
     if not settings.REDIS_URL:
         return None
     try:
@@ -347,7 +359,7 @@ async def _get_cached(key: str) -> EvaluatedSearchResponse | None:
         try:
             data = await r.get(key)
             if data:
-                return EvaluatedSearchResponse.model_validate_json(data)
+                return JudgedSearchResponse.model_validate_json(data)
         finally:
             await r.aclose()
     except Exception as e:
@@ -355,7 +367,7 @@ async def _get_cached(key: str) -> EvaluatedSearchResponse | None:
     return None
 
 
-async def _set_cached(key: str, response: EvaluatedSearchResponse) -> None:
+async def _set_cached(key: str, response: JudgedSearchResponse) -> None:
     if not settings.REDIS_URL:
         return
     try:
@@ -373,14 +385,14 @@ async def _set_cached(key: str, response: EvaluatedSearchResponse) -> None:
 async def search_resources(
     preset: ClassroomPreset,
     query: str,
-) -> EvaluatedSearchResponse:
-    """Run federated search with RAG pipeline and deep evaluation.
+) -> JudgedSearchResponse:
+    """Run federated search with RAG pipeline and 3-call evaluation.
 
     1. Check Redis cache
     2. Federated search across all providers (~15 results)
     3. Take top 4 results
     4. RAG pipeline: fetch → chunk → embed → Weaviate →
-       Agent 3 + Agent 4 (parallel, blind) → reconcile
+       Triage + Risk Scanner (parallel, blind) → Final Judge
     5. Cache and return
     """
     from fastapi import HTTPException, status
@@ -484,27 +496,24 @@ async def search_resources(
     top_cards = all_results[:_TOP_K_EVALUATE]
 
     # Run RAG pipeline + evaluation (graceful degradation)
-    evaluations: list[EvaluationResult] = []
+    _VERDICT_SCORE: dict[str, float] = {"use_it": 1.0, "adapt_it": 0.5, "skip_it": 0.0}
+    judgments: list[JudgmentResult] = []
     try:
-        evaluations = await asyncio.wait_for(
+        judgments = await asyncio.wait_for(
             _run_rag_pipeline(
                 top_cards, preset, query, search_id, eval_vector=eval_vector
             ),
             timeout=120.0,
         )
-        # Create a lookup mapping by URL
-        eval_map = {e.resource_url: e for e in evaluations}
+        judgment_map = {j.resource_url: j for j in judgments}
 
-        # Attach relevance score and reason to the original results
-        # so the frontend can display them directly on the card
+        # Attach verdict, relevance score proxy, and reasoning to each card
         for card in all_results:
-            if card.url in eval_map:
-                evaluation = eval_map[card.url]
-                card.relevance_score = evaluation.overall_score
-                card.relevance_reason = evaluation.relevance_reason
-                card.evaluation_details = {
-                    k: v.model_dump() for k, v in evaluation.scores.items()
-                }
+            if card.url in judgment_map:
+                j = judgment_map[card.url]
+                card.verdict = j.verdict
+                card.relevance_score = _VERDICT_SCORE.get(j.verdict, 0.5)
+                card.relevance_reason = j.reasoning_chain
 
     except Exception as e:
         logger.error(
@@ -512,7 +521,7 @@ async def search_resources(
             error=str(e),
         )
 
-    # Sort results by relevance_score descending (putting None values at the end)
+    # Sort: judged resources first (by verdict proxy), unevaluated at end
     all_results.sort(
         key=lambda card: (
             card.relevance_score if card.relevance_score is not None else -1.0
@@ -520,14 +529,14 @@ async def search_resources(
         reverse=True,
     )
 
-    response = EvaluatedSearchResponse(
+    response = JudgedSearchResponse(
         query=query,
         preset_id=uuid.UUID(str(preset.id)),
         total_results=len(all_results),
         counts_by_source=counts_by_source,
         results=all_results,
         errors=errors,
-        evaluations=evaluations,
+        judgments=judgments,
         generated_queries=generated_queries,
     )
 
