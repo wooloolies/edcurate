@@ -199,7 +199,7 @@ export function SuggestedCollectionsRail({
               </div>
               <DialogFooter>
                 <Button variant="outline" onClick={() => setSelectedColId(null)}>
-                  {t("cancel")}
+                  {t("cancel", { fallback: "Cancel" })}
                 </Button>
                 {isCloned ? (
                   <Button 
