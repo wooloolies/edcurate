@@ -158,10 +158,22 @@ export function CollectionOnboarding() {
             <input
               ref={inputRef}
               type="text"
-              value={presetName}
+              value={presetNameRaw ?? ""}
               onChange={(e) => setPresetName(e.target.value)}
-              onBlur={() => setIsEditingPreset(false)}
-              onKeyDown={(e) => e.key === "Enter" && setIsEditingPreset(false)}
+              onBlur={() => {
+                if (!presetNameRaw?.trim()) {
+                  setPresetName("Collection 1");
+                }
+                setIsEditingPreset(false);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  if (!presetNameRaw?.trim()) {
+                    setPresetName("Collection 1");
+                  }
+                  setIsEditingPreset(false);
+                }
+              }}
               className="text-2xl font-bold text-[#111827] outline-none border-b-2 border-[#B7FF70] bg-transparent w-40"
               aria-label="Edit collection name"
             />
