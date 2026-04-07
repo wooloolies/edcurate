@@ -5,7 +5,10 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { useDeleteArtifactEndpointApiLocalizerArtifactIdDelete } from "@/lib/api/localizer/localizer";
+import {
+  useDeleteArtifactEndpointApiLocalizerArtifactIdDelete,
+  useListArtifactsEndpointApiLocalizerGet,
+} from "@/lib/api/localizer/localizer";
 import type { GeneratedArtifactResponse } from "@/lib/api/model";
 
 import { FlashcardsViewer } from "./flashcards-viewer";
@@ -41,7 +44,8 @@ interface ArtifactListProps {
   collectionName?: string;
 }
 
-export function ArtifactList({ artifacts, collectionName }: ArtifactListProps) {
+export function ArtifactList({ presetId }: ArtifactListProps) {
+  const { data, isLoading } = useListArtifactsEndpointApiLocalizerGet({ preset_id: presetId });
   const { mutateAsync: deleteArtifact } = useDeleteArtifactEndpointApiLocalizerArtifactIdDelete();
   const [viewingArtifact, setViewingArtifact] = useState<GeneratedArtifactResponse | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);

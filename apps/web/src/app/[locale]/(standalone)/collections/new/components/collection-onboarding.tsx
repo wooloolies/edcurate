@@ -58,18 +58,18 @@ export function CollectionOnboarding() {
   const { data: countries } = useGetCountriesApiCurriculumCountriesGet();
 
   const { data: frameworks } = useGetFrameworksApiCurriculumFrameworksGet(
-    { country: countryCode },
-    { query: { enabled: !!countryCode } }
-  );
-
-  const { data: grades } = useGetGradesApiCurriculumGradesGet(
-    { country: countryCode, framework },
-    { query: { enabled: !!countryCode && !!framework } }
+    { country: countryCode, subject },
+    { query: { enabled: !!countryCode && !!subject } }
   );
 
   const { data: subjects } = useGetSubjectsApiCurriculumSubjectsGet(
     { country: countryCode },
     { query: { enabled: !!countryCode } }
+  );
+
+  const { data: subjects } = useGetSubjectsApiCurriculumSubjectsGet(
+    { country: countryCode },
+    { query: { enabled: !!countryCode } },
   );
 
   useEffect(() => {
@@ -244,6 +244,30 @@ export function CollectionOnboarding() {
               </div>
             </div>
 
+            {/* Subject */}
+            <div className="w-full">
+              <label className="block text-xl font-bold text-[#111827] mb-3 text-left">
+                Subject
+              </label>
+              <div className="relative">
+                <select
+                  value={subject}
+                  onChange={handleSubjectChange}
+                  disabled={!countryCode}
+                  className={selectClass}
+                >
+                  <option value="">Select a subject...</option>
+                  {subjects?.map((s) => (
+                    <option key={s} value={s}>
+                      {s}
+                    </option>
+                  ))}
+                </select>
+                <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
+                  <ChevronDown className="w-5 h-5" />
+                </div>
+              </div>
+            </div>
             {/* Curriculum Framework */}
             <div className="w-full">
               <label

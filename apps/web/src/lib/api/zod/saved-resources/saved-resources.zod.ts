@@ -169,7 +169,36 @@ export const SaveResourceEndpointApiSavedPostBody = zod.object({
   "relevance_reason": zod.union([zod.string(),zod.null()]).optional(),
   "verdict": zod.union([zod.string(),zod.null()]).optional().describe('use_it | adapt_it | skip_it')
 }).describe('Normalised resource card returned by all providers.'),
-  "evaluation_data": zod.union([zod.record(zod.string(), zod.unknown()),zod.null()]).optional()
+  "evaluation_data": zod.union([zod.object({
+  "resource_url": zod.string(),
+  "verdict": zod.enum(['use_it', 'adapt_it', 'skip_it']),
+  "confidence": zod.enum(['high', 'moderate', 'low']),
+  "curriculum_fit": zod.object({
+  "rating": zod.enum(['strong', 'adequate', 'weak']),
+  "reason": zod.string()
+}).describe('One of the 3 evaluation metrics.'),
+  "accessibility": zod.object({
+  "rating": zod.enum(['strong', 'adequate', 'weak']),
+  "reason": zod.string()
+}).describe('One of the 3 evaluation metrics.'),
+  "trustworthiness": zod.object({
+  "rating": zod.enum(['strong', 'adequate', 'weak']),
+  "reason": zod.string()
+}).describe('One of the 3 evaluation metrics.'),
+  "reasoning_chain": zod.string(),
+  "flags": zod.array(zod.object({
+  "category": zod.enum(['outdated_content', 'bias_or_framing', 'factual_concern', 'safety_concern', 'misleading_match']),
+  "severity": zod.enum(['high', 'medium', 'low']),
+  "evidence_quote": zod.string(),
+  "explanation": zod.string(),
+  "suggested_action": zod.string()
+}).describe('A single issue found by the risk scanner, backed by evidence.')).optional(),
+  "adaptations": zod.array(zod.object({
+  "action": zod.string(),
+  "rationale": zod.string()
+}).describe('A concrete adaptation the teacher can apply.')).optional(),
+  "override_notes": zod.union([zod.string(),zod.null()]).optional()
+}).describe('Final judgment combining triage + risk scan, presented to the teacher.'),zod.record(zod.string(), zod.unknown()),zod.null()]).optional()
 })
 
 export const saveResourceEndpointApiSavedPostResponseResourceDataMetadataOneSourceDefault = `ddgs`;
