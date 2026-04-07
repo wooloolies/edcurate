@@ -1,14 +1,13 @@
 "use client";
 
+import { useQueryClient } from "@tanstack/react-query";
+import { Check, Copy } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-import { Copy, Check } from "lucide-react";
 import { toast } from "sonner";
-import { useQueryClient } from "@tanstack/react-query";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Dialog,
   DialogContent,
@@ -17,12 +16,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { ResourceCardRenderer } from "@/features/search/components/resource-card";
 import {
-  useGetSuggestedCollectionsEndpointApiSavedSuggestedGet,
+  getListSavedResourcesEndpointApiSavedGetQueryKey,
   useCloneCollectionEndpointApiSavedCollectionsCollectionIdClonePost,
+  useGetSuggestedCollectionsEndpointApiSavedSuggestedGet,
   useSyncClonedCollectionEndpointApiSavedCollectionsCollectionIdSyncPost,
-  getListSavedResourcesEndpointApiSavedGetQueryKey
 } from "@/lib/api/saved-resources/saved-resources";
 
 export function SuggestedCollectionsRail({
@@ -37,16 +37,15 @@ export function SuggestedCollectionsRail({
   const [clonedIds, setClonedIds] = useState<Set<string>>(new Set());
   const [syncedIds, setSyncedIds] = useState<Set<string>>(new Set());
 
-  const { data: suggestions, isFetching } =
-    useGetSuggestedCollectionsEndpointApiSavedSuggestedGet(
-      { preset_id: presetId, search_query: searchQuery, limit: 5 },
-      { query: { enabled: !!presetId && !!searchQuery, gcTime: 0 } }
-    );
+  const { data: suggestions, isFetching } = useGetSuggestedCollectionsEndpointApiSavedSuggestedGet(
+    { preset_id: presetId, search_query: searchQuery, limit: 5 },
+    { query: { enabled: !!presetId && !!searchQuery, gcTime: 0 } }
+  );
 
   const { mutateAsync: cloneCollection } =
     useCloneCollectionEndpointApiSavedCollectionsCollectionIdClonePost();
 
-  const { mutateAsync: syncCollection, isPending: isSyncing } = 
+  const { mutateAsync: syncCollection, isPending: isSyncing } =
     useSyncClonedCollectionEndpointApiSavedCollectionsCollectionIdSyncPost();
 
   const [selectedColId, setSelectedColId] = useState<string | null>(null);
@@ -60,10 +59,10 @@ export function SuggestedCollectionsRail({
       await cloneCollection({ collectionId });
       setClonedIds((prev) => new Set(prev).add(collectionId));
       toast.success(t("savedSuccess"));
-      
+
       // Invalidate saved resources to update library
       queryClient.invalidateQueries({
-        queryKey: getListSavedResourcesEndpointApiSavedGetQueryKey()
+        queryKey: getListSavedResourcesEndpointApiSavedGetQueryKey(),
       });
       setSelectedColId(null);
     } catch (e: unknown) {
@@ -76,10 +75,10 @@ export function SuggestedCollectionsRail({
       await syncCollection({ collectionId });
       setSyncedIds((prev) => new Set(prev).add(collectionId));
       toast.success(t("suggestedCollections.syncSuccess", { fallback: "Collection synced!" }));
-      
+
       // Invalidate saved resources to update library
       queryClient.invalidateQueries({
-        queryKey: getListSavedResourcesEndpointApiSavedGetQueryKey()
+        queryKey: getListSavedResourcesEndpointApiSavedGetQueryKey(),
       });
     } catch (e: unknown) {
       toast.error(t("savedError"));
@@ -102,9 +101,10 @@ export function SuggestedCollectionsRail({
               {suggestions.map((suggestion) => {
                 const item = suggestion.collection;
                 const isCloned = clonedIds.has(item.id) || suggestion.is_cloned_by_user;
-                
+
                 return (
-                  <div key={item.id} 
+                  <div
+                    key={item.id}
                     className="flex flex-col gap-2 rounded-lg border bg-card p-3 shadow-sm hover:border-primary/50 cursor-pointer transition-colors"
                     onClick={() => setSelectedColId(item.id)}
                   >
@@ -116,7 +116,8 @@ export function SuggestedCollectionsRail({
                         </span>
                         {suggestion.publisher_name && (
                           <span className="text-xs text-muted-foreground">
-                            Published by <span className="font-medium">{suggestion.publisher_name}</span>
+                            Published by{" "}
+                            <span className="font-medium">{suggestion.publisher_name}</span>
                           </span>
                         )}
                       </div>
@@ -124,10 +125,16 @@ export function SuggestedCollectionsRail({
                     <div className="flex items-center justify-between mt-1">
                       <div className="flex items-center gap-3">
                         <span className="text-xs text-muted-foreground">
-                          {t("suggestedCollections.sourcesCount", { count: suggestion.resources_count || 0, fallback: `${suggestion.resources_count || 0} sources` })}
+                          {t("suggestedCollections.sourcesCount", {
+                            count: suggestion.resources_count || 0,
+                            fallback: `${suggestion.resources_count || 0} sources`,
+                          })}
                         </span>
                         <span className="text-xs text-muted-foreground">
-                          {t("suggestedCollections.clonesCount", { count: item.clone_count, fallback: `${item.clone_count} clones` })}
+                          {t("suggestedCollections.clonesCount", {
+                            count: item.clone_count,
+                            fallback: `${item.clone_count} clones`,
+                          })}
                         </span>
                       </div>
                       {isCloned && (
@@ -146,84 +153,85 @@ export function SuggestedCollectionsRail({
       </Card>
 
       <Dialog open={!!selectedColId} onOpenChange={(open) => !open && setSelectedColId(null)}>
-        {selectedSuggestion && (() => {
-          const item = selectedSuggestion.collection;
-          const isCloned = clonedIds.has(item.id) || selectedSuggestion.is_cloned_by_user;
-          
-          return (
-            <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
-              <DialogHeader>
-                <DialogTitle>{item.name}</DialogTitle>
-                <DialogDescription>
-                  {t("suggestedCollections.previewDescription", { fallback: "Collection Details" })}
-                </DialogDescription>
-              </DialogHeader>
-              <div className="grid gap-4 py-4">
-                <div className="flex flex-col gap-1">
-                  <span className="font-semibold text-sm">Target Query</span>
-                  <p className="text-sm text-muted-foreground">{item.search_query}</p>
-                </div>
-                {selectedSuggestion.publisher_name && (
+        {selectedSuggestion &&
+          (() => {
+            const item = selectedSuggestion.collection;
+            const isCloned = clonedIds.has(item.id) || selectedSuggestion.is_cloned_by_user;
+
+            return (
+              <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
+                <DialogHeader>
+                  <DialogTitle>{item.name}</DialogTitle>
+                  <DialogDescription>
+                    {t("suggestedCollections.previewDescription", {
+                      fallback: "Collection Details",
+                    })}
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="grid gap-4 py-4">
                   <div className="flex flex-col gap-1">
-                    <span className="font-semibold text-sm">Published by</span>
-                    <p className="text-sm text-muted-foreground">{selectedSuggestion.publisher_name}</p>
+                    <span className="font-semibold text-sm">Target Query</span>
+                    <p className="text-sm text-muted-foreground">{item.search_query}</p>
                   </div>
-                )}
-                <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                  <div>
-                    <span className="font-medium">{selectedSuggestion.resources_count || 0}</span>{" "}
-                    sources
+                  {selectedSuggestion.publisher_name && (
+                    <div className="flex flex-col gap-1">
+                      <span className="font-semibold text-sm">Published by</span>
+                      <p className="text-sm text-muted-foreground">
+                        {selectedSuggestion.publisher_name}
+                      </p>
+                    </div>
+                  )}
+                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                    <div>
+                      <span className="font-medium">{selectedSuggestion.resources_count || 0}</span>{" "}
+                      sources
+                    </div>
+                    <div>
+                      <span className="font-medium">{item.clone_count}</span> clones
+                    </div>
                   </div>
-                  <div>
-                    <span className="font-medium">{item.clone_count}</span>{" "}
-                    clones
-                  </div>
+                  {selectedSuggestion.resources && selectedSuggestion.resources.length > 0 && (
+                    <div className="flex flex-col gap-2">
+                      <span className="font-semibold text-sm">Resources</span>
+                      <ScrollArea className="max-h-96">
+                        <div className="space-y-3 pr-2">
+                          {selectedSuggestion.resources.map((savedResource) => (
+                            <ResourceCardRenderer
+                              key={savedResource.id}
+                              resource={savedResource.resource_data}
+                              judgment={savedResource.evaluation_data ?? undefined}
+                              hideAction
+                            />
+                          ))}
+                        </div>
+                      </ScrollArea>
+                    </div>
+                  )}
                 </div>
-                {selectedSuggestion.resources && selectedSuggestion.resources.length > 0 && (
-                  <div className="flex flex-col gap-2">
-                    <span className="font-semibold text-sm">Resources</span>
-                    <ScrollArea className="max-h-96">
-                      <div className="space-y-3 pr-2">
-                        {selectedSuggestion.resources.map((savedResource) => (
-                          <ResourceCardRenderer
-                            key={savedResource.id}
-                            resource={savedResource.resource_data}
-                            judgment={savedResource.evaluation_data ?? undefined}
-                            hideAction
-                          />
-                        ))}
-                      </div>
-                    </ScrollArea>
-                  </div>
-                )}
-              </div>
-              <DialogFooter>
-                <Button variant="outline" onClick={() => setSelectedColId(null)}>
-                  {t("cancel", { fallback: "Cancel" })}
-                </Button>
-                {isCloned ? (
-                  <Button 
-                    onClick={() => handleSync(item.id)}
-                    disabled={syncedIds.has(item.id) || isSyncing}
-                  >
-                    <Check className="mr-1.5 h-4 w-4" />
-                    {syncedIds.has(item.id) 
-                      ? t("suggestedCollections.syncSuccess", { fallback: "Synced" }) 
-                      : t("suggestedCollections.syncCollection", { fallback: "Sync Collection" })
-                    }
+                <DialogFooter>
+                  <Button variant="outline" onClick={() => setSelectedColId(null)}>
+                    {t("cancel", { fallback: "Cancel" })}
                   </Button>
-                ) : (
-                  <Button 
-                    onClick={() => handleClone(item.id)}
-                  >
-                    <Copy className="mr-1.5 h-4 w-4" />
-                    {t("suggestedCollections.cloneCollection", { fallback: "Clone Collection" })}
-                  </Button>
-                )}
-              </DialogFooter>
-            </DialogContent>
-          );
-        })()}
+                  {isCloned ? (
+                    <Button
+                      onClick={() => handleSync(item.id)}
+                      disabled={syncedIds.has(item.id) || isSyncing}
+                    >
+                      <Check className="mr-1.5 h-4 w-4" />
+                      {syncedIds.has(item.id)
+                        ? t("suggestedCollections.syncSuccess", { fallback: "Synced" })
+                        : t("suggestedCollections.syncCollection", { fallback: "Sync Collection" })}
+                    </Button>
+                  ) : (
+                    <Button onClick={() => handleClone(item.id)}>
+                      <Copy className="mr-1.5 h-4 w-4" />
+                      {t("suggestedCollections.cloneCollection", { fallback: "Clone Collection" })}
+                    </Button>
+                  )}
+                </DialogFooter>
+              </DialogContent>
+            );
+          })()}
       </Dialog>
     </>
   );

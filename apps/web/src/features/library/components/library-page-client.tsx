@@ -196,6 +196,20 @@ export function LibraryPageClient() {
     }
   };
 
+  const handleUpdatePrivacy = async (col: { id: string; is_public: boolean }) => {
+    const nextPrivacy = !col.is_public;
+    if (nextPrivacy) {
+      if (
+        !window.confirm(
+          "Are you sure you want to make this public? Anyone will be able to discover these resources."
+        )
+      ) {
+        return;
+      }
+    }
+    await handleUpdateCollection(col.id, { is_public: nextPrivacy });
+  };
+
   const handleDeleteCollection = async (collectionId: string) => {
     if (!window.confirm("Are you sure you want to delete this collection and all its resources?"))
       return;
@@ -390,11 +404,7 @@ export function LibraryPageClient() {
                         >
                           <Pencil className="mr-2 h-4 w-4" /> Rename
                         </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onClick={() =>
-                            handleUpdateCollection(groupKey, { is_public: !col.is_public })
-                          }
-                        >
+                        <DropdownMenuItem onClick={() => handleUpdatePrivacy(col)}>
                           {col.is_public ? (
                             <Lock className="mr-2 h-4 w-4" />
                           ) : (

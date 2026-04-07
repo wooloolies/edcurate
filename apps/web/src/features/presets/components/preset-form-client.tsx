@@ -182,7 +182,7 @@ export function PresetFormClient({ presetId }: PresetFormClientProps) {
           <Label htmlFor="name">{t("fields.name")}</Label>
           <Input
             id="name"
-            value={form.name}
+            value={form.name ?? ""}
             onChange={(e) => set("name", e.target.value)}
             placeholder={t("placeholders.name")}
             required
@@ -297,7 +297,7 @@ export function PresetFormClient({ presetId }: PresetFormClientProps) {
             <Label htmlFor="teaching_language">{t("fields.teachingLanguage")}</Label>
             <Input
               id="teaching_language"
-              value={form.teaching_language}
+              value={form.teaching_language ?? ""}
               onChange={(e) => set("teaching_language", e.target.value)}
               placeholder={t("placeholders.teachingLanguage")}
             />
