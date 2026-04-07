@@ -122,7 +122,7 @@ export default function ContactPage() {
                 </div>
                 <button
                   type="submit"
-                  className="w-full rounded-[2rem] bg-[#B7FF70] px-6 py-2.5 text-sm font-semibold text-[#111827] transition-all hover:bg-[#111827] hover:text-white shadow-sm"
+                  className="w-full cursor-pointer rounded-[2rem] bg-[#B7FF70] px-6 py-2.5 text-sm font-semibold text-[#111827] transition-all hover:bg-[#111827] hover:text-white shadow-sm"
                 >
                   {t("send")}
                 </button>
