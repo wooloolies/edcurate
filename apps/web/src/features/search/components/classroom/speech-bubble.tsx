@@ -12,11 +12,7 @@ interface SpeechBubbleProps {
   cycleInterval?: number;
 }
 
-export function SpeechBubble({
-  text,
-  position = "left",
-  cycleInterval = 4000,
-}: SpeechBubbleProps) {
+export function SpeechBubble({ text, position = "left", cycleInterval = 4000 }: SpeechBubbleProps) {
   const tailOffset = position === "left" ? "25%" : "75%";
   // Randomize start index and interval offset so multiple bubbles don't sync
   const [index, setIndex] = useState(() => Math.floor(Math.random() * 100));
@@ -31,7 +27,7 @@ export function SpeechBubble({
         setIndex((prev) => prev + 1);
       }
     },
-    shouldCycle ? cycleInterval + jitter : undefined,
+    shouldCycle ? cycleInterval + jitter : undefined
   );
 
   const displayText = messages?.[index % messages.length] ?? null;

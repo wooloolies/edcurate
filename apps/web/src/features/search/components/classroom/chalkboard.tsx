@@ -22,11 +22,7 @@ interface ChalkboardProps {
 export function Chalkboard({ activeStage, isCached }: ChalkboardProps) {
   const t = useTranslations("search.classroom.chalkboard");
   const displayStage = isCached ? "complete" : activeStage;
-  const text = isCached
-    ? t("cached")
-    : displayStage
-      ? t(STAGE_KEY[displayStage])
-      : null;
+  const text = isCached ? t("cached") : displayStage ? t(STAGE_KEY[displayStage]) : null;
 
   return (
     <div

@@ -24,7 +24,7 @@ const STAGE_KEY: Record<Stage, string> = {
 
 function resolveStatus(
   status: StageStatus | undefined,
-  isCached: boolean,
+  isCached: boolean
 ): StageStatus | undefined {
   if (isCached) return "done";
   return status;
@@ -48,7 +48,7 @@ export function ClassroomScene({ stages, activeStage, isCached }: ClassroomScene
   // Student bubbles — returns string or string[] for cycling
   const getBubble = (
     character: string,
-    status: StageStatus | undefined,
+    status: StageStatus | undefined
   ): string | string[] | null => {
     if (!status) return null;
     if (status === "done") return tBubbles(`${character}.${status}`);
@@ -75,8 +75,7 @@ export function ClassroomScene({ stages, activeStage, isCached }: ClassroomScene
           "radial-gradient(ellipse at 50% 50%, transparent 60%, rgba(0,0,0,0.04) 100%)",
           "repeating-linear-gradient(90deg, transparent, transparent 59px, rgba(180,140,80,0.06) 59px, rgba(180,140,80,0.06) 60px)",
         ].join(", "),
-        boxShadow:
-          "0 8px 32px rgba(0,0,0,0.10), inset 0 0 0 1px rgba(0,0,0,0.06)",
+        boxShadow: "0 8px 32px rgba(0,0,0,0.10), inset 0 0 0 1px rgba(0,0,0,0.06)",
       }}
       role="region"
       aria-label="Classroom scene showing search progress"
@@ -110,11 +109,7 @@ export function ClassroomScene({ stages, activeStage, isCached }: ClassroomScene
       <Chalkboard activeStage={activeStage} isCached={isCached} />
 
       {/* Quokka teacher */}
-      <QuokkaTeacher
-        activeStage={activeStage}
-        isCached={isCached}
-        message={teacherMessage}
-      />
+      <QuokkaTeacher activeStage={activeStage} isCached={isCached} message={teacherMessage} />
 
       {/* Row 1 students */}
       <StudentAgent
