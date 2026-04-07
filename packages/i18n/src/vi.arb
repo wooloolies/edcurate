@@ -292,17 +292,17 @@
   "@presets__fields__additionalNotes": {
     "description": "Field label for additional notes"
   },
-  "presets__sources__ddgs": "DuckDuckGo",
+  "presets__sources__ddgs": "Web",
   "@presets__sources__ddgs": {
-    "description": "Label for DuckDuckGo source toggle"
+    "description": "Source label for web search (DuckDuckGo)"
   },
-  "presets__sources__youtube": "YouTube",
+  "presets__sources__youtube": "Video",
   "@presets__sources__youtube": {
-    "description": "Label for YouTube source toggle"
+    "description": "Source label for video search (YouTube)"
   },
-  "presets__sources__openalex": "OpenAlex",
+  "presets__sources__openalex": "Bài báo",
   "@presets__sources__openalex": {
-    "description": "Label for OpenAlex source toggle"
+    "description": "Source label for academic papers (OpenAlex)"
   },
   "search__title": "Khám phá tài nguyên",
   "@search__title": {

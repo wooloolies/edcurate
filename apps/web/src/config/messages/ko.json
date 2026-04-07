@@ -92,9 +92,9 @@
       "additionalNotes": "추가 메모"
     },
     "sources": {
-      "ddgs": "DuckDuckGo",
-      "youtube": "YouTube",
-      "openalex": "OpenAlex"
+      "ddgs": "웹",
+      "youtube": "동영상",
+      "openalex": "논문"
     },
     "placeholders": {
       "name": "예: 9학년 지리 - 케언스",
@@ -176,6 +176,8 @@
       "step6": "가장 관련성 높은 조각을 찾는 중",
       "step7": "교육과정 정합성과 교수학적 품질을 평가하는 중",
       "step8": "읽기 수준과 편향 표현을 평가하는 중",
+      "compactCount": "{count}/{total} 완료",
+      "compactTitle": "리소스 평가 중",
       "step9": "점수를 마무리하고 결과 순위를 정하는 중"
     },
     "classroom": {
@@ -229,6 +231,7 @@
       }
     },
     "evaluation": {
+      "evaluating": "평가 중...",
       "unevaluated": "미평가",
       "score": "점수: {score}/10",
       "agent": "심층 평가 에이전트",

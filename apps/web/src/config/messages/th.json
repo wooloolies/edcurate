@@ -92,9 +92,9 @@
       "additionalNotes": "บันทึกเพิ่มเติม"
     },
     "sources": {
-      "ddgs": "DuckDuckGo",
-      "youtube": "YouTube",
-      "openalex": "OpenAlex"
+      "ddgs": "เว็บ",
+      "youtube": "วิดีโอ",
+      "openalex": "บทความ"
     },
     "placeholders": {
       "name": "เช่น ภูมิศาสตร์ ม.3 - แคนส์",
@@ -176,6 +176,8 @@
       "step6": "กำลังดึงช่วงข้อความที่เกี่ยวข้องที่สุด",
       "step7": "กำลังให้คะแนนความสอดคล้องกับหลักสูตรและคุณภาพเชิงการสอน",
       "step8": "กำลังประเมินระดับการอ่านและการนำเสนออคติ",
+      "compactCount": "{count}/{total} complete",
+      "compactTitle": "Evaluating resources",
       "step9": "กำลังสรุปคะแนนและจัดอันดับผลลัพธ์"
     },
     "classroom": {
@@ -229,6 +231,7 @@
       }
     },
     "evaluation": {
+      "evaluating": "Evaluating...",
       "unevaluated": "ยังไม่ประเมิน",
       "score": "คะแนน: {score}/10",
       "agent": "เอเจนต์ประเมินเชิงลึก",

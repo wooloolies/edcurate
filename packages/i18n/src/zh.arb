@@ -292,17 +292,17 @@
   "@presets__fields__additionalNotes": {
     "description": "Field label for additional notes"
   },
-  "presets__sources__ddgs": "DuckDuckGo",
+  "presets__sources__ddgs": "网页",
   "@presets__sources__ddgs": {
-    "description": "Source label for DuckDuckGo"
+    "description": "Source label for web search (DuckDuckGo)"
   },
-  "presets__sources__youtube": "YouTube",
+  "presets__sources__youtube": "视频",
   "@presets__sources__youtube": {
-    "description": "Source label for YouTube"
+    "description": "Source label for video search (YouTube)"
   },
-  "presets__sources__openalex": "OpenAlex",
+  "presets__sources__openalex": "论文",
   "@presets__sources__openalex": {
-    "description": "Source label for OpenAlex"
+    "description": "Source label for academic papers (OpenAlex)"
   },
   "search__title": "教育资源探索",
   "@search__title": {

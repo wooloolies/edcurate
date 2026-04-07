@@ -92,9 +92,9 @@
       "additionalNotes": "Additional Notes"
     },
     "sources": {
-      "ddgs": "DuckDuckGo",
-      "youtube": "YouTube",
-      "openalex": "OpenAlex"
+      "ddgs": "Web",
+      "youtube": "Video",
+      "openalex": "Paper"
     },
     "placeholders": {
       "name": "e.g., Year 9 Geography - Cairns",
@@ -177,6 +177,8 @@
       "step6": "Retrieving the most relevant chunks",
       "step7": "Scoring curriculum alignment and pedagogical quality",
       "step8": "Evaluating reading level and bias representation",
+      "compactCount": "{count}/{total} complete",
+      "compactTitle": "Evaluating resources",
       "step9": "Finalising scores and ranking results"
     },
     "classroom": {
@@ -230,6 +232,7 @@
       }
     },
     "evaluation": {
+      "evaluating": "Evaluating...",
       "unevaluated": "Unevaluated",
       "score": "Score: {score}/10",
       "agent": "Deep Evaluation Agent",
