@@ -153,6 +153,14 @@
     "savedSuccess": "Resources saved to library!",
     "savedError": "Failed to save resources",
     "cancel": "Cancel",
+    "overview": "Overview",
+    "changePreset": "Change preset",
+    "bookmark": {
+      "save": "Save",
+      "saved": "Saved",
+      "saveLabel": "Save to Library",
+      "removeLabel": "Remove from Library"
+    },
     "clearSelection": "Clear selection",
     "remainingResources": "{count} resources not evaluated yet",
     "evaluateNext": "Evaluate next {count} resources",
@@ -318,7 +326,16 @@
     "tagline": "Context-aware resource discovery and adaptation for teachers",
     "heroTitlePart1": "Intelligent adaption engine",
     "heroTitlePart2": "for teachers",
-    "startResearch": "Start your research"
+    "startResearch": "Start your research",
+    "featureTagYear": "Year 7 to 12",
+    "featureTagDesigner": "Curriculum Designer",
+    "featureTagGlobal": "Internationally"
+  },
+  "overview": {
+    "defaultTitle": "Resource Overview",
+    "defaultType": "Document",
+    "comingSoonTitle": "Detailed Analysis Coming Soon",
+    "comingSoonDescription": "This page will display AI-generated analysis of the resource, including curriculum alignment, pedagogical reasoning, and evidence extraction."
   },
   "errors": {
     "title": "Error",

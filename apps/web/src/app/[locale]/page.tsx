@@ -30,6 +30,19 @@ export default async function HomePage({ params }: HomePageProps) {
         <ShimmerLink href="/collections/new" authRequired className="mt-16">
           {t("startResearch")}
         </ShimmerLink>
+
+        {/* Feature Tags */}
+        <div className="flex flex-wrap items-center justify-center gap-3 mt-10">
+          <div className="px-5 py-2.5 rounded-full bg-white/60 border border-white/80 shadow-sm backdrop-blur-md transition-transform hover:scale-105 cursor-default">
+            <span className="text-sm font-bold text-[#111827]">{t("featureTagYear")}</span>
+          </div>
+          <div className="px-5 py-2.5 rounded-full bg-white/60 border border-white/80 shadow-sm backdrop-blur-md transition-transform hover:scale-105 cursor-default">
+            <span className="text-sm font-bold text-[#111827]">{t("featureTagDesigner")}</span>
+          </div>
+          <div className="px-5 py-2.5 rounded-full bg-white/60 border border-white/80 shadow-sm backdrop-blur-md transition-transform hover:scale-105 cursor-default">
+            <span className="text-sm font-bold text-[#111827]">{t("featureTagGlobal")}</span>
+          </div>
+        </div>
       </main>
     </div>
   );

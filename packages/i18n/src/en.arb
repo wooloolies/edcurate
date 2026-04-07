@@ -469,6 +469,34 @@
   "@home__startResearch": {
     "description": "Homepage button to start research"
   },
+  "home__featureTagYear": "Year 7 to 12",
+  "@home__featureTagYear": {
+    "description": "Homepage feature tag for supported year levels"
+  },
+  "home__featureTagDesigner": "Curriculum Designer",
+  "@home__featureTagDesigner": {
+    "description": "Homepage feature tag for curriculum design"
+  },
+  "home__featureTagGlobal": "Internationally",
+  "@home__featureTagGlobal": {
+    "description": "Homepage feature tag for global reach"
+  },
+  "overview__defaultTitle": "Resource Overview",
+  "@overview__defaultTitle": {
+    "description": "Default title for overview page"
+  },
+  "overview__defaultType": "Document",
+  "@overview__defaultType": {
+    "description": "Default type label for overview page"
+  },
+  "overview__comingSoonTitle": "Detailed Analysis Coming Soon",
+  "@overview__comingSoonTitle": {
+    "description": "Coming soon heading on overview page"
+  },
+  "overview__comingSoonDescription": "This page will display AI-generated analysis of the resource, including curriculum alignment, pedagogical reasoning, and evidence extraction.",
+  "@overview__comingSoonDescription": {
+    "description": "Coming soon description on overview page"
+  },
   "errors__title": "Error",
   "@errors__title": {
     "description": "Generic error page title"
@@ -592,6 +620,30 @@
   "search__cancel": "Cancel",
   "@search__cancel": {
     "description": "Cancel button label in search dialogs"
+  },
+  "search__overview": "Overview",
+  "@search__overview": {
+    "description": "Overview button label on resource cards"
+  },
+  "search__changePreset": "Change preset",
+  "@search__changePreset": {
+    "description": "Aria label for preset picker button"
+  },
+  "search__bookmark__save": "Save",
+  "@search__bookmark__save": {
+    "description": "Save button label on resource cards"
+  },
+  "search__bookmark__saved": "Saved",
+  "@search__bookmark__saved": {
+    "description": "Saved state label on resource cards"
+  },
+  "search__bookmark__saveLabel": "Save to Library",
+  "@search__bookmark__saveLabel": {
+    "description": "Accessible label for save button"
+  },
+  "search__bookmark__removeLabel": "Remove from Library",
+  "@search__bookmark__removeLabel": {
+    "description": "Accessible label for remove button"
   },
   "search__clearSelection": "Clear selection",
   "@search__clearSelection": {

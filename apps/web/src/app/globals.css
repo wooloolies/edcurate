@@ -104,3 +104,52 @@ body {
     transform: rotate(360deg);
   }
 }
+
+@keyframes rainbow-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.btn-rainbow-hover {
+  position: relative;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.btn-rainbow-hover::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    135deg,
+    #f87171,
+    #fb923c,
+    #facc15,
+    #4ade80,
+    #60a5fa,
+    #a78bfa,
+    #f472b6,
+    #f87171
+  );
+  background-size: 300% 300%;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .btn-rainbow-hover::before {
+    animation: rainbow-shift 4s ease infinite;
+  }
+}
+
+.btn-rainbow-hover:hover::before {
+  opacity: 1;
+}

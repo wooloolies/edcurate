@@ -491,7 +491,6 @@ export function LibraryPageClient() {
                     key={item.id}
                     index={idx}
                     resource={item.resource_data}
-                    judgment={item.evaluation_data ?? undefined}
                     presetId={presetId}
                     customAction={renderCardAction(item)}
                   />

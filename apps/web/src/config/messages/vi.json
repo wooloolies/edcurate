@@ -152,6 +152,14 @@
     "saving": "Đang lưu...",
     "savedSuccess": "Đã lưu vào thư viện!",
     "savedError": "Không thể lưu tài nguyên",
+    "overview": "Tổng quan",
+    "changePreset": "Thay đổi preset",
+    "bookmark": {
+      "save": "Lưu",
+      "saved": "Đã lưu",
+      "saveLabel": "Lưu vào thư viện",
+      "removeLabel": "Xóa khỏi thư viện"
+    },
     "clearSelection": "Bỏ chọn",
     "remainingResources": "Còn {count} tài nguyên chưa được đánh giá",
     "evaluateNext": "Đánh giá {count} tài nguyên tiếp theo",
@@ -300,7 +308,16 @@
     "tagline": "Khám phá và điều chỉnh tài nguyên theo ngữ cảnh dành cho giáo viên",
     "heroTitlePart1": "Công cụ thích ứng thông minh",
     "heroTitlePart2": "cho giáo viên",
-    "startResearch": "Bắt đầu nghiên cứu"
+    "startResearch": "Bắt đầu nghiên cứu",
+    "featureTagYear": "Lớp 7 đến 12",
+    "featureTagDesigner": "Nhà thiết kế chương trình",
+    "featureTagGlobal": "Toàn cầu"
+  },
+  "overview": {
+    "defaultTitle": "Tổng quan tài liệu",
+    "defaultType": "Tài liệu",
+    "comingSoonTitle": "Phân tích chi tiết sắp ra mắt",
+    "comingSoonDescription": "Trang này sẽ hiển thị phân tích do AI tạo ra về tài liệu, bao gồm sự phù hợp với chương trình giảng dạy, lý luận sư phạm và trích xuất bằng chứng."
   },
   "errors": {
     "title": "Lỗi",

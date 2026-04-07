@@ -152,6 +152,14 @@
     "saving": "저장 중...",
     "savedSuccess": "라이브러리에 저장되었습니다!",
     "savedError": "자료 저장에 실패했습니다",
+    "overview": "개요",
+    "changePreset": "프리셋 변경",
+    "bookmark": {
+      "save": "저장",
+      "saved": "저장됨",
+      "saveLabel": "라이브러리에 저장",
+      "removeLabel": "라이브러리에서 제거"
+    },
     "clearSelection": "선택 해제",
     "remainingResources": "{count}개의 자료가 아직 평가되지 않았습니다",
     "evaluateNext": "다음 {count}개 자료 평가하기",
@@ -300,7 +308,16 @@
     "tagline": "교사를 위한 맥락 인식 기반 자료 탐색 및 적용",
     "heroTitlePart1": "교사를 위한",
     "heroTitlePart2": "지능형 어댑션 엔진",
-    "startResearch": "리서치 시작하기"
+    "startResearch": "리서치 시작하기",
+    "featureTagYear": "7~12학년",
+    "featureTagDesigner": "커리큘럼 디자이너",
+    "featureTagGlobal": "전 세계"
+  },
+  "overview": {
+    "defaultTitle": "자료 개요",
+    "defaultType": "문서",
+    "comingSoonTitle": "상세 분석 준비 중",
+    "comingSoonDescription": "이 페이지에서 AI 기반 분석 결과를 확인할 수 있습니다. 교육과정 정합성, 교수법적 근거, 근거 추출 등을 포함합니다."
   },
   "errors": {
     "title": "오류",
