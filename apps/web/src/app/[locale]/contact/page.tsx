@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-import { Mail, ExternalLink, MapPin } from "lucide-react";
+import { Mail, MapPin } from "lucide-react";
 import { Header } from "@/components/layout/header";
 import { CanvasBackground } from "@/components/ui/canvas-background";
 
@@ -159,21 +159,6 @@ export default function ContactPage() {
                   </div>
                 ))}
               </div>
-            </div>
-
-            <div className="rounded-xl border border-black/5 bg-white/60 backdrop-blur-xl p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <ExternalLink className="h-5 w-5 text-gray-400" />
-                <h3 className="font-semibold">{t("repository")}</h3>
-              </div>
-              <a
-                href="https://github.com/wooloolies/edcurate"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-sm text-gray-500 hover:text-black transition-colors"
-              >
-                github.com/wooloolies/edcurate
-              </a>
             </div>
           </div>
         </div>

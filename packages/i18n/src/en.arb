@@ -1052,7 +1052,5 @@
   "contact__location": "Location",
   "@contact__location": { "description": "Location section heading" },
   "contact__teamEmails": "Team Emails",
-  "@contact__teamEmails": { "description": "Team emails section heading" },
-  "contact__repository": "Repository",
-  "@contact__repository": { "description": "Repository section heading" }
+  "@contact__teamEmails": { "description": "Team emails section heading" }
 }

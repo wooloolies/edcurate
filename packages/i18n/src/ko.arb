@@ -961,7 +961,5 @@
   "contact__location": "위치",
   "@contact__location": { "description": "Location section heading" },
   "contact__teamEmails": "팀 이메일",
-  "@contact__teamEmails": { "description": "Team emails section heading" },
-  "contact__repository": "저장소",
-  "@contact__repository": { "description": "Repository section heading" }
+  "@contact__teamEmails": { "description": "Team emails section heading" }
 }

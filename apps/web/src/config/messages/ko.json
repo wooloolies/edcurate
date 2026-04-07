@@ -332,7 +332,6 @@
     "thankYouDescription": "GitHub에서 피드백을 확인하고 제출해 주세요. 감사합니다!",
     "sendAnother": "추가 피드백 보내기",
     "location": "위치",
-    "teamEmails": "팀 이메일",
-    "repository": "저장소"
+    "teamEmails": "팀 이메일"
   }
 }

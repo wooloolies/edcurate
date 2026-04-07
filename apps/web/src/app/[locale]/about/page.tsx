@@ -73,9 +73,17 @@ export default async function AboutPage({ params }: AboutPageProps) {
           ))}
         </div>
 
-        <p className="mt-12 text-center text-sm text-gray-400">
-          University of Technology Sydney (UTS)
-        </p>
+        <div className="mt-12 flex flex-col items-center gap-2 text-sm text-gray-400">
+          <p>University of Technology Sydney (UTS)</p>
+          <a
+            href="https://github.com/wooloolies/edcurate"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-black transition-colors"
+          >
+            github.com/wooloolies/edcurate
+          </a>
+        </div>
       </main>
     </div>
   );

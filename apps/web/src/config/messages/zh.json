@@ -332,7 +332,6 @@
     "thankYouDescription": "您将跳转到 GitHub 完成提交。谢谢您的反馈！",
     "sendAnother": "发送更多反馈",
     "location": "位置",
-    "teamEmails": "团队邮箱",
-    "repository": "代码仓库"
+    "teamEmails": "团队邮箱"
   }
 }

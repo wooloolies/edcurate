@@ -332,7 +332,6 @@
     "thankYouDescription": "You'll be redirected to GitHub to finalize your feedback. Thank you!",
     "sendAnother": "Send more feedback",
     "location": "Location",
-    "teamEmails": "Team Emails",
-    "repository": "Repository"
+    "teamEmails": "Team Emails"
   }
 }
