@@ -4,6 +4,7 @@ import asyncio
 import hashlib
 import uuid
 from collections.abc import AsyncGenerator
+from itertools import zip_longest
 from typing import Literal
 
 from src.agents.evaluation.adversarial_retrieval import (
@@ -153,10 +154,20 @@ def _select_candidates(
     """Flatten, dedupe, and globally rank candidates by embedding similarity.
 
     Returns (all_results, top_cards) where both lists are sorted by
-    descending embedding score.  Cards without a score default to 0.0.
+    descending embedding score.  If scoring is unavailable, falls back to
+    round-robin interleaving to preserve provider diversity.
     """
     seen_urls: set[str] = set()
     all_cards: list[ResourceCard] = []
+
+    if not scores_by_url:
+        valid_results_lists = [cards for cards in results_by_source.values() if cards]
+        for interleaved_tuple in zip_longest(*valid_results_lists):
+            for card in interleaved_tuple:
+                if card is not None and card.url not in seen_urls:
+                    seen_urls.add(card.url)
+                    all_cards.append(card)
+        return all_cards, all_cards[:top_k]
 
     for cards in results_by_source.values():
         for card in cards:

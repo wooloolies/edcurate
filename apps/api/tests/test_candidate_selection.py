@@ -149,23 +149,28 @@ class TestSelectCandidatesDedup:
 
 
 class TestSelectCandidatesGracefulDegradation:
-    """When pre-sort scores are missing, candidates default to 0.0."""
+    """When pre-sort scores are missing, preserve provider diversity."""
 
-    def test_empty_scores_returns_all_with_zero_score_order(self):
+    def test_empty_scores_falls_back_to_round_robin_order(self):
         from src.discovery.service import _select_candidates
 
         results_by_source = {
-            "ddgs": [_make_card("D1", source="ddgs")],
-            "youtube": [_make_card("Y1", source="youtube")],
-            "openalex": [],
+            "ddgs": [_make_card(f"D{i}", source="ddgs") for i in range(1, 6)],
+            "youtube": [_make_card(f"Y{i}", source="youtube") for i in range(1, 6)],
+            "openalex": [_make_card(f"O{i}", source="openalex") for i in range(1, 3)],
         }
 
         all_results, top_cards = _select_candidates(
             results_by_source, scores_by_url={}, top_k=4
         )
 
-        assert len(all_results) == 2
-        assert len(top_cards) == 2
+        assert len(all_results) == 12
+        assert [c.url for c in top_cards] == [
+            "https://example.com/d1",
+            "https://example.com/y1",
+            "https://example.com/o1",
+            "https://example.com/d2",
+        ]
 
     def test_empty_providers_returns_empty(self):
         from src.discovery.service import _select_candidates

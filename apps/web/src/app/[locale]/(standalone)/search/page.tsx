@@ -1,6 +1,6 @@
-import { Suspense } from "react";
 import type { Locale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
+import { Suspense } from "react";
 
 import { Header } from "@/components/layout/header";
 import { CanvasBackground } from "@/components/ui/canvas-background";
