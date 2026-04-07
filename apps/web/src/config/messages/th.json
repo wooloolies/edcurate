@@ -153,6 +153,10 @@
     "savedSuccess": "บันทึกลงคลังสื่อแล้ว!",
     "savedError": "ไม่สามารถบันทึกสื่อได้",
     "clearSelection": "ล้างการเลือก",
+    "remainingResources": "ยังมี {count} รายการที่ยังไม่ได้ประเมิน",
+    "evaluateNext": "ประเมิน {count} รายการถัดไป",
+    "showEvaluationDetails": "แสดงรายละเอียดการประเมิน",
+    "hideEvaluationDetails": "ซ่อนรายละเอียดการประเมิน",
     "progress": {
       "title": "กำลังประเมินเชิงลึก",
       "duration": "โดยปกติใช้เวลา 60-90 วินาที",

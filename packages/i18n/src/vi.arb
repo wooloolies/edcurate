@@ -555,6 +555,32 @@
   "@search__clearSelection": {
     "description": "Button to clear resource selection"
   },
+  "search__remainingResources": "Còn {count} tài nguyên chưa được đánh giá",
+  "@search__remainingResources": {
+    "description": "Message showing how many resources remain unevaluated",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "search__evaluateNext": "Đánh giá {count} tài nguyên tiếp theo",
+  "@search__evaluateNext": {
+    "description": "Button to load and evaluate the next batch of resources",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "search__showEvaluationDetails": "Hiện chi tiết đánh giá",
+  "@search__showEvaluationDetails": {
+    "description": "Tooltip for expanding evaluation details on a resource row"
+  },
+  "search__hideEvaluationDetails": "Ẩn chi tiết đánh giá",
+  "@search__hideEvaluationDetails": {
+    "description": "Tooltip for collapsing evaluation details on a resource row"
+  },
   "search__progress__title": "Đang đánh giá chuyên sâu",
   "@search__progress__title": {
     "description": "Title shown while deep evaluation is running"

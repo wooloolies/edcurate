@@ -555,6 +555,32 @@
   "@search__clearSelection": {
     "description": "Button to clear resource selection"
   },
+  "search__remainingResources": "ยังมี {count} รายการที่ยังไม่ได้ประเมิน",
+  "@search__remainingResources": {
+    "description": "Message showing how many resources remain unevaluated",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "search__evaluateNext": "ประเมิน {count} รายการถัดไป",
+  "@search__evaluateNext": {
+    "description": "Button to load and evaluate the next batch of resources",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "search__showEvaluationDetails": "แสดงรายละเอียดการประเมิน",
+  "@search__showEvaluationDetails": {
+    "description": "Tooltip for expanding evaluation details on a resource row"
+  },
+  "search__hideEvaluationDetails": "ซ่อนรายละเอียดการประเมิน",
+  "@search__hideEvaluationDetails": {
+    "description": "Tooltip for collapsing evaluation details on a resource row"
+  },
   "search__progress__title": "กำลังประเมินเชิงลึก",
   "@search__progress__title": {
     "description": "Title shown while deep evaluation is running"

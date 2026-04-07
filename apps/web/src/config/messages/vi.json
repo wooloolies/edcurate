@@ -153,6 +153,10 @@
     "savedSuccess": "Đã lưu vào thư viện!",
     "savedError": "Không thể lưu tài nguyên",
     "clearSelection": "Bỏ chọn",
+    "remainingResources": "Còn {count} tài nguyên chưa được đánh giá",
+    "evaluateNext": "Đánh giá {count} tài nguyên tiếp theo",
+    "showEvaluationDetails": "Hiện chi tiết đánh giá",
+    "hideEvaluationDetails": "Ẩn chi tiết đánh giá",
     "progress": {
       "title": "Đang đánh giá chuyên sâu",
       "duration": "Thường mất khoảng 60-90 giây",

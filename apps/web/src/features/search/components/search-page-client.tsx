@@ -366,14 +366,14 @@ export function SearchPageClient() {
                   {remainingCount > 0 && (
                     <div className="bg-slate-50 border-t border-slate-100 p-6 flex flex-col items-center justify-center gap-4 text-center">
                       <p className="text-sm font-medium text-slate-500">
-                        {remainingCount} resources not evaluated yet
+                        {t("remainingResources", { count: remainingCount })}
                       </p>
-                      <Button 
-                        variant="secondary" 
+                      <Button
+                        variant="secondary"
                         onClick={() => setVisibleCount((v) => v + 4)}
                         className="rounded-full px-8 shadow-sm"
                       >
-                        Evaluate next 4 resources
+                        {t("evaluateNext", { count: 4 })}
                         <ChevronDown className="ml-2 h-4 w-4" />
                       </Button>
                     </div>

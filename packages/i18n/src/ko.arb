@@ -555,6 +555,32 @@
   "@search__clearSelection": {
     "description": "Button to clear resource selection"
   },
+  "search__remainingResources": "{count}개의 자료가 아직 평가되지 않았습니다",
+  "@search__remainingResources": {
+    "description": "Message showing how many resources remain unevaluated",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "search__evaluateNext": "다음 {count}개 자료 평가하기",
+  "@search__evaluateNext": {
+    "description": "Button to load and evaluate the next batch of resources",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "search__showEvaluationDetails": "평가 상세 보기",
+  "@search__showEvaluationDetails": {
+    "description": "Tooltip for expanding evaluation details on a resource row"
+  },
+  "search__hideEvaluationDetails": "평가 상세 숨기기",
+  "@search__hideEvaluationDetails": {
+    "description": "Tooltip for collapsing evaluation details on a resource row"
+  },
   "search__progress__title": "심층 평가 진행 중",
   "@search__progress__title": {
     "description": "Title shown while deep evaluation is running"

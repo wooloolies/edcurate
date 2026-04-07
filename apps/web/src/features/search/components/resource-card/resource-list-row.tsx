@@ -1,5 +1,6 @@
 import { useState, type ReactNode } from "react";
 import { ChevronDown } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface ResourceListRowProps {
   index: number;
@@ -16,6 +17,7 @@ export function ResourceListRow({
   actionsNode,
   expandedDetailsNode,
 }: ResourceListRowProps) {
+  const t = useTranslations("search");
   const [isExpanded, setIsExpanded] = useState(false);
   return (
     <div className="group border-b border-slate-200 last:border-0 hover:bg-slate-50/50 transition-colors">
@@ -42,7 +44,7 @@ export function ResourceListRow({
             <button
               onClick={() => setIsExpanded(p => !p)}
               className="flex h-8 w-8 items-center justify-center rounded-full hover:bg-slate-200 text-slate-500 transition-colors cursor-pointer"
-              title={isExpanded ? "Hide evaluation details" : "Show evaluation details"}
+              title={isExpanded ? t("hideEvaluationDetails") : t("showEvaluationDetails")}
             >
               <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isExpanded ? "rotate-180" : ""}`} />
             </button>

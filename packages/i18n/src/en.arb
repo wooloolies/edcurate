@@ -593,6 +593,32 @@
   "@search__clearSelection": {
     "description": "Button to clear resource selection"
   },
+  "search__remainingResources": "{count} resources not evaluated yet",
+  "@search__remainingResources": {
+    "description": "Message showing how many resources remain unevaluated",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "search__evaluateNext": "Evaluate next {count} resources",
+  "@search__evaluateNext": {
+    "description": "Button to load and evaluate the next batch of resources",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "search__showEvaluationDetails": "Show evaluation details",
+  "@search__showEvaluationDetails": {
+    "description": "Tooltip for expanding evaluation details on a resource row"
+  },
+  "search__hideEvaluationDetails": "Hide evaluation details",
+  "@search__hideEvaluationDetails": {
+    "description": "Tooltip for collapsing evaluation details on a resource row"
+  },
   "search__progress__title": "Deep Evaluation in Progress",
   "@search__progress__title": {
     "description": "Title shown while deep evaluation is running"

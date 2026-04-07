@@ -153,6 +153,10 @@
     "savedSuccess": "已保存到资源库！",
     "savedError": "保存资源失败",
     "clearSelection": "取消选择",
+    "remainingResources": "还有 {count} 个资源未评估",
+    "evaluateNext": "评估下 {count} 个资源",
+    "showEvaluationDetails": "显示评估详情",
+    "hideEvaluationDetails": "隐藏评估详情",
     "progress": {
       "title": "深度评估进行中",
       "duration": "通常需要 60 到 90 秒",

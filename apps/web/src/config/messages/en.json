@@ -153,6 +153,10 @@
     "savedSuccess": "Resources saved to library!",
     "savedError": "Failed to save resources",
     "clearSelection": "Clear selection",
+    "remainingResources": "{count} resources not evaluated yet",
+    "evaluateNext": "Evaluate next {count} resources",
+    "showEvaluationDetails": "Show evaluation details",
+    "hideEvaluationDetails": "Hide evaluation details",
     "progress": {
       "title": "Deep Evaluation in Progress",
       "duration": "This usually takes 60–90 seconds",

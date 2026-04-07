@@ -555,6 +555,32 @@
   "@search__clearSelection": {
     "description": "Button to clear resource selection"
   },
+  "search__remainingResources": "还有 {count} 个资源未评估",
+  "@search__remainingResources": {
+    "description": "Message showing how many resources remain unevaluated",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "search__evaluateNext": "评估下 {count} 个资源",
+  "@search__evaluateNext": {
+    "description": "Button to load and evaluate the next batch of resources",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "search__showEvaluationDetails": "显示评估详情",
+  "@search__showEvaluationDetails": {
+    "description": "Tooltip for expanding evaluation details on a resource row"
+  },
+  "search__hideEvaluationDetails": "隐藏评估详情",
+  "@search__hideEvaluationDetails": {
+    "description": "Tooltip for collapsing evaluation details on a resource row"
+  },
   "search__progress__title": "深度评估进行中",
   "@search__progress__title": {
     "description": "Title shown while deep evaluation is running"
