@@ -47,7 +47,7 @@ export function UserMenu() {
   });
 
   if (isLoading && hasToken) {
-    return <span className="size-6 animate-pulse rounded-full bg-muted" />;
+    return <span className="size-10 animate-pulse rounded-full bg-muted" />;
   }
 
   if (error) {
@@ -70,9 +70,9 @@ export function UserMenu() {
           aria-label={user.name ?? t("profile")}
           className="cursor-pointer rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
-          <Avatar>
+          <Avatar size="lg" className="ring-2 ring-slate-200 shadow-sm">
             {user.image ? <AvatarImage src={user.image} alt={user.name ?? ""} /> : null}
-            <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
+            <AvatarFallback className="text-base font-semibold">{getInitials(user.name)}</AvatarFallback>
           </Avatar>
         </button>
       </DropdownMenuTrigger>
