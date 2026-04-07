@@ -11,6 +11,10 @@ from src.users.model import User
 
 
 async def main():
+    if settings.PROJECT_ENV == "prod":
+        print("ERROR: seed_test_collections.py must not run in production.")
+        return
+
     engine = create_async_engine(settings.DATABASE_URL)
     async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 

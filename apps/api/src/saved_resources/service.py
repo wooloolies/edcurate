@@ -270,7 +270,19 @@ async def sync_cloned_collection(
     db: DBSession, user_id: uuid.UUID, collection_id: uuid.UUID
 ) -> LibraryCollectionResponse:
     # `collection_id` here is the id of the ORIGINAL collection we want to sync from.
-    # First, find the user's cloned copy of this collection.
+    # Verify the original collection still exists and is public
+    orig_exec = await db.execute(
+        select(LibraryCollection).where(LibraryCollection.id == collection_id)
+    )
+    orig_collection = orig_exec.scalar_one_or_none()
+
+    if not orig_collection or not orig_collection.is_public:
+        raise HTTPException(
+            status_code=404,
+            detail="Original collection not found or is no longer public",
+        )
+
+    # Find the user's cloned copy of this collection.
     clone_exec = await db.execute(
         select(LibraryCollection).where(
             LibraryCollection.user_id == user_id,
