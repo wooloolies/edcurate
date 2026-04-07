@@ -1,6 +1,9 @@
 {
   "openapi": "3.1.0",
-  "info": { "title": "edcurate-api", "version": "0.1.0" },
+  "info": {
+    "title": "edcurate-api",
+    "version": "0.1.0"
+  },
   "paths": {
     "/health": {
       "get": {
@@ -11,7 +14,11 @@
           "200": {
             "description": "Successful Response",
             "content": {
-              "application/json": { "schema": { "$ref": "#/components/schemas/HealthResponse" } }
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
             }
           }
         }
@@ -28,7 +35,9 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "additionalProperties": { "type": "string" },
+                  "additionalProperties": {
+                    "type": "string"
+                  },
                   "type": "object",
                   "title": "Response Liveness Check Health Live Get"
                 }
@@ -49,7 +58,9 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "additionalProperties": { "type": "string" },
+                  "additionalProperties": {
+                    "type": "string"
+                  },
                   "type": "object",
                   "title": "Response Readiness Check Health Ready Get"
                 }
@@ -61,13 +72,19 @@
     },
     "/api/auth/register": {
       "post": {
-        "tags": ["authentication"],
+        "tags": [
+          "authentication"
+        ],
         "summary": "Register",
         "description": "Register a new user with email and password.",
         "operationId": "register_api_auth_register_post",
         "requestBody": {
           "content": {
-            "application/json": { "schema": { "$ref": "#/components/schemas/RegisterRequest" } }
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            }
           },
           "required": true
         },
@@ -75,14 +92,20 @@
           "201": {
             "description": "Successful Response",
             "content": {
-              "application/json": { "schema": { "$ref": "#/components/schemas/RegisterResponse" } }
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegisterResponse"
+                }
+              }
             }
           },
           "422": {
             "description": "Validation Error",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
               }
             }
           }
@@ -91,7 +114,9 @@
     },
     "/api/auth/verify-email": {
       "get": {
-        "tags": ["authentication"],
+        "tags": [
+          "authentication"
+        ],
         "summary": "Verify Email",
         "description": "Verify email address via token from verification link.",
         "operationId": "verify_email_api_auth_verify_email_get",
@@ -100,7 +125,10 @@
             "name": "token",
             "in": "query",
             "required": true,
-            "schema": { "type": "string", "title": "Token" }
+            "schema": {
+              "type": "string",
+              "title": "Token"
+            }
           }
         ],
         "responses": {
@@ -110,7 +138,9 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "additionalProperties": { "type": "string" },
+                  "additionalProperties": {
+                    "type": "string"
+                  },
                   "title": "Response Verify Email Api Auth Verify Email Get"
                 }
               }
@@ -120,7 +150,9 @@
             "description": "Validation Error",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
               }
             }
           }
@@ -129,14 +161,18 @@
     },
     "/api/auth/resend-verification": {
       "post": {
-        "tags": ["authentication"],
+        "tags": [
+          "authentication"
+        ],
         "summary": "Resend Verification Email",
         "description": "Resend a verification email for an existing unverified user.",
         "operationId": "resend_verification_email_api_auth_resend_verification_post",
         "requestBody": {
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/ResendVerificationRequest" }
+              "schema": {
+                "$ref": "#/components/schemas/ResendVerificationRequest"
+              }
             }
           },
           "required": true
@@ -147,7 +183,9 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "additionalProperties": { "type": "string" },
+                  "additionalProperties": {
+                    "type": "string"
+                  },
                   "type": "object",
                   "title": "Response Resend Verification Email Api Auth Resend Verification Post"
                 }
@@ -158,7 +196,9 @@
             "description": "Validation Error",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
               }
             }
           }
@@ -167,13 +207,19 @@
     },
     "/api/auth/email-login": {
       "post": {
-        "tags": ["authentication"],
+        "tags": [
+          "authentication"
+        ],
         "summary": "Email Login",
         "description": "Login with email and password.",
         "operationId": "email_login_api_auth_email_login_post",
         "requestBody": {
           "content": {
-            "application/json": { "schema": { "$ref": "#/components/schemas/EmailLoginRequest" } }
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmailLoginRequest"
+              }
+            }
           },
           "required": true
         },
@@ -181,14 +227,20 @@
           "200": {
             "description": "Successful Response",
             "content": {
-              "application/json": { "schema": { "$ref": "#/components/schemas/TokenResponse" } }
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenResponse"
+                }
+              }
             }
           },
           "422": {
             "description": "Validation Error",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
               }
             }
           }
@@ -197,13 +249,19 @@
     },
     "/api/auth/login": {
       "post": {
-        "tags": ["authentication"],
+        "tags": [
+          "authentication"
+        ],
         "summary": "Oauth Login",
-        "description": "OAuth login \u2014 verify provider token, create/update user.",
+        "description": "OAuth login — verify provider token, create/update user.",
         "operationId": "oauth_login_api_auth_login_post",
         "requestBody": {
           "content": {
-            "application/json": { "schema": { "$ref": "#/components/schemas/OAuthLoginRequest" } }
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OAuthLoginRequest"
+              }
+            }
           },
           "required": true
         },
@@ -211,14 +269,20 @@
           "200": {
             "description": "Successful Response",
             "content": {
-              "application/json": { "schema": { "$ref": "#/components/schemas/TokenResponse" } }
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenResponse"
+                }
+              }
             }
           },
           "422": {
             "description": "Validation Error",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
               }
             }
           }
@@ -227,13 +291,19 @@
     },
     "/api/auth/refresh": {
       "post": {
-        "tags": ["authentication"],
+        "tags": [
+          "authentication"
+        ],
         "summary": "Refresh Token",
         "description": "Refresh access token using refresh token.",
         "operationId": "refresh_token_api_auth_refresh_post",
         "requestBody": {
           "content": {
-            "application/json": { "schema": { "$ref": "#/components/schemas/RefreshTokenRequest" } }
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshTokenRequest"
+              }
+            }
           },
           "required": true
         },
@@ -241,14 +311,20 @@
           "200": {
             "description": "Successful Response",
             "content": {
-              "application/json": { "schema": { "$ref": "#/components/schemas/TokenResponse" } }
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenResponse"
+                }
+              }
             }
           },
           "422": {
             "description": "Validation Error",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
               }
             }
           }
@@ -257,16 +333,24 @@
     },
     "/api/auth/logout": {
       "post": {
-        "tags": ["authentication"],
+        "tags": [
+          "authentication"
+        ],
         "summary": "Logout",
-        "description": "Logout \u2014 client should remove tokens from localStorage.",
+        "description": "Logout — client should remove tokens from localStorage.",
         "operationId": "logout_api_auth_logout_post",
-        "responses": { "204": { "description": "Successful Response" } }
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          }
+        }
       }
     },
     "/api/curriculum/countries": {
       "get": {
-        "tags": ["curriculum"],
+        "tags": [
+          "curriculum"
+        ],
         "summary": "Get Countries",
         "operationId": "get_countries_api_curriculum_countries_get",
         "responses": {
@@ -275,7 +359,9 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "items": { "$ref": "#/components/schemas/CountryOption" },
+                  "items": {
+                    "$ref": "#/components/schemas/CountryOption"
+                  },
                   "type": "array",
                   "title": "Response Get Countries Api Curriculum Countries Get"
                 }
@@ -287,7 +373,9 @@
     },
     "/api/curriculum/subjects": {
       "get": {
-        "tags": ["curriculum"],
+        "tags": [
+          "curriculum"
+        ],
         "summary": "Get Subjects",
         "operationId": "get_subjects_api_curriculum_subjects_get",
         "parameters": [
@@ -295,7 +383,10 @@
             "name": "country",
             "in": "query",
             "required": true,
-            "schema": { "type": "string", "title": "Country" }
+            "schema": {
+              "type": "string",
+              "title": "Country"
+            }
           }
         ],
         "responses": {
@@ -305,7 +396,9 @@
               "application/json": {
                 "schema": {
                   "type": "array",
-                  "items": { "type": "string" },
+                  "items": {
+                    "type": "string"
+                  },
                   "title": "Response Get Subjects Api Curriculum Subjects Get"
                 }
               }
@@ -315,7 +408,9 @@
             "description": "Validation Error",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
               }
             }
           }
@@ -324,7 +419,9 @@
     },
     "/api/curriculum/frameworks": {
       "get": {
-        "tags": ["curriculum"],
+        "tags": [
+          "curriculum"
+        ],
         "summary": "Get Frameworks",
         "operationId": "get_frameworks_api_curriculum_frameworks_get",
         "parameters": [
@@ -332,13 +429,26 @@
             "name": "country",
             "in": "query",
             "required": true,
-            "schema": { "type": "string", "title": "Country" }
+            "schema": {
+              "type": "string",
+              "title": "Country"
+            }
           },
           {
             "name": "subject",
             "in": "query",
-            "required": true,
-            "schema": { "type": "string", "title": "Subject" }
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Subject"
+            }
           }
         ],
         "responses": {
@@ -348,7 +458,9 @@
               "application/json": {
                 "schema": {
                   "type": "array",
-                  "items": { "type": "string" },
+                  "items": {
+                    "type": "string"
+                  },
                   "title": "Response Get Frameworks Api Curriculum Frameworks Get"
                 }
               }
@@ -358,7 +470,9 @@
             "description": "Validation Error",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
               }
             }
           }
@@ -367,7 +481,9 @@
     },
     "/api/curriculum/grades": {
       "get": {
-        "tags": ["curriculum"],
+        "tags": [
+          "curriculum"
+        ],
         "summary": "Get Grades",
         "operationId": "get_grades_api_curriculum_grades_get",
         "parameters": [
@@ -375,19 +491,35 @@
             "name": "country",
             "in": "query",
             "required": true,
-            "schema": { "type": "string", "title": "Country" }
-          },
-          {
-            "name": "subject",
-            "in": "query",
-            "required": true,
-            "schema": { "type": "string", "title": "Subject" }
+            "schema": {
+              "type": "string",
+              "title": "Country"
+            }
           },
           {
             "name": "framework",
             "in": "query",
             "required": true,
-            "schema": { "type": "string", "title": "Framework" }
+            "schema": {
+              "type": "string",
+              "title": "Framework"
+            }
+          },
+          {
+            "name": "subject",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Subject"
+            }
           }
         ],
         "responses": {
@@ -397,7 +529,9 @@
               "application/json": {
                 "schema": {
                   "type": "array",
-                  "items": { "$ref": "#/components/schemas/GradeOption" },
+                  "items": {
+                    "$ref": "#/components/schemas/GradeOption"
+                  },
                   "title": "Response Get Grades Api Curriculum Grades Get"
                 }
               }
@@ -407,7 +541,9 @@
             "description": "Validation Error",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
               }
             }
           }
@@ -416,35 +552,49 @@
     },
     "/api/presets/": {
       "post": {
-        "tags": ["presets"],
+        "tags": [
+          "presets"
+        ],
         "summary": "Create Preset",
         "description": "Create a new classroom preset.",
         "operationId": "create_preset_api_presets__post",
         "requestBody": {
           "required": true,
           "content": {
-            "application/json": { "schema": { "$ref": "#/components/schemas/PresetCreate" } }
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PresetCreate"
+              }
+            }
           }
         },
         "responses": {
           "201": {
             "description": "Successful Response",
             "content": {
-              "application/json": { "schema": { "$ref": "#/components/schemas/PresetResponse" } }
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PresetResponse"
+                }
+              }
             }
           },
           "422": {
             "description": "Validation Error",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
               }
             }
           }
         }
       },
       "get": {
-        "tags": ["presets"],
+        "tags": [
+          "presets"
+        ],
         "summary": "List Presets",
         "description": "List classroom presets for the current user (paginated).",
         "operationId": "list_presets_api_presets__get",
@@ -453,7 +603,12 @@
             "name": "page",
             "in": "query",
             "required": false,
-            "schema": { "type": "integer", "minimum": 1, "default": 1, "title": "Page" }
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1,
+              "title": "Page"
+            }
           },
           {
             "name": "limit",
@@ -473,7 +628,9 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/PaginatedResponse_PresetResponse_" }
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedResponse_PresetResponse_"
+                }
               }
             }
           },
@@ -481,7 +638,9 @@
             "description": "Validation Error",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
               }
             }
           }
@@ -490,7 +649,9 @@
     },
     "/api/presets/{preset_id}": {
       "get": {
-        "tags": ["presets"],
+        "tags": [
+          "presets"
+        ],
         "summary": "Get Preset",
         "description": "Get a single classroom preset by id.",
         "operationId": "get_preset_api_presets__preset_id__get",
@@ -499,28 +660,40 @@
             "name": "preset_id",
             "in": "path",
             "required": true,
-            "schema": { "type": "string", "format": "uuid", "title": "Preset Id" }
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Preset Id"
+            }
           }
         ],
         "responses": {
           "200": {
             "description": "Successful Response",
             "content": {
-              "application/json": { "schema": { "$ref": "#/components/schemas/PresetResponse" } }
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PresetResponse"
+                }
+              }
             }
           },
           "422": {
             "description": "Validation Error",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
               }
             }
           }
         }
       },
       "put": {
-        "tags": ["presets"],
+        "tags": [
+          "presets"
+        ],
         "summary": "Update Preset",
         "description": "Full update of a classroom preset.",
         "operationId": "update_preset_api_presets__preset_id__put",
@@ -529,34 +702,50 @@
             "name": "preset_id",
             "in": "path",
             "required": true,
-            "schema": { "type": "string", "format": "uuid", "title": "Preset Id" }
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Preset Id"
+            }
           }
         ],
         "requestBody": {
           "required": true,
           "content": {
-            "application/json": { "schema": { "$ref": "#/components/schemas/PresetUpdate" } }
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PresetUpdate"
+              }
+            }
           }
         },
         "responses": {
           "200": {
             "description": "Successful Response",
             "content": {
-              "application/json": { "schema": { "$ref": "#/components/schemas/PresetResponse" } }
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PresetResponse"
+                }
+              }
             }
           },
           "422": {
             "description": "Validation Error",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
               }
             }
           }
         }
       },
       "delete": {
-        "tags": ["presets"],
+        "tags": [
+          "presets"
+        ],
         "summary": "Delete Preset",
         "description": "Delete a classroom preset. Returns 409 if it is the default.",
         "operationId": "delete_preset_api_presets__preset_id__delete",
@@ -565,16 +754,24 @@
             "name": "preset_id",
             "in": "path",
             "required": true,
-            "schema": { "type": "string", "format": "uuid", "title": "Preset Id" }
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Preset Id"
+            }
           }
         ],
         "responses": {
-          "204": { "description": "Successful Response" },
+          "204": {
+            "description": "Successful Response"
+          },
           "422": {
             "description": "Validation Error",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
               }
             }
           }
@@ -583,7 +780,9 @@
     },
     "/api/presets/{preset_id}/default": {
       "patch": {
-        "tags": ["presets"],
+        "tags": [
+          "presets"
+        ],
         "summary": "Set Default Preset",
         "description": "Set a classroom preset as the default (atomic swap).",
         "operationId": "set_default_preset_api_presets__preset_id__default_patch",
@@ -592,7 +791,11 @@
             "name": "preset_id",
             "in": "path",
             "required": true,
-            "schema": { "type": "string", "format": "uuid", "title": "Preset Id" }
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Preset Id"
+            }
           }
         ],
         "responses": {
@@ -600,7 +803,9 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/PresetDefaultResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/PresetDefaultResponse"
+                }
               }
             }
           },
@@ -608,7 +813,9 @@
             "description": "Validation Error",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
               }
             }
           }
@@ -617,7 +824,9 @@
     },
     "/api/users/me": {
       "get": {
-        "tags": ["users"],
+        "tags": [
+          "users"
+        ],
         "summary": "Get Current User Profile",
         "description": "Return the profile of the currently authenticated user.",
         "operationId": "get_current_user_profile_api_users_me_get",
@@ -625,7 +834,11 @@
           "200": {
             "description": "Successful Response",
             "content": {
-              "application/json": { "schema": { "$ref": "#/components/schemas/UserResponse" } }
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
             }
           }
         }
@@ -633,7 +846,9 @@
     },
     "/api/discovery/search": {
       "get": {
-        "tags": ["discovery"],
+        "tags": [
+          "discovery"
+        ],
         "summary": "Search",
         "description": "Federated search across DuckDuckGo, YouTube, and OpenAlex.\n\nRate limited to 20 requests per minute per user.\nSource labels: ddgs=DuckDuckGo, youtube=YouTube, openalex=OpenAlex",
         "operationId": "search_api_discovery_search_get",
@@ -642,13 +857,22 @@
             "name": "preset_id",
             "in": "query",
             "required": true,
-            "schema": { "type": "string", "format": "uuid", "title": "Preset Id" }
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Preset Id"
+            }
           },
           {
             "name": "query",
             "in": "query",
             "required": true,
-            "schema": { "type": "string", "minLength": 1, "maxLength": 500, "title": "Query" }
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 500,
+              "title": "Query"
+            }
           }
         ],
         "responses": {
@@ -656,7 +880,9 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/JudgedSearchResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/JudgedSearchResponse"
+                }
               }
             }
           },
@@ -664,7 +890,9 @@
             "description": "Validation Error",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
               }
             }
           }
@@ -673,7 +901,9 @@
     },
     "/api/discovery/search/stream": {
       "get": {
-        "tags": ["discovery"],
+        "tags": [
+          "discovery"
+        ],
         "summary": "Search Stream",
         "description": "SSE stream of search pipeline progress.\n\nEmits `SearchStageEvent` messages under the `stage` event name as the\nmulti-agent pipeline executes.  Rate limited to 20 requests per minute\nper user.\n\nThe stream always terminates with a ``complete / done`` event whose\n``data`` field contains the full ``JudgedSearchResponse``.",
         "operationId": "search_stream_api_discovery_search_stream_get",
@@ -682,25 +912,40 @@
             "name": "preset_id",
             "in": "query",
             "required": true,
-            "schema": { "type": "string", "format": "uuid", "title": "Preset Id" }
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Preset Id"
+            }
           },
           {
             "name": "query",
             "in": "query",
             "required": true,
-            "schema": { "type": "string", "minLength": 1, "maxLength": 500, "title": "Query" }
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 500,
+              "title": "Query"
+            }
           }
         ],
         "responses": {
           "200": {
             "description": "Successful Response",
-            "content": { "application/json": { "schema": {} } }
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
           },
           "422": {
             "description": "Validation Error",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
               }
             }
           }
@@ -709,7 +954,9 @@
     },
     "/api/saved": {
       "get": {
-        "tags": ["saved_resources"],
+        "tags": [
+          "saved_resources"
+        ],
         "summary": "List Saved Resources Endpoint",
         "description": "List grouped saved resources in the library by collection.",
         "operationId": "list_saved_resources_endpoint_api_saved_get",
@@ -719,7 +966,15 @@
             "in": "query",
             "required": false,
             "schema": {
-              "anyOf": [{ "type": "string", "format": "uuid" }, { "type": "null" }],
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
               "title": "Preset Id"
             }
           }
@@ -729,7 +984,9 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/SavedResourceListResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/SavedResourceListResponse"
+                }
               }
             }
           },
@@ -737,21 +994,29 @@
             "description": "Validation Error",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
               }
             }
           }
         }
       },
       "post": {
-        "tags": ["saved_resources"],
+        "tags": [
+          "saved_resources"
+        ],
         "summary": "Save Resource Endpoint",
         "description": "Save a single resource, auto-creating a collection if needed.",
         "operationId": "save_resource_endpoint_api_saved_post",
         "requestBody": {
           "required": true,
           "content": {
-            "application/json": { "schema": { "$ref": "#/components/schemas/SaveResourceRequest" } }
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SaveResourceRequest"
+              }
+            }
           }
         },
         "responses": {
@@ -759,7 +1024,9 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/SavedResourceResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/SavedResourceResponse"
+                }
               }
             }
           },
@@ -767,7 +1034,9 @@
             "description": "Validation Error",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
               }
             }
           }
@@ -776,7 +1045,9 @@
     },
     "/api/saved/suggested": {
       "get": {
-        "tags": ["saved_resources"],
+        "tags": [
+          "saved_resources"
+        ],
         "summary": "Get Suggested Collections Endpoint",
         "description": "Get suggested public collections matching the search query via TF-IDF / FTS.",
         "operationId": "get_suggested_collections_endpoint_api_saved_suggested_get",
@@ -785,14 +1056,25 @@
             "name": "search_query",
             "in": "query",
             "required": true,
-            "schema": { "type": "string", "title": "Search Query" }
+            "schema": {
+              "type": "string",
+              "title": "Search Query"
+            }
           },
           {
             "name": "preset_id",
             "in": "query",
             "required": false,
             "schema": {
-              "anyOf": [{ "type": "string", "format": "uuid" }, { "type": "null" }],
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
               "title": "Preset Id"
             }
           },
@@ -800,7 +1082,11 @@
             "name": "limit",
             "in": "query",
             "required": false,
-            "schema": { "type": "integer", "default": 5, "title": "Limit" }
+            "schema": {
+              "type": "integer",
+              "default": 5,
+              "title": "Limit"
+            }
           }
         ],
         "responses": {
@@ -810,7 +1096,9 @@
               "application/json": {
                 "schema": {
                   "type": "array",
-                  "items": { "$ref": "#/components/schemas/SuggestedCollectionResponse" },
+                  "items": {
+                    "$ref": "#/components/schemas/SuggestedCollectionResponse"
+                  },
                   "title": "Response Get Suggested Collections Endpoint Api Saved Suggested Get"
                 }
               }
@@ -820,7 +1108,9 @@
             "description": "Validation Error",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
               }
             }
           }
@@ -829,14 +1119,18 @@
     },
     "/api/saved/collections": {
       "post": {
-        "tags": ["saved_resources"],
+        "tags": [
+          "saved_resources"
+        ],
         "summary": "Create Collection Endpoint",
         "description": "Create a new collection from multiple resources.",
         "operationId": "create_collection_endpoint_api_saved_collections_post",
         "requestBody": {
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/LibraryCollectionCreate" }
+              "schema": {
+                "$ref": "#/components/schemas/LibraryCollectionCreate"
+              }
             }
           },
           "required": true
@@ -846,7 +1140,9 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/LibraryCollectionResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/LibraryCollectionResponse"
+                }
               }
             }
           },
@@ -854,7 +1150,9 @@
             "description": "Validation Error",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
               }
             }
           }
@@ -863,7 +1161,9 @@
     },
     "/api/saved/collections/{collection_id}": {
       "patch": {
-        "tags": ["saved_resources"],
+        "tags": [
+          "saved_resources"
+        ],
         "summary": "Update Collection Endpoint",
         "description": "Update a collection (e.g. rename, make public).",
         "operationId": "update_collection_endpoint_api_saved_collections__collection_id__patch",
@@ -872,14 +1172,20 @@
             "name": "collection_id",
             "in": "path",
             "required": true,
-            "schema": { "type": "string", "format": "uuid", "title": "Collection Id" }
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Collection Id"
+            }
           }
         ],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/LibraryCollectionUpdate" }
+              "schema": {
+                "$ref": "#/components/schemas/LibraryCollectionUpdate"
+              }
             }
           }
         },
@@ -888,7 +1194,9 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/LibraryCollectionResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/LibraryCollectionResponse"
+                }
               }
             }
           },
@@ -896,14 +1204,18 @@
             "description": "Validation Error",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
               }
             }
           }
         }
       },
       "delete": {
-        "tags": ["saved_resources"],
+        "tags": [
+          "saved_resources"
+        ],
         "summary": "Delete Collection Endpoint",
         "description": "Delete a library collection permanently.",
         "operationId": "delete_collection_endpoint_api_saved_collections__collection_id__delete",
@@ -912,16 +1224,24 @@
             "name": "collection_id",
             "in": "path",
             "required": true,
-            "schema": { "type": "string", "format": "uuid", "title": "Collection Id" }
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Collection Id"
+            }
           }
         ],
         "responses": {
-          "204": { "description": "Successful Response" },
+          "204": {
+            "description": "Successful Response"
+          },
           "422": {
             "description": "Validation Error",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
               }
             }
           }
@@ -930,7 +1250,9 @@
     },
     "/api/saved/collections/{collection_id}/clone": {
       "post": {
-        "tags": ["saved_resources"],
+        "tags": [
+          "saved_resources"
+        ],
         "summary": "Clone Collection Endpoint",
         "description": "Clone another user's public collection.",
         "operationId": "clone_collection_endpoint_api_saved_collections__collection_id__clone_post",
@@ -939,7 +1261,11 @@
             "name": "collection_id",
             "in": "path",
             "required": true,
-            "schema": { "type": "string", "format": "uuid", "title": "Collection Id" }
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Collection Id"
+            }
           }
         ],
         "responses": {
@@ -947,7 +1273,9 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/LibraryCollectionResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/LibraryCollectionResponse"
+                }
               }
             }
           },
@@ -955,7 +1283,9 @@
             "description": "Validation Error",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
               }
             }
           }
@@ -964,7 +1294,9 @@
     },
     "/api/saved/collections/{collection_id}/sync": {
       "post": {
-        "tags": ["saved_resources"],
+        "tags": [
+          "saved_resources"
+        ],
         "summary": "Sync Cloned Collection Endpoint",
         "description": "Sync a cloned collection with its original source.",
         "operationId": "sync_cloned_collection_endpoint_api_saved_collections__collection_id__sync_post",
@@ -973,7 +1305,11 @@
             "name": "collection_id",
             "in": "path",
             "required": true,
-            "schema": { "type": "string", "format": "uuid", "title": "Collection Id" }
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Collection Id"
+            }
           }
         ],
         "responses": {
@@ -981,7 +1317,9 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/LibraryCollectionResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/LibraryCollectionResponse"
+                }
               }
             }
           },
@@ -989,7 +1327,9 @@
             "description": "Validation Error",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
               }
             }
           }
@@ -998,14 +1338,18 @@
     },
     "/api/saved/collection-item": {
       "post": {
-        "tags": ["saved_resources"],
+        "tags": [
+          "saved_resources"
+        ],
         "summary": "Save Resource To Collection Endpoint",
         "description": "Save a single resource to an existing collection.",
         "operationId": "save_resource_to_collection_endpoint_api_saved_collection_item_post",
         "requestBody": {
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/SaveResourceToCollectionRequest" }
+              "schema": {
+                "$ref": "#/components/schemas/SaveResourceToCollectionRequest"
+              }
             }
           },
           "required": true
@@ -1015,7 +1359,9 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/SavedResourceResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/SavedResourceResponse"
+                }
               }
             }
           },
@@ -1023,7 +1369,9 @@
             "description": "Validation Error",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
               }
             }
           }
@@ -1032,7 +1380,9 @@
     },
     "/api/saved/{id}": {
       "delete": {
-        "tags": ["saved_resources"],
+        "tags": [
+          "saved_resources"
+        ],
         "summary": "Delete Saved Resource Endpoint",
         "description": "Remove a saved resource from library.",
         "operationId": "delete_saved_resource_endpoint_api_saved__id__delete",
@@ -1041,16 +1391,24 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": { "type": "string", "format": "uuid", "title": "Id" }
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Id"
+            }
           }
         ],
         "responses": {
-          "204": { "description": "Successful Response" },
+          "204": {
+            "description": "Successful Response"
+          },
           "422": {
             "description": "Validation Error",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
               }
             }
           }
@@ -1059,14 +1417,18 @@
     },
     "/api/saved/link": {
       "post": {
-        "tags": ["saved_resources"],
+        "tags": [
+          "saved_resources"
+        ],
         "summary": "Add Custom Link Endpoint",
         "description": "Add and scrape a custom link.",
         "operationId": "add_custom_link_endpoint_api_saved_link_post",
         "requestBody": {
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/AddCustomLinkRequest" }
+              "schema": {
+                "$ref": "#/components/schemas/AddCustomLinkRequest"
+              }
             }
           },
           "required": true
@@ -1076,7 +1438,9 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/SavedResourceResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/SavedResourceResponse"
+                }
               }
             }
           },
@@ -1084,7 +1448,9 @@
             "description": "Validation Error",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
               }
             }
           }
@@ -1093,14 +1459,18 @@
     },
     "/api/saved/evaluate": {
       "post": {
-        "tags": ["saved_resources"],
+        "tags": [
+          "saved_resources"
+        ],
         "summary": "Evaluate Saved Resources Endpoint",
         "description": "Batch evaluate unevaluated library resources within a preset+query group.",
         "operationId": "evaluate_saved_resources_endpoint_api_saved_evaluate_post",
         "requestBody": {
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/BatchEvaluateRequest" }
+              "schema": {
+                "$ref": "#/components/schemas/BatchEvaluateRequest"
+              }
             }
           },
           "required": true
@@ -1122,7 +1492,9 @@
             "description": "Validation Error",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
               }
             }
           }
@@ -1131,14 +1503,18 @@
     },
     "/api/saved/evaluate-single": {
       "post": {
-        "tags": ["saved_resources"],
+        "tags": [
+          "saved_resources"
+        ],
         "summary": "Evaluate Single Resource Endpoint",
         "description": "Evaluate a single saved resource.",
         "operationId": "evaluate_single_resource_endpoint_api_saved_evaluate_single_post",
         "requestBody": {
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/EvaluateSingleRequest" }
+              "schema": {
+                "$ref": "#/components/schemas/EvaluateSingleRequest"
+              }
             }
           },
           "required": true
@@ -1148,7 +1524,9 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/SavedResourceResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/SavedResourceResponse"
+                }
               }
             }
           },
@@ -1156,7 +1534,174 @@
             "description": "Validation Error",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/localizer/generate": {
+      "post": {
+        "tags": [
+          "localizer"
+        ],
+        "summary": "Generate Artifact Endpoint",
+        "description": "Generate a learning artifact from saved resources via NotebookLM.",
+        "operationId": "generate_artifact_endpoint_api_localizer_generate_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenerateArtifactRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GeneratedArtifactResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/localizer": {
+      "get": {
+        "tags": [
+          "localizer"
+        ],
+        "summary": "List Artifacts Endpoint",
+        "description": "List generated artifacts for a preset.",
+        "operationId": "list_artifacts_endpoint_api_localizer_get",
+        "parameters": [
+          {
+            "name": "preset_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Preset Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArtifactListResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/localizer/{artifact_id}": {
+      "get": {
+        "tags": [
+          "localizer"
+        ],
+        "summary": "Get Artifact Endpoint",
+        "description": "Get a single generated artifact.",
+        "operationId": "get_artifact_endpoint_api_localizer__artifact_id__get",
+        "parameters": [
+          {
+            "name": "artifact_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Artifact Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GeneratedArtifactResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "localizer"
+        ],
+        "summary": "Delete Artifact Endpoint",
+        "description": "Delete a generated artifact.",
+        "operationId": "delete_artifact_endpoint_api_localizer__artifact_id__delete",
+        "parameters": [
+          {
+            "name": "artifact_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Artifact Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
               }
             }
           }
@@ -1168,18 +1713,34 @@
     "schemas": {
       "AdaptationSuggestion": {
         "properties": {
-          "action": { "type": "string", "title": "Action" },
-          "rationale": { "type": "string", "title": "Rationale" }
+          "action": {
+            "type": "string",
+            "title": "Action"
+          },
+          "rationale": {
+            "type": "string",
+            "title": "Rationale"
+          }
         },
         "type": "object",
-        "required": ["action", "rationale"],
+        "required": [
+          "action",
+          "rationale"
+        ],
         "title": "AdaptationSuggestion",
         "description": "A concrete adaptation the teacher can apply."
       },
       "AddCustomLinkRequest": {
         "properties": {
-          "preset_id": { "type": "string", "format": "uuid", "title": "Preset Id" },
-          "search_query": { "type": "string", "title": "Search Query" },
+          "preset_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Preset Id"
+          },
+          "search_query": {
+            "type": "string",
+            "title": "Search Query"
+          },
           "url": {
             "type": "string",
             "maxLength": 2083,
@@ -1187,117 +1748,372 @@
             "format": "uri",
             "title": "Url"
           },
-          "title": { "anyOf": [{ "type": "string" }, { "type": "null" }], "title": "Title" }
+          "title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          }
         },
         "type": "object",
-        "required": ["preset_id", "search_query", "url"],
+        "required": [
+          "preset_id",
+          "search_query",
+          "url"
+        ],
         "title": "AddCustomLinkRequest"
+      },
+      "ArtifactListResponse": {
+        "properties": {
+          "artifacts": {
+            "items": {
+              "$ref": "#/components/schemas/GeneratedArtifactResponse"
+            },
+            "type": "array",
+            "title": "Artifacts"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          }
+        },
+        "type": "object",
+        "required": [
+          "artifacts",
+          "total"
+        ],
+        "title": "ArtifactListResponse"
       },
       "BatchEvaluateRequest": {
         "properties": {
-          "preset_id": { "type": "string", "format": "uuid", "title": "Preset Id" },
-          "search_query": { "type": "string", "title": "Search Query" }
+          "preset_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Preset Id"
+          },
+          "search_query": {
+            "type": "string",
+            "title": "Search Query"
+          }
         },
         "type": "object",
-        "required": ["preset_id", "search_query"],
+        "required": [
+          "preset_id",
+          "search_query"
+        ],
         "title": "BatchEvaluateRequest"
       },
       "CollectionGroup": {
         "properties": {
-          "collection": { "$ref": "#/components/schemas/LibraryCollectionResponse" },
+          "collection": {
+            "$ref": "#/components/schemas/LibraryCollectionResponse"
+          },
           "items": {
-            "items": { "$ref": "#/components/schemas/SavedResourceResponse" },
+            "items": {
+              "$ref": "#/components/schemas/SavedResourceResponse"
+            },
             "type": "array",
             "title": "Items"
           }
         },
         "type": "object",
-        "required": ["collection", "items"],
+        "required": [
+          "collection",
+          "items"
+        ],
         "title": "CollectionGroup",
         "description": "A collection of saved resources."
       },
       "CountryOption": {
         "properties": {
-          "code": { "type": "string", "title": "Code" },
-          "name": { "type": "string", "title": "Name" }
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          }
         },
         "type": "object",
-        "required": ["code", "name"],
+        "required": [
+          "code",
+          "name"
+        ],
         "title": "CountryOption"
       },
       "CustomMetadata": {
         "properties": {
-          "source": { "type": "string", "const": "custom", "title": "Source", "default": "custom" },
-          "domain": { "type": "string", "title": "Domain" },
-          "og_title": { "anyOf": [{ "type": "string" }, { "type": "null" }], "title": "Og Title" },
+          "source": {
+            "type": "string",
+            "const": "custom",
+            "title": "Source",
+            "default": "custom"
+          },
+          "domain": {
+            "type": "string",
+            "title": "Domain"
+          },
+          "og_title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Og Title"
+          },
           "og_description": {
-            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Og Description"
           },
-          "og_image": { "anyOf": [{ "type": "string" }, { "type": "null" }], "title": "Og Image" }
+          "og_image": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Og Image"
+          }
         },
         "type": "object",
-        "required": ["domain"],
+        "required": [
+          "domain"
+        ],
         "title": "CustomMetadata",
         "description": "Metadata from manually added custom links."
       },
       "DdgsMetadata": {
         "properties": {
-          "source": { "type": "string", "const": "ddgs", "title": "Source", "default": "ddgs" },
-          "domain": { "type": "string", "title": "Domain" },
+          "source": {
+            "type": "string",
+            "const": "ddgs",
+            "title": "Source",
+            "default": "ddgs"
+          },
+          "domain": {
+            "type": "string",
+            "title": "Domain"
+          },
           "published_date": {
-            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Published Date"
           },
-          "language": { "anyOf": [{ "type": "string" }, { "type": "null" }], "title": "Language" }
+          "language": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Language"
+          }
         },
         "type": "object",
-        "required": ["domain"],
+        "required": [
+          "domain"
+        ],
         "title": "DdgsMetadata",
         "description": "Metadata from DuckDuckGo search results."
       },
       "EmailLoginRequest": {
         "properties": {
-          "email": { "type": "string", "title": "Email" },
-          "password": { "type": "string", "title": "Password" }
+          "email": {
+            "type": "string",
+            "title": "Email"
+          },
+          "password": {
+            "type": "string",
+            "title": "Password"
+          }
         },
         "type": "object",
-        "required": ["email", "password"],
+        "required": [
+          "email",
+          "password"
+        ],
         "title": "EmailLoginRequest",
         "description": "Email/password login."
       },
       "EvaluateSingleRequest": {
         "properties": {
-          "saved_resource_id": { "type": "string", "format": "uuid", "title": "Saved Resource Id" }
+          "saved_resource_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Saved Resource Id"
+          }
         },
         "type": "object",
-        "required": ["saved_resource_id"],
+        "required": [
+          "saved_resource_id"
+        ],
         "title": "EvaluateSingleRequest"
+      },
+      "GenerateArtifactRequest": {
+        "properties": {
+          "preset_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Preset Id"
+          },
+          "saved_resource_ids": {
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "type": "array",
+            "maxItems": 10,
+            "minItems": 1,
+            "title": "Saved Resource Ids"
+          },
+          "artifact_type": {
+            "type": "string",
+            "enum": [
+              "quiz",
+              "mindmap",
+              "summary",
+              "flashcards"
+            ],
+            "title": "Artifact Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "preset_id",
+          "saved_resource_ids",
+          "artifact_type"
+        ],
+        "title": "GenerateArtifactRequest"
+      },
+      "GeneratedArtifactResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "preset_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Preset Id"
+          },
+          "artifact_type": {
+            "type": "string",
+            "title": "Artifact Type"
+          },
+          "content": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Content"
+          },
+          "source_resource_ids": {
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "type": "array",
+            "title": "Source Resource Ids"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "preset_id",
+          "artifact_type",
+          "content",
+          "source_resource_ids",
+          "created_at"
+        ],
+        "title": "GeneratedArtifactResponse"
       },
       "GeneratedSearchQueries": {
         "properties": {
-          "ddgs": { "items": { "type": "string" }, "type": "array", "title": "Ddgs" },
-          "youtube": { "items": { "type": "string" }, "type": "array", "title": "Youtube" },
-          "openalex": { "items": { "type": "string" }, "type": "array", "title": "Openalex" }
+          "ddgs": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Ddgs"
+          },
+          "youtube": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Youtube"
+          },
+          "openalex": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Openalex"
+          }
         },
         "type": "object",
-        "required": ["ddgs", "youtube", "openalex"],
+        "required": [
+          "ddgs",
+          "youtube",
+          "openalex"
+        ],
         "title": "GeneratedSearchQueries",
         "description": "Agent-generated queries sent to each provider."
       },
       "GradeOption": {
         "properties": {
-          "name": { "type": "string", "title": "Name" },
-          "sort_order": { "type": "integer", "title": "Sort Order" }
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "sort_order": {
+            "type": "integer",
+            "title": "Sort Order"
+          }
         },
         "type": "object",
-        "required": ["name", "sort_order"],
+        "required": [
+          "name",
+          "sort_order"
+        ],
         "title": "GradeOption"
       },
       "HTTPValidationError": {
         "properties": {
           "detail": {
-            "items": { "$ref": "#/components/schemas/ValidationError" },
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
             "type": "array",
             "title": "Detail"
           }
@@ -1309,46 +2125,84 @@
         "properties": {
           "status": {
             "type": "string",
-            "enum": ["healthy", "degraded", "unhealthy"],
+            "enum": [
+              "healthy",
+              "degraded",
+              "unhealthy"
+            ],
             "title": "Status"
           },
-          "version": { "type": "string", "title": "Version", "default": "0.1.0" },
+          "version": {
+            "type": "string",
+            "title": "Version",
+            "default": "0.1.0"
+          },
           "services": {
-            "additionalProperties": { "$ref": "#/components/schemas/ServiceStatus" },
+            "additionalProperties": {
+              "$ref": "#/components/schemas/ServiceStatus"
+            },
             "type": "object",
             "title": "Services"
           }
         },
         "type": "object",
-        "required": ["status", "services"],
+        "required": [
+          "status",
+          "services"
+        ],
         "title": "HealthResponse",
         "description": "Health check response with detailed service statuses."
       },
       "JudgedSearchResponse": {
         "properties": {
-          "query": { "type": "string", "title": "Query" },
-          "preset_id": { "type": "string", "format": "uuid", "title": "Preset Id" },
-          "total_results": { "type": "integer", "title": "Total Results" },
+          "query": {
+            "type": "string",
+            "title": "Query"
+          },
+          "preset_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Preset Id"
+          },
+          "total_results": {
+            "type": "integer",
+            "title": "Total Results"
+          },
           "counts_by_source": {
-            "additionalProperties": { "type": "integer" },
+            "additionalProperties": {
+              "type": "integer"
+            },
             "type": "object",
             "title": "Counts By Source"
           },
           "results": {
-            "items": { "$ref": "#/components/schemas/ResourceCard" },
+            "items": {
+              "$ref": "#/components/schemas/ResourceCard"
+            },
             "type": "array",
             "title": "Results"
           },
           "errors": {
-            "items": { "$ref": "#/components/schemas/SourceError" },
+            "items": {
+              "$ref": "#/components/schemas/SourceError"
+            },
             "type": "array",
             "title": "Errors"
           },
           "generated_queries": {
-            "anyOf": [{ "$ref": "#/components/schemas/GeneratedSearchQueries" }, { "type": "null" }]
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/GeneratedSearchQueries"
+              },
+              {
+                "type": "null"
+              }
+            ]
           },
           "judgments": {
-            "items": { "$ref": "#/components/schemas/JudgmentResult" },
+            "items": {
+              "$ref": "#/components/schemas/JudgmentResult"
+            },
             "type": "array",
             "title": "Judgments"
           }
@@ -1367,33 +2221,64 @@
       },
       "JudgmentResult": {
         "properties": {
-          "resource_url": { "type": "string", "title": "Resource Url" },
+          "resource_url": {
+            "type": "string",
+            "title": "Resource Url"
+          },
           "verdict": {
             "type": "string",
-            "enum": ["use_it", "adapt_it", "skip_it"],
+            "enum": [
+              "use_it",
+              "adapt_it",
+              "skip_it"
+            ],
             "title": "Verdict"
           },
           "confidence": {
             "type": "string",
-            "enum": ["high", "moderate", "low"],
+            "enum": [
+              "high",
+              "moderate",
+              "low"
+            ],
             "title": "Confidence"
           },
-          "curriculum_fit": { "$ref": "#/components/schemas/MetricResult" },
-          "accessibility": { "$ref": "#/components/schemas/MetricResult" },
-          "trustworthiness": { "$ref": "#/components/schemas/MetricResult" },
-          "reasoning_chain": { "type": "string", "title": "Reasoning Chain" },
+          "curriculum_fit": {
+            "$ref": "#/components/schemas/MetricResult"
+          },
+          "accessibility": {
+            "$ref": "#/components/schemas/MetricResult"
+          },
+          "trustworthiness": {
+            "$ref": "#/components/schemas/MetricResult"
+          },
+          "reasoning_chain": {
+            "type": "string",
+            "title": "Reasoning Chain"
+          },
           "flags": {
-            "items": { "$ref": "#/components/schemas/ResourceFlag" },
+            "items": {
+              "$ref": "#/components/schemas/ResourceFlag"
+            },
             "type": "array",
             "title": "Flags"
           },
           "adaptations": {
-            "items": { "$ref": "#/components/schemas/AdaptationSuggestion" },
+            "items": {
+              "$ref": "#/components/schemas/AdaptationSuggestion"
+            },
             "type": "array",
             "title": "Adaptations"
           },
           "override_notes": {
-            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Override Notes"
           }
         },
@@ -1412,12 +2297,28 @@
       },
       "LibraryCollectionCreate": {
         "properties": {
-          "preset_id": { "type": "string", "format": "uuid", "title": "Preset Id" },
-          "search_query": { "type": "string", "title": "Search Query" },
-          "name": { "type": "string", "title": "Name" },
-          "is_public": { "type": "boolean", "title": "Is Public", "default": false },
+          "preset_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Preset Id"
+          },
+          "search_query": {
+            "type": "string",
+            "title": "Search Query"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "is_public": {
+            "type": "boolean",
+            "title": "Is Public",
+            "default": false
+          },
           "resources": {
-            "items": { "$ref": "#/components/schemas/ResourceCard" },
+            "items": {
+              "$ref": "#/components/schemas/ResourceCard"
+            },
             "type": "array",
             "title": "Resources"
           },
@@ -1425,29 +2326,71 @@
             "anyOf": [
               {
                 "items": {
-                  "anyOf": [{ "$ref": "#/components/schemas/JudgmentResult" }, { "type": "null" }]
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/JudgmentResult"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
                 },
                 "type": "array"
               },
-              { "type": "null" }
+              {
+                "type": "null"
+              }
             ],
             "title": "Evaluation Data List"
           }
         },
         "type": "object",
-        "required": ["preset_id", "search_query", "name", "resources"],
+        "required": [
+          "preset_id",
+          "search_query",
+          "name",
+          "resources"
+        ],
         "title": "LibraryCollectionCreate"
       },
       "LibraryCollectionResponse": {
         "properties": {
-          "id": { "type": "string", "format": "uuid", "title": "Id" },
-          "user_id": { "type": "string", "format": "uuid", "title": "User Id" },
-          "preset_id": { "type": "string", "format": "uuid", "title": "Preset Id" },
-          "search_query": { "type": "string", "title": "Search Query" },
-          "name": { "type": "string", "title": "Name" },
-          "is_public": { "type": "boolean", "title": "Is Public" },
-          "clone_count": { "type": "integer", "title": "Clone Count" },
-          "created_at": { "type": "string", "format": "date-time", "title": "Created At" }
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "user_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "User Id"
+          },
+          "preset_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Preset Id"
+          },
+          "search_query": {
+            "type": "string",
+            "title": "Search Query"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "is_public": {
+            "type": "boolean",
+            "title": "Is Public"
+          },
+          "clone_count": {
+            "type": "integer",
+            "title": "Clone Count"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
         },
         "type": "object",
         "required": [
@@ -1464,9 +2407,26 @@
       },
       "LibraryCollectionUpdate": {
         "properties": {
-          "name": { "anyOf": [{ "type": "string" }, { "type": "null" }], "title": "Name" },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
           "is_public": {
-            "anyOf": [{ "type": "boolean" }, { "type": "null" }],
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Is Public"
           }
         },
@@ -1475,11 +2435,25 @@
       },
       "MetricResult": {
         "properties": {
-          "rating": { "type": "string", "enum": ["strong", "adequate", "weak"], "title": "Rating" },
-          "reason": { "type": "string", "title": "Reason" }
+          "rating": {
+            "type": "string",
+            "enum": [
+              "strong",
+              "adequate",
+              "weak"
+            ],
+            "title": "Rating"
+          },
+          "reason": {
+            "type": "string",
+            "title": "Reason"
+          }
         },
         "type": "object",
-        "required": ["rating", "reason"],
+        "required": [
+          "rating",
+          "reason"
+        ],
         "title": "MetricResult",
         "description": "One of the 3 evaluation metrics."
       },
@@ -1487,15 +2461,39 @@
         "properties": {
           "provider": {
             "type": "string",
-            "enum": ["google", "github", "facebook"],
+            "enum": [
+              "google",
+              "github",
+              "facebook"
+            ],
             "title": "Provider"
           },
-          "access_token": { "type": "string", "title": "Access Token" },
-          "email": { "type": "string", "title": "Email" },
-          "name": { "anyOf": [{ "type": "string" }, { "type": "null" }], "title": "Name" }
+          "access_token": {
+            "type": "string",
+            "title": "Access Token"
+          },
+          "email": {
+            "type": "string",
+            "title": "Email"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          }
         },
         "type": "object",
-        "required": ["provider", "access_token", "email"],
+        "required": [
+          "provider",
+          "access_token",
+          "email"
+        ],
         "title": "OAuthLoginRequest",
         "description": "OAuth login request."
       },
@@ -1507,15 +2505,55 @@
             "title": "Source",
             "default": "openalex"
           },
-          "authors": { "items": { "type": "string" }, "type": "array", "title": "Authors" },
-          "journal": { "anyOf": [{ "type": "string" }, { "type": "null" }], "title": "Journal" },
+          "authors": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Authors"
+          },
+          "journal": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Journal"
+          },
           "citation_count": {
-            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Citation Count"
           },
-          "doi": { "anyOf": [{ "type": "string" }, { "type": "null" }], "title": "Doi" },
+          "doi": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Doi"
+          },
           "published_date": {
-            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Published Date"
           }
         },
@@ -1526,21 +2564,40 @@
       "PaginatedResponse_PresetResponse_": {
         "properties": {
           "data": {
-            "items": { "$ref": "#/components/schemas/PresetResponse" },
+            "items": {
+              "$ref": "#/components/schemas/PresetResponse"
+            },
             "type": "array",
             "title": "Data"
           },
-          "meta": { "$ref": "#/components/schemas/PaginationMeta" }
+          "meta": {
+            "$ref": "#/components/schemas/PaginationMeta"
+          }
         },
         "type": "object",
-        "required": ["data", "meta"],
+        "required": [
+          "data",
+          "meta"
+        ],
         "title": "PaginatedResponse[PresetResponse]"
       },
       "PaginationMeta": {
         "properties": {
-          "page": { "type": "integer", "title": "Page", "description": "Current page number" },
-          "limit": { "type": "integer", "title": "Limit", "description": "Items per page" },
-          "total": { "type": "integer", "title": "Total", "description": "Total number of items" },
+          "page": {
+            "type": "integer",
+            "title": "Page",
+            "description": "Current page number"
+          },
+          "limit": {
+            "type": "integer",
+            "title": "Limit",
+            "description": "Items per page"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total",
+            "description": "Total number of items"
+          },
           "total_pages": {
             "type": "integer",
             "title": "Total Pages",
@@ -1558,32 +2615,82 @@
           }
         },
         "type": "object",
-        "required": ["page", "limit", "total", "total_pages", "has_next", "has_prev"],
+        "required": [
+          "page",
+          "limit",
+          "total",
+          "total_pages",
+          "has_next",
+          "has_prev"
+        ],
         "title": "PaginationMeta",
         "description": "Pagination metadata."
       },
       "PresetCreate": {
         "properties": {
-          "name": { "type": "string", "maxLength": 255, "minLength": 1, "title": "Name" },
-          "is_default": { "type": "boolean", "title": "Is Default", "default": false },
+          "name": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1,
+            "title": "Name"
+          },
+          "is_default": {
+            "type": "boolean",
+            "title": "Is Default",
+            "default": false
+          },
           "curriculum_framework": {
-            "anyOf": [{ "type": "string", "maxLength": 255 }, { "type": "null" }],
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 255
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Curriculum Framework"
           },
-          "subject": { "type": "string", "maxLength": 255, "minLength": 1, "title": "Subject" },
+          "subject": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1,
+            "title": "Subject"
+          },
           "year_level": {
             "type": "string",
             "maxLength": 50,
             "minLength": 1,
             "title": "Year Level"
           },
-          "country": { "type": "string", "maxLength": 100, "minLength": 1, "title": "Country" },
+          "country": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Country"
+          },
           "state_region": {
-            "anyOf": [{ "type": "string", "maxLength": 100 }, { "type": "null" }],
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 100
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "State Region"
           },
           "city": {
-            "anyOf": [{ "type": "string", "maxLength": 100 }, { "type": "null" }],
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 100
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "City"
           },
           "teaching_language": {
@@ -1594,114 +2701,299 @@
             "default": "en"
           },
           "class_size": {
-            "anyOf": [{ "type": "integer", "exclusiveMinimum": 0.0 }, { "type": "null" }],
+            "anyOf": [
+              {
+                "type": "integer",
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Class Size"
           },
           "eal_d_students": {
-            "anyOf": [{ "type": "integer", "minimum": 0.0 }, { "type": "null" }],
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Eal D Students"
           },
           "reading_support_students": {
-            "anyOf": [{ "type": "integer", "minimum": 0.0 }, { "type": "null" }],
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Reading Support Students"
           },
           "extension_students": {
-            "anyOf": [{ "type": "integer", "minimum": 0.0 }, { "type": "null" }],
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Extension Students"
           },
           "student_interests": {
-            "items": { "type": "string" },
+            "items": {
+              "type": "string"
+            },
             "type": "array",
             "title": "Student Interests"
           },
           "language_backgrounds": {
-            "items": { "type": "string" },
+            "items": {
+              "type": "string"
+            },
             "type": "array",
             "title": "Language Backgrounds"
           },
           "average_reading_level": {
-            "anyOf": [{ "type": "string", "maxLength": 50 }, { "type": "null" }],
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 50
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Average Reading Level"
           },
-          "source_weights": { "$ref": "#/components/schemas/SourceWeights" },
+          "source_weights": {
+            "$ref": "#/components/schemas/SourceWeights"
+          },
           "additional_notes": {
-            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Additional Notes"
           }
         },
         "type": "object",
-        "required": ["name", "subject", "year_level", "country"],
+        "required": [
+          "name",
+          "subject",
+          "year_level",
+          "country"
+        ],
         "title": "PresetCreate",
         "description": "Schema for creating a classroom preset."
       },
       "PresetDefaultResponse": {
         "properties": {
-          "id": { "type": "string", "format": "uuid", "title": "Id" },
-          "is_default": { "type": "boolean", "title": "Is Default" }
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "is_default": {
+            "type": "boolean",
+            "title": "Is Default"
+          }
         },
         "type": "object",
-        "required": ["id", "is_default"],
+        "required": [
+          "id",
+          "is_default"
+        ],
         "title": "PresetDefaultResponse",
         "description": "Minimal response after setting a preset as default."
       },
       "PresetGroup": {
         "properties": {
-          "preset_id": { "type": "string", "format": "uuid", "title": "Preset Id" },
-          "preset_name": { "type": "string", "title": "Preset Name" },
-          "preset_subject": { "type": "string", "title": "Preset Subject" },
+          "preset_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Preset Id"
+          },
+          "preset_name": {
+            "type": "string",
+            "title": "Preset Name"
+          },
+          "preset_subject": {
+            "type": "string",
+            "title": "Preset Subject"
+          },
           "preset_topic": {
-            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Preset Topic"
           },
           "collections": {
-            "items": { "$ref": "#/components/schemas/CollectionGroup" },
+            "items": {
+              "$ref": "#/components/schemas/CollectionGroup"
+            },
             "type": "array",
             "title": "Collections"
           }
         },
         "type": "object",
-        "required": ["preset_id", "preset_name", "preset_subject", "collections"],
+        "required": [
+          "preset_id",
+          "preset_name",
+          "preset_subject",
+          "collections"
+        ],
         "title": "PresetGroup"
       },
       "PresetResponse": {
         "properties": {
-          "id": { "type": "string", "format": "uuid", "title": "Id" },
-          "user_id": { "type": "string", "format": "uuid", "title": "User Id" },
-          "is_default": { "type": "boolean", "title": "Is Default" },
-          "name": { "type": "string", "title": "Name" },
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "user_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "User Id"
+          },
+          "is_default": {
+            "type": "boolean",
+            "title": "Is Default"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
           "curriculum_framework": {
-            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Curriculum Framework"
           },
-          "subject": { "type": "string", "title": "Subject" },
-          "year_level": { "type": "string", "title": "Year Level" },
-          "country": { "type": "string", "title": "Country" },
+          "subject": {
+            "type": "string",
+            "title": "Subject"
+          },
+          "year_level": {
+            "type": "string",
+            "title": "Year Level"
+          },
+          "country": {
+            "type": "string",
+            "title": "Country"
+          },
           "state_region": {
-            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "State Region"
           },
-          "city": { "anyOf": [{ "type": "string" }, { "type": "null" }], "title": "City" },
-          "teaching_language": { "type": "string", "title": "Teaching Language" },
+          "city": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "City"
+          },
+          "teaching_language": {
+            "type": "string",
+            "title": "Teaching Language"
+          },
           "class_size": {
-            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Class Size"
           },
           "eal_d_students": {
-            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Eal D Students"
           },
           "reading_support_students": {
-            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Reading Support Students"
           },
           "extension_students": {
-            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Extension Students"
           },
-          "student_interests": { "items": {}, "type": "array", "title": "Student Interests" },
-          "language_backgrounds": { "items": {}, "type": "array", "title": "Language Backgrounds" },
+          "student_interests": {
+            "items": {},
+            "type": "array",
+            "title": "Student Interests"
+          },
+          "language_backgrounds": {
+            "items": {},
+            "type": "array",
+            "title": "Language Backgrounds"
+          },
           "average_reading_level": {
-            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Average Reading Level"
           },
           "source_weights": {
@@ -1710,11 +3002,26 @@
             "title": "Source Weights"
           },
           "additional_notes": {
-            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Additional Notes"
           },
-          "created_at": { "type": "string", "format": "date-time", "title": "Created At" },
-          "updated_at": { "type": "string", "format": "date-time", "title": "Updated At" }
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          }
         },
         "type": "object",
         "required": [
@@ -1746,26 +3053,69 @@
       },
       "PresetUpdate": {
         "properties": {
-          "name": { "type": "string", "maxLength": 255, "minLength": 1, "title": "Name" },
-          "is_default": { "type": "boolean", "title": "Is Default", "default": false },
+          "name": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1,
+            "title": "Name"
+          },
+          "is_default": {
+            "type": "boolean",
+            "title": "Is Default",
+            "default": false
+          },
           "curriculum_framework": {
-            "anyOf": [{ "type": "string", "maxLength": 255 }, { "type": "null" }],
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 255
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Curriculum Framework"
           },
-          "subject": { "type": "string", "maxLength": 255, "minLength": 1, "title": "Subject" },
+          "subject": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1,
+            "title": "Subject"
+          },
           "year_level": {
             "type": "string",
             "maxLength": 50,
             "minLength": 1,
             "title": "Year Level"
           },
-          "country": { "type": "string", "maxLength": 100, "minLength": 1, "title": "Country" },
+          "country": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Country"
+          },
           "state_region": {
-            "anyOf": [{ "type": "string", "maxLength": 100 }, { "type": "null" }],
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 100
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "State Region"
           },
           "city": {
-            "anyOf": [{ "type": "string", "maxLength": 100 }, { "type": "null" }],
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 100
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "City"
           },
           "teaching_language": {
@@ -1776,72 +3126,170 @@
             "default": "en"
           },
           "class_size": {
-            "anyOf": [{ "type": "integer", "exclusiveMinimum": 0.0 }, { "type": "null" }],
+            "anyOf": [
+              {
+                "type": "integer",
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Class Size"
           },
           "eal_d_students": {
-            "anyOf": [{ "type": "integer", "minimum": 0.0 }, { "type": "null" }],
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Eal D Students"
           },
           "reading_support_students": {
-            "anyOf": [{ "type": "integer", "minimum": 0.0 }, { "type": "null" }],
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Reading Support Students"
           },
           "extension_students": {
-            "anyOf": [{ "type": "integer", "minimum": 0.0 }, { "type": "null" }],
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Extension Students"
           },
           "student_interests": {
-            "items": { "type": "string" },
+            "items": {
+              "type": "string"
+            },
             "type": "array",
             "title": "Student Interests"
           },
           "language_backgrounds": {
-            "items": { "type": "string" },
+            "items": {
+              "type": "string"
+            },
             "type": "array",
             "title": "Language Backgrounds"
           },
           "average_reading_level": {
-            "anyOf": [{ "type": "string", "maxLength": 50 }, { "type": "null" }],
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 50
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Average Reading Level"
           },
-          "source_weights": { "$ref": "#/components/schemas/SourceWeights" },
+          "source_weights": {
+            "$ref": "#/components/schemas/SourceWeights"
+          },
           "additional_notes": {
-            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Additional Notes"
           }
         },
         "type": "object",
-        "required": ["name", "subject", "year_level", "country"],
+        "required": [
+          "name",
+          "subject",
+          "year_level",
+          "country"
+        ],
         "title": "PresetUpdate",
         "description": "Schema for updating a classroom preset (full replacement)."
       },
       "RefreshTokenRequest": {
-        "properties": { "refresh_token": { "type": "string", "title": "Refresh Token" } },
+        "properties": {
+          "refresh_token": {
+            "type": "string",
+            "title": "Refresh Token"
+          }
+        },
         "type": "object",
-        "required": ["refresh_token"],
+        "required": [
+          "refresh_token"
+        ],
         "title": "RefreshTokenRequest",
         "description": "Refresh token request."
       },
       "RegisterRequest": {
         "properties": {
-          "email": { "type": "string", "title": "Email" },
-          "password": { "type": "string", "title": "Password" },
-          "name": { "anyOf": [{ "type": "string" }, { "type": "null" }], "title": "Name" }
+          "email": {
+            "type": "string",
+            "title": "Email"
+          },
+          "password": {
+            "type": "string",
+            "title": "Password"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          }
         },
         "type": "object",
-        "required": ["email", "password"],
+        "required": [
+          "email",
+          "password"
+        ],
         "title": "RegisterRequest",
         "description": "Email/password registration."
       },
       "RegisterResponse": {
         "properties": {
           "access_token": {
-            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Access Token"
           },
           "refresh_token": {
-            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Refresh Token"
           },
           "requires_verification": {
@@ -1849,41 +3297,90 @@
             "title": "Requires Verification",
             "default": false
           },
-          "message": { "type": "string", "title": "Message" }
+          "message": {
+            "type": "string",
+            "title": "Message"
+          }
         },
         "type": "object",
-        "required": ["message"],
+        "required": [
+          "message"
+        ],
         "title": "RegisterResponse",
-        "description": "Registration response \u2014 tokens if no verification needed."
+        "description": "Registration response — tokens if no verification needed."
       },
       "ResendVerificationRequest": {
-        "properties": { "email": { "type": "string", "title": "Email" } },
+        "properties": {
+          "email": {
+            "type": "string",
+            "title": "Email"
+          }
+        },
         "type": "object",
-        "required": ["email"],
+        "required": [
+          "email"
+        ],
         "title": "ResendVerificationRequest",
         "description": "Resend email verification request."
       },
       "ResourceCard": {
         "properties": {
-          "title": { "type": "string", "title": "Title" },
-          "url": { "type": "string", "title": "Url" },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "url": {
+            "type": "string",
+            "title": "Url"
+          },
           "source": {
             "type": "string",
-            "enum": ["ddgs", "youtube", "openalex", "custom"],
+            "enum": [
+              "ddgs",
+              "youtube",
+              "openalex",
+              "custom"
+            ],
             "title": "Source"
           },
-          "type": { "type": "string", "enum": ["webpage", "video", "paper"], "title": "Type" },
-          "snippet": { "type": "string", "title": "Snippet" },
+          "type": {
+            "type": "string",
+            "enum": [
+              "webpage",
+              "video",
+              "paper"
+            ],
+            "title": "Type"
+          },
+          "snippet": {
+            "type": "string",
+            "title": "Snippet"
+          },
           "thumbnail_url": {
-            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Thumbnail Url"
           },
           "metadata": {
             "oneOf": [
-              { "$ref": "#/components/schemas/DdgsMetadata" },
-              { "$ref": "#/components/schemas/YoutubeMetadata" },
-              { "$ref": "#/components/schemas/OpenAlexMetadata" },
-              { "$ref": "#/components/schemas/CustomMetadata" }
+              {
+                "$ref": "#/components/schemas/DdgsMetadata"
+              },
+              {
+                "$ref": "#/components/schemas/YoutubeMetadata"
+              },
+              {
+                "$ref": "#/components/schemas/OpenAlexMetadata"
+              },
+              {
+                "$ref": "#/components/schemas/CustomMetadata"
+              }
             ],
             "title": "Metadata",
             "discriminator": {
@@ -1897,21 +3394,49 @@
             }
           },
           "relevance_score": {
-            "anyOf": [{ "type": "number" }, { "type": "null" }],
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Relevance Score"
           },
           "relevance_reason": {
-            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Relevance Reason"
           },
           "verdict": {
-            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Verdict",
             "description": "use_it | adapt_it | skip_it"
           }
         },
         "type": "object",
-        "required": ["title", "url", "source", "type", "snippet", "metadata"],
+        "required": [
+          "title",
+          "url",
+          "source",
+          "type",
+          "snippet",
+          "metadata"
+        ],
         "title": "ResourceCard",
         "description": "Normalised resource card returned by all providers."
       },
@@ -1928,66 +3453,164 @@
             ],
             "title": "Category"
           },
-          "severity": { "type": "string", "enum": ["high", "medium", "low"], "title": "Severity" },
-          "evidence_quote": { "type": "string", "title": "Evidence Quote" },
-          "explanation": { "type": "string", "title": "Explanation" },
-          "suggested_action": { "type": "string", "title": "Suggested Action" }
+          "severity": {
+            "type": "string",
+            "enum": [
+              "high",
+              "medium",
+              "low"
+            ],
+            "title": "Severity"
+          },
+          "evidence_quote": {
+            "type": "string",
+            "title": "Evidence Quote"
+          },
+          "explanation": {
+            "type": "string",
+            "title": "Explanation"
+          },
+          "suggested_action": {
+            "type": "string",
+            "title": "Suggested Action"
+          }
         },
         "type": "object",
-        "required": ["category", "severity", "evidence_quote", "explanation", "suggested_action"],
+        "required": [
+          "category",
+          "severity",
+          "evidence_quote",
+          "explanation",
+          "suggested_action"
+        ],
         "title": "ResourceFlag",
         "description": "A single issue found by the risk scanner, backed by evidence."
       },
       "SaveResourceRequest": {
         "properties": {
-          "preset_id": { "type": "string", "format": "uuid", "title": "Preset Id" },
-          "search_query": { "type": "string", "title": "Search Query" },
-          "resource": { "$ref": "#/components/schemas/ResourceCard" },
+          "preset_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Preset Id"
+          },
+          "search_query": {
+            "type": "string",
+            "title": "Search Query"
+          },
+          "resource": {
+            "$ref": "#/components/schemas/ResourceCard"
+          },
           "evaluation_data": {
-            "anyOf": [{ "additionalProperties": true, "type": "object" }, { "type": "null" }],
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/JudgmentResult"
+              },
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Evaluation Data"
           }
         },
         "type": "object",
-        "required": ["preset_id", "search_query", "resource"],
+        "required": [
+          "preset_id",
+          "search_query",
+          "resource"
+        ],
         "title": "SaveResourceRequest"
       },
       "SaveResourceToCollectionRequest": {
         "properties": {
-          "collection_id": { "type": "string", "format": "uuid", "title": "Collection Id" },
-          "resource": { "$ref": "#/components/schemas/ResourceCard" },
+          "collection_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Collection Id"
+          },
+          "resource": {
+            "$ref": "#/components/schemas/ResourceCard"
+          },
           "evaluation_data": {
-            "anyOf": [{ "$ref": "#/components/schemas/JudgmentResult" }, { "type": "null" }]
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/JudgmentResult"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "type": "object",
-        "required": ["collection_id", "resource"],
+        "required": [
+          "collection_id",
+          "resource"
+        ],
         "title": "SaveResourceToCollectionRequest"
       },
       "SavedResourceListResponse": {
         "properties": {
-          "total": { "type": "integer", "title": "Total" },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
           "groups": {
-            "items": { "$ref": "#/components/schemas/PresetGroup" },
+            "items": {
+              "$ref": "#/components/schemas/PresetGroup"
+            },
             "type": "array",
             "title": "Groups"
           }
         },
         "type": "object",
-        "required": ["total", "groups"],
+        "required": [
+          "total",
+          "groups"
+        ],
         "title": "SavedResourceListResponse"
       },
       "SavedResourceResponse": {
         "properties": {
-          "id": { "type": "string", "format": "uuid", "title": "Id" },
-          "preset_id": { "type": "string", "format": "uuid", "title": "Preset Id" },
-          "search_query": { "type": "string", "title": "Search Query" },
-          "resource_url": { "type": "string", "title": "Resource Url" },
-          "resource_data": { "$ref": "#/components/schemas/ResourceCard" },
-          "evaluation_data": {
-            "anyOf": [{ "$ref": "#/components/schemas/JudgmentResult" }, { "type": "null" }]
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
           },
-          "saved_at": { "type": "string", "format": "date-time", "title": "Saved At" }
+          "preset_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Preset Id"
+          },
+          "search_query": {
+            "type": "string",
+            "title": "Search Query"
+          },
+          "resource_url": {
+            "type": "string",
+            "title": "Resource Url"
+          },
+          "resource_data": {
+            "$ref": "#/components/schemas/ResourceCard"
+          },
+          "evaluation_data": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/JudgmentResult"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "saved_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Saved At"
+          }
         },
         "type": "object",
         "required": [
@@ -2002,15 +3625,41 @@
       },
       "ServiceStatus": {
         "properties": {
-          "status": { "type": "string", "enum": ["healthy", "unhealthy"], "title": "Status" },
+          "status": {
+            "type": "string",
+            "enum": [
+              "healthy",
+              "unhealthy"
+            ],
+            "title": "Status"
+          },
           "latency_ms": {
-            "anyOf": [{ "type": "number" }, { "type": "null" }],
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Latency Ms"
           },
-          "error": { "anyOf": [{ "type": "string" }, { "type": "null" }], "title": "Error" }
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          }
         },
         "type": "object",
-        "required": ["status"],
+        "required": [
+          "status"
+        ],
         "title": "ServiceStatus",
         "description": "Individual service health status."
       },
@@ -2018,13 +3667,24 @@
         "properties": {
           "source": {
             "type": "string",
-            "enum": ["ddgs", "youtube", "openalex", "custom"],
+            "enum": [
+              "ddgs",
+              "youtube",
+              "openalex",
+              "custom"
+            ],
             "title": "Source"
           },
-          "message": { "type": "string", "title": "Message" }
+          "message": {
+            "type": "string",
+            "title": "Message"
+          }
         },
         "type": "object",
-        "required": ["source", "message"],
+        "required": [
+          "source",
+          "message"
+        ],
         "title": "SourceError",
         "description": "Error from a single search provider."
       },
@@ -2058,11 +3718,27 @@
       },
       "SuggestedCollectionResponse": {
         "properties": {
-          "collection": { "$ref": "#/components/schemas/LibraryCollectionResponse" },
-          "matched_by": { "type": "string", "title": "Matched By" },
-          "resources_count": { "type": "integer", "title": "Resources Count", "default": 0 },
+          "collection": {
+            "$ref": "#/components/schemas/LibraryCollectionResponse"
+          },
+          "matched_by": {
+            "type": "string",
+            "title": "Matched By"
+          },
+          "resources_count": {
+            "type": "integer",
+            "title": "Resources Count",
+            "default": 0
+          },
           "publisher_name": {
-            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Publisher Name"
           },
           "is_cloned_by_user": {
@@ -2071,54 +3747,135 @@
             "default": false
           },
           "resources": {
-            "items": { "$ref": "#/components/schemas/SavedResourceResponse" },
+            "items": {
+              "$ref": "#/components/schemas/SavedResourceResponse"
+            },
             "type": "array",
             "title": "Resources",
             "default": []
           }
         },
         "type": "object",
-        "required": ["collection", "matched_by"],
+        "required": [
+          "collection",
+          "matched_by"
+        ],
         "title": "SuggestedCollectionResponse"
       },
       "TokenResponse": {
         "properties": {
-          "access_token": { "type": "string", "title": "Access Token" },
-          "refresh_token": { "type": "string", "title": "Refresh Token" },
-          "token_type": { "type": "string", "title": "Token Type", "default": "bearer" }
+          "access_token": {
+            "type": "string",
+            "title": "Access Token"
+          },
+          "refresh_token": {
+            "type": "string",
+            "title": "Refresh Token"
+          },
+          "token_type": {
+            "type": "string",
+            "title": "Token Type",
+            "default": "bearer"
+          }
         },
         "type": "object",
-        "required": ["access_token", "refresh_token"],
+        "required": [
+          "access_token",
+          "refresh_token"
+        ],
         "title": "TokenResponse",
         "description": "Token response."
       },
       "UserResponse": {
         "properties": {
-          "id": { "type": "string", "format": "uuid", "title": "Id" },
-          "email": { "type": "string", "title": "Email" },
-          "name": { "anyOf": [{ "type": "string" }, { "type": "null" }], "title": "Name" },
-          "image": { "anyOf": [{ "type": "string" }, { "type": "null" }], "title": "Image" },
-          "email_verified": { "type": "boolean", "title": "Email Verified", "default": false },
-          "created_at": { "type": "string", "format": "date-time", "title": "Created At" },
-          "updated_at": { "type": "string", "format": "date-time", "title": "Updated At" }
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "email": {
+            "type": "string",
+            "title": "Email"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "image": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Image"
+          },
+          "email_verified": {
+            "type": "boolean",
+            "title": "Email Verified",
+            "default": false
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          }
         },
         "type": "object",
-        "required": ["id", "email", "created_at", "updated_at"],
+        "required": [
+          "id",
+          "email",
+          "created_at",
+          "updated_at"
+        ],
         "title": "UserResponse",
         "description": "User response model."
       },
       "ValidationError": {
         "properties": {
           "loc": {
-            "items": { "anyOf": [{ "type": "string" }, { "type": "integer" }] },
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
             "type": "array",
             "title": "Location"
           },
-          "msg": { "type": "string", "title": "Message" },
-          "type": { "type": "string", "title": "Error Type" }
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
         },
         "type": "object",
-        "required": ["loc", "msg", "type"],
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
         "title": "ValidationError"
       },
       "YoutubeMetadata": {
@@ -2129,24 +3886,60 @@
             "title": "Source",
             "default": "youtube"
           },
-          "channel": { "type": "string", "title": "Channel" },
-          "duration": { "type": "string", "title": "Duration", "default": "" },
+          "channel": {
+            "type": "string",
+            "title": "Channel"
+          },
+          "duration": {
+            "type": "string",
+            "title": "Duration",
+            "default": ""
+          },
           "view_count": {
-            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "View Count"
           },
           "published_date": {
-            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Published Date"
           },
-          "tags": { "items": { "type": "string" }, "type": "array", "title": "Tags" },
+          "tags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Tags"
+          },
           "full_description": {
-            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Full Description"
           }
         },
         "type": "object",
-        "required": ["channel"],
+        "required": [
+          "channel"
+        ],
         "title": "YoutubeMetadata",
         "description": "Metadata from YouTube Data API results."
       }

@@ -166,15 +166,13 @@ export function CollectionOnboarding() {
               aria-label="Edit collection name"
             />
           ) : (
-            <h2
-              className="text-2xl font-bold text-[#111827] cursor-pointer hover:opacity-80 transition-opacity"
+            <button
+              type="button"
+              className="text-2xl font-bold text-[#111827] cursor-pointer hover:opacity-80 transition-opacity bg-transparent border-none p-0"
               onClick={() => setIsEditingPreset(true)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") setIsEditingPreset(true);
-              }}
             >
               {presetName}
-            </h2>
+            </button>
           )}
           {!isEditingPreset && (
             <button
