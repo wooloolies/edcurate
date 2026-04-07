@@ -105,7 +105,7 @@ export interface UseSearchStreamReturn extends SearchStreamState {
 
 export function useSearchStream(
   presetId: string | null,
-  query: string | null,
+  query: string | null
 ): UseSearchStreamReturn {
   const [state, setState] = useAtom(searchStreamAtom);
   const latestPresetId = useLatest(presetId);
@@ -134,7 +134,7 @@ export function useSearchStream(
       const response = await fetchSSE(
         "/api/discovery/search/stream",
         { preset_id: pid, query: q },
-        controller.signal,
+        controller.signal
       );
 
       if (!response.ok) {

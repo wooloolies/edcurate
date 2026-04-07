@@ -11,6 +11,7 @@ import {
   MoreHorizontal,
   Pencil,
   Plus,
+  Sparkles,
   Trash2,
   Wand2,
   X,
@@ -31,12 +32,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ArtifactList } from "@/features/library/components/artifact-list";
+import { GenerateArtifactDialog } from "@/features/library/components/generate-artifact-dialog";
 import { ResourceCardRenderer } from "@/features/search/components/resource-card";
-import type {
-  CollectionGroup,
-  ResourceCard,
-  SavedResourceResponse,
-} from "@/lib/api/model";
+import type { ArtifactType, CollectionGroup, SavedResourceResponse } from "@/lib/api/model";
 import {
   getListSavedResourcesEndpointApiSavedGetQueryKey,
   useAddCustomLinkEndpointApiSavedLinkPost,
@@ -70,6 +69,12 @@ export function LibraryPageClient() {
   const [closedGroups, setClosedGroups] = useState<Set<string>>(new Set());
   const [addLinkOpenFor, setAddLinkOpenFor] = useState<string | null>(null);
   const [linkUrl, setLinkUrl] = useState("");
+  const [generateDialog, setGenerateDialog] = useState<{
+    open: boolean;
+    artifactType: ArtifactType;
+    presetId: string;
+    resources: SavedResourceResponse[];
+  } | null>(null);
 
   const [renamingCollectionId, setRenamingCollectionId] = useState<string | null>(null);
   const [renamingValue, setRenamingValue] = useState("");
@@ -383,6 +388,42 @@ export function LibraryPageClient() {
                     </DropdownMenu>
                   </>
                 )}
+
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-8 text-xs"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <Sparkles className="mr-1 h-3.5 w-3.5" /> Generate
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    {(["quiz", "mindmap", "summary", "flashcards"] as const).map((type) => (
+                      <DropdownMenuItem
+                        key={type}
+                        onClick={() =>
+                          setGenerateDialog({
+                            open: true,
+                            artifactType: type,
+                            presetId,
+                            resources: colGroup.items,
+                          })
+                        }
+                      >
+                        {type === "quiz"
+                          ? "Quiz"
+                          : type === "mindmap"
+                            ? "Mind Map"
+                            : type === "summary"
+                              ? "Summary"
+                              : "Flashcards"}
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             </div>
 
@@ -466,10 +507,24 @@ export function LibraryPageClient() {
               {group.collections.map((colGroup) =>
                 renderCollectionGroup(colGroup, group.preset_id)
               )}
+              <ArtifactList presetId={group.preset_id} />
             </TabsContent>
           ))}
         </Tabs>
       )}
+
+      {generateDialog ? (
+        <GenerateArtifactDialog
+          open={generateDialog.open}
+          onOpenChange={(open) => {
+            if (!open) setGenerateDialog(null);
+          }}
+          artifactType={generateDialog.artifactType}
+          presetId={generateDialog.presetId}
+          resources={generateDialog.resources}
+          onSuccess={() => setGenerateDialog(null)}
+        />
+      ) : null}
     </div>
   );
 }
