@@ -26,9 +26,7 @@ from src.saved_resources.schemas import (
 from src.users.model import User
 
 
-def _dump_eval_data(
-    evaluation_data: Any, resource: ResourceCard
-) -> dict[str, Any] | None:
+def _dump_eval_data(evaluation_data: Any) -> dict[str, Any] | None:
     if hasattr(evaluation_data, "model_dump"):
         return evaluation_data.model_dump(mode="json")
     return evaluation_data
