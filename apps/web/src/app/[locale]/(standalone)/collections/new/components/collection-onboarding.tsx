@@ -2,120 +2,118 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useQueryState } from "nuqs";
-import { Pen, ChevronDown, AlertCircle } from "lucide-react";
+import { Pen, ChevronDown, AlertCircle, Loader2 } from "lucide-react";
 import { Link, useRouter } from "@/lib/i18n/routing";
-
-const CURRICULUM_DATA: Record<string, string[]> = {
-  "Australia": [
-    "Australian Curriculum (ACARA)",
-    "New South Wales Syllabus (NESA)",
-    "Victorian Curriculum (VCAA)",
-    "Queensland Curriculum (QCAA)",
-    "Western Australian Curriculum (SCSA)",
-    "South Australian Curriculum (SACE)"
-  ],
-  "United Kingdom": [
-    "National Curriculum for England",
-    "Curriculum for Wales",
-    "Curriculum for Excellence (Scotland)",
-    "Northern Ireland Curriculum"
-  ],
-  "United States": [
-    "Common Core State Standards",
-    "Next Generation Science Standards (NGSS)",
-    "Texas Essential Knowledge and Skills (TEKS)",
-    "New York State Learning Standards"
-  ],
-  "Canada": [
-    "Ontario Curriculum",
-    "BC Curriculum",
-    "Alberta Curriculum"
-  ],
-  "International": [
-    "International Baccalaureate (IB)",
-    "Cambridge Assessment International Education (CAIE)"
-  ]
-};
-
-const FIELD_DATA: string[] = [
-  "Mathematics",
-  "English",
-  "Science",
-  "History / Humanities",
-  "Geography",
-  "Health & Physical Education",
-  "Arts",
-  "Languages",
-  "Technology / IT",
-  "Other..."
-];
+import {
+  useGetCountriesApiCurriculumCountriesGet,
+  useGetSubjectsApiCurriculumSubjectsGet,
+  useGetFrameworksApiCurriculumFrameworksGet,
+  useGetGradesApiCurriculumGradesGet,
+} from "@/lib/api/curriculum/curriculum";
+import { useCreatePresetApiPresetsPost } from "@/lib/api/presets/presets";
+import type { PresetCreate } from "@/lib/api/model";
 
 export function CollectionOnboarding() {
   const router = useRouter();
+  const createMutation = useCreatePresetApiPresetsPost();
 
-  // --- URL-Synchronized State (Preserves data on Language Switch & supports Browser Back Button) ---
+  // --- URL-Synchronized State ---
   const [stepStr, setStepStr] = useQueryState("step", { defaultValue: "1", history: "push" });
   const currentStep = parseInt(stepStr || "1") as 1 | 2 | 3;
-  const setCurrentStep = (val: 1|2|3) => setStepStr(val.toString());
+  const setCurrentStep = (val: 1 | 2 | 3) => setStepStr(val.toString());
 
   const [presetNameRaw, setPresetName] = useQueryState("preset", { defaultValue: "Collection 1" });
   const presetName = presetNameRaw || "Collection 1";
 
   const [isEditingPreset, setIsEditingPreset] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-  
-  // UX Evaluation Error State
-  const [errorMsg, setErrorMsg] = useState<string>("");
 
-  // Step 1 State
-  const [yearStr, setYearStr] = useQueryState("year", { defaultValue: "" });
-  const selectedYear = yearStr ? parseInt(yearStr) : null;
-  const setSelectedYear = (val: number | null) => setYearStr(val ? val.toString() : "");
+  const [errorMsg, setErrorMsg] = useState("");
 
-  const [selectedCountryRaw, setSelectedCountry] = useQueryState("country", { defaultValue: "Australia" });
-  const selectedCountry = selectedCountryRaw || "Australia";
+  // Step 1: Cascading curriculum state
+  const [countryCodeRaw, setCountryCode] = useQueryState("cc", { defaultValue: "" });
+  const countryCode = countryCodeRaw || "";
 
-  const [selectedCurriculumRaw, setSelectedCurriculum] = useQueryState("curriculum", { defaultValue: CURRICULUM_DATA["Australia"][0] });
-  const selectedCurriculum = selectedCurriculumRaw || CURRICULUM_DATA["Australia"][0];
+  const [countryNameRaw, setCountryName] = useQueryState("country", { defaultValue: "" });
+  const countryName = countryNameRaw || "";
 
-  // Step 2 State
+  const [subjectRaw, setSubject] = useQueryState("subject", { defaultValue: "" });
+  const subject = subjectRaw || "";
+
+  const [frameworkRaw, setFramework] = useQueryState("framework", { defaultValue: "" });
+  const framework = frameworkRaw || "";
+
+  const [gradeRaw, setGrade] = useQueryState("grade", { defaultValue: "" });
+  const grade = gradeRaw || "";
+
+  // Step 2
   const [classSizeRaw, setClassSize] = useQueryState("size", { defaultValue: "" });
   const classSize = classSizeRaw || "";
 
-  const [selectedFieldRaw, setSelectedField] = useQueryState("field", { defaultValue: FIELD_DATA[0] });
-  const selectedField = selectedFieldRaw || FIELD_DATA[0];
-
-  const [otherFieldRaw, setOtherField] = useQueryState("other", { defaultValue: "" });
-  const otherField = otherFieldRaw || "";
-
-  // Step 3 State
+  // Step 3
   const [additionalNotesRaw, setAdditionalNotes] = useQueryState("notes", { defaultValue: "" });
   const additionalNotes = additionalNotesRaw || "";
 
-  const years = [7, 8, 9, 10, 11, 12];
-  const countries = Object.keys(CURRICULUM_DATA);
+  // --- Curriculum API (cascading) ---
+  const { data: countries } = useGetCountriesApiCurriculumCountriesGet();
+
+  const { data: subjects } = useGetSubjectsApiCurriculumSubjectsGet(
+    { country: countryCode },
+    { query: { enabled: !!countryCode } },
+  );
+
+  const { data: frameworks } = useGetFrameworksApiCurriculumFrameworksGet(
+    { country: countryCode, subject },
+    { query: { enabled: !!countryCode && !!subject } },
+  );
+
+  const { data: grades } = useGetGradesApiCurriculumGradesGet(
+    { country: countryCode, subject, framework },
+    { query: { enabled: !!countryCode && !!subject && !!framework } },
+  );
 
   useEffect(() => {
     if (isEditingPreset && inputRef.current) {
       inputRef.current.focus();
     }
   }, [isEditingPreset]);
-  
-  // Clear error whenever primary inputs change
+
   useEffect(() => {
     setErrorMsg("");
-  }, [selectedYear, classSize, selectedField, otherField, additionalNotes, currentStep]);
+  }, [grade, classSize, subject, additionalNotes, currentStep]);
 
   const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const country = e.target.value;
-    setSelectedCountry(country);
-    setSelectedCurriculum(CURRICULUM_DATA[country][0]);
+    const code = e.target.value;
+    const match = countries?.find((c) => c.code === code);
+    setCountryCode(code);
+    setCountryName(match?.name ?? "");
+    setSubject("");
+    setFramework("");
+    setGrade("");
+  };
+
+  const handleSubjectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSubject(e.target.value);
+    setFramework("");
+    setGrade("");
+  };
+
+  const handleFrameworkChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setFramework(e.target.value);
+    setGrade("");
   };
 
   const handleNext = () => {
-    // Nielsen Heuristics #5 & #9: Error Prevention and Recovery
     if (currentStep === 1) {
-      if (!selectedYear) {
+      if (!countryCode) {
+        setErrorMsg("Please select a country to proceed.");
+        return;
+      }
+      if (!subject) {
+        setErrorMsg("Please select a subject to proceed.");
+        return;
+      }
+      if (!grade) {
         setErrorMsg("Please select a year level to proceed.");
         return;
       }
@@ -126,14 +124,21 @@ export function CollectionOnboarding() {
         setErrorMsg("Please enter a valid class size (e.g. 25).");
         return;
       }
-      if (selectedField === "Other..." && !otherField.trim()) {
-        setErrorMsg("Please specify your relevant field.");
-        return;
-      }
       setCurrentStep(3);
     } else if (currentStep === 3) {
-      // TODO: call create collection API with collected data, then redirect
-      router.push("/collections");
+      const payload: PresetCreate = {
+        name: presetName,
+        subject,
+        year_level: grade,
+        country: countryName,
+        curriculum_framework: framework || null,
+        class_size: parseInt(classSize) || null,
+        additional_notes: additionalNotes || null,
+      };
+      createMutation.mutate(
+        { data: payload },
+        { onSuccess: () => router.push("/collections") },
+      );
     }
   };
 
@@ -141,11 +146,13 @@ export function CollectionOnboarding() {
     if (currentStep > 1) setCurrentStep((currentStep - 1) as 1 | 2 | 3);
   };
 
+  const selectClass =
+    "w-full appearance-none bg-white border-2 border-gray-200 rounded-2xl px-6 py-4 text-sm font-semibold text-[#111827] cursor-pointer hover:border-gray-300 focus:outline-none focus:border-[#B7FF70] transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed";
+
   return (
     <div className="w-full max-w-4xl bg-white rounded-[2.5rem] shadow-xl shadow-black/[0.03] ring-1 ring-black/5 p-10 md:p-14 transition-all duration-300">
       {/* Header Row */}
       <div className="flex items-center justify-between mb-8">
-        {/* Editable Preset Title - Nielsen Heuristics #3: User control */}
         <div className="flex items-center gap-3">
           {isEditingPreset ? (
             <input
@@ -156,81 +163,60 @@ export function CollectionOnboarding() {
               onBlur={() => setIsEditingPreset(false)}
               onKeyDown={(e) => e.key === "Enter" && setIsEditingPreset(false)}
               className="text-2xl font-bold text-[#111827] outline-none border-b-2 border-[#B7FF70] bg-transparent w-40"
-              aria-label="Edit preset name"
+              aria-label="Edit collection name"
             />
           ) : (
-            <h2 className="text-2xl font-bold text-[#111827] cursor-pointer hover:opacity-80 transition-opacity" onClick={() => setIsEditingPreset(true)}>
+            <h2
+              className="text-2xl font-bold text-[#111827] cursor-pointer hover:opacity-80 transition-opacity"
+              onClick={() => setIsEditingPreset(true)}
+            >
               {presetName}
             </h2>
           )}
           {!isEditingPreset && (
-            <button onClick={() => setIsEditingPreset(true)} className="p-2 -ml-2 text-gray-400 hover:text-black transition-colors rounded-full hover:bg-gray-100" aria-label="Edit preset title">
+            <button
+              onClick={() => setIsEditingPreset(true)}
+              className="p-2 -ml-2 text-gray-400 hover:text-black transition-colors rounded-full hover:bg-gray-100"
+              aria-label="Edit collection name"
+            >
               <Pen className="w-4 h-4" />
             </button>
           )}
         </div>
 
-        {/* Step Indicator - Nielsen Heuristics #1: System status */}
         <div className="text-lg font-semibold text-[#111827] tracking-tight" aria-live="polite">
           Step {currentStep}/3
         </div>
       </div>
 
-      {/* Segmented Progress Bar */}
+      {/* Progress Bar */}
       <div className="flex w-full h-2 gap-2 mb-12" role="progressbar" aria-valuenow={currentStep} aria-valuemin={1} aria-valuemax={3}>
         <div className={`h-full w-1/3 rounded-full transition-colors duration-500 ${currentStep >= 1 ? "bg-[#B7FF70]" : "bg-gray-200"}`} />
         <div className={`h-full w-1/3 rounded-full transition-colors duration-500 ${currentStep >= 2 ? "bg-[#B7FF70]" : "bg-gray-200"}`} />
         <div className={`h-full w-1/3 rounded-full transition-colors duration-500 ${currentStep >= 3 ? "bg-[#B7FF70]" : "bg-gray-200"}`} />
       </div>
 
-      {/* --- STEP 1 --- */}
+      {/* --- STEP 1: Curriculum --- */}
       {currentStep === 1 && (
         <div className="space-y-12 mb-16 animate-in fade-in slide-in-from-bottom-4 duration-500">
           <div className="flex flex-col gap-2 items-center text-center max-w-2xl mx-auto">
             <h3 className="text-3xl md:text-4xl font-bold text-[#111827] tracking-tight text-center">
-              Tell us about what subject and year level you are curriculum to?
+              Tell us about your curriculum
             </h3>
             <p className="text-gray-500 text-sm font-medium text-center w-full max-w-sm mx-auto leading-relaxed">
               Tell us about your educational context so we can tailor your research and resources.
             </p>
           </div>
 
-          {/* Year Level Pills */}
-          <div className="w-full">
-            <label className="block text-xl font-bold text-[#111827] mb-4 text-left">Year</label>
-            <div className="grid grid-cols-3 gap-4">
-              {years.map((year) => {
-                const isSelected = selectedYear === year;
-                return (
-                  <button
-                    key={year}
-                    onClick={() => setSelectedYear(year)}
-                    className={`px-8 py-3 rounded-[2rem] font-semibold text-lg transition-all border-2 flex items-center justify-center ${
-                      isSelected 
-                        ? "border-[#B7FF70] bg-[#B7FF70] text-[#111827] shadow-md" 
-                        : "border-gray-200 text-gray-600 hover:border-gray-300 hover:bg-gray-50 bg-white"
-                    }`}
-                    aria-pressed={isSelected}
-                  >
-                    Year {year}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
           <div className="flex flex-col gap-8">
-            {/* Country Select */}
+            {/* Country */}
             <div className="w-full">
               <label className="block text-xl font-bold text-[#111827] mb-3 text-left">Country</label>
               <div className="relative">
-                <select
-                  value={selectedCountry}
-                  onChange={handleCountryChange}
-                  className="w-full appearance-none bg-white border-2 border-gray-200 rounded-2xl px-6 py-4 text-sm font-semibold text-[#111827] cursor-pointer hover:border-gray-300 focus:outline-none focus:border-[#B7FF70] transition-colors shadow-sm"
-                >
-                  {countries.map((country) => (
-                    <option key={country} value={country}>{country}</option>
+                <select value={countryCode} onChange={handleCountryChange} className={selectClass}>
+                  <option value="">Select a country...</option>
+                  {countries?.map((c) => (
+                    <option key={c.code} value={c.code}>{c.name}</option>
                   ))}
                 </select>
                 <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
@@ -239,17 +225,40 @@ export function CollectionOnboarding() {
               </div>
             </div>
 
-            {/* Curriculum Select */}
+            {/* Subject */}
+            <div className="w-full">
+              <label className="block text-xl font-bold text-[#111827] mb-3 text-left">Subject</label>
+              <div className="relative">
+                <select
+                  value={subject}
+                  onChange={handleSubjectChange}
+                  disabled={!countryCode}
+                  className={selectClass}
+                >
+                  <option value="">Select a subject...</option>
+                  {subjects?.map((s) => (
+                    <option key={s} value={s}>{s}</option>
+                  ))}
+                </select>
+                <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
+                  <ChevronDown className="w-5 h-5" />
+                </div>
+              </div>
+            </div>
+
+            {/* Curriculum Framework */}
             <div className="w-full">
               <label className="block text-xl font-bold text-[#111827] mb-3 text-left">Curriculum Framework</label>
               <div className="relative">
                 <select
-                  value={selectedCurriculum}
-                  onChange={(e) => setSelectedCurriculum(e.target.value)}
-                  className="w-full appearance-none bg-white border-2 border-gray-200 rounded-2xl px-6 py-4 text-sm font-semibold text-[#111827] cursor-pointer hover:border-gray-300 focus:outline-none focus:border-[#B7FF70] transition-colors shadow-sm text-ellipsis"
+                  value={framework}
+                  onChange={handleFrameworkChange}
+                  disabled={!subject}
+                  className={`${selectClass} text-ellipsis`}
                 >
-                  {CURRICULUM_DATA[selectedCountry].map((curriculum) => (
-                    <option key={curriculum} value={curriculum}>{curriculum}</option>
+                  <option value="">Select a framework...</option>
+                  {frameworks?.map((f) => (
+                    <option key={f} value={f}>{f}</option>
                   ))}
                 </select>
                 <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
@@ -257,11 +266,38 @@ export function CollectionOnboarding() {
                 </div>
               </div>
             </div>
+
+            {/* Grade / Year Level */}
+            {grades && grades.length > 0 && (
+              <div className="w-full">
+                <label className="block text-xl font-bold text-[#111827] mb-4 text-left">Year Level</label>
+                <div className="grid grid-cols-3 gap-4">
+                  {grades.map((g) => {
+                    const isSelected = grade === g.name;
+                    return (
+                      <button
+                        key={g.name}
+                        type="button"
+                        onClick={() => setGrade(g.name)}
+                        className={`px-8 py-3 rounded-[2rem] font-semibold text-lg transition-all border-2 flex items-center justify-center cursor-pointer ${
+                          isSelected
+                            ? "border-[#B7FF70] bg-[#B7FF70] text-[#111827] shadow-md"
+                            : "border-gray-200 text-gray-600 hover:border-gray-300 hover:bg-gray-50 bg-white"
+                        }`}
+                        aria-pressed={isSelected}
+                      >
+                        {g.name}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}
 
-      {/* --- STEP 2 --- */}
+      {/* --- STEP 2: Class Size --- */}
       {currentStep === 2 && (
         <div className="space-y-12 mb-16 animate-in fade-in slide-in-from-bottom-4 duration-500">
           <div className="flex flex-col gap-2 items-center text-center max-w-2xl mx-auto">
@@ -274,7 +310,6 @@ export function CollectionOnboarding() {
           </div>
 
           <div className="flex flex-col gap-8 max-w-xl mx-auto">
-            {/* Class Size Input */}
             <div className="w-full">
               <label className="block text-xl font-bold text-[#111827] mb-3 text-left">Class Size</label>
               <input
@@ -287,44 +322,11 @@ export function CollectionOnboarding() {
                 className="w-full appearance-none bg-white border-2 border-gray-200 rounded-2xl px-6 py-4 text-sm font-semibold text-[#111827] hover:border-gray-300 focus:outline-none focus:border-[#B7FF70] transition-colors shadow-sm placeholder:text-gray-400 placeholder:font-normal"
               />
             </div>
-
-            {/* Relevant Field Select */}
-            <div className="w-full">
-              <label className="block text-xl font-bold text-[#111827] mb-3 text-left">Relevant field</label>
-              <div className="relative">
-                <select
-                  value={selectedField}
-                  onChange={(e) => setSelectedField(e.target.value)}
-                  className="w-full appearance-none bg-white border-2 border-gray-200 rounded-2xl px-6 py-4 text-sm font-semibold text-[#111827] cursor-pointer hover:border-gray-300 focus:outline-none focus:border-[#B7FF70] transition-colors shadow-sm text-ellipsis"
-                >
-                  {FIELD_DATA.map((subject) => (
-                    <option key={subject} value={subject}>{subject}</option>
-                  ))}
-                </select>
-                <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
-                  <ChevronDown className="w-5 h-5" />
-                </div>
-              </div>
-            </div>
-
-            {/* User Freedom: "Other" Input field drops down smoothly */}
-            {selectedField === "Other..." && (
-              <div className="w-full animate-in fade-in slide-in-from-top-2 duration-300">
-                <label className="block text-sm font-bold text-gray-500 mb-2 text-left">Specify your field</label>
-                <input
-                  type="text"
-                  placeholder="e.g. Robotics, Advanced Philosophy..."
-                  value={otherField}
-                  onChange={(e) => setOtherField(e.target.value)}
-                  className="w-full appearance-none bg-gray-50 border-2 border-gray-200 rounded-2xl px-6 py-4 text-sm font-semibold text-[#111827] hover:border-gray-300 focus:outline-none focus:border-[#B7FF70] transition-colors shadow-sm placeholder:text-gray-400 placeholder:font-normal"
-                />
-              </div>
-            )}
           </div>
         </div>
       )}
 
-      {/* --- STEP 3 --- */}
+      {/* --- STEP 3: Notes --- */}
       {currentStep === 3 && (
         <div className="space-y-12 mb-16 animate-in fade-in slide-in-from-bottom-4 duration-500">
           <div className="flex flex-col gap-2 items-center text-center max-w-2xl mx-auto">
@@ -342,42 +344,45 @@ export function CollectionOnboarding() {
               onChange={(e) => setAdditionalNotes(e.target.value)}
               placeholder="e.g., I focus heavily on divergent thinking and visual learning styles..."
               className="w-full min-h-[220px] resize-y appearance-none bg-white border-2 border-gray-200 rounded-[2rem] p-8 text-base font-medium text-[#111827] hover:border-gray-300 focus:outline-none focus:border-[#B7FF70] transition-colors shadow-sm placeholder:text-gray-400 placeholder:font-normal leading-relaxed"
-            ></textarea>
+            />
           </div>
         </div>
       )}
 
-      {/* UX: Error Display Boundary */}
-      {errorMsg && (
+      {/* Error */}
+      {(errorMsg || createMutation.isError) && (
         <div className="mb-4 p-4 rounded-2xl bg-red-50 flex items-center justify-center gap-2 text-red-600 font-medium animate-in fade-in slide-in-from-top-2">
           <AlertCircle className="w-5 h-5" />
-          <span>{errorMsg}</span>
+          <span>{errorMsg || "Failed to create collection. Please try again."}</span>
         </div>
       )}
 
-      {/* Footer Navigation */}
+      {/* Footer */}
       <div className="flex items-center justify-end gap-4 mt-4 pt-8 border-t border-gray-100">
         {currentStep === 1 ? (
-          <Link 
-            href="/" 
+          <Link
+            href="/"
             className="px-8 py-3 rounded-[2rem] text-base font-semibold text-[#111827] bg-white border-2 border-[#111827] hover:!bg-[#111827] hover:!text-white transition-all duration-300 shadow-sm inline-flex items-center justify-center"
           >
             Back
           </Link>
         ) : (
-          <button 
+          <button
             onClick={handleBack}
             className="px-8 py-3 rounded-[2rem] text-base font-semibold text-[#111827] bg-white border-2 border-[#111827] hover:!bg-[#111827] hover:!text-white transition-all duration-300 shadow-sm"
           >
             Back
           </button>
         )}
-        
-        <button 
+
+        <button
           onClick={handleNext}
-          className="px-8 py-3 rounded-[2rem] text-base font-semibold text-[#111827] bg-[#B7FF70] border-2 border-[#B7FF70] hover:!bg-[#111827] hover:!text-[#B7FF70] hover:!border-[#111827] transition-all duration-300 shadow-sm"
+          disabled={createMutation.isPending}
+          className="px-8 py-3 rounded-[2rem] text-base font-semibold text-[#111827] bg-[#B7FF70] border-2 border-[#B7FF70] hover:!bg-[#111827] hover:!text-[#B7FF70] hover:!border-[#111827] transition-all duration-300 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {currentStep === 3 ? "Complete" : "Next"}
+          {createMutation.isPending ? (
+            <Loader2 className="w-5 h-5 animate-spin" />
+          ) : currentStep === 3 ? "Complete" : "Next"}
         </button>
       </div>
     </div>
