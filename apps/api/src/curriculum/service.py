@@ -49,6 +49,8 @@ async def list_frameworks(
 async def list_grades(
     db: AsyncSession, country_code: str, subject: str | None, framework: str
 ) -> list[dict]:
+    # distinct() required: the flat table stores one row per (country, subject,
+    # framework, grade) combo, so the same grade repeats across subjects.
     stmt = (
         select(CurriculumEntry.grade, CurriculumEntry.grade_sort)
         .where(
@@ -56,6 +58,7 @@ async def list_grades(
             CurriculumEntry.framework == framework,
             CurriculumEntry.is_active.is_(True),
         )
+        .distinct()
         .order_by(CurriculumEntry.grade_sort)
     )
     if subject:
