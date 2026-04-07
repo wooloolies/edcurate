@@ -6,11 +6,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useGetCurrentUserProfileApiUsersMeGet } from "@/lib/api/users/users";
 
-const WHITESPACE_RE = /\s+/;
+const WHITESPACE_REGEX = /\s+/;
 
 function getInitials(name: string | null | undefined): string {
   if (!name) return "?";
-  const parts = name.trim().split(WHITESPACE_RE);
+  const parts = name.trim().split(WHITESPACE_REGEX);
   if (parts.length >= 2) {
     return (parts[0][0] + parts[1][0]).toUpperCase();
   }

@@ -4,14 +4,8 @@ import { BookOpen, BrainCircuit, FileText, Layers, Loader2, Trash2 } from "lucid
 import { useState } from "react";
 import { toast } from "sonner";
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import {
-  useDeleteArtifactEndpointApiLocalizerArtifactIdDelete,
-  useListArtifactsEndpointApiLocalizerGet,
-} from "@/lib/api/localizer/localizer";
+import { useDeleteArtifactEndpointApiLocalizerArtifactIdDelete } from "@/lib/api/localizer/localizer";
 import type { GeneratedArtifactResponse } from "@/lib/api/model";
 
 import { FlashcardsViewer } from "./flashcards-viewer";
@@ -19,32 +13,38 @@ import { MindmapViewer } from "./mindmap-viewer";
 import { QuizViewer } from "./quiz-viewer";
 import { SummaryViewer } from "./summary-viewer";
 
-const TYPE_META: Record<string, { label: string; icon: React.ReactNode }> = {
-  quiz: { label: "Quiz", icon: <BookOpen className="h-4 w-4" /> },
-  mindmap: { label: "Mind Map", icon: <BrainCircuit className="h-4 w-4" /> },
-  summary: { label: "Summary", icon: <FileText className="h-4 w-4" /> },
-  flashcards: { label: "Flashcards", icon: <Layers className="h-4 w-4" /> },
+const TYPE_META: Record<string, { label: string; icon: React.ReactNode; gradient: string }> = {
+  quiz: {
+    label: "Quiz",
+    icon: <BookOpen className="h-4 w-4" />,
+    gradient: "from-[#B7FF70]/20 to-[#B7FF70]/5",
+  },
+  mindmap: {
+    label: "Mind Map",
+    icon: <BrainCircuit className="h-4 w-4" />,
+    gradient: "from-[#111827]/8 to-[#111827]/2",
+  },
+  summary: {
+    label: "Summary",
+    icon: <FileText className="h-4 w-4" />,
+    gradient: "from-[#B7FF70]/15 to-transparent",
+  },
+  flashcards: {
+    label: "Flashcards",
+    icon: <Layers className="h-4 w-4" />,
+    gradient: "from-[#111827]/6 to-transparent",
+  },
 };
 
 interface ArtifactListProps {
-  presetId: string;
+  artifacts: GeneratedArtifactResponse[];
+  collectionName?: string;
 }
 
-export function ArtifactList({ presetId }: ArtifactListProps) {
-  const { data, isLoading } = useListArtifactsEndpointApiLocalizerGet({ preset_id: presetId });
+export function ArtifactList({ artifacts, collectionName }: ArtifactListProps) {
   const { mutateAsync: deleteArtifact } = useDeleteArtifactEndpointApiLocalizerArtifactIdDelete();
   const [viewingArtifact, setViewingArtifact] = useState<GeneratedArtifactResponse | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
-
-  const artifacts = data?.artifacts ?? [];
-
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center py-8">
-        <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
-      </div>
-    );
-  }
 
   if (artifacts.length === 0) return null;
 
@@ -64,62 +64,47 @@ export function ArtifactList({ presetId }: ArtifactListProps) {
 
   return (
     <>
-      <div className="space-y-3">
-        <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
-          Generated Artifacts
-        </h3>
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-4 border-t border-[#111827]/5 pt-4">
+        <div className="grid gap-2.5 sm:grid-cols-2 lg:grid-cols-3">
           {artifacts.map((artifact) => {
             const meta = TYPE_META[artifact.artifact_type] ?? {
               label: artifact.artifact_type,
               icon: <FileText className="h-4 w-4" />,
+              gradient: "from-[#111827]/5 to-transparent",
             };
             return (
-              <Card
+              <button
+                type="button"
                 key={artifact.id}
-                className="cursor-pointer transition-colors hover:bg-muted/30"
+                className="group w-full cursor-pointer overflow-hidden rounded-xl border border-[#111827]/5 bg-[#F8F9FA]/80 text-left transition-all hover:border-[#111827]/10 hover:shadow-[0_2px_12px_rgba(0,0,0,0.04)]"
                 onClick={() => setViewingArtifact(artifact)}
-                onKeyDown={(event) => {
-                  if (event.target !== event.currentTarget) return;
-                  if (event.key === "Enter" || event.key === " ") {
-                    event.preventDefault();
-                    setViewingArtifact(artifact);
-                  }
-                }}
                 aria-label={`View ${meta.label}`}
-                role="button"
-                tabIndex={0}
               >
-                <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+                <div className="flex items-center justify-between px-3.5 py-2.5">
                   <div className="flex items-center gap-2">
-                    {meta.icon}
-                    <CardTitle className="text-sm font-medium">{meta.label}</CardTitle>
+                    <span className="text-[#111827]/50">{meta.icon}</span>
+                    <span className="text-[13px] font-semibold text-[#111827]">{meta.label}</span>
                   </div>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-7 w-7 text-destructive hover:bg-destructive/10"
-                    onClick={(e) => handleDelete(e, artifact.id)}
-                    disabled={deletingId === artifact.id}
-                    aria-label={`Delete ${meta.label}`}
-                  >
-                    {deletingId === artifact.id ? (
-                      <Loader2 className="h-3 w-3 animate-spin" />
-                    ) : (
-                      <Trash2 className="h-3 w-3" />
-                    )}
-                  </Button>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <Badge variant="secondary" className="text-xs">
-                      {artifact.source_resource_ids.length} source
-                      {artifact.source_resource_ids.length !== 1 ? "s" : ""}
-                    </Badge>
-                    <span>{new Date(artifact.created_at).toLocaleDateString()}</span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-[10px] text-[#111827]/30">
+                      {new Date(artifact.created_at).toLocaleDateString()}
+                    </span>
+                    <button
+                      type="button"
+                      className="rounded-full p-1 text-[#111827]/15 opacity-0 transition-all hover:bg-red-50 hover:text-red-500 group-hover:opacity-100"
+                      onClick={(e) => handleDelete(e, artifact.id)}
+                      disabled={deletingId === artifact.id}
+                      aria-label={`Delete ${meta.label}`}
+                    >
+                      {deletingId === artifact.id ? (
+                        <Loader2 className="h-3 w-3 animate-spin" />
+                      ) : (
+                        <Trash2 className="h-3 w-3" />
+                      )}
+                    </button>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </button>
             );
           })}
         </div>
@@ -134,10 +119,13 @@ export function ArtifactList({ presetId }: ArtifactListProps) {
           }
         >
           <DialogHeader>
-            <DialogTitle>
+            <DialogTitle className="flex items-center gap-2">
               {viewingArtifact
                 ? (TYPE_META[viewingArtifact.artifact_type]?.label ?? "Artifact")
                 : null}
+              {!!collectionName && !!viewingArtifact && (
+                <span className="text-sm font-normal text-[#111827]/40">from {collectionName}</span>
+              )}
             </DialogTitle>
           </DialogHeader>
           <div
@@ -167,7 +155,7 @@ function ArtifactContentViewer({ artifact }: { artifact: GeneratedArtifactRespon
       return <FlashcardsViewer data={content as Parameters<typeof FlashcardsViewer>[0]["data"]} />;
     default:
       return (
-        <pre className="rounded bg-muted p-4 text-xs overflow-auto max-h-96">
+        <pre className="rounded-xl bg-[#F8F9FA] p-4 text-xs overflow-auto max-h-96">
           {JSON.stringify(content, null, 2)}
         </pre>
       );

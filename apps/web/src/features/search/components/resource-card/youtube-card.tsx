@@ -1,5 +1,6 @@
 import { ExternalLink, Play } from "lucide-react";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import {
   RelevanceDetails,
   VerdictBadge,
@@ -15,6 +16,7 @@ interface YoutubeCardProps {
 }
 
 export function YoutubeCard({ index, resource, judgment, action }: YoutubeCardProps) {
+  const _t = useTranslations("search");
   const meta = resource.metadata as {
     channel?: string;
     duration?: string;

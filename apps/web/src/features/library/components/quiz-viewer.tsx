@@ -3,9 +3,6 @@
 import { Check, Download, Eye, EyeOff, HelpCircle, X } from "lucide-react";
 import { useCallback, useState } from "react";
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { MathMarkdown } from "@/components/ui/math-markdown";
 
 interface AnswerOption {
@@ -135,49 +132,63 @@ export function QuizViewer({ data }: QuizViewerProps) {
   const answeredCount = Object.keys(selectedAnswers).length;
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
+      {/* Header */}
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold">{data.title}</h3>
-        <div className="flex items-center gap-3">
+        <h3 className="text-lg font-bold text-[#111827]">{data.title}</h3>
+        <div className="flex items-center gap-2">
           {answeredCount > 0 && (
-            <Badge variant="outline">
+            <span className="rounded-full bg-[#B7FF70]/30 px-3 py-1 text-xs font-medium text-[#111827]/70">
               {correctCount}/{answeredCount} correct
-            </Badge>
+            </span>
           )}
-          <Button variant="ghost" size="sm" onClick={() => setShowAllAnswers((p) => !p)}>
+          <button
+            type="button"
+            onClick={() => setShowAllAnswers((p) => !p)}
+            className="inline-flex items-center rounded-full px-3.5 py-1.5 text-xs font-medium text-[#111827]/60 transition-colors hover:bg-[#111827]/5 hover:text-[#111827]"
+          >
             {showAllAnswers ? (
               <>
-                <EyeOff className="mr-1 h-4 w-4" /> Hide Answers
+                <EyeOff className="mr-1.5 h-3.5 w-3.5" /> Hide Answers
               </>
             ) : (
               <>
-                <Eye className="mr-1 h-4 w-4" /> Show All Answers
+                <Eye className="mr-1.5 h-3.5 w-3.5" /> Show All
               </>
             )}
-          </Button>
-          <Button variant="ghost" size="sm" onClick={downloadPdf}>
-            <Download className="mr-1 h-4 w-4" /> Download PDF
-          </Button>
+          </button>
+          <button
+            type="button"
+            onClick={downloadPdf}
+            className="inline-flex items-center rounded-full bg-[#B7FF70] px-3.5 py-1.5 text-xs font-medium text-[#111827] transition-all hover:bg-[#111827] hover:text-white"
+          >
+            <Download className="mr-1.5 h-3.5 w-3.5" /> PDF
+          </button>
         </div>
       </div>
 
+      {/* Questions */}
       <div className="space-y-4">
         {data.questions.map((q, qIdx) => {
           const selected = selectedAnswers[qIdx];
           const revealed = showAllAnswers || selected !== undefined;
 
           return (
-            <Card key={q.question}>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-medium leading-relaxed">
-                  <span className="text-muted-foreground mr-2">Q{qIdx + 1}.</span>
+            <div
+              key={q.question}
+              className="overflow-hidden rounded-2xl border border-white/80 bg-white/70 shadow-[0_2px_16px_rgba(0,0,0,0.03)] backdrop-blur-sm"
+            >
+              {/* Question text */}
+              <div className="px-5 pt-4 pb-3">
+                <p className="text-sm font-medium leading-relaxed text-[#111827]">
+                  <span className="mr-2 text-[#111827]/35">Q{qIdx + 1}.</span>
                   <MathMarkdown inline>{q.question}</MathMarkdown>
-                </CardTitle>
+                </p>
                 {q.hint ? (
                   <button
                     type="button"
                     onClick={() => toggleHint(qIdx)}
-                    className="mt-1 flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
+                    className="mt-2 flex items-center gap-1.5 text-xs text-[#111827]/40 transition-colors hover:text-[#111827]/70"
                   >
                     <HelpCircle className="h-3 w-3" />
                     {visibleHints.has(qIdx) ? (
@@ -187,18 +198,25 @@ export function QuizViewer({ data }: QuizViewerProps) {
                     )}
                   </button>
                 ) : null}
-              </CardHeader>
-              <CardContent className="space-y-2">
+              </div>
+
+              {/* Options */}
+              <div className="space-y-1.5 px-5 pb-4">
                 {q.answerOptions.map((opt, oIdx) => {
                   const isSelected = selected === oIdx;
                   const isCorrect = opt.isCorrect;
                   const showResult = revealed;
 
-                  let borderClass = "border-border";
-                  if (showResult && isCorrect)
-                    borderClass = "border-green-500 bg-green-50 dark:bg-green-950/20";
-                  else if (showResult && isSelected && !isCorrect)
-                    borderClass = "border-red-500 bg-red-50 dark:bg-red-950/20";
+                  let bgClass = "bg-[#F8F9FA] border-transparent hover:bg-[#111827]/5";
+                  let indicatorClass = "border-[#111827]/15 bg-white text-[#111827]/50";
+
+                  if (showResult && isCorrect) {
+                    bgClass = "bg-[#B7FF70]/15 border-[#B7FF70]/40";
+                    indicatorClass = "border-[#B7FF70] bg-[#B7FF70] text-[#111827]";
+                  } else if (showResult && isSelected && !isCorrect) {
+                    bgClass = "bg-red-50 border-red-200/60";
+                    indicatorClass = "border-red-400 bg-red-400 text-white";
+                  }
 
                   return (
                     <button
@@ -206,23 +224,27 @@ export function QuizViewer({ data }: QuizViewerProps) {
                       type="button"
                       onClick={() => selectAnswer(qIdx, oIdx)}
                       disabled={showAllAnswers}
-                      className={`flex w-full items-start gap-3 rounded-lg border p-3 text-left text-sm transition-colors ${borderClass} ${
-                        !revealed ? "hover:bg-muted/50 cursor-pointer" : ""
+                      className={`flex w-full items-start gap-3 rounded-xl border p-3 text-left text-sm transition-all ${bgClass} ${
+                        !revealed ? "cursor-pointer" : ""
                       }`}
                     >
-                      <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-xs">
+                      <span
+                        className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-[10px] font-semibold transition-colors ${indicatorClass}`}
+                      >
                         {showResult && isCorrect ? (
-                          <Check className="h-3 w-3 text-green-600" />
+                          <Check className="h-3 w-3" />
                         ) : showResult && isSelected ? (
-                          <X className="h-3 w-3 text-red-600" />
+                          <X className="h-3 w-3" />
                         ) : (
                           String.fromCharCode(65 + oIdx)
                         )}
                       </span>
                       <div className="min-w-0 flex-1">
-                        <MathMarkdown inline>{opt.text}</MathMarkdown>
+                        <span className="text-[#111827]">
+                          <MathMarkdown inline>{opt.text}</MathMarkdown>
+                        </span>
                         {showResult ? (
-                          <p className="mt-1 text-xs text-muted-foreground">
+                          <p className="mt-1 text-xs text-[#111827]/45">
                             <MathMarkdown inline>{opt.rationale}</MathMarkdown>
                           </p>
                         ) : null}
@@ -230,8 +252,8 @@ export function QuizViewer({ data }: QuizViewerProps) {
                     </button>
                   );
                 })}
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           );
         })}
       </div>

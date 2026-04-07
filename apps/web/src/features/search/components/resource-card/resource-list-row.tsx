@@ -50,13 +50,13 @@ export function ResourceListRow({
       </div>
 
       {/* Expanded Details */}
-      {isExpanded && expandedDetailsNode ? (
+      {!!(isExpanded && expandedDetailsNode) && (
         <div className="ml-10 md:ml-48 pr-4 pb-4 animate-in fade-in slide-in-from-top-2 duration-200">
           <div className="rounded-md border bg-slate-50/80 shadow-sm overflow-hidden">
             {expandedDetailsNode}
           </div>
         </div>
-      ) : null}
+      )}
     </div>
   );
 }

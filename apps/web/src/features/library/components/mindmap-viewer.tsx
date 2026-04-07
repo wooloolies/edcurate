@@ -3,8 +3,6 @@
 import { Download, Minus, Plus } from "lucide-react";
 import { useCallback, useMemo, useRef, useState } from "react";
 
-import { Button } from "@/components/ui/button";
-
 interface MindmapNode {
   name: string;
   children?: MindmapNode[];
@@ -14,7 +12,6 @@ interface MindmapViewerProps {
   data: MindmapNode;
 }
 
-// Layout constants
 const NODE_H = 36;
 const NODE_PAD_X = 20;
 const NODE_GAP_Y = 14;
@@ -25,14 +22,14 @@ const ROOT_FONT_SIZE = 15;
 const ROOT_CHAR_WIDTH = 8.6;
 
 const BRANCH_COLORS = [
-  "#6366f1", // indigo
-  "#0ea5e9", // sky
-  "#8b5cf6", // violet
-  "#f59e0b", // amber
-  "#10b981", // emerald
-  "#f43f5e", // rose
-  "#06b6d4", // cyan
-  "#ec4899", // pink
+  "#111827",
+  "#B7FF70",
+  "#6366f1",
+  "#0ea5e9",
+  "#10b981",
+  "#f59e0b",
+  "#f43f5e",
+  "#8b5cf6",
 ];
 
 interface LayoutNode {
@@ -159,7 +156,7 @@ export function MindmapViewer({ data }: MindmapViewerProps) {
       }
     }
     walk(data, "root");
-    ids.delete("root"); // keep root expanded
+    ids.delete("root");
     setCollapsed(ids);
   }, [data]);
 
@@ -189,7 +186,7 @@ export function MindmapViewer({ data }: MindmapViewerProps) {
       canvas.width = img.width * scale;
       canvas.height = img.height * scale;
       const ctx = canvas.getContext("2d")!;
-      ctx.fillStyle = "#ffffff";
+      ctx.fillStyle = "#F8F9FA";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       ctx.scale(scale, scale);
       ctx.drawImage(img, 0, 0);
@@ -218,25 +215,39 @@ export function MindmapViewer({ data }: MindmapViewerProps) {
   });
 
   return (
-    <div className="flex flex-col h-full min-h-0 gap-3">
-      <div className="flex items-center justify-between shrink-0">
-        <h3 className="text-lg font-semibold">{data.name}</h3>
-        <div className="flex gap-1">
-          <Button variant="ghost" size="sm" className="h-7 text-xs" onClick={expandAll}>
+    <div className="flex h-full min-h-0 flex-col gap-3">
+      {/* Toolbar */}
+      <div className="flex shrink-0 items-center justify-between">
+        <h3 className="text-lg font-bold text-[#111827]">{data.name}</h3>
+        <div className="flex items-center gap-1.5">
+          <button
+            type="button"
+            onClick={expandAll}
+            className="inline-flex items-center rounded-full px-3 py-1.5 text-xs font-medium text-[#111827]/60 transition-colors hover:bg-[#111827]/5 hover:text-[#111827]"
+          >
             <Plus className="mr-1 h-3 w-3" /> Expand
-          </Button>
-          <Button variant="ghost" size="sm" className="h-7 text-xs" onClick={collapseAll}>
+          </button>
+          <button
+            type="button"
+            onClick={collapseAll}
+            className="inline-flex items-center rounded-full px-3 py-1.5 text-xs font-medium text-[#111827]/60 transition-colors hover:bg-[#111827]/5 hover:text-[#111827]"
+          >
             <Minus className="mr-1 h-3 w-3" /> Collapse
-          </Button>
-          <Button variant="ghost" size="sm" className="h-7 text-xs" onClick={downloadPng}>
+          </button>
+          <button
+            type="button"
+            onClick={downloadPng}
+            className="inline-flex items-center rounded-full bg-[#B7FF70] px-3.5 py-1.5 text-xs font-medium text-[#111827] transition-all hover:bg-[#111827] hover:text-white"
+          >
             <Download className="mr-1 h-3 w-3" /> Download
-          </Button>
+          </button>
         </div>
       </div>
 
+      {/* SVG canvas */}
       <div
         ref={containerRef}
-        className="overflow-auto rounded-lg border bg-background flex-1 min-h-0"
+        className="flex-1 min-h-0 overflow-auto rounded-2xl border border-white/80 bg-white/70 shadow-[0_2px_16px_rgba(0,0,0,0.03)] backdrop-blur-sm"
       >
         <svg
           ref={svgRef}
@@ -263,7 +274,7 @@ export function MindmapViewer({ data }: MindmapViewerProps) {
                   fill="none"
                   stroke={to.color}
                   strokeWidth={1.5}
-                  strokeOpacity={0.5}
+                  strokeOpacity={0.4}
                 />
               );
             })}
@@ -273,7 +284,7 @@ export function MindmapViewer({ data }: MindmapViewerProps) {
               const isRoot = node.depth === 0;
               const canToggle = node.hasChildren;
               const isCollapsed = collapsed.has(node.id);
-              const ry = isRoot ? 8 : 14;
+              const ry = isRoot ? 8 : 18;
 
               return (
                 // biome-ignore lint/a11y/noStaticElementInteractions: SVG <g> with role="button" is intentional
@@ -293,7 +304,6 @@ export function MindmapViewer({ data }: MindmapViewerProps) {
                       : undefined
                   }
                 >
-                  {/* Node background */}
                   <rect
                     x={0}
                     y={0}
@@ -301,13 +311,13 @@ export function MindmapViewer({ data }: MindmapViewerProps) {
                     height={NODE_H}
                     rx={ry}
                     ry={ry}
-                    fill={isRoot ? node.color : `${node.color}18`}
-                    stroke={node.color}
+                    fill={isRoot ? "#111827" : `${node.color}15`}
+                    stroke={isRoot ? "#111827" : node.color}
                     strokeWidth={isRoot ? 0 : 1}
+                    strokeOpacity={0.3}
                     className="transition-colors"
                   />
 
-                  {/* Node label */}
                   <text
                     x={node.w / 2}
                     y={NODE_H / 2}
@@ -315,13 +325,12 @@ export function MindmapViewer({ data }: MindmapViewerProps) {
                     dominantBaseline="central"
                     fontSize={isRoot ? ROOT_FONT_SIZE : FONT_SIZE}
                     fontWeight={isRoot || node.depth === 1 ? 600 : 400}
-                    fill={isRoot ? "#fff" : "currentColor"}
+                    fill={isRoot ? "#F8F9FA" : "#111827"}
                     className="pointer-events-none"
                   >
                     {node.name}
                   </text>
 
-                  {/* Collapse indicator */}
                   {canToggle && isCollapsed ? (
                     <g transform={`translate(${node.w - 14}, ${NODE_H / 2 - 6})`}>
                       <rect

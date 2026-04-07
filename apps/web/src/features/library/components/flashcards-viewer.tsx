@@ -3,8 +3,6 @@
 import { ChevronLeft, ChevronRight, RotateCcw } from "lucide-react";
 import { useState } from "react";
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { MathMarkdown } from "@/components/ui/math-markdown";
 
 interface Flashcard {
@@ -28,7 +26,7 @@ export function FlashcardsViewer({ data }: FlashcardsViewerProps) {
   const [flipped, setFlipped] = useState(false);
 
   if (cards.length === 0) {
-    return <p className="text-sm text-muted-foreground">No flashcards generated.</p>;
+    return <p className="text-sm text-[#111827]/45">No flashcards generated.</p>;
   }
 
   const current = cards[currentIdx];
@@ -44,51 +42,69 @@ export function FlashcardsViewer({ data }: FlashcardsViewerProps) {
   };
 
   return (
-    <div className="space-y-4">
-      {data.title ? <h3 className="text-lg font-semibold">{data.title}</h3> : null}
+    <div className="space-y-5">
+      {data.title ? <h3 className="text-lg font-bold text-[#111827]">{data.title}</h3> : null}
 
-      <Card
-        className="cursor-pointer min-h-[200px] flex items-center justify-center transition-all hover:shadow-md"
+      {/* Flip card */}
+      <button
+        type="button"
+        className="group relative min-h-[220px] w-full cursor-pointer overflow-hidden rounded-2xl border border-white/80 bg-white/70 text-left shadow-[0_2px_20px_rgba(0,0,0,0.04)] backdrop-blur-sm transition-all hover:shadow-[0_4px_28px_rgba(0,0,0,0.07)]"
         onClick={() => setFlipped((p) => !p)}
-        onKeyDown={(event) => {
-          if (event.key === "Enter" || event.key === " ") {
-            event.preventDefault();
-            setFlipped((p) => !p);
-          }
-        }}
-        role="button"
-        tabIndex={0}
       >
-        <CardContent className="flex flex-col items-center justify-center p-8 text-center">
-          <span className="mb-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+        {/* Decorative accent stripe */}
+        <div
+          className={`absolute inset-x-0 top-0 h-1 transition-colors duration-300 ${
+            flipped ? "bg-[#B7FF70]" : "bg-[#111827]"
+          }`}
+        />
+
+        <div className="flex flex-col items-center justify-center p-10 text-center">
+          <span
+            className={`mb-3 inline-block rounded-full px-3 py-0.5 text-[10px] font-semibold uppercase tracking-widest transition-colors ${
+              flipped ? "bg-[#B7FF70]/20 text-[#111827]/60" : "bg-[#111827]/5 text-[#111827]/40"
+            }`}
+          >
             {flipped ? "Answer" : "Question"}
           </span>
-          <div className="text-lg leading-relaxed prose prose-sm dark:prose-invert max-w-none">
+          <div className="prose prose-sm max-w-none text-lg leading-relaxed text-[#111827]">
             <MathMarkdown>{flipped ? current.back : current.front}</MathMarkdown>
           </div>
-        </CardContent>
-      </Card>
-
-      <div className="flex items-center justify-between">
-        <Button variant="outline" size="sm" onClick={goPrev} disabled={currentIdx === 0}>
-          <ChevronLeft className="mr-1 h-4 w-4" /> Previous
-        </Button>
-        <div className="flex items-center gap-3">
-          <span className="text-sm text-muted-foreground">
-            {currentIdx + 1} / {cards.length}
-          </span>
-          <Button variant="ghost" size="icon" onClick={() => setFlipped(false)} title="Reset flip">
-            <RotateCcw className="h-4 w-4" />
-          </Button>
         </div>
-        <Button
-          variant="outline"
-          size="sm"
+      </button>
+
+      {/* Navigation */}
+      <div className="flex items-center justify-between">
+        <button
+          type="button"
+          onClick={goPrev}
+          disabled={currentIdx === 0}
+          className="inline-flex items-center rounded-full border border-[#111827]/10 bg-white px-4 py-2 text-xs font-medium text-[#111827]/70 shadow-sm transition-all hover:border-[#111827]/20 hover:text-[#111827] disabled:opacity-35"
+        >
+          <ChevronLeft className="mr-1 h-3.5 w-3.5" /> Previous
+        </button>
+
+        <div className="flex items-center gap-3">
+          <span className="text-sm font-medium text-[#111827]/40">
+            {currentIdx + 1} <span className="text-[#111827]/20">/</span> {cards.length}
+          </span>
+          <button
+            type="button"
+            onClick={() => setFlipped(false)}
+            title="Reset flip"
+            className="rounded-full p-1.5 text-[#111827]/30 transition-colors hover:bg-[#111827]/5 hover:text-[#111827]"
+          >
+            <RotateCcw className="h-3.5 w-3.5" />
+          </button>
+        </div>
+
+        <button
+          type="button"
           onClick={goNext}
           disabled={currentIdx === cards.length - 1}
+          className="inline-flex items-center rounded-full bg-[#B7FF70] px-4 py-2 text-xs font-medium text-[#111827] shadow-sm transition-all hover:bg-[#111827] hover:text-white disabled:opacity-35"
         >
-          Next <ChevronRight className="ml-1 h-4 w-4" />
-        </Button>
+          Next <ChevronRight className="ml-1 h-3.5 w-3.5" />
+        </button>
       </div>
     </div>
   );

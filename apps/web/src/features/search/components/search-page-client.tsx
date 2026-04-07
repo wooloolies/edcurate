@@ -171,6 +171,8 @@ export function SearchPageClient() {
     return m;
   }, [results?.judgments]);
 
+  const [_showUnscored, _setShowUnscored] = useState(false);
+
   const filterBySource = (source?: string) =>
     source ? allResults.filter((r) => r.source === source) : allResults;
 
@@ -217,7 +219,7 @@ export function SearchPageClient() {
             className="flex-1 bg-transparent py-4 text-xl font-bold text-[#111827] placeholder:text-gray-500 outline-none w-full"
           />
           <div className="flex items-center gap-2 pr-2">
-            {draft ? (
+            {!!draft && (
               <button
                 type="button"
                 onClick={() => setDraft("")}
@@ -225,7 +227,7 @@ export function SearchPageClient() {
               >
                 {t("clearInput")}
               </button>
-            ) : null}
+            )}
             <button
               type="submit"
               disabled={!presetId || !draft.trim() || stream.isStreaming || isFetching}
@@ -246,11 +248,11 @@ export function SearchPageClient() {
               <div className="px-5 py-2.5 bg-white border border-[#111827]/10 rounded-xl text-sm font-bold text-[#111827] shadow-sm cursor-pointer">
                 {activePreset.year_level}
               </div>
-              {activePreset.class_size ? (
+              {!!activePreset.class_size && (
                 <div className="px-5 py-2.5 bg-white border border-[#111827]/10 rounded-xl text-sm font-bold text-[#111827] shadow-sm cursor-pointer">
                   {t("classSizePeople", { classSize: activePreset.class_size })}
                 </div>
-              ) : null}
+              )}
             </div>
           </div>
         )}

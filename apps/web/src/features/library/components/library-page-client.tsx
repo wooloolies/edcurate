@@ -3,14 +3,14 @@
 import { useQueryClient } from "@tanstack/react-query";
 import {
   Bookmark,
-  ChevronDown,
+  ChevronRight,
   Globe,
   Link as LinkIcon,
   Lock,
-  MessageCircleQuestion,
   MoreHorizontal,
   Pencil,
   Plus,
+  Search,
   Sparkles,
   Trash2,
   Wand2,
@@ -19,9 +19,6 @@ import {
 import { useQueryState } from "nuqs";
 import { useState } from "react";
 import { toast } from "sonner";
-
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import {
   DropdownMenu,
@@ -31,13 +28,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArtifactList } from "@/features/library/components/artifact-list";
 import { GenerateArtifactDialog } from "@/features/library/components/generate-artifact-dialog";
 import { ResourceCardRenderer } from "@/features/search/components/resource-card";
+import { useListArtifactsEndpointApiLocalizerGet } from "@/lib/api/localizer/localizer";
 import type {
   CollectionGroup,
   GenerateArtifactRequestArtifactType,
+  GeneratedArtifactResponse,
   SavedResourceResponse,
 } from "@/lib/api/model";
 import {
@@ -50,6 +48,7 @@ import {
   useListSavedResourcesEndpointApiSavedGet,
   useUpdateCollectionEndpointApiSavedCollectionsCollectionIdPatch,
 } from "@/lib/api/saved-resources/saved-resources";
+import { Link } from "@/lib/i18n/routing";
 
 export function LibraryPageClient() {
   const queryClient = useQueryClient();
@@ -85,6 +84,18 @@ export function LibraryPageClient() {
 
   const groups = savedData?.groups ?? [];
   const activeGroup = groups.find((g) => g.preset_id === activeTab) ?? groups[0];
+  const activePresetId = activeTab || activeGroup?.preset_id;
+
+  const { data: artifactsData } = useListArtifactsEndpointApiLocalizerGet(
+    { preset_id: activePresetId ?? "" },
+    { query: { enabled: !!activePresetId } }
+  );
+  const allArtifacts = artifactsData?.artifacts ?? [];
+
+  const getArtifactsForCollection = (colGroup: CollectionGroup): GeneratedArtifactResponse[] => {
+    const resourceIds = new Set(colGroup.items.map((i) => i.id));
+    return allArtifacts.filter((a) => a.source_resource_ids.some((id) => resourceIds.has(id)));
+  };
 
   const invalidateLibrary = () =>
     queryClient.invalidateQueries({
@@ -208,34 +219,33 @@ export function LibraryPageClient() {
     const isEvaluatingThis = evaluatingIds.has(item.id);
     const isDeletingThis = deletingIds.has(item.id);
     return (
-      <div className="flex flex-col gap-2">
-        <Button
-          variant="outline"
-          size="sm"
+      <div className="flex flex-col gap-1.5">
+        <button
+          type="button"
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
             void handleEvaluateSingle(item.id);
           }}
           disabled={isEvaluatingThis}
+          className="inline-flex items-center justify-center rounded-full bg-[#B7FF70] px-3.5 py-1.5 text-xs font-medium text-[#111827] transition-all hover:bg-[#111827] hover:text-white disabled:opacity-50"
         >
-          <Wand2 className="mr-2 h-4 w-4" />
+          <Wand2 className="mr-1.5 h-3 w-3" />
           {isEvaluatingThis ? "Evaluating..." : item.evaluation_data ? "Re-evaluate" : "Evaluate"}
-        </Button>
-        <Button
-          variant="ghost"
-          size="icon"
+        </button>
+        <button
+          type="button"
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
             void handleDelete(item.id);
           }}
           disabled={isDeletingThis}
-          className="text-destructive hover:bg-destructive/10 hover:text-destructive shrink-0 self-end"
+          className="inline-flex items-center justify-center self-end rounded-full p-1.5 text-red-400 transition-colors hover:bg-red-50 hover:text-red-600 disabled:opacity-50"
           aria-label="Remove resource"
         >
-          <Trash2 className="h-4 w-4" />
-        </Button>
+          <Trash2 className="h-3.5 w-3.5" />
+        </button>
       </div>
     );
   };
@@ -246,7 +256,6 @@ export function LibraryPageClient() {
     const searchQuery = col.search_query;
     const isEvaluatingGroup = evaluatingQueries.has(`${presetId}:${searchQuery}`);
 
-    // Sort logic: Unevaluated first (recent on top), then Evaluated (use_it → adapt_it → skip_it)
     const _VERDICT_ORDER: Record<string, number> = { use_it: 0, adapt_it: 1, skip_it: 2 };
     const unevaluated = colGroup.items.filter((i) => !i.evaluation_data);
     const evaluated = colGroup.items.filter((i) => !!i.evaluation_data);
@@ -264,65 +273,75 @@ export function LibraryPageClient() {
 
     return (
       <Collapsible key={groupKey} open={isOpen} onOpenChange={() => toggleGroup(groupKey)}>
-        <Card className="overflow-hidden">
-          <CardHeader className="bg-muted/50 py-3 border-b select-none">
-            <div className="flex items-center justify-between gap-2">
+        <div className="overflow-hidden rounded-2xl border border-white/80 bg-white/70 shadow-[0_2px_20px_rgba(0,0,0,0.04)] backdrop-blur-sm transition-shadow hover:shadow-[0_4px_28px_rgba(0,0,0,0.06)]">
+          {/* Collection header */}
+          <div className="select-none px-5 py-4">
+            <div className="flex items-center justify-between gap-3">
               <CollapsibleTrigger asChild>
                 <button
                   type="button"
-                  className="flex min-w-0 flex-1 items-center gap-2 text-left"
+                  className="flex min-w-0 flex-1 items-center gap-3 text-left"
                   aria-label={`${isOpen ? "Collapse" : "Expand"} ${col.name} collection`}
                 >
-                  <ChevronDown
-                    className={`h-4 w-4 text-muted-foreground transition-transform duration-200 ${
-                      isOpen ? "rotate-0" : "-rotate-90"
+                  <ChevronRight
+                    className={`h-4 w-4 shrink-0 text-[#111827]/40 transition-transform duration-200 ${
+                      isOpen ? "rotate-90" : "rotate-0"
                     }`}
                   />
-                  <MessageCircleQuestion className="h-4 w-4 text-muted-foreground" />
-                  <CardTitle className="text-base font-medium">{col.name}</CardTitle>
-                  <span className="text-xs text-muted-foreground">
-                    ({colGroup.items.length} resource{colGroup.items.length === 1 ? "" : "s"}
-                    {unevaluatedCount > 0 ? `, ${unevaluatedCount} unevaluated` : ""})
-                  </span>
-                  {col.is_public ? (
-                    <span title="Public">
-                      <Globe className="h-3.5 w-3.5 text-green-500" />
-                    </span>
-                  ) : (
-                    <span title="Private">
-                      <Lock className="h-3.5 w-3.5 text-muted-foreground" />
-                    </span>
-                  )}
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-2">
+                      <h3 className="truncate text-[15px] font-semibold text-[#111827]">
+                        {col.name}
+                      </h3>
+                      {col.is_public ? (
+                        <Globe className="h-3.5 w-3.5 shrink-0 text-[#B7FF70]" />
+                      ) : (
+                        <Lock className="h-3.5 w-3.5 shrink-0 text-[#111827]/25" />
+                      )}
+                    </div>
+                    <p className="mt-0.5 text-xs text-[#111827]/45">
+                      {colGroup.items.length} resource{colGroup.items.length === 1 ? "" : "s"}
+                      {unevaluatedCount > 0 && (
+                        <span className="ml-1.5 rounded-full bg-[#B7FF70]/30 px-2 py-0.5 text-[11px] font-medium text-[#111827]/70">
+                          {unevaluatedCount} unevaluated
+                        </span>
+                      )}
+                    </p>
+                  </div>
                 </button>
               </CollapsibleTrigger>
 
-              <div role="toolbar" className="flex items-center gap-2">
+              <div role="toolbar" className="flex items-center gap-1.5">
                 {renamingCollectionId === groupKey ? (
-                  <form onSubmit={(e) => handleRenameSubmit(e, groupKey)} className="flex gap-2">
+                  <form
+                    onSubmit={(e) => handleRenameSubmit(e, groupKey)}
+                    className="flex items-center gap-2"
+                  >
                     <Input
-                      className="h-8 text-sm"
+                      className="h-8 rounded-xl border-[#111827]/10 bg-white text-sm focus-visible:ring-[#B7FF70]"
                       value={renamingValue}
                       onChange={(e) => setRenamingValue(e.target.value)}
                       autoFocus
                     />
-                    <Button size="sm" type="submit" className="h-8">
+                    <button
+                      type="submit"
+                      className="rounded-full bg-[#B7FF70] px-3.5 py-1.5 text-xs font-medium text-[#111827] transition-colors hover:bg-[#111827] hover:text-white"
+                    >
                       Save
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      className="h-8"
+                    </button>
+                    <button
+                      type="button"
+                      className="rounded-full px-3 py-1.5 text-xs text-[#111827]/50 transition-colors hover:bg-[#111827]/5 hover:text-[#111827]"
                       onClick={() => setRenamingCollectionId(null)}
                     >
                       Cancel
-                    </Button>
+                    </button>
                   </form>
                 ) : (
                   <>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="h-8 text-xs"
+                    <button
+                      type="button"
+                      className="inline-flex items-center rounded-full px-3 py-1.5 text-xs font-medium text-[#111827]/60 transition-colors hover:bg-[#111827]/5 hover:text-[#111827]"
                       onClick={(e) => {
                         e.stopPropagation();
                         if (isAddLinkOpen) {
@@ -339,28 +358,30 @@ export function LibraryPageClient() {
                         <LinkIcon className="mr-1 h-3.5 w-3.5" />
                       )}
                       {isAddLinkOpen ? "Cancel" : "Add Link"}
-                    </Button>
+                    </button>
 
                     {unevaluatedCount > 0 && (
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="h-8 text-xs"
+                      <button
+                        type="button"
+                        className="inline-flex items-center rounded-full bg-[#B7FF70] px-3.5 py-1.5 text-xs font-medium text-[#111827] transition-all hover:bg-[#111827] hover:text-white disabled:opacity-50"
                         onClick={() => void handleEvaluateGroup(presetId, searchQuery)}
                         disabled={isEvaluatingGroup || isBatchEvaluating}
                       >
-                        <Wand2 className="mr-2 h-3.5 w-3.5" />
+                        <Wand2 className="mr-1.5 h-3 w-3" />
                         Evaluate All ({unevaluatedCount})
-                      </Button>
+                      </button>
                     )}
 
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" className="h-8 w-8">
+                        <button
+                          type="button"
+                          className="rounded-full p-2 text-[#111827]/40 transition-colors hover:bg-[#111827]/5 hover:text-[#111827]"
+                        >
                           <MoreHorizontal className="h-4 w-4" />
-                        </Button>
+                        </button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
+                      <DropdownMenuContent align="end" className="rounded-xl">
                         <DropdownMenuItem
                           onClick={() => {
                             setRenamingValue(col.name);
@@ -383,7 +404,7 @@ export function LibraryPageClient() {
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem
-                          className="text-destructive"
+                          className="text-red-500 focus:text-red-600"
                           onClick={() => handleDeleteCollection(groupKey)}
                         >
                           <Trash2 className="mr-2 h-4 w-4" /> Delete Collection
@@ -395,16 +416,15 @@ export function LibraryPageClient() {
 
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="h-8 text-xs"
+                    <button
+                      type="button"
+                      className="inline-flex items-center rounded-full border border-[#111827]/10 bg-white px-3 py-1.5 text-xs font-medium text-[#111827]/70 shadow-sm transition-all hover:border-[#B7FF70] hover:shadow-[0_0_0_1px_rgba(183,255,112,0.3)]"
                       onClick={(e) => e.stopPropagation()}
                     >
-                      <Sparkles className="mr-1 h-3.5 w-3.5" /> Generate
-                    </Button>
+                      <Sparkles className="mr-1 h-3.5 w-3.5 text-[#B7FF70]" /> Generate
+                    </button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
+                  <DropdownMenuContent align="end" className="rounded-xl">
                     {(["quiz", "mindmap", "summary", "flashcards"] as const).map((type) => (
                       <DropdownMenuItem
                         key={type}
@@ -431,105 +451,144 @@ export function LibraryPageClient() {
               </div>
             </div>
 
-            {/* Inline add-link form */}
             {isAddLinkOpen && (
               <form
                 onSubmit={(e) => handleAddLink(e, presetId, searchQuery)}
-                className="mt-3 flex gap-2"
+                className="mt-4 flex gap-2"
               >
                 <Input
-                  className="h-8 text-sm"
+                  className="h-9 rounded-xl border-[#111827]/10 bg-white text-sm focus-visible:ring-[#B7FF70]"
                   placeholder="https://example.com/useful-link"
                   value={linkUrl}
                   onChange={(e) => setLinkUrl(e.target.value)}
                   disabled={isAdding}
                   autoFocus
                 />
-                <Button
-                  size="sm"
+                <button
                   type="submit"
                   disabled={!linkUrl || isAdding}
-                  className="h-8 shrink-0"
+                  className="inline-flex shrink-0 items-center rounded-full bg-[#B7FF70] px-4 py-2 text-xs font-medium text-[#111827] transition-all hover:bg-[#111827] hover:text-white disabled:opacity-50"
                 >
                   <Plus className="mr-1 h-3.5 w-3.5" /> Add
-                </Button>
+                </button>
               </form>
             )}
-          </CardHeader>
+          </div>
 
           <CollapsibleContent>
-            <CardContent className="p-4 grid gap-4 sm:grid-cols-1 lg:grid-cols-2">
-              {sortedItems.map((item: SavedResourceResponse, idx: number) => (
-                <ResourceCardRenderer
-                  key={item.id}
-                  index={idx}
-                  resource={item.resource_data}
-                  judgment={item.evaluation_data ?? undefined}
-                  presetId={presetId}
-                  customAction={renderCardAction(item)}
-                />
-              ))}
-            </CardContent>
+            <div className="border-t border-[#111827]/5 px-5 py-5">
+              <div className="grid gap-4 sm:grid-cols-1 lg:grid-cols-2">
+                {sortedItems.map((item: SavedResourceResponse, idx: number) => (
+                  <ResourceCardRenderer
+                    key={item.id}
+                    index={idx}
+                    resource={item.resource_data}
+                    judgment={item.evaluation_data ?? undefined}
+                    presetId={presetId}
+                    customAction={renderCardAction(item)}
+                  />
+                ))}
+              </div>
+              <ArtifactList
+                artifacts={getArtifactsForCollection(colGroup)}
+                collectionName={col.name}
+              />
+            </div>
           </CollapsibleContent>
-        </Card>
+        </div>
       </Collapsible>
     );
   };
 
   return (
-    <div className="mx-auto w-full max-w-6xl space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold tracking-tight">Library</h1>
-      </div>
-
-      {groups.length === 0 && !isLoading ? (
-        <div className="flex flex-col items-center justify-center py-24 text-center text-muted-foreground">
-          <Bookmark className="mb-4 h-12 w-12 opacity-20" />
-          <p className="text-lg">Your library is empty.</p>
-          <p className="mt-2 text-sm">Save resources from your search results to see them here.</p>
+    <div
+      className="-mt-6 min-h-[calc(100vh-3.5rem)] bg-[#F8F9FA] px-4 py-10 md:px-8"
+      style={{ width: "100vw", marginLeft: "calc(-50vw + 50%)" }}
+    >
+      <div className="mx-auto w-full max-w-7xl">
+        {/* Hero header */}
+        <div className="mb-10">
+          <h1 className="text-4xl font-bold tracking-tight text-[#111827] md:text-5xl">
+            Your Library
+          </h1>
+          <p className="mt-2 text-[15px] text-[#111827]/50">
+            Curated resources across your teaching collections
+          </p>
         </div>
-      ) : (
-        <Tabs
-          value={activeTab || (activeGroup?.preset_id ?? "")}
-          onValueChange={setActiveTab}
-          className="w-full"
-        >
-          <div className="border-b pb-4 mb-6">
-            <TabsList className="overflow-x-auto max-w-full">
-              {groups.map((group) => (
-                <TabsTrigger key={group.preset_id} value={group.preset_id}>
-                  {group.preset_name}
-                  <span className="ml-1.5 text-xs text-muted-foreground">
-                    ({group.collections.length})
-                  </span>
-                </TabsTrigger>
-              ))}
-            </TabsList>
+
+        {groups.length === 0 && !isLoading ? (
+          <div className="flex flex-col items-center justify-center rounded-3xl border border-white/80 bg-white/60 py-24 text-center backdrop-blur-sm">
+            <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-[#B7FF70]/20">
+              <Bookmark className="h-8 w-8 text-[#111827]/30" />
+            </div>
+            <p className="text-xl font-semibold text-[#111827]">Your library is empty</p>
+            <p className="mt-2 max-w-sm text-sm text-[#111827]/50">
+              Save resources from your search results to build your curated collection.
+            </p>
+            <Link
+              href="/search"
+              className="mt-8 inline-flex items-center rounded-full bg-[#B7FF70] px-8 py-3 text-sm font-semibold text-[#111827] shadow-sm transition-all hover:bg-[#111827] hover:text-white hover:shadow-[0_8px_32px_rgba(183,255,112,0.3)]"
+            >
+              <Search className="mr-2 h-4 w-4" />
+              Start Searching
+            </Link>
           </div>
+        ) : (
+          <div className="space-y-8">
+            {/* Glass pill tab bar */}
+            <div className="inline-flex items-center gap-1 rounded-[2rem] border border-white/60 bg-white/60 p-1.5 shadow-[0_4px_32px_rgba(0,0,0,0.04)] backdrop-blur-xl">
+              {groups.map((group) => {
+                const isActive = (activeTab || activeGroup?.preset_id) === group.preset_id;
+                return (
+                  <button
+                    key={group.preset_id}
+                    type="button"
+                    onClick={() => setActiveTab(group.preset_id)}
+                    className={`rounded-[1.75rem] px-5 py-2 text-sm font-medium transition-all ${
+                      isActive
+                        ? "bg-[#111827] text-white shadow-sm"
+                        : "text-[#111827]/60 hover:bg-white/80 hover:text-[#111827]"
+                    }`}
+                  >
+                    {group.preset_name}
+                    <span
+                      className={`ml-1.5 text-xs ${isActive ? "text-white/60" : "text-[#111827]/30"}`}
+                    >
+                      {group.collections.length}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
 
-          {groups.map((group) => (
-            <TabsContent key={group.preset_id} value={group.preset_id} className="space-y-4">
-              {group.collections.map((colGroup) =>
-                renderCollectionGroup(colGroup, group.preset_id)
-              )}
-              <ArtifactList presetId={group.preset_id} />
-            </TabsContent>
-          ))}
-        </Tabs>
-      )}
+            {/* Active tab content */}
+            {groups.map((group) => {
+              const isActive = (activeTab || activeGroup?.preset_id) === group.preset_id;
+              if (!isActive) return null;
+              return (
+                <div key={group.preset_id} className="space-y-5">
+                  {group.collections.map((colGroup) =>
+                    renderCollectionGroup(colGroup, group.preset_id)
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        )}
 
-      {generateDialog ? (
-        <GenerateArtifactDialog
-          open={generateDialog.open}
-          onOpenChange={(open) => {
-            if (!open) setGenerateDialog(null);
-          }}
-          artifactType={generateDialog.artifactType}
-          presetId={generateDialog.presetId}
-          resources={generateDialog.resources}
-          onSuccess={() => setGenerateDialog(null)}
-        />
-      ) : null}
+        {generateDialog ? (
+          <GenerateArtifactDialog
+            open={generateDialog.open}
+            onOpenChange={(open) => {
+              if (!open) setGenerateDialog(null);
+            }}
+            artifactType={generateDialog.artifactType}
+            presetId={generateDialog.presetId}
+            resources={generateDialog.resources}
+            onSuccess={() => setGenerateDialog(null)}
+          />
+        ) : null}
+      </div>
     </div>
   );
 }

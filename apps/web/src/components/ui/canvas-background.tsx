@@ -233,6 +233,7 @@ export function CanvasBackground() {
       <svg
         width="0"
         height="0"
+        aria-hidden="true"
         className="absolute pointer-events-none"
         style={{ position: "absolute" }}
       >

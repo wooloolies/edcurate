@@ -274,9 +274,14 @@ export function CollectionOnboarding() {
             </div>
 
             {/* Grade / Year Level */}
-            {grades && grades.length > 0 && (
+            {grades && grades.length > 0 ? (
               <div className="w-full">
-                <p className="block text-xl font-bold text-[#111827] mb-4 text-left">Year Level</p>
+                <label
+                  htmlFor="grade-level"
+                  className="block text-xl font-bold text-[#111827] mb-4 text-left"
+                >
+                  Year Level
+                </label>
                 <div className="grid grid-cols-3 gap-4">
                   {grades.map((g) => {
                     const isSelected = grade === g.name;
@@ -298,7 +303,7 @@ export function CollectionOnboarding() {
                   })}
                 </div>
               </div>
-            )}
+            ) : null}
           </div>
         </div>
       )}
