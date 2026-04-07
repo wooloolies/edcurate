@@ -51,7 +51,7 @@ export default function DashboardPage() {
         <h2 className="text-lg font-semibold">{t("quickActions")}</h2>
         <div className="flex gap-3">
           <Button asChild>
-            <Link href="/presets/new">
+            <Link href="/collections/new">
               <Plus className="mr-1 h-4 w-4" />
               {tPresets("newPreset")}
             </Link>

@@ -161,9 +161,9 @@ export function PresetFormClient({ presetId }: PresetFormClientProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (isEdit && presetId) {
-      updateMutation.mutate({ presetId, data: form }, { onSuccess: () => router.push("/presets") });
+      updateMutation.mutate({ presetId, data: form }, { onSuccess: () => router.push("/collections") });
     } else {
-      createMutation.mutate({ data: form }, { onSuccess: () => router.push("/presets") });
+      createMutation.mutate({ data: form }, { onSuccess: () => router.push("/collections") });
     }
   };
 
@@ -404,7 +404,7 @@ export function PresetFormClient({ presetId }: PresetFormClientProps) {
         <Button type="submit" disabled={isPending}>
           {isPending ? t("saving") : t("savePreset")}
         </Button>
-        <Button type="button" variant="outline" onClick={() => router.push("/presets")}>
+        <Button type="button" variant="outline" onClick={() => router.push("/collections")}>
           {tRoot("common.cancel")}
         </Button>
       </div>

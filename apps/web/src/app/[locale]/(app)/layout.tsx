@@ -6,7 +6,7 @@ import { AppNav } from "@/features/app-shell/components/app-nav";
 import { Link } from "@/lib/i18n/routing";
 
 const TABS = [
-  { key: "presets", href: "/presets" },
+  { key: "presets", href: "/collections" },
   { key: "search", href: "/search" },
   { key: "library", href: "/library" },
 ] as const;

@@ -66,7 +66,7 @@ export function PresetCard({ preset }: PresetCardProps) {
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm" asChild>
-            <Link href={`/presets/${preset.id}/edit`}>
+            <Link href={`/collections/${preset.id}/edit`}>
               <Pencil className="mr-1 h-3 w-3" />
               {t("editPreset")}
             </Link>
