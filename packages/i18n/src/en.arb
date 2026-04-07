@@ -705,5 +705,31 @@
   "profile__memberSince": "Member since",
   "@profile__memberSince": {
     "description": "Profile join date label"
+  },
+  "dashboard__title": "Dashboard",
+  "@dashboard__title": {
+    "description": "Dashboard page title"
+  },
+  "dashboard__presetsToday": "{count} presets created today",
+  "@dashboard__presetsToday": {
+    "description": "Number of presets created today",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboard__presetsTotal": "{count} total presets",
+  "@dashboard__presetsTotal": {
+    "description": "Total number of presets",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboard__quickActions": "Quick Actions",
+  "@dashboard__quickActions": {
+    "description": "Dashboard quick actions section title"
   }
 }

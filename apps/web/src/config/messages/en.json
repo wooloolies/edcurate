@@ -209,5 +209,11 @@
     "emailVerified": "Email verified",
     "emailNotVerified": "Email not verified",
     "memberSince": "Member since"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "presetsToday": "{count} presets created today",
+    "presetsTotal": "{count} total presets",
+    "quickActions": "Quick Actions"
   }
 }

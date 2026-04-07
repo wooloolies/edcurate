@@ -19,7 +19,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen">
       <nav className="border-b bg-background">
         <div className="mx-auto flex h-14 max-w-7xl items-center gap-6 px-4">
-          <Link href="/presets" className="text-lg font-bold">
+          <Link href="/dashboard" className="text-lg font-bold">
             {tRoot("title")}
           </Link>
           <AppNav

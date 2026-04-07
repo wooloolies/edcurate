@@ -681,5 +681,13 @@
   "profile__memberSince": "Thành viên từ",
   "@profile__memberSince": {
     "description": "Profile join date label"
-  }
+  },
+  "dashboard__title": "Bảng điều khiển",
+  "@dashboard__title": { "description": "Dashboard page title" },
+  "dashboard__presetsToday": "{count} preset tạo hôm nay",
+  "@dashboard__presetsToday": { "description": "Number of presets created today", "placeholders": { "count": { "type": "int" } } },
+  "dashboard__presetsTotal": "Tổng cộng {count} preset",
+  "@dashboard__presetsTotal": { "description": "Total number of presets", "placeholders": { "count": { "type": "int" } } },
+  "dashboard__quickActions": "Thao tác nhanh",
+  "@dashboard__quickActions": { "description": "Dashboard quick actions section title" }
 }

@@ -681,5 +681,13 @@
   "profile__memberSince": "注册时间",
   "@profile__memberSince": {
     "description": "Profile join date label"
-  }
+  },
+  "dashboard__title": "仪表盘",
+  "@dashboard__title": { "description": "Dashboard page title" },
+  "dashboard__presetsToday": "今日创建 {count} 个预设",
+  "@dashboard__presetsToday": { "description": "Number of presets created today", "placeholders": { "count": { "type": "int" } } },
+  "dashboard__presetsTotal": "共 {count} 个预设",
+  "@dashboard__presetsTotal": { "description": "Total number of presets", "placeholders": { "count": { "type": "int" } } },
+  "dashboard__quickActions": "快捷操作",
+  "@dashboard__quickActions": { "description": "Dashboard quick actions section title" }
 }

@@ -209,5 +209,11 @@
     "emailVerified": "Email đã xác minh",
     "emailNotVerified": "Email chưa xác minh",
     "memberSince": "Thành viên từ"
+  },
+  "dashboard": {
+    "title": "Bảng điều khiển",
+    "presetsToday": "{count} preset tạo hôm nay",
+    "presetsTotal": "Tổng cộng {count} preset",
+    "quickActions": "Thao tác nhanh"
   }
 }

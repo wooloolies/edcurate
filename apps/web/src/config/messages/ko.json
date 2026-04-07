@@ -209,5 +209,11 @@
     "emailVerified": "이메일 인증됨",
     "emailNotVerified": "이메일 미인증",
     "memberSince": "가입일"
+  },
+  "dashboard": {
+    "title": "대시보드",
+    "presetsToday": "오늘 생성된 프리셋 {count}개",
+    "presetsTotal": "전체 프리셋 {count}개",
+    "quickActions": "빠른 작업"
   }
 }

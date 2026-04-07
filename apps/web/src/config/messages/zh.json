@@ -209,5 +209,11 @@
     "emailVerified": "邮箱已验证",
     "emailNotVerified": "邮箱未验证",
     "memberSince": "注册时间"
+  },
+  "dashboard": {
+    "title": "仪表盘",
+    "presetsToday": "今日创建 {count} 个预设",
+    "presetsTotal": "共 {count} 个预设",
+    "quickActions": "快捷操作"
   }
 }

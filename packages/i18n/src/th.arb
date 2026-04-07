@@ -681,5 +681,13 @@
   "profile__memberSince": "สมาชิกตั้งแต่",
   "@profile__memberSince": {
     "description": "Profile join date label"
-  }
+  },
+  "dashboard__title": "แดชบอร์ด",
+  "@dashboard__title": { "description": "Dashboard page title" },
+  "dashboard__presetsToday": "พรีเซ็ตที่สร้างวันนี้ {count} รายการ",
+  "@dashboard__presetsToday": { "description": "Number of presets created today", "placeholders": { "count": { "type": "int" } } },
+  "dashboard__presetsTotal": "พรีเซ็ตทั้งหมด {count} รายการ",
+  "@dashboard__presetsTotal": { "description": "Total number of presets", "placeholders": { "count": { "type": "int" } } },
+  "dashboard__quickActions": "การดำเนินการด่วน",
+  "@dashboard__quickActions": { "description": "Dashboard quick actions section title" }
 }

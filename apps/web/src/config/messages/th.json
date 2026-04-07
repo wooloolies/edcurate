@@ -209,5 +209,11 @@
     "emailVerified": "ยืนยันอีเมลแล้ว",
     "emailNotVerified": "ยังไม่ได้ยืนยันอีเมล",
     "memberSince": "สมาชิกตั้งแต่"
+  },
+  "dashboard": {
+    "title": "แดชบอร์ด",
+    "presetsToday": "พรีเซ็ตที่สร้างวันนี้ {count} รายการ",
+    "presetsTotal": "พรีเซ็ตทั้งหมด {count} รายการ",
+    "quickActions": "การดำเนินการด่วน"
   }
 }

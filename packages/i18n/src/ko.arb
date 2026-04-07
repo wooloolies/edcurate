@@ -681,5 +681,31 @@
   "profile__memberSince": "가입일",
   "@profile__memberSince": {
     "description": "Profile join date label"
+  },
+  "dashboard__title": "대시보드",
+  "@dashboard__title": {
+    "description": "Dashboard page title"
+  },
+  "dashboard__presetsToday": "오늘 생성된 프리셋 {count}개",
+  "@dashboard__presetsToday": {
+    "description": "Number of presets created today",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboard__presetsTotal": "전체 프리셋 {count}개",
+  "@dashboard__presetsTotal": {
+    "description": "Total number of presets",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboard__quickActions": "빠른 작업",
+  "@dashboard__quickActions": {
+    "description": "Dashboard quick actions section title"
   }
 }
