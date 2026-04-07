@@ -100,9 +100,19 @@ function FlagCard({ flag, t }: { flag: ResourceFlag; t: ReturnType<typeof useTra
   );
 }
 
-export function VerdictBadge({ verdict }: { verdict?: string | null }) {
+export function VerdictBadge({ verdict, isEvaluating }: { verdict?: string | null; isEvaluating?: boolean }) {
   const t = useTranslations("search.evaluation");
 
+  // State 1: Evaluating — blue pulse
+  if (isEvaluating) {
+    return (
+      <Badge variant="outline" className="w-fit animate-pulse text-blue-600 bg-blue-50 border-blue-200 px-3 py-1 text-sm font-semibold">
+        {t("evaluating")}
+      </Badge>
+    );
+  }
+
+  // State 2: No verdict — unevaluated
   if (!verdict) {
     return (
       <Badge variant="outline" className="w-fit text-slate-500 bg-slate-100 border-slate-200 px-3 py-1 text-sm font-semibold">
@@ -111,6 +121,7 @@ export function VerdictBadge({ verdict }: { verdict?: string | null }) {
     );
   }
 
+  // State 3: Has verdict
   const config = VERDICT_CONFIG[verdict as JudgmentResultVerdict] ?? VERDICT_CONFIG.adapt_it;
 
   return (

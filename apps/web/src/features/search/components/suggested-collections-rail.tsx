@@ -196,11 +196,11 @@ export function SuggestedCollectionsRail({
                       <span className="font-semibold text-sm">Resources</span>
                       <ScrollArea className="max-h-96">
                         <div className="space-y-3 pr-2">
-                          {selectedSuggestion.resources.map((savedResource) => (
+                          {selectedSuggestion.resources.map((savedResource, i) => (
                             <ResourceCardRenderer
                               key={savedResource.id}
+                              index={i + 1}
                               resource={savedResource.resource_data}
-                              judgment={savedResource.evaluation_data ?? undefined}
                               hideAction
                             />
                           ))}

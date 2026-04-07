@@ -677,6 +677,26 @@
   "@search__progress__step9": {
     "description": "Evaluation progress step 9"
   },
+  "search__progress__stageQueryGeneration": "Đang tạo truy vấn tìm kiếm",
+  "@search__progress__stageQueryGeneration": {
+    "description": "Progress bar label during query generation stage"
+  },
+  "search__progress__stageFederatedSearch": "Đang tìm kiếm từ các nguồn",
+  "@search__progress__stageFederatedSearch": {
+    "description": "Progress bar label during federated search stage"
+  },
+  "search__progress__stageRagPreparation": "Đang chuẩn bị kết quả",
+  "@search__progress__stageRagPreparation": {
+    "description": "Progress bar label during RAG preparation stage"
+  },
+  "search__progress__stageEvaluation": "Đang đánh giá tài nguyên",
+  "@search__progress__stageEvaluation": {
+    "description": "Progress bar label during evaluation stage"
+  },
+  "search__progress__stageSearching": "Đang tìm kiếm",
+  "@search__progress__stageSearching": {
+    "description": "Fallback progress bar label during search"
+  },
   "search__classroom__chalkboard__queryGeneration": "Đang tạo truy vấn tìm kiếm...",
   "@search__classroom__chalkboard__queryGeneration": {
     "description": "Chalkboard text during query generation stage"

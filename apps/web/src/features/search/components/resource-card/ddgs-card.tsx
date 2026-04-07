@@ -8,9 +8,10 @@ interface DdgsCardProps {
   index: number;
   resource: ResourceCard;
   action?: React.ReactNode;
+  isEvaluating?: boolean;
 }
 
-export function DdgsCard({ index, resource, action }: DdgsCardProps) {
+export function DdgsCard({ index, resource, action, isEvaluating }: DdgsCardProps) {
   const meta = resource.metadata as { domain?: string };
 
   const contentNode = (
@@ -37,7 +38,7 @@ export function DdgsCard({ index, resource, action }: DdgsCardProps) {
   return (
     <ResourceListRow
       index={index}
-      verdictNode={<VerdictBadge verdict={resource.verdict} />}
+      verdictNode={<VerdictBadge verdict={resource.verdict} isEvaluating={isEvaluating} />}
       contentNode={contentNode}
       actionsNode={action}
     />

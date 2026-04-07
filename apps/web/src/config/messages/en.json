@@ -179,7 +179,12 @@
       "step8": "Evaluating reading level and bias representation",
       "compactCount": "{count}/{total} complete",
       "compactTitle": "Evaluating resources",
-      "step9": "Finalising scores and ranking results"
+      "step9": "Finalising scores and ranking results",
+      "stageQueryGeneration": "Generating search queries",
+      "stageFederatedSearch": "Searching across sources",
+      "stageRagPreparation": "Preparing results",
+      "stageEvaluation": "Evaluating resources",
+      "stageSearching": "Searching"
     },
     "classroom": {
       "chalkboard": {
@@ -348,7 +353,10 @@
     "defaultTitle": "Resource Overview",
     "defaultType": "Document",
     "comingSoonTitle": "Detailed Analysis Coming Soon",
-    "comingSoonDescription": "This page will display AI-generated analysis of the resource, including curriculum alignment, pedagogical reasoning, and evidence extraction."
+    "comingSoonDescription": "This page will display AI-generated analysis of the resource, including curriculum alignment, pedagogical reasoning, and evidence extraction.",
+    "confidence": "Confidence",
+    "evaluationNotFound": "Evaluation data is no longer available. Try searching again.",
+    "evaluationUnavailable": "No evaluation data available for this resource."
   },
   "errors": {
     "title": "Error",

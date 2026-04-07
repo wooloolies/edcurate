@@ -178,7 +178,12 @@
       "step8": "읽기 수준과 편향 표현을 평가하는 중",
       "compactCount": "{count}/{total} 완료",
       "compactTitle": "리소스 평가 중",
-      "step9": "점수를 마무리하고 결과 순위를 정하는 중"
+      "step9": "점수를 마무리하고 결과 순위를 정하는 중",
+      "stageQueryGeneration": "검색 쿼리 생성 중",
+      "stageFederatedSearch": "소스에서 검색 중",
+      "stageRagPreparation": "결과 준비 중",
+      "stageEvaluation": "리소스 평가 중",
+      "stageSearching": "검색 중"
     },
     "classroom": {
       "chalkboard": {
@@ -330,7 +335,10 @@
     "defaultTitle": "자료 개요",
     "defaultType": "문서",
     "comingSoonTitle": "상세 분석 준비 중",
-    "comingSoonDescription": "이 페이지에서 AI 기반 분석 결과를 확인할 수 있습니다. 교육과정 정합성, 교수법적 근거, 근거 추출 등을 포함합니다."
+    "comingSoonDescription": "이 페이지에서 AI 기반 분석 결과를 확인할 수 있습니다. 교육과정 정합성, 교수법적 근거, 근거 추출 등을 포함합니다.",
+    "confidence": "신뢰도",
+    "evaluationNotFound": "평가 데이터가 만료되었습니다. 다시 검색해주세요.",
+    "evaluationUnavailable": "이 리소스의 평가 데이터가 없습니다."
   },
   "errors": {
     "title": "오류",

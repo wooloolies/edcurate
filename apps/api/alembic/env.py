@@ -5,6 +5,7 @@ from sqlalchemy.engine import Connection
 
 from alembic import context
 from src.curriculum.model import CurriculumEntry  # noqa: F401
+from src.evaluations.model import ResourceEvaluation  # noqa: F401
 from src.lib.config import escape_alembic_url, settings
 from src.lib.database import Base
 from src.localizer.model import GeneratedArtifact  # noqa: F401

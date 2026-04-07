@@ -176,7 +176,12 @@
       "step6": "Đang truy xuất các đoạn liên quan nhất",
       "step7": "Đang chấm mức độ phù hợp với chương trình và chất lượng sư phạm",
       "step8": "Đang đánh giá mức độ đọc và cách thể hiện thiên lệch",
-      "step9": "Đang hoàn tất điểm số và xếp hạng kết quả"
+      "step9": "Đang hoàn tất điểm số và xếp hạng kết quả",
+      "stageQueryGeneration": "Đang tạo truy vấn tìm kiếm",
+      "stageFederatedSearch": "Đang tìm kiếm từ các nguồn",
+      "stageRagPreparation": "Đang chuẩn bị kết quả",
+      "stageEvaluation": "Đang đánh giá tài nguyên",
+      "stageSearching": "Đang tìm kiếm"
     },
     "classroom": {
       "chalkboard": {

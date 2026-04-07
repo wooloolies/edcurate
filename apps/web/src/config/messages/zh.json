@@ -176,7 +176,12 @@
       "step6": "正在检索最相关的文本片段",
       "step7": "正在评估课程契合度与教学质量",
       "step8": "正在评估阅读难度与偏见呈现",
-      "step9": "正在完成评分并排序结果"
+      "step9": "正在完成评分并排序结果",
+      "stageQueryGeneration": "正在生成搜索查询",
+      "stageFederatedSearch": "正在搜索各来源",
+      "stageRagPreparation": "正在准备结果",
+      "stageEvaluation": "正在评估资源",
+      "stageSearching": "搜索中"
     },
     "classroom": {
       "chalkboard": {

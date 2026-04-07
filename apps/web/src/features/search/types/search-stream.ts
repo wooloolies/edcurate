@@ -1,4 +1,6 @@
 import type { JudgedSearchResponse } from "@/lib/api/model/judged-search-response";
+import type { JudgmentResult } from "@/lib/api/model/judgment-result";
+import type { ResourceCard } from "@/lib/api/model/resource-card";
 
 export type Stage =
   | "query_generation"
@@ -34,4 +36,10 @@ export interface SearchStreamState {
   isCached: boolean;
   isStreaming: boolean;
   error: string | null;
+  /** Set on federated_search/done — resource cards before evaluation */
+  partialResults: ResourceCard[] | null;
+  /** Accumulated per-resource judgments during evaluation streaming */
+  partialJudgments: Map<string, JudgmentResult>;
+  /** evaluation_id per resource_url (for Overview page link) */
+  evaluationIds: Map<string, string>;
 }

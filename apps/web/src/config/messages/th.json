@@ -178,7 +178,12 @@
       "step8": "กำลังประเมินระดับการอ่านและการนำเสนออคติ",
       "compactCount": "{count}/{total} complete",
       "compactTitle": "Evaluating resources",
-      "step9": "กำลังสรุปคะแนนและจัดอันดับผลลัพธ์"
+      "step9": "กำลังสรุปคะแนนและจัดอันดับผลลัพธ์",
+      "stageQueryGeneration": "กำลังสร้างคำค้นหา",
+      "stageFederatedSearch": "กำลังค้นหาจากแหล่งข้อมูล",
+      "stageRagPreparation": "กำลังเตรียมผลลัพธ์",
+      "stageEvaluation": "กำลังประเมินทรัพยากร",
+      "stageSearching": "กำลังค้นหา"
     },
     "classroom": {
       "chalkboard": {

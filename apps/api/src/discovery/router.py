@@ -7,12 +7,15 @@ from fastapi import APIRouter, HTTPException, Query, Request, status
 from sqlalchemy import select
 from sse_starlette.sse import EventSourceResponse
 
-from src.agents.schemas import JudgedSearchResponse
+from src.agents.schemas import JudgedSearchResponse, JudgmentResult
 from src.discovery import service
 from src.lib.auth import decode_token
 from src.lib.dependencies import CurrentUser, DBSession
 from src.lib.rate_limit import rate_limit
 from src.presets.model import ClassroomPreset
+from src.lib.logging import get_logger
+
+logger = get_logger(__name__)
 
 router = APIRouter()
 
@@ -105,7 +108,65 @@ async def search_stream(
         )
 
     async def _event_generator() -> AsyncGenerator[dict, None]:
+        from src.evaluations.service import save_evaluation
+        from src.lib.database import async_session_factory
+
         async for event in service.search_resources_stream(preset, query):
+            # Persist evaluation results when each resource finishes evaluation
+            if (
+                event.stage == "evaluation"
+                and event.status == "done"
+                and event.resource_url
+                and event.data
+                and "judgment" in event.data
+            ):
+                try:
+                    judgment = JudgmentResult(**event.data["judgment"])
+                    # Use a fresh DB session — the injected `db` may be
+                    # closed by the time the SSE generator reaches this point.
+                    async with async_session_factory() as session:
+                        eval_id = await save_evaluation(
+                            session,
+                            user_id,
+                            preset_id,
+                            event.resource_url,
+                            query,
+                            judgment,
+                        )
+                        await session.commit()
+                    event.data["evaluation_id"] = str(eval_id)
+                except Exception as e:
+                    logger.warning(
+                        "Failed to persist evaluation",
+                        resource_url=event.resource_url,
+                        error=str(e),
+                    )
+
             yield {"event": "stage", "data": event.model_dump_json()}
 
     return EventSourceResponse(_event_generator())
+
+
+@router.get("/evaluation/{evaluation_id}")
+async def get_evaluation_endpoint(
+    evaluation_id: uuid.UUID,
+    db: DBSession,
+    current_user: CurrentUser,
+) -> dict | None:
+    """Fetch evaluation data by ID."""
+    from src.evaluations.service import get_evaluation
+
+    row = await get_evaluation(db, evaluation_id)
+    if row is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Evaluation not found"
+        )
+
+    # Verify the user owns this evaluation
+    user_id = uuid.UUID(current_user.id)
+    if row.user_id != user_id:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Evaluation not found"
+        )
+
+    return row.judgment_data

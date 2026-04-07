@@ -8,9 +8,10 @@ interface CustomCardProps {
   index: number;
   resource: ResourceCard;
   action?: React.ReactNode;
+  isEvaluating?: boolean;
 }
 
-export function CustomCard({ index, resource, action }: CustomCardProps) {
+export function CustomCard({ index, resource, action, isEvaluating }: CustomCardProps) {
   const meta = resource.metadata as { domain?: string };
 
   const contentNode = (
@@ -47,7 +48,7 @@ export function CustomCard({ index, resource, action }: CustomCardProps) {
   return (
     <ResourceListRow
       index={index}
-      verdictNode={<VerdictBadge verdict={resource.verdict} />}
+      verdictNode={<VerdictBadge verdict={resource.verdict} isEvaluating={isEvaluating} />}
       contentNode={contentNode}
       actionsNode={action}
     />

@@ -459,6 +459,18 @@
   "@overview__comingSoonDescription": {
     "description": "Coming soon description on overview page"
   },
+  "overview__confidence": "신뢰도",
+  "@overview__confidence": {
+    "description": "Label for evaluation confidence level"
+  },
+  "overview__evaluationNotFound": "평가 데이터가 만료되었습니다. 다시 검색해주세요.",
+  "@overview__evaluationNotFound": {
+    "description": "Message when evaluation cache has expired"
+  },
+  "overview__evaluationUnavailable": "이 리소스의 평가 데이터가 없습니다.",
+  "@overview__evaluationUnavailable": {
+    "description": "Message when evaluation params are missing"
+  },
   "errors__title": "오류",
   "@errors__title": {
     "description": "Generic error page title"
@@ -692,6 +704,26 @@
   "search__progress__step9": "점수를 마무리하고 결과 순위를 정하는 중",
   "@search__progress__step9": {
     "description": "Evaluation progress step 9"
+  },
+  "search__progress__stageQueryGeneration": "검색 쿼리 생성 중",
+  "@search__progress__stageQueryGeneration": {
+    "description": "Progress bar label during query generation stage"
+  },
+  "search__progress__stageFederatedSearch": "소스에서 검색 중",
+  "@search__progress__stageFederatedSearch": {
+    "description": "Progress bar label during federated search stage"
+  },
+  "search__progress__stageRagPreparation": "결과 준비 중",
+  "@search__progress__stageRagPreparation": {
+    "description": "Progress bar label during RAG preparation stage"
+  },
+  "search__progress__stageEvaluation": "리소스 평가 중",
+  "@search__progress__stageEvaluation": {
+    "description": "Progress bar label during evaluation stage"
+  },
+  "search__progress__stageSearching": "검색 중",
+  "@search__progress__stageSearching": {
+    "description": "Fallback progress bar label during search"
   },
   "search__classroom__chalkboard__queryGeneration": "검색 쿼리 생성 중...",
   "@search__classroom__chalkboard__queryGeneration": {

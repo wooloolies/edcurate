@@ -1,7 +1,7 @@
 "use client";
 
 import { useQueryClient } from "@tanstack/react-query";
-import { BookOpen, ChevronDown, Globe, Inbox, Layers, Play, Repeat, Search, X } from "lucide-react";
+import { Repeat, Search, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useQueryState } from "nuqs";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -9,13 +9,12 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { ClassroomScene } from "@/features/search/components/classroom/classroom-scene";
+import { CompactProgressBar } from "@/features/search/components/compact-progress-bar";
 import { ErrorBanner } from "@/features/search/components/error-banner";
 import { EvaluationProgress } from "@/features/search/components/evaluation-progress";
 import { GeneratedQueriesPanel } from "@/features/search/components/generated-queries";
-import { ResourceCardRenderer } from "@/features/search/components/resource-card";
 import { ResourceCardSkeleton } from "@/features/search/components/skeleton/resource-card-skeleton";
-import { SuggestedCollectionsRail } from "@/features/search/components/suggested-collections-rail";
+import { SearchResultsGrid } from "@/features/search/components/search-results-grid";
 import { useSearchStream } from "@/features/search/hooks/use-search-stream";
 import { useSearchApiDiscoverySearchGet } from "@/lib/api/discovery/discovery";
 import type { JudgmentResult, ResourceCard } from "@/lib/api/model";
@@ -34,13 +33,6 @@ export function SearchPageClient() {
   const [searchQuery, setSearchQuery] = useQueryState("q");
   const [draft, setDraft] = useState(searchQuery ?? "");
   const searchInputRef = useRef<HTMLInputElement>(null);
-  const [activeCategory, setActiveCategory] = useState<string>("all");
-  const [visibleCount, setVisibleCount] = useState<number>(4);
-
-  // Reset pagination when query or category changes
-  useEffect(() => {
-    setVisibleCount(4);
-  }, []);
 
   const { data: presetsData } = useListPresetsApiPresetsGet();
   const presets = presetsData?.data ?? [];
@@ -69,8 +61,6 @@ export function SearchPageClient() {
     return urls;
   }, [presetId, savedData]);
 
-  const isChecked = (url: string) => selectedResources.has(url) || savedUrls.has(url);
-
   const handleToggleChecked = (resource: ResourceCard, checked: boolean) => {
     setSelectedResources((prev) => {
       const next = new Map(prev);
@@ -88,7 +78,7 @@ export function SearchPageClient() {
     try {
       const resourcesList = Array.from(selectedResources.values());
       const evaluationDataList = resourcesList.map(
-        (resource) => judgmentByUrl.get(resource.url) ?? null
+        (resource) => displayJudgments.get(resource.url) ?? null
       );
       await createCollection({
         data: {
@@ -157,10 +147,6 @@ export function SearchPageClient() {
     searchInputRef.current?.focus();
   }, []);
 
-  const counts = results?.counts_by_source ?? { ddgs: 0, youtube: 0, openalex: 0 };
-  const totalCount = results?.total_results ?? 0;
-  const allResults = results?.results ?? [];
-
   const judgmentByUrl = useMemo(() => {
     const m = new Map<string, JudgmentResult>();
     for (const j of results?.judgments ?? []) {
@@ -169,12 +155,23 @@ export function SearchPageClient() {
     return m;
   }, [results?.judgments]);
 
-  const [_showUnscored, _setShowUnscored] = useState(false);
+  // Unified data source: complete results take priority, then partial (streaming)
+  const displayResults = results?.results ?? stream.partialResults;
+  const displayJudgments = results ? judgmentByUrl : stream.partialJudgments;
+  const isEvaluationPhase = stream.isStreaming && !!stream.partialResults;
 
-  const filterBySource = (source?: string) =>
-    source ? allResults.filter((r) => r.source === source) : allResults;
+  const displayCounts = useMemo(() => {
+    if (results) return results.counts_by_source ?? { ddgs: 0, youtube: 0, openalex: 0 };
+    const c: Record<string, number> = { ddgs: 0, youtube: 0, openalex: 0 };
+    for (const card of stream.partialResults ?? []) {
+      c[card.source] = (c[card.source] ?? 0) + 1;
+    }
+    return c;
+  }, [results, stream.partialResults]);
 
-  const hasContent = results || stream.isStreaming || isFetching;
+  const displayTotalCount = results?.total_results ?? (stream.partialResults?.length ?? 0);
+
+  const hasContent = results || stream.isStreaming || isFetching || !!stream.partialResults;
 
   return (
     <div className={`w-full max-w-4xl space-y-6 ${!hasContent ? "my-auto" : ""}`}>
@@ -290,12 +287,24 @@ export function SearchPageClient() {
         <GeneratedQueriesPanel queries={results.generated_queries} />
       ) : null}
 
+      {/* Progress bar — shown during all streaming phases */}
       {stream.isStreaming ? (
-        <ClassroomScene
+        <CompactProgressBar
           stages={stream.stages}
           activeStage={stream.activeStage}
-          isCached={stream.isCached}
+          completedEvaluations={stream.partialJudgments.size}
+          totalEvaluations={4}
         />
+      ) : null}
+
+      {/* Skeleton cards — before federated_search results arrive */}
+      {stream.isStreaming && !stream.partialResults ? (
+        <div className="space-y-3">
+          {Array.from({ length: 4 }).map((_, i) => (
+            // biome-ignore lint/suspicious/noArrayIndexKey: skeleton list is static
+            <ResourceCardSkeleton key={i} />
+          ))}
+        </div>
       ) : isFetching ? (
         <div className="space-y-4">
           <EvaluationProgress />
@@ -308,114 +317,23 @@ export function SearchPageClient() {
         </div>
       ) : null}
 
-      {results && !isFetching && !stream.isStreaming ? (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          {/* Left Sidebar: Categories Overview */}
-          <aside className="lg:col-span-2 space-y-1 bg-slate-50/50 p-2 rounded-xl border border-slate-100">
-            <button
-              type="button"
-              onClick={() => setActiveCategory("all")}
-              className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors cursor-pointer ${activeCategory === "all" ? "bg-white shadow-sm border border-slate-200 text-slate-900" : "text-slate-600 hover:bg-slate-100/60"}`}
-            >
-              <div className="flex items-center gap-2">
-                <Layers className="h-4 w-4" />
-                <span>{t("tabs.all")}</span>
-              </div>
-              <span className="text-xs text-slate-400">({totalCount})</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setActiveCategory("youtube")}
-              className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors cursor-pointer ${activeCategory === "youtube" ? "bg-white shadow-sm border border-slate-200 text-slate-900" : "text-slate-600 hover:bg-slate-100/60"}`}
-            >
-              <div className="flex items-center gap-2">
-                <Play className="h-4 w-4" />
-                <span>{t("tabs.video")}</span>
-              </div>
-              <span className="text-xs text-slate-400">({counts.youtube ?? 0})</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setActiveCategory("ddgs")}
-              className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors cursor-pointer ${activeCategory === "ddgs" ? "bg-white shadow-sm border border-slate-200 text-slate-900" : "text-slate-600 hover:bg-slate-100/60"}`}
-            >
-              <div className="flex items-center gap-2">
-                <Globe className="h-4 w-4" />
-                <span>{t("tabs.web")}</span>
-              </div>
-              <span className="text-xs text-slate-400">({counts.ddgs ?? 0})</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setActiveCategory("openalex")}
-              className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors cursor-pointer ${activeCategory === "openalex" ? "bg-white shadow-sm border border-slate-200 text-slate-900" : "text-slate-600 hover:bg-slate-100/60"}`}
-            >
-              <div className="flex items-center gap-2">
-                <BookOpen className="h-4 w-4" />
-                <span>{t("tabs.papers")}</span>
-              </div>
-              <span className="text-xs text-slate-400">({counts.openalex ?? 0})</span>
-            </button>
-          </aside>
-
-          {/* Right Content: Results List */}
-          <section className="lg:col-span-7 min-h-[400px]">
-            {(() => {
-              const items = filterBySource(activeCategory === "all" ? undefined : activeCategory);
-              const visibleItems = items.slice(0, visibleCount);
-              const remainingCount = items.length - visibleCount;
-
-              if (items.length === 0) {
-                return (
-                  <div className="flex flex-col items-center justify-center p-12 text-center text-slate-500">
-                    <Inbox className="h-10 w-10 text-slate-300 mb-4" />
-                    <p>{t("noResults")}</p>
-                  </div>
-                );
-              }
-
-              return (
-                <div className="flex flex-col gap-6">
-                  <div className="flex flex-col gap-6">
-                    {visibleItems.map((resource, i) => (
-                      <ResourceCardRenderer
-                        key={resource.url}
-                        index={i + 1}
-                        resource={resource}
-                        presetId={presetId ?? undefined}
-                        checked={isChecked(resource.url)}
-                        onToggleChecked={(_, c) => handleToggleChecked(resource, c)}
-                      />
-                    ))}
-                  </div>
-
-                  {remainingCount > 0 && (
-                    <div className="bg-slate-50 border-t border-slate-100 p-6 flex flex-col items-center justify-center gap-4 text-center">
-                      <p className="text-sm font-medium text-slate-500">
-                        {t("remainingResources", { count: remainingCount })}
-                      </p>
-                      <Button
-                        variant="secondary"
-                        onClick={() => setVisibleCount((v) => v + 4)}
-                        className="rounded-full px-8 shadow-sm"
-                      >
-                        {t("evaluateNext", { count: 4 })}
-                        <ChevronDown className="ml-2 h-4 w-4" />
-                      </Button>
-                    </div>
-                  )}
-                </div>
-              );
-            })()}
-          </section>
-
-          {/* Suggested Collections Rail */}
-          <section className="lg:col-span-3 space-y-4">
-            {!!(presetId && searchQuery) && (
-              <SuggestedCollectionsRail presetId={presetId} searchQuery={searchQuery} />
-            )}
-          </section>
-        </div>
+      {/* Results grid: shown during evaluation phase AND after complete */}
+      {displayResults && !isFetching && (!stream.isStreaming || isEvaluationPhase) ? (
+        <SearchResultsGrid
+          results={displayResults}
+          judgments={displayJudgments}
+          counts={displayCounts}
+          totalCount={displayTotalCount}
+          presetId={presetId ?? undefined}
+          searchQuery={searchQuery ?? undefined}
+          savedUrls={savedUrls}
+          selectedResources={selectedResources}
+          onToggleChecked={handleToggleChecked}
+          isEvaluationPhase={isEvaluationPhase}
+          resourceProgress={stream.resourceProgress}
+          evaluationIds={stream.evaluationIds}
+          isNewResults={!results}
+        />
       ) : null}
 
       {selectedResources.size > 0 && (

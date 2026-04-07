@@ -17,7 +17,7 @@ export function ResourceListRow({
     <div className="group border-b border-slate-200 last:border-0 hover:bg-slate-50/50 transition-colors">
       <div className="flex items-stretch gap-3 p-4 text-sm">
         {/* Col 1: Index + Verdict */}
-        <div className="shrink-0 flex flex-col items-center justify-between pt-0.5 pb-0.5">
+        <div className="shrink-0 w-28 flex flex-col items-center justify-between pt-0.5 pb-0.5">
           <span className="text-[#111827] font-bold text-base leading-none">{index}</span>
           {verdictNode}
         </div>

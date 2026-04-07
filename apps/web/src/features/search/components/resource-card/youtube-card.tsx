@@ -8,9 +8,10 @@ interface YoutubeCardProps {
   index: number;
   resource: ResourceCard;
   action?: React.ReactNode;
+  isEvaluating?: boolean;
 }
 
-export function YoutubeCard({ index, resource, action }: YoutubeCardProps) {
+export function YoutubeCard({ index, resource, action, isEvaluating }: YoutubeCardProps) {
   const meta = resource.metadata as {
     channel?: string;
     duration?: string;
@@ -52,7 +53,7 @@ export function YoutubeCard({ index, resource, action }: YoutubeCardProps) {
   return (
     <ResourceListRow
       index={index}
-      verdictNode={<VerdictBadge verdict={resource.verdict} />}
+      verdictNode={<VerdictBadge verdict={resource.verdict} isEvaluating={isEvaluating} />}
       contentNode={contentNode}
       actionsNode={action}
     />

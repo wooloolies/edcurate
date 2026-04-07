@@ -8,9 +8,10 @@ interface OpenAlexCardProps {
   index: number;
   resource: ResourceCard;
   action?: React.ReactNode;
+  isEvaluating?: boolean;
 }
 
-export function OpenAlexCard({ index, resource, action }: OpenAlexCardProps) {
+export function OpenAlexCard({ index, resource, action, isEvaluating }: OpenAlexCardProps) {
   const t = useTranslations("search");
 
   const meta = resource.metadata as {
@@ -63,7 +64,7 @@ export function OpenAlexCard({ index, resource, action }: OpenAlexCardProps) {
   return (
     <ResourceListRow
       index={index}
-      verdictNode={<VerdictBadge verdict={resource.verdict} />}
+      verdictNode={<VerdictBadge verdict={resource.verdict} isEvaluating={isEvaluating} />}
       contentNode={contentNode}
       actionsNode={action}
     />
