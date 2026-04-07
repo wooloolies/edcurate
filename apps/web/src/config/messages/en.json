@@ -233,6 +233,49 @@
         "factualAccuracy": "Factual accuracy",
         "sourceCredibility": "Source credibility",
         "licensingIp": "Licensing and IP"
+      },
+      "verdicts": {
+        "use_it": "Use it",
+        "adapt_it": "Adapt it",
+        "skip_it": "Skip it"
+      },
+      "confidence": {
+        "high": "High confidence",
+        "medium": "Medium confidence",
+        "low": "Low confidence"
+      },
+      "showDetails": "Show details",
+      "hideDetails": "Hide details",
+      "flags": "{count, plural, one {# flag} other {# flags}}",
+      "noFlags": "No flags detected",
+      "overrideNote": "Override note",
+      "evidence": "Evidence",
+      "suggested": "Suggested action",
+      "sections": {
+        "triage": "Triage",
+        "adaptations": "Adaptations",
+        "riskScan": "Risk Scan",
+        "reasoning": "Reasoning"
+      },
+      "metrics": {
+        "curriculumFit": "Curriculum fit",
+        "accessibility": "Accessibility",
+        "trustworthiness": "Trustworthiness"
+      },
+      "ratings": {
+        "strong": "Strong",
+        "adequate": "Adequate",
+        "weak": "Weak"
+      },
+      "flagCategories": {
+        "bias": "Bias",
+        "factual_error": "Factual error",
+        "outdated": "Outdated",
+        "inappropriate_content": "Inappropriate content",
+        "licensing": "Licensing",
+        "reading_level": "Reading level",
+        "accessibility": "Accessibility",
+        "cultural_sensitivity": "Cultural sensitivity"
       }
     }
   },

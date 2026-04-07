@@ -233,6 +233,49 @@
         "factualAccuracy": "Độ chính xác thông tin",
         "sourceCredibility": "Độ tin cậy của nguồn",
         "licensingIp": "Giấy phép và sở hữu trí tuệ"
+      },
+      "verdicts": {
+        "use_it": "Dùng được",
+        "adapt_it": "Cần chỉnh sửa",
+        "skip_it": "Bỏ qua"
+      },
+      "confidence": {
+        "high": "Độ tin cậy cao",
+        "medium": "Độ tin cậy trung bình",
+        "low": "Độ tin cậy thấp"
+      },
+      "showDetails": "Hiện chi tiết",
+      "hideDetails": "Ẩn chi tiết",
+      "flags": "{count, plural, one {# cảnh báo} other {# cảnh báo}}",
+      "noFlags": "Không phát hiện cảnh báo",
+      "overrideNote": "Ghi chú ghi đè",
+      "evidence": "Bằng chứng",
+      "suggested": "Hành động đề xuất",
+      "sections": {
+        "triage": "Phân loại",
+        "adaptations": "Điều chỉnh",
+        "riskScan": "Quét rủi ro",
+        "reasoning": "Lập luận"
+      },
+      "metrics": {
+        "curriculumFit": "Phù hợp chương trình",
+        "accessibility": "Khả năng tiếp cận",
+        "trustworthiness": "Độ tin cậy"
+      },
+      "ratings": {
+        "strong": "Tốt",
+        "adequate": "Đạt",
+        "weak": "Yếu"
+      },
+      "flagCategories": {
+        "bias": "Thiên kiến",
+        "factual_error": "Sai sự thật",
+        "outdated": "Lỗi thời",
+        "inappropriate_content": "Nội dung không phù hợp",
+        "licensing": "Giấy phép",
+        "reading_level": "Trình độ đọc",
+        "accessibility": "Khả năng tiếp cận",
+        "cultural_sensitivity": "Nhạy cảm văn hóa"
       }
     }
   },

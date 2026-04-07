@@ -233,6 +233,49 @@
         "factualAccuracy": "事实准确性",
         "sourceCredibility": "来源可信度",
         "licensingIp": "许可与知识产权"
+      },
+      "verdicts": {
+        "use_it": "可用",
+        "adapt_it": "需改编",
+        "skip_it": "跳过"
+      },
+      "confidence": {
+        "high": "高可信度",
+        "medium": "中等可信度",
+        "low": "低可信度"
+      },
+      "showDetails": "显示详情",
+      "hideDetails": "隐藏详情",
+      "flags": "{count, plural, one {#个标记} other {#个标记}}",
+      "noFlags": "未检测到标记",
+      "overrideNote": "覆盖备注",
+      "evidence": "依据",
+      "suggested": "建议操作",
+      "sections": {
+        "triage": "分类",
+        "adaptations": "改编建议",
+        "riskScan": "风险扫描",
+        "reasoning": "推理过程"
+      },
+      "metrics": {
+        "curriculumFit": "课程适配度",
+        "accessibility": "可及性",
+        "trustworthiness": "可信度"
+      },
+      "ratings": {
+        "strong": "优秀",
+        "adequate": "合格",
+        "weak": "薄弱"
+      },
+      "flagCategories": {
+        "bias": "偏见",
+        "factual_error": "事实错误",
+        "outdated": "过时内容",
+        "inappropriate_content": "不当内容",
+        "licensing": "许可",
+        "reading_level": "阅读水平",
+        "accessibility": "可及性",
+        "cultural_sensitivity": "文化敏感性"
       }
     }
   },

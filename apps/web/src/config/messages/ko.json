@@ -233,6 +233,49 @@
         "factualAccuracy": "사실 정확성",
         "sourceCredibility": "출처 신뢰도",
         "licensingIp": "라이선스 및 지식재산권"
+      },
+      "verdicts": {
+        "use_it": "사용 가능",
+        "adapt_it": "수정 필요",
+        "skip_it": "건너뛰기"
+      },
+      "confidence": {
+        "high": "높은 신뢰도",
+        "medium": "보통 신뢰도",
+        "low": "낮은 신뢰도"
+      },
+      "showDetails": "상세 보기",
+      "hideDetails": "상세 접기",
+      "flags": "{count, plural, one {#개 플래그} other {#개 플래그}}",
+      "noFlags": "감지된 플래그 없음",
+      "overrideNote": "재정의 메모",
+      "evidence": "근거",
+      "suggested": "권장 조치",
+      "sections": {
+        "triage": "분류",
+        "adaptations": "수정 사항",
+        "riskScan": "위험 검사",
+        "reasoning": "추론"
+      },
+      "metrics": {
+        "curriculumFit": "교육과정 적합도",
+        "accessibility": "접근성",
+        "trustworthiness": "신뢰도"
+      },
+      "ratings": {
+        "strong": "우수",
+        "adequate": "적절",
+        "weak": "미흡"
+      },
+      "flagCategories": {
+        "bias": "편향",
+        "factual_error": "사실 오류",
+        "outdated": "구식 자료",
+        "inappropriate_content": "부적절한 콘텐츠",
+        "licensing": "라이선스",
+        "reading_level": "읽기 수준",
+        "accessibility": "접근성",
+        "cultural_sensitivity": "문화적 민감성"
       }
     }
   },

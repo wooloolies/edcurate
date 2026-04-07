@@ -233,6 +233,49 @@
         "factualAccuracy": "ความถูกต้องของข้อมูล",
         "sourceCredibility": "ความน่าเชื่อถือของแหล่งข้อมูล",
         "licensingIp": "ใบอนุญาตและทรัพย์สินทางปัญญา"
+      },
+      "verdicts": {
+        "use_it": "ใช้ได้",
+        "adapt_it": "ต้องปรับ",
+        "skip_it": "ข้ามไป"
+      },
+      "confidence": {
+        "high": "ความเชื่อมั่นสูง",
+        "medium": "ความเชื่อมั่นปานกลาง",
+        "low": "ความเชื่อมั่นต่ำ"
+      },
+      "showDetails": "แสดงรายละเอียด",
+      "hideDetails": "ซ่อนรายละเอียด",
+      "flags": "{count, plural, one {# แฟล็ก} other {# แฟล็ก}}",
+      "noFlags": "ไม่พบแฟล็ก",
+      "overrideNote": "หมายเหตุแทนที่",
+      "evidence": "หลักฐาน",
+      "suggested": "การดำเนินการที่แนะนำ",
+      "sections": {
+        "triage": "การคัดกรอง",
+        "adaptations": "การปรับปรุง",
+        "riskScan": "สแกนความเสี่ยง",
+        "reasoning": "การให้เหตุผล"
+      },
+      "metrics": {
+        "curriculumFit": "ความเหมาะสมกับหลักสูตร",
+        "accessibility": "การเข้าถึง",
+        "trustworthiness": "ความน่าเชื่อถือ"
+      },
+      "ratings": {
+        "strong": "ดีมาก",
+        "adequate": "พอใช้",
+        "weak": "อ่อน"
+      },
+      "flagCategories": {
+        "bias": "อคติ",
+        "factual_error": "ข้อผิดพลาดเชิงข้อเท็จจริง",
+        "outdated": "ข้อมูลล้าสมัย",
+        "inappropriate_content": "เนื้อหาไม่เหมาะสม",
+        "licensing": "ใบอนุญาต",
+        "reading_level": "ระดับการอ่าน",
+        "accessibility": "การเข้าถึง",
+        "cultural_sensitivity": "ความอ่อนไหวทางวัฒนธรรม"
       }
     }
   },
