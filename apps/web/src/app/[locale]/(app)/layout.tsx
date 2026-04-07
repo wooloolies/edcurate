@@ -19,10 +19,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen bg-brand-surface">
       <header className="sticky top-0 z-50 px-4 pt-4 pb-2 md:px-8 md:pt-6">
         <nav className="mx-auto flex max-w-5xl items-center gap-6 rounded-[2.5rem] bg-white/60 px-6 py-2.5 backdrop-blur-xl shadow-[0_4px_32px_rgba(0,0,0,0.04)] border border-white/60">
-          <Link
-            href="/dashboard"
-            className="font-bold text-xl tracking-tight text-brand-ink mr-2"
-          >
+          <Link href="/dashboard" className="font-bold text-xl tracking-tight text-brand-ink mr-2">
             {tRoot("title")}
           </Link>
           <AppNav

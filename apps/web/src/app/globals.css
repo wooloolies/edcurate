@@ -55,9 +55,9 @@
   --radius: 0.5rem;
 
   /* Edcurate brand semantic tokens */
-  --brand-green: #B7FF70;
+  --brand-green: #b7ff70;
   --brand-ink: #111827;
-  --brand-surface: #F8F9FA;
+  --brand-surface: #f8f9fa;
 }
 
 .dark {
@@ -91,7 +91,6 @@ body {
   color: var(--foreground);
 }
 
-
 @keyframes shimmer-spin {
   0% {
     transform: rotate(0deg);
@@ -106,7 +105,9 @@ body {
   position: relative;
   overflow: hidden;
   z-index: 0;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
 .btn-brand-hover:hover {

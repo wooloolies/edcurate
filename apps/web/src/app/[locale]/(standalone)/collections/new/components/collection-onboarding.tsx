@@ -92,7 +92,7 @@ export function CollectionOnboarding() {
     setGrade("");
   };
 
-  const handleSubjectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const _handleSubjectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSubject(e.target.value);
     setFramework("");
     setGrade("");
@@ -340,7 +340,6 @@ export function CollectionOnboarding() {
                   placeholder="e.g. 25"
                   value={classSize}
                   onChange={(e) => setClassSize(e.target.value)}
-                  autoFocus={currentStep === 2}
                   className="w-full appearance-none bg-white border-2 border-gray-200 rounded-2xl px-6 py-4 text-sm font-semibold text-brand-ink hover:border-gray-300 focus:outline-none focus:border-brand-green transition-colors shadow-sm placeholder:text-gray-400 placeholder:font-normal mt-3"
                 />
               </label>

@@ -23,14 +23,10 @@ export function ResourceListRow({
         </div>
 
         {/* Col 2: Content */}
-        <div className="flex-1 min-w-0 flex flex-col gap-1.5">
-          {contentNode}
-        </div>
+        <div className="flex-1 min-w-0 flex flex-col gap-1.5">{contentNode}</div>
 
         {/* Col 3: Actions */}
-        <div className="flex items-center gap-2 shrink-0 pt-1">
-          {actionsNode}
-        </div>
+        <div className="flex items-center gap-2 shrink-0 pt-1">{actionsNode}</div>
       </div>
     </div>
   );

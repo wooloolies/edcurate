@@ -1,7 +1,6 @@
 import { ExternalLink, Globe } from "lucide-react";
-
-import { ResourceListRow } from "@/features/search/components/resource-card/resource-list-row";
 import { VerdictBadge } from "@/features/search/components/resource-card/relevance-indicator";
+import { ResourceListRow } from "@/features/search/components/resource-card/resource-list-row";
 import type { ResourceCard } from "@/lib/api/model";
 
 interface DdgsCardProps {
@@ -27,9 +26,7 @@ export function DdgsCard({ index, resource, action, isEvaluating }: DdgsCardProp
           {resource.title}
           <ExternalLink className="ml-1.5 inline h-3 w-3 text-slate-400" />
         </a>
-        <p className="text-muted-foreground line-clamp-2 leading-relaxed">
-          {resource.snippet}
-        </p>
+        <p className="text-muted-foreground line-clamp-2 leading-relaxed">{resource.snippet}</p>
         {!!meta.domain && <p className="text-xs font-medium text-slate-400">{meta.domain}</p>}
       </div>
     </div>

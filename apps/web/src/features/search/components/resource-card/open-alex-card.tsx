@@ -1,7 +1,7 @@
 import { BookOpen, ExternalLink } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { ResourceListRow } from "@/features/search/components/resource-card/resource-list-row";
 import { VerdictBadge } from "@/features/search/components/resource-card/relevance-indicator";
+import { ResourceListRow } from "@/features/search/components/resource-card/resource-list-row";
 import type { ResourceCard } from "@/lib/api/model";
 
 interface OpenAlexCardProps {

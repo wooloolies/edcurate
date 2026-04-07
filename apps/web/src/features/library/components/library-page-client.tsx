@@ -31,13 +31,13 @@ import { Input } from "@/components/ui/input";
 import { ArtifactList } from "@/features/library/components/artifact-list";
 import { GenerateArtifactDialog } from "@/features/library/components/generate-artifact-dialog";
 import { ResourceCardRenderer } from "@/features/search/components/resource-card";
+import { useListArtifactsEndpointApiLocalizerGet } from "@/lib/api/localizer/localizer";
 import type {
   CollectionGroup,
   GenerateArtifactRequestArtifactType,
   GeneratedArtifactResponse,
   SavedResourceResponse,
 } from "@/lib/api/model";
-import { useListArtifactsEndpointApiLocalizerGet } from "@/lib/api/localizer/localizer";
 import {
   getListSavedResourcesEndpointApiSavedGetQueryKey,
   useAddCustomLinkEndpointApiSavedLinkPost,

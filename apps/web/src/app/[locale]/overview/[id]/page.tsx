@@ -2,16 +2,16 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { BookOpen, ExternalLink, Globe, Play } from "lucide-react";
-import { useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 import { Header } from "@/components/layout/header";
 import {
   RelevanceDetails,
   VerdictBadge,
 } from "@/features/search/components/resource-card/relevance-indicator";
-import { apiClient } from "@/lib/api-client";
 import type { JudgmentResult } from "@/lib/api/model";
+import { apiClient } from "@/lib/api-client";
 
 const SOURCE_ICON: Record<string, React.ReactNode> = {
   ddgs: <Globe className="h-5 w-5 text-slate-500" />,
@@ -20,9 +20,7 @@ const SOURCE_ICON: Record<string, React.ReactNode> = {
 };
 
 async function fetchEvaluation(id: string): Promise<JudgmentResult> {
-  const { data } = await apiClient.get<JudgmentResult>(
-    `/api/discovery/evaluation/${id}`,
-  );
+  const { data } = await apiClient.get<JudgmentResult>(`/api/discovery/evaluation/${id}`);
   return data;
 }
 
@@ -65,9 +63,7 @@ export default function OverviewDetailPage() {
           </div>
         ) : error || !judgment ? (
           <div className="bg-white/60 backdrop-blur-xl rounded-3xl p-10 shadow-sm border border-white/80 text-center">
-            <p className="text-muted-foreground text-lg">
-              {t("evaluationNotFound")}
-            </p>
+            <p className="text-muted-foreground text-lg">{t("evaluationNotFound")}</p>
           </div>
         ) : (
           <>
@@ -77,7 +73,7 @@ export default function OverviewDetailPage() {
                 {SOURCE_ICON[sourceType]}
                 <VerdictBadge verdict={judgment.verdict} />
               </div>
-              {resourceUrl && (
+              {!!resourceUrl && (
                 <a
                   href={resourceUrl}
                   target="_blank"
