@@ -8,6 +8,7 @@ import { Bear } from "@/features/search/components/classroom/characters/bear";
 import { Fox } from "@/features/search/components/classroom/characters/fox";
 import { Owl } from "@/features/search/components/classroom/characters/owl";
 import { Rabbit } from "@/features/search/components/classroom/characters/rabbit";
+import { SpeechBubble } from "@/features/search/components/classroom/speech-bubble";
 import type { StageStatus } from "@/features/search/types/search-stream";
 
 type CharacterType = "owl" | "fox" | "bear" | "rabbit";
@@ -31,6 +32,7 @@ interface StudentAgentProps {
   position: { x: string; y: string };
   status: StageStatus | undefined;
   label: string;
+  message?: string | null;
 }
 
 export function StudentAgent({
@@ -38,6 +40,7 @@ export function StudentAgent({
   position,
   status,
   label,
+  message,
 }: StudentAgentProps) {
   const controls = useAnimation();
   const prevStatusRef = useRef<StageStatus | undefined>(undefined);
@@ -79,7 +82,8 @@ export function StudentAgent({
       viewport={{ once: true }}
       transition={{ type: "spring", stiffness: 120, damping: 18, delay: 0.1 }}
     >
-      <motion.div animate={controls} style={{ width: 64, height: 80 }}>
+      <SpeechBubble text={message ?? null} position={character === "owl" || character === "bear" ? "left" : "right"} />
+      <motion.div animate={controls} style={{ width: 72, height: 90 }}>
         <CharacterComponent
           className="h-full w-full"
           isWorking={isWorking}

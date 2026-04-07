@@ -172,6 +172,31 @@
         "federatedSearch": "Search Agent",
         "evaluation": "Evaluation Agent",
         "adversarial": "Review Agent"
+      },
+      "bubbles": {
+        "teacher": {
+          "queryGeneration": "Let's find the best queries!",
+          "federatedSearch": "Search everywhere!",
+          "ragPreparation": "Time to analyze!",
+          "evaluation": "Grade these carefully!",
+          "adversarial": "Check for issues!"
+        },
+        "owl": {
+          "working": "Crafting queries...",
+          "done": "Queries ready!"
+        },
+        "fox": {
+          "working": "Fetching results...",
+          "done": "Found them!"
+        },
+        "bear": {
+          "working": "Scoring resources...",
+          "done": "All scored!"
+        },
+        "rabbit": {
+          "working": "Checking for bias...",
+          "done": "Review done!"
+        }
       }
     },
     "evaluation": {

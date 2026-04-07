@@ -124,8 +124,14 @@ export function SearchPageClient() {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (!presetId || !draft.trim()) return;
-    setSearchQuery(draft.trim());
-    pendingStreamRef.current = true;
+    const trimmed = draft.trim();
+    if (trimmed === searchQuery) {
+      // Same query — trigger stream directly since useEffect won't fire
+      stream.startStream();
+    } else {
+      setSearchQuery(trimmed);
+      pendingStreamRef.current = true;
+    }
   };
 
   useEffect(() => {

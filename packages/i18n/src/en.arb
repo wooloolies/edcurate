@@ -644,6 +644,58 @@
   "@search__classroom__agents__adversarial": {
     "description": "Label for the adversarial review agent"
   },
+  "search__classroom__bubbles__teacher__queryGeneration": "Let's find the best queries!",
+  "@search__classroom__bubbles__teacher__queryGeneration": {
+    "description": "Teacher speech bubble during query generation stage"
+  },
+  "search__classroom__bubbles__teacher__federatedSearch": "Search everywhere!",
+  "@search__classroom__bubbles__teacher__federatedSearch": {
+    "description": "Teacher speech bubble during federated search stage"
+  },
+  "search__classroom__bubbles__teacher__ragPreparation": "Time to analyze!",
+  "@search__classroom__bubbles__teacher__ragPreparation": {
+    "description": "Teacher speech bubble during RAG preparation stage"
+  },
+  "search__classroom__bubbles__teacher__evaluation": "Grade these carefully!",
+  "@search__classroom__bubbles__teacher__evaluation": {
+    "description": "Teacher speech bubble during evaluation stage"
+  },
+  "search__classroom__bubbles__teacher__adversarial": "Check for issues!",
+  "@search__classroom__bubbles__teacher__adversarial": {
+    "description": "Teacher speech bubble during adversarial check stage"
+  },
+  "search__classroom__bubbles__owl__working": "Crafting queries...",
+  "@search__classroom__bubbles__owl__working": {
+    "description": "Owl agent speech bubble while working"
+  },
+  "search__classroom__bubbles__owl__done": "Queries ready!",
+  "@search__classroom__bubbles__owl__done": {
+    "description": "Owl agent speech bubble when done"
+  },
+  "search__classroom__bubbles__fox__working": "Fetching results...",
+  "@search__classroom__bubbles__fox__working": {
+    "description": "Fox agent speech bubble while working"
+  },
+  "search__classroom__bubbles__fox__done": "Found them!",
+  "@search__classroom__bubbles__fox__done": {
+    "description": "Fox agent speech bubble when done"
+  },
+  "search__classroom__bubbles__bear__working": "Scoring resources...",
+  "@search__classroom__bubbles__bear__working": {
+    "description": "Bear agent speech bubble while working"
+  },
+  "search__classroom__bubbles__bear__done": "All scored!",
+  "@search__classroom__bubbles__bear__done": {
+    "description": "Bear agent speech bubble when done"
+  },
+  "search__classroom__bubbles__rabbit__working": "Checking for bias...",
+  "@search__classroom__bubbles__rabbit__working": {
+    "description": "Rabbit agent speech bubble while working"
+  },
+  "search__classroom__bubbles__rabbit__done": "Review done!",
+  "@search__classroom__bubbles__rabbit__done": {
+    "description": "Rabbit agent speech bubble when done"
+  },
   "search__evaluation__unevaluated": "Unevaluated",
   "@search__evaluation__unevaluated": {
     "description": "Badge shown when a resource has not been evaluated yet"

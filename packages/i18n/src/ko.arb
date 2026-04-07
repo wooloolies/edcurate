@@ -620,6 +620,58 @@
   "@search__classroom__agents__adversarial": {
     "description": "Label for the adversarial review agent"
   },
+  "search__classroom__bubbles__teacher__queryGeneration": "최고의 쿼리를 찾아보자!",
+  "@search__classroom__bubbles__teacher__queryGeneration": {
+    "description": "Teacher speech bubble during query generation stage"
+  },
+  "search__classroom__bubbles__teacher__federatedSearch": "모든 곳에서 검색해!",
+  "@search__classroom__bubbles__teacher__federatedSearch": {
+    "description": "Teacher speech bubble during federated search stage"
+  },
+  "search__classroom__bubbles__teacher__ragPreparation": "분석할 시간이야!",
+  "@search__classroom__bubbles__teacher__ragPreparation": {
+    "description": "Teacher speech bubble during RAG preparation stage"
+  },
+  "search__classroom__bubbles__teacher__evaluation": "꼼꼼하게 평가해!",
+  "@search__classroom__bubbles__teacher__evaluation": {
+    "description": "Teacher speech bubble during evaluation stage"
+  },
+  "search__classroom__bubbles__teacher__adversarial": "문제가 없는지 확인해!",
+  "@search__classroom__bubbles__teacher__adversarial": {
+    "description": "Teacher speech bubble during adversarial check stage"
+  },
+  "search__classroom__bubbles__owl__working": "쿼리 만드는 중...",
+  "@search__classroom__bubbles__owl__working": {
+    "description": "Owl agent speech bubble while working"
+  },
+  "search__classroom__bubbles__owl__done": "쿼리 완성!",
+  "@search__classroom__bubbles__owl__done": {
+    "description": "Owl agent speech bubble when done"
+  },
+  "search__classroom__bubbles__fox__working": "결과 가져오는 중...",
+  "@search__classroom__bubbles__fox__working": {
+    "description": "Fox agent speech bubble while working"
+  },
+  "search__classroom__bubbles__fox__done": "찾았어!",
+  "@search__classroom__bubbles__fox__done": {
+    "description": "Fox agent speech bubble when done"
+  },
+  "search__classroom__bubbles__bear__working": "리소스 채점 중...",
+  "@search__classroom__bubbles__bear__working": {
+    "description": "Bear agent speech bubble while working"
+  },
+  "search__classroom__bubbles__bear__done": "채점 완료!",
+  "@search__classroom__bubbles__bear__done": {
+    "description": "Bear agent speech bubble when done"
+  },
+  "search__classroom__bubbles__rabbit__working": "편향 검사 중...",
+  "@search__classroom__bubbles__rabbit__working": {
+    "description": "Rabbit agent speech bubble while working"
+  },
+  "search__classroom__bubbles__rabbit__done": "검토 끝!",
+  "@search__classroom__bubbles__rabbit__done": {
+    "description": "Rabbit agent speech bubble when done"
+  },
   "search__evaluation__unevaluated": "미평가",
   "@search__evaluation__unevaluated": {
     "description": "Badge shown when a resource has not been evaluated yet"

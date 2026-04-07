@@ -13,10 +13,15 @@ interface ClassroomSceneProps {
   isCached: boolean;
 }
 
-/**
- * Derive the effective status for a student in the cached scenario.
- * When isCached is true every student is immediately shown as "done".
- */
+const STAGE_KEY: Record<Stage, string> = {
+  query_generation: "queryGeneration",
+  federated_search: "federatedSearch",
+  rag_preparation: "ragPreparation",
+  evaluation: "evaluation",
+  adversarial: "adversarial",
+  complete: "complete",
+};
+
 function resolveStatus(
   status: StageStatus | undefined,
   isCached: boolean,
@@ -26,63 +31,108 @@ function resolveStatus(
 }
 
 export function ClassroomScene({ stages, activeStage, isCached }: ClassroomSceneProps) {
-  const t = useTranslations("search.classroom.agents");
+  const tAgents = useTranslations("search.classroom.agents");
+  const tBubbles = useTranslations("search.classroom.bubbles");
+
   const owlStatus = resolveStatus(stages.query_generation, isCached);
   const foxStatus = resolveStatus(stages.federated_search, isCached);
   const bearStatus = resolveStatus(stages.evaluation, isCached);
   const rabbitStatus = resolveStatus(stages.adversarial, isCached);
 
+  // Teacher bubble
+  const teacherMessage =
+    activeStage && activeStage !== "complete" && !isCached
+      ? tBubbles(`teacher.${STAGE_KEY[activeStage]}`)
+      : null;
+
+  // Student bubbles — keyed by character name in i18n
+  const getBubble = (character: string, status: StageStatus | undefined) => {
+    if (!status) return null;
+    return tBubbles(`${character}.${status}`);
+  };
+
   return (
     <div
-      className="relative mx-auto aspect-[3/2] w-full max-w-[600px] overflow-hidden rounded-2xl"
+      className="relative mx-auto w-full max-w-4xl overflow-hidden rounded-2xl"
       style={{
-        backgroundColor: "#FEF3C7", // amber-100-ish warm classroom
-        backgroundImage:
+        aspectRatio: "16 / 9",
+        backgroundColor: "#FEF3C7",
+        backgroundImage: [
           "radial-gradient(ellipse at 50% 100%, rgba(251,191,36,0.15) 0%, transparent 70%)",
+          "radial-gradient(ellipse at 50% 50%, transparent 60%, rgba(0,0,0,0.04) 100%)",
+          "repeating-linear-gradient(90deg, transparent, transparent 59px, rgba(180,140,80,0.06) 59px, rgba(180,140,80,0.06) 60px)",
+        ].join(", "),
         boxShadow:
-          "0 4px 24px rgba(0,0,0,0.08), inset 0 0 0 1px rgba(0,0,0,0.06)",
+          "0 8px 32px rgba(0,0,0,0.10), inset 0 0 0 1px rgba(0,0,0,0.06)",
       }}
       role="region"
       aria-label="Classroom scene showing search progress"
     >
       {/* Floor line */}
       <div
-        className="absolute bottom-[22%] left-0 right-0 h-px"
-        style={{ backgroundColor: "rgba(180,140,80,0.25)" }}
+        className="absolute left-0 right-0 h-px"
+        style={{ bottom: "18%", backgroundColor: "rgba(180,140,80,0.3)" }}
       />
+
+      {/* Student desks */}
+      {[
+        { x: "18%", y: "70%" },
+        { x: "55%", y: "70%" },
+        { x: "18%", y: "92%" },
+        { x: "55%", y: "92%" },
+      ].map((pos) => (
+        <div
+          key={`${pos.x}-${pos.y}`}
+          className="absolute"
+          style={{ left: pos.x, top: pos.y, transform: "translateX(-50%)" }}
+        >
+          <svg viewBox="0 0 80 16" className="h-3 w-16">
+            <rect x="4" y="0" width="72" height="12" rx="3" fill="#B8904A" opacity="0.7" />
+            <rect x="7" y="2" width="66" height="7" rx="2" fill="#D4A96A" opacity="0.8" />
+          </svg>
+        </div>
+      ))}
 
       {/* Chalkboard */}
       <Chalkboard activeStage={activeStage} isCached={isCached} />
 
       {/* Quokka teacher */}
-      <QuokkaTeacher activeStage={activeStage} isCached={isCached} />
+      <QuokkaTeacher
+        activeStage={activeStage}
+        isCached={isCached}
+        message={teacherMessage}
+      />
 
       {/* Row 1 students */}
       <StudentAgent
         character="owl"
-        position={{ x: "15%", y: "55%" }}
+        position={{ x: "18%", y: "58%" }}
         status={owlStatus}
-        label={t("queryGeneration")}
+        label={tAgents("queryGeneration")}
+        message={getBubble("owl", owlStatus)}
       />
       <StudentAgent
         character="fox"
-        position={{ x: "60%", y: "55%" }}
+        position={{ x: "55%", y: "58%" }}
         status={foxStatus}
-        label={t("federatedSearch")}
+        label={tAgents("federatedSearch")}
+        message={getBubble("fox", foxStatus)}
       />
 
       {/* Row 2 students */}
       <StudentAgent
         character="bear"
-        position={{ x: "15%", y: "78%" }}
+        position={{ x: "18%", y: "80%" }}
         status={bearStatus}
-        label={t("evaluation")}
+        label={tAgents("evaluation")}
+        message={getBubble("bear", bearStatus)}
       />
       <StudentAgent
         character="rabbit"
-        position={{ x: "60%", y: "78%" }}
+        position={{ x: "55%", y: "80%" }}
         status={rabbitStatus}
-        label={t("adversarial")}
+        label={tAgents("adversarial")}
+        message={getBubble("rabbit", rabbitStatus)}
       />
     </div>
   );

@@ -5,16 +5,17 @@ import { useRef } from "react";
 import { motion } from "motion/react";
 
 import { Quokka } from "@/features/search/components/classroom/characters/quokka";
+import { SpeechBubble } from "@/features/search/components/classroom/speech-bubble";
 import type { Stage } from "@/features/search/types/search-stream";
 
 /** Percentage-based positions within the scene container */
 const TEACHER_POSITIONS: Record<Stage, { x: string; y: string }> = {
-  query_generation: { x: "20%", y: "45%" },
-  federated_search: { x: "65%", y: "45%" },
-  rag_preparation: { x: "42%", y: "30%" },
-  evaluation: { x: "20%", y: "70%" },
-  adversarial: { x: "65%", y: "70%" },
-  complete: { x: "42%", y: "35%" },
+  query_generation: { x: "18%", y: "42%" },
+  federated_search: { x: "55%", y: "42%" },
+  rag_preparation: { x: "38%", y: "25%" },
+  evaluation: { x: "18%", y: "68%" },
+  adversarial: { x: "55%", y: "68%" },
+  complete: { x: "38%", y: "32%" },
 };
 
 /** Convert a percentage string like "42%" to its numeric value */
@@ -25,14 +26,15 @@ function parsePercent(value: string): number {
 interface QuokkaTeacherProps {
   activeStage: Stage | null;
   isCached?: boolean;
+  message?: string | null;
 }
 
-export function QuokkaTeacher({ activeStage, isCached }: QuokkaTeacherProps) {
+export function QuokkaTeacher({ activeStage, isCached, message }: QuokkaTeacherProps) {
   const prevXRef = useRef<number>(42);
 
   const position = activeStage
     ? TEACHER_POSITIONS[activeStage]
-    : { x: "42%", y: "35%" };
+    : { x: "38%", y: "32%" };
 
   const currentX = parsePercent(position.x);
   const isMovingLeft = currentX < prevXRef.current;
@@ -49,8 +51,8 @@ export function QuokkaTeacher({ activeStage, isCached }: QuokkaTeacherProps) {
         top: position.y,
         translateX: "-50%",
         translateY: "-50%",
-        width: 70,
-        height: 88,
+        width: 90,
+        height: 112,
       }}
       animate={{
         left: position.x,
@@ -64,6 +66,7 @@ export function QuokkaTeacher({ activeStage, isCached }: QuokkaTeacherProps) {
       }
       aria-label="Quokka teacher"
     >
+      <SpeechBubble text={message ?? null} />
       <Quokka
         className="h-full w-full"
         isWorking={isWorking && !isWriting}

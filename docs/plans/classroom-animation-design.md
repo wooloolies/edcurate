@@ -2,13 +2,13 @@
 
 ## Overview
 
-검색 실행 시 교실 씬 애니메이션으로 에이전트 파이프라인 진행 상태를 시각화합니다.
-쿼카 선생님이 분필을 들고 각 에이전트 학생(동물 캐릭터)을 지시하며 이동하는 풀 스테이지 연출입니다.
+Visualizes the agent pipeline progress with a classroom scene animation during search execution.
+A quokka teacher holding chalk walks between animal student characters, directing each agent in a full-stage production.
 
 ## Architecture & Data Flow
 
 ```
-[사용자 검색 실행]
+[User initiates search]
        │
        ▼
 [SearchPageClient] ──── GET /api/discovery/search/stream (SSE)
@@ -16,7 +16,7 @@
        ▼
 [useSearchStream hook] ── fetch + ReadableStream
        │
-       │  이벤트 수신:
+       │  Events received:
        │  ├─ { stage: "query_generation", status: "working" }
        │  ├─ { stage: "query_generation", status: "done", data: queries }
        │  ├─ { stage: "federated_search", status: "working" }
@@ -30,10 +30,10 @@
        │  └─ { stage: "complete", data: EvaluatedSearchResponse }
        │
        ▼
-[ClassroomScene] ── stage 상태에 따라 애니메이션 제어
-       ├─ QuokkaTeacher: 현재 활성 학생 쪽으로 이동
-       ├─ StudentAgent × 4: idle → working → done 상태 전환
-       └─ Chalkboard: 현재 단계 텍스트 표시
+[ClassroomScene] ── Controls animation based on stage state
+       ├─ QuokkaTeacher: Moves toward the currently active student
+       ├─ StudentAgent × 4: idle → working → done state transitions
+       └─ Chalkboard: Displays current stage text
 ```
 
 ## File Structure
@@ -42,29 +42,29 @@
 apps/web/src/features/search/
 ├── components/
 │   ├── classroom/
-│   │   ├── classroom-scene.tsx       # 메인 씬 컨테이너
-│   │   ├── chalkboard.tsx            # 칠판 배경 + 상태 텍스트
-│   │   ├── quokka-teacher.tsx        # 쿼카 선생님 (이동 애니메이션)
-│   │   ├── student-agent.tsx         # 학생 캐릭터 (공통 래퍼)
+│   │   ├── classroom-scene.tsx       # Main scene container
+│   │   ├── chalkboard.tsx            # Chalkboard background + stage text
+│   │   ├── quokka-teacher.tsx        # Quokka teacher (movement animation)
+│   │   ├── student-agent.tsx         # Student character (shared wrapper)
 │   │   └── characters/
-│   │       ├── quokka.tsx            # 쿼카 SVG
-│   │       ├── owl.tsx               # 부엉이 SVG (Search Query Agent)
-│   │       ├── fox.tsx               # 여우 SVG (Federated Search)
-│   │       ├── bear.tsx              # 곰 SVG (Evaluation Agent)
-│   │       └── rabbit.tsx            # 토끼 SVG (Adversarial Agent)
-│   └── search-page-client.tsx        # 수정: SSE 모드 추가
+│   │       ├── quokka.tsx            # Quokka SVG
+│   │       ├── owl.tsx               # Owl SVG (Search Query Agent)
+│   │       ├── fox.tsx               # Fox SVG (Federated Search)
+│   │       ├── bear.tsx              # Bear SVG (Evaluation Agent)
+│   │       └── rabbit.tsx            # Rabbit SVG (Adversarial Agent)
+│   └── search-page-client.tsx        # Modified: SSE mode added
 ├── hooks/
-│   └── use-search-stream.ts          # SSE 연결 + 상태 관리 훅
+│   └── use-search-stream.ts          # SSE connection + state management hook
 ├── types/
-│   └── search-stream.ts              # SSE 관련 타입 정의
+│   └── search-stream.ts              # SSE-related type definitions
 └── utils/
-    ├── fetch-sse.ts                  # fetch 기반 SSE 헬퍼
-    └── parse-sse.ts                  # SSE 버퍼 파서
+    ├── fetch-sse.ts                  # fetch-based SSE helper
+    └── parse-sse.ts                  # SSE buffer parser
 
 apps/api/src/discovery/
-├── router.py                         # 수정: SSE 엔드포인트 추가
-├── service.py                        # 수정: async generator 리팩터링
-└── schemas.py                        # 수정: SSE 이벤트 스키마 추가
+├── router.py                         # Modified: SSE endpoint added
+├── service.py                        # Modified: async generator refactoring
+└── schemas.py                        # Modified: SSE event schema added
 ```
 
 ## Dependencies

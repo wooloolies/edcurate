@@ -172,6 +172,31 @@
         "federatedSearch": "搜索代理",
         "evaluation": "评估代理",
         "adversarial": "审查代理"
+      },
+      "bubbles": {
+        "teacher": {
+          "queryGeneration": "找到最好的查询！",
+          "federatedSearch": "搜索所有地方！",
+          "ragPreparation": "是时候分析了！",
+          "evaluation": "仔细评分！",
+          "adversarial": "检查问题！"
+        },
+        "owl": {
+          "working": "正在构建查询...",
+          "done": "查询就绪！"
+        },
+        "fox": {
+          "working": "正在获取结果...",
+          "done": "找到了！"
+        },
+        "bear": {
+          "working": "正在评分...",
+          "done": "评分完成！"
+        },
+        "rabbit": {
+          "working": "正在检查偏差...",
+          "done": "审查完毕！"
+        }
       }
     },
     "evaluation": {

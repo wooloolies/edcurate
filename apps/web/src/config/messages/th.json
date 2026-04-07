@@ -172,6 +172,31 @@
         "federatedSearch": "ตัวแทนสืบค้น",
         "evaluation": "ตัวแทนประเมิน",
         "adversarial": "ตัวแทนตรวจสอบ"
+      },
+      "bubbles": {
+        "teacher": {
+          "queryGeneration": "มาหาคำค้นหาที่ดีที่สุดกัน!",
+          "federatedSearch": "ค้นหาทุกที่!",
+          "ragPreparation": "ถึงเวลาวิเคราะห์!",
+          "evaluation": "ให้คะแนนอย่างรอบคอบ!",
+          "adversarial": "ตรวจสอบปัญหา!"
+        },
+        "owl": {
+          "working": "กำลังสร้างคำค้นหา...",
+          "done": "คำค้นหาพร้อม!"
+        },
+        "fox": {
+          "working": "กำลังดึงผลลัพธ์...",
+          "done": "พบแล้ว!"
+        },
+        "bear": {
+          "working": "กำลังให้คะแนน...",
+          "done": "ให้คะแนนเสร็จ!"
+        },
+        "rabbit": {
+          "working": "กำลังตรวจสอบอคติ...",
+          "done": "ตรวจสอบเสร็จ!"
+        }
       }
     },
     "evaluation": {

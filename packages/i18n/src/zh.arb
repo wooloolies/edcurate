@@ -620,6 +620,58 @@
   "@search__classroom__agents__adversarial": {
     "description": "Label for the adversarial review agent"
   },
+  "search__classroom__bubbles__teacher__queryGeneration": "找到最好的查询！",
+  "@search__classroom__bubbles__teacher__queryGeneration": {
+    "description": "Teacher speech bubble during query generation stage"
+  },
+  "search__classroom__bubbles__teacher__federatedSearch": "搜索所有地方！",
+  "@search__classroom__bubbles__teacher__federatedSearch": {
+    "description": "Teacher speech bubble during federated search stage"
+  },
+  "search__classroom__bubbles__teacher__ragPreparation": "是时候分析了！",
+  "@search__classroom__bubbles__teacher__ragPreparation": {
+    "description": "Teacher speech bubble during RAG preparation stage"
+  },
+  "search__classroom__bubbles__teacher__evaluation": "仔细评分！",
+  "@search__classroom__bubbles__teacher__evaluation": {
+    "description": "Teacher speech bubble during evaluation stage"
+  },
+  "search__classroom__bubbles__teacher__adversarial": "检查问题！",
+  "@search__classroom__bubbles__teacher__adversarial": {
+    "description": "Teacher speech bubble during adversarial check stage"
+  },
+  "search__classroom__bubbles__owl__working": "正在构建查询...",
+  "@search__classroom__bubbles__owl__working": {
+    "description": "Owl agent speech bubble while working"
+  },
+  "search__classroom__bubbles__owl__done": "查询就绪！",
+  "@search__classroom__bubbles__owl__done": {
+    "description": "Owl agent speech bubble when done"
+  },
+  "search__classroom__bubbles__fox__working": "正在获取结果...",
+  "@search__classroom__bubbles__fox__working": {
+    "description": "Fox agent speech bubble while working"
+  },
+  "search__classroom__bubbles__fox__done": "找到了！",
+  "@search__classroom__bubbles__fox__done": {
+    "description": "Fox agent speech bubble when done"
+  },
+  "search__classroom__bubbles__bear__working": "正在评分...",
+  "@search__classroom__bubbles__bear__working": {
+    "description": "Bear agent speech bubble while working"
+  },
+  "search__classroom__bubbles__bear__done": "评分完成！",
+  "@search__classroom__bubbles__bear__done": {
+    "description": "Bear agent speech bubble when done"
+  },
+  "search__classroom__bubbles__rabbit__working": "正在检查偏差...",
+  "@search__classroom__bubbles__rabbit__working": {
+    "description": "Rabbit agent speech bubble while working"
+  },
+  "search__classroom__bubbles__rabbit__done": "审查完毕！",
+  "@search__classroom__bubbles__rabbit__done": {
+    "description": "Rabbit agent speech bubble when done"
+  },
   "search__evaluation__unevaluated": "未评估",
   "@search__evaluation__unevaluated": {
     "description": "Badge shown when a resource has not been evaluated yet"

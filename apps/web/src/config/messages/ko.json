@@ -172,6 +172,31 @@
         "federatedSearch": "검색 에이전트",
         "evaluation": "평가 에이전트",
         "adversarial": "검토 에이전트"
+      },
+      "bubbles": {
+        "teacher": {
+          "queryGeneration": "최고의 쿼리를 찾아보자!",
+          "federatedSearch": "모든 곳에서 검색해!",
+          "ragPreparation": "분석할 시간이야!",
+          "evaluation": "꼼꼼하게 평가해!",
+          "adversarial": "문제가 없는지 확인해!"
+        },
+        "owl": {
+          "working": "쿼리 만드는 중...",
+          "done": "쿼리 완성!"
+        },
+        "fox": {
+          "working": "결과 가져오는 중...",
+          "done": "찾았어!"
+        },
+        "bear": {
+          "working": "리소스 채점 중...",
+          "done": "채점 완료!"
+        },
+        "rabbit": {
+          "working": "편향 검사 중...",
+          "done": "검토 끝!"
+        }
       }
     },
     "evaluation": {

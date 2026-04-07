@@ -620,6 +620,58 @@
   "@search__classroom__agents__adversarial": {
     "description": "Label for the adversarial review agent"
   },
+  "search__classroom__bubbles__teacher__queryGeneration": "Hãy tìm truy vấn tốt nhất!",
+  "@search__classroom__bubbles__teacher__queryGeneration": {
+    "description": "Teacher speech bubble during query generation stage"
+  },
+  "search__classroom__bubbles__teacher__federatedSearch": "Tìm kiếm mọi nơi!",
+  "@search__classroom__bubbles__teacher__federatedSearch": {
+    "description": "Teacher speech bubble during federated search stage"
+  },
+  "search__classroom__bubbles__teacher__ragPreparation": "Đến lúc phân tích!",
+  "@search__classroom__bubbles__teacher__ragPreparation": {
+    "description": "Teacher speech bubble during RAG preparation stage"
+  },
+  "search__classroom__bubbles__teacher__evaluation": "Chấm điểm cẩn thận nhé!",
+  "@search__classroom__bubbles__teacher__evaluation": {
+    "description": "Teacher speech bubble during evaluation stage"
+  },
+  "search__classroom__bubbles__teacher__adversarial": "Kiểm tra vấn đề!",
+  "@search__classroom__bubbles__teacher__adversarial": {
+    "description": "Teacher speech bubble during adversarial check stage"
+  },
+  "search__classroom__bubbles__owl__working": "Đang tạo truy vấn...",
+  "@search__classroom__bubbles__owl__working": {
+    "description": "Owl agent speech bubble while working"
+  },
+  "search__classroom__bubbles__owl__done": "Truy vấn sẵn sàng!",
+  "@search__classroom__bubbles__owl__done": {
+    "description": "Owl agent speech bubble when done"
+  },
+  "search__classroom__bubbles__fox__working": "Đang lấy kết quả...",
+  "@search__classroom__bubbles__fox__working": {
+    "description": "Fox agent speech bubble while working"
+  },
+  "search__classroom__bubbles__fox__done": "Tìm thấy rồi!",
+  "@search__classroom__bubbles__fox__done": {
+    "description": "Fox agent speech bubble when done"
+  },
+  "search__classroom__bubbles__bear__working": "Đang chấm điểm...",
+  "@search__classroom__bubbles__bear__working": {
+    "description": "Bear agent speech bubble while working"
+  },
+  "search__classroom__bubbles__bear__done": "Chấm điểm xong!",
+  "@search__classroom__bubbles__bear__done": {
+    "description": "Bear agent speech bubble when done"
+  },
+  "search__classroom__bubbles__rabbit__working": "Đang kiểm tra thiên lệch...",
+  "@search__classroom__bubbles__rabbit__working": {
+    "description": "Rabbit agent speech bubble while working"
+  },
+  "search__classroom__bubbles__rabbit__done": "Đánh giá xong!",
+  "@search__classroom__bubbles__rabbit__done": {
+    "description": "Rabbit agent speech bubble when done"
+  },
   "search__evaluation__unevaluated": "Chưa đánh giá",
   "@search__evaluation__unevaluated": {
     "description": "Badge shown when a resource has not been evaluated yet"

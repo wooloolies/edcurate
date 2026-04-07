@@ -172,6 +172,31 @@
         "federatedSearch": "Tác tử tìm kiếm",
         "evaluation": "Tác tử đánh giá",
         "adversarial": "Tác tử kiểm duyệt"
+      },
+      "bubbles": {
+        "teacher": {
+          "queryGeneration": "Hãy tìm truy vấn tốt nhất!",
+          "federatedSearch": "Tìm kiếm mọi nơi!",
+          "ragPreparation": "Đến lúc phân tích!",
+          "evaluation": "Chấm điểm cẩn thận nhé!",
+          "adversarial": "Kiểm tra vấn đề!"
+        },
+        "owl": {
+          "working": "Đang tạo truy vấn...",
+          "done": "Truy vấn sẵn sàng!"
+        },
+        "fox": {
+          "working": "Đang lấy kết quả...",
+          "done": "Tìm thấy rồi!"
+        },
+        "bear": {
+          "working": "Đang chấm điểm...",
+          "done": "Chấm điểm xong!"
+        },
+        "rabbit": {
+          "working": "Đang kiểm tra thiên lệch...",
+          "done": "Đánh giá xong!"
+        }
       }
     },
     "evaluation": {
