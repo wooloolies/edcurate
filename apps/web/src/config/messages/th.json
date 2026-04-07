@@ -241,14 +241,14 @@
       },
       "confidence": {
         "high": "ความเชื่อมั่นสูง",
-        "medium": "ความเชื่อมั่นปานกลาง",
+        "moderate": "ความเชื่อมั่นปานกลาง",
         "low": "ความเชื่อมั่นต่ำ"
       },
       "showDetails": "แสดงรายละเอียด",
       "hideDetails": "ซ่อนรายละเอียด",
       "flags": "{count, plural, one {# แฟล็ก} other {# แฟล็ก}}",
       "noFlags": "ไม่พบแฟล็ก",
-      "overrideNote": "หมายเหตุแทนที่",
+      "overrideNote": "หมายเหตุพิเศษ",
       "evidence": "หลักฐาน",
       "suggested": "การดำเนินการที่แนะนำ",
       "sections": {

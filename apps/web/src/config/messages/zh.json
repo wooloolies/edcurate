@@ -241,7 +241,7 @@
       },
       "confidence": {
         "high": "高可信度",
-        "medium": "中等可信度",
+        "moderate": "中等可信度",
         "low": "低可信度"
       },
       "showDetails": "显示详情",

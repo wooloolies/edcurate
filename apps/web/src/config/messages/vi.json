@@ -241,14 +241,14 @@
       },
       "confidence": {
         "high": "Độ tin cậy cao",
-        "medium": "Độ tin cậy trung bình",
+        "moderate": "Độ tin cậy trung bình",
         "low": "Độ tin cậy thấp"
       },
       "showDetails": "Hiện chi tiết",
       "hideDetails": "Ẩn chi tiết",
       "flags": "{count, plural, one {# cảnh báo} other {# cảnh báo}}",
       "noFlags": "Không phát hiện cảnh báo",
-      "overrideNote": "Ghi chú ghi đè",
+      "overrideNote": "Ghi chú bổ sung",
       "evidence": "Bằng chứng",
       "suggested": "Hành động đề xuất",
       "sections": {

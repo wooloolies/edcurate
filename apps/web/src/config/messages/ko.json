@@ -241,7 +241,7 @@
       },
       "confidence": {
         "high": "높은 신뢰도",
-        "medium": "보통 신뢰도",
+        "moderate": "보통 신뢰도",
         "low": "낮은 신뢰도"
       },
       "showDetails": "상세 보기",

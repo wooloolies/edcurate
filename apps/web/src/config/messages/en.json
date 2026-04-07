@@ -241,7 +241,7 @@
       },
       "confidence": {
         "high": "High confidence",
-        "medium": "Medium confidence",
+        "moderate": "Moderate confidence",
         "low": "Low confidence"
       },
       "showDetails": "Show details",
