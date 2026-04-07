@@ -55,7 +55,7 @@ export function ClassroomScene({ stages, activeStage, isCached }: ClassroomScene
     <div
       className="relative mx-auto w-full max-w-4xl overflow-hidden rounded-2xl"
       style={{
-        aspectRatio: "4 / 3",
+        aspectRatio: "5 / 3",
         backgroundColor: "#FEF3C7",
         backgroundImage: [
           "radial-gradient(ellipse at 50% 100%, rgba(251,191,36,0.15) 0%, transparent 70%)",
@@ -71,15 +71,15 @@ export function ClassroomScene({ stages, activeStage, isCached }: ClassroomScene
       {/* Floor line */}
       <div
         className="absolute left-0 right-0 h-px"
-        style={{ bottom: "12%", backgroundColor: "rgba(180,140,80,0.3)" }}
+        style={{ bottom: "5%", backgroundColor: "rgba(180,140,80,0.3)" }}
       />
 
       {/* Student desks */}
       {[
-        { x: "22%", y: "56%" },
-        { x: "65%", y: "56%" },
-        { x: "22%", y: "82%" },
-        { x: "65%", y: "82%" },
+        { x: "22%", y: "60%" },
+        { x: "65%", y: "60%" },
+        { x: "22%", y: "88%" },
+        { x: "65%", y: "88%" },
       ].map((pos) => (
         <div
           key={`${pos.x}-${pos.y}`}
@@ -106,14 +106,14 @@ export function ClassroomScene({ stages, activeStage, isCached }: ClassroomScene
       {/* Row 1 students */}
       <StudentAgent
         character="owl"
-        position={{ x: "22%", y: "48%" }}
+        position={{ x: "22%", y: "50%" }}
         status={owlStatus}
         label={tAgents("queryGeneration")}
         message={getBubble("owl", owlStatus)}
       />
       <StudentAgent
         character="fox"
-        position={{ x: "65%", y: "48%" }}
+        position={{ x: "65%", y: "50%" }}
         status={foxStatus}
         label={tAgents("federatedSearch")}
         message={getBubble("fox", foxStatus)}
@@ -122,14 +122,14 @@ export function ClassroomScene({ stages, activeStage, isCached }: ClassroomScene
       {/* Row 2 students */}
       <StudentAgent
         character="bear"
-        position={{ x: "22%", y: "76%" }}
+        position={{ x: "22%", y: "80%" }}
         status={bearStatus}
         label={tAgents("evaluation")}
         message={getBubble("bear", bearStatus)}
       />
       <StudentAgent
         character="rabbit"
-        position={{ x: "65%", y: "76%" }}
+        position={{ x: "65%", y: "80%" }}
         status={rabbitStatus}
         label={tAgents("adversarial")}
         message={getBubble("rabbit", rabbitStatus)}

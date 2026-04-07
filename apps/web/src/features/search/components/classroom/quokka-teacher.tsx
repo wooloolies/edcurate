@@ -10,12 +10,12 @@ import type { Stage } from "@/features/search/types/search-stream";
 
 /** Percentage-based positions within the scene container */
 const TEACHER_POSITIONS: Record<Stage, { x: string; y: string }> = {
-  query_generation: { x: "42%", y: "44%" },
-  federated_search: { x: "45%", y: "44%" },
-  rag_preparation: { x: "44%", y: "25%" },
-  evaluation: { x: "42%", y: "70%" },
-  adversarial: { x: "45%", y: "70%" },
-  complete: { x: "44%", y: "32%" },
+  query_generation: { x: "42%", y: "46%" },
+  federated_search: { x: "45%", y: "46%" },
+  rag_preparation: { x: "44%", y: "26%" },
+  evaluation: { x: "42%", y: "74%" },
+  adversarial: { x: "45%", y: "74%" },
+  complete: { x: "44%", y: "34%" },
 };
 
 /** Convert a percentage string like "42%" to its numeric value */
@@ -34,7 +34,7 @@ export function QuokkaTeacher({ activeStage, isCached, message }: QuokkaTeacherP
 
   const position = activeStage
     ? TEACHER_POSITIONS[activeStage]
-    : { x: "44%", y: "32%" };
+    : { x: "44%", y: "34%" };
 
   const currentX = parsePercent(position.x);
   const isMovingLeft = currentX < prevXRef.current;
