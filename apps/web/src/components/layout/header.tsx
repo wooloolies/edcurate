@@ -33,7 +33,13 @@ export function Header() {
           href="/collections"
           className="text-sm font-medium text-gray-500 hover:text-black transition-colors"
         >
-          Your collection
+          Classroom
+        </Link>
+        <Link
+          href="/library"
+          className="text-sm font-medium text-gray-500 hover:text-black transition-colors"
+        >
+          Library
         </Link>
         <Link
           href="/contact"
@@ -46,7 +52,7 @@ export function Header() {
         ) : (
           <Link
             href="/login"
-            className="text-sm font-semibold bg-[#B7FF70] text-[#111827] px-6 py-2.5 rounded-[2rem] hover:bg-[#111827] hover:text-white transition-all ml-2 shadow-sm"
+            className="text-sm font-semibold bg-brand-green text-brand-ink px-6 py-2.5 rounded-[2rem] hover:bg-brand-ink hover:text-white transition-all ml-2 shadow-sm"
           >
             Sign in
           </Link>
