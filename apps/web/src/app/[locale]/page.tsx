@@ -1,8 +1,8 @@
 import type { Locale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Header } from "@/components/layout/header";
-import { Link } from "@/lib/i18n/routing";
 import { CanvasBackground } from "@/components/ui/canvas-background";
+import { ShimmerLink } from "@/components/ui/shimmer-button";
 
 interface HomePageProps {
   params: Promise<{ locale: string }>;
@@ -27,13 +27,9 @@ export default async function HomePage({ params }: HomePageProps) {
           {t("heroTitlePart1")} <br /> {t("heroTitlePart2")}
         </h1>
 
-        {/* Glassmorphic link in the middle */}
-        <Link
-          href="/collections/new"
-          className="mt-16 px-10 py-5 rounded-[2.5rem] text-lg font-semibold text-[#111827] backdrop-blur-2xl bg-white/40 border border-black/10 shadow-[0_8px_32px_rgba(0,0,0,0.05)] hover:bg-[#111827] hover:text-white hover:border-[#111827] hover:shadow-[0_8px_32px_rgba(17,24,39,0.3)] hover:scale-105 duration-300 transition-all inline-block"
-        >
+        <ShimmerLink href="/collections/new" className="mt-16">
           {t("startResearch")}
-        </Link>
+        </ShimmerLink>
       </main>
     </div>
   );
