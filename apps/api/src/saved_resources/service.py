@@ -39,7 +39,7 @@ async def save_resource(
             status_code=status.HTTP_404_NOT_FOUND, detail="Preset not found"
         )
 
-    eval_data = _build_eval_data(request.resource)
+    eval_data = request.evaluation_data or _build_eval_data(request.resource)
 
     stmt = insert(SavedResource).values(
         user_id=user_id,
@@ -110,9 +110,15 @@ async def bulk_save_resources(
             "search_query": request.search_query,
             "resource_url": r.url,
             "resource_data": r.model_dump(mode="json"),
-            "evaluation_data": _build_eval_data(r),
+            "evaluation_data": (
+                request.evaluation_data_list[idx]
+                if request.evaluation_data_list
+                and idx < len(request.evaluation_data_list)
+                else None
+            )
+            or _build_eval_data(r),
         }
-        for r in request.resources
+        for idx, r in enumerate(request.resources)
     ]
 
     stmt = insert(SavedResource).values(rows)
@@ -124,9 +130,7 @@ async def bulk_save_resources(
     # Fetch any that already existed (conflict skip)
     if len(inserted) < len(request.resources):
         inserted_urls = {r.resource_url for r in inserted}
-        missing_urls = [
-            r.url for r in request.resources if r.url not in inserted_urls
-        ]
+        missing_urls = [r.url for r in request.resources if r.url not in inserted_urls]
         if missing_urls:
             exist_result = await db.execute(
                 select(SavedResource).where(
