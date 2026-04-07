@@ -27,7 +27,7 @@ export default async function HomePage({ params }: HomePageProps) {
           {t("heroTitlePart1")} <br /> {t("heroTitlePart2")}
         </h1>
 
-        <ShimmerLink href="/collections/new" className="mt-16">
+        <ShimmerLink href="/collections/new" authRequired className="mt-16">
           {t("startResearch")}
         </ShimmerLink>
       </main>

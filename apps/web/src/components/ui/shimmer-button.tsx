@@ -1,10 +1,12 @@
 "use client";
 
-import { type ComponentPropsWithoutRef, type ReactNode } from "react";
+import { type ComponentPropsWithoutRef, type ReactNode, useEffect, useState } from "react";
 import { Link } from "@/lib/i18n/routing";
+import { hasBackendAccessToken } from "@/lib/auth/auth-client";
 
 interface ShimmerLinkProps extends ComponentPropsWithoutRef<typeof Link> {
   shimmerColor?: string;
+  authRequired?: boolean;
   children: ReactNode;
 }
 
@@ -12,11 +14,22 @@ function ShimmerLink({
   children,
   className = "",
   shimmerColor = "#B7FF70",
+  authRequired = false,
+  href,
   ...props
 }: ShimmerLinkProps) {
+  const [resolvedHref, setResolvedHref] = useState(href);
+
+  useEffect(() => {
+    if (authRequired && !hasBackendAccessToken()) {
+      setResolvedHref(`/login?redirect=${encodeURIComponent(String(href))}`);
+    }
+  }, [authRequired, href]);
+
   return (
     <Link
       className={`group relative inline-flex items-center justify-center overflow-hidden rounded-[2.5rem] p-[2px] shadow-[0_8px_32px_rgba(0,0,0,0.05)] transition-all duration-300 hover:scale-105 hover:shadow-[0_8px_32px_rgba(183,255,112,0.3)] ${className}`}
+      href={resolvedHref}
       {...props}
     >
       {/* Rotating shimmer — oversized square centered on the button */}
