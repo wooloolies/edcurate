@@ -23,21 +23,11 @@ import type {
 import { fetchSSE } from "@/features/search/utils/fetch-sse";
 import { parseSSEBuffer } from "@/features/search/utils/parse-sse";
 import type { JudgedSearchResponse } from "@/lib/api/model/judged-search-response";
-import { searchStreamAtom } from "@/stores/search-stream-atoms";
+import { INITIAL_STREAM_STATE, searchStreamAtom } from "@/stores/search-stream-atoms";
 
 // ---------------------------------------------------------------------------
 // Reducer logic (pure function, used by the hook to update the atom)
 // ---------------------------------------------------------------------------
-
-const initialState: SearchStreamState = {
-  stages: {},
-  activeStage: null,
-  resourceProgress: new Map(),
-  result: null,
-  isCached: false,
-  isStreaming: false,
-  error: null,
-};
 
 type Action =
   | { type: "START" }
@@ -48,7 +38,7 @@ type Action =
 function reduce(state: SearchStreamState, action: Action): SearchStreamState {
   switch (action.type) {
     case "START":
-      return { ...initialState, resourceProgress: new Map(), isStreaming: true };
+      return { ...INITIAL_STREAM_STATE, resourceProgress: new Map(), isStreaming: true };
 
     case "STAGE_EVENT": {
       const { stage, status, resource_url, cached, data } = action.payload;
@@ -91,7 +81,7 @@ function reduce(state: SearchStreamState, action: Action): SearchStreamState {
       return { ...state, isStreaming: false, error: action.payload };
 
     case "RESET":
-      return { ...initialState, resourceProgress: new Map() };
+      return { ...INITIAL_STREAM_STATE, resourceProgress: new Map() };
 
     default:
       return state;
@@ -181,9 +171,8 @@ export function useSearchStream(
   const stopStream = useMemoizedFn(() => {
     activeAbort?.abort();
     activeAbort = null;
+    dispatch({ type: "RESET" });
   });
-
-  // No useUnmount abort — stream persists across navigations
 
   return { ...state, startStream, stopStream };
 }
