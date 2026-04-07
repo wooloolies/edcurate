@@ -23,6 +23,8 @@ const ARTIFACT_LABELS: Record<ArtifactType, string> = {
   flashcards: "Flashcards",
 };
 
+const MAX_SELECTED_RESOURCES = 10;
+
 interface GenerateArtifactDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -45,7 +47,7 @@ export function GenerateArtifactDialog({
   onSuccess,
 }: GenerateArtifactDialogProps) {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(
-    () => new Set(resources.map((r) => r.id))
+    () => new Set(resources.slice(0, MAX_SELECTED_RESOURCES).map((r) => r.id))
   );
 
   const { mutateAsync: generate, isPending } = useGenerateArtifactApiLocalizerGeneratePost();
@@ -56,6 +58,10 @@ export function GenerateArtifactDialog({
       if (next.has(id)) {
         next.delete(id);
       } else {
+        if (next.size >= MAX_SELECTED_RESOURCES) {
+          toast.error(`Select up to ${MAX_SELECTED_RESOURCES} resources`);
+          return next;
+        }
         next.add(id);
       }
       return next;
@@ -92,12 +98,15 @@ export function GenerateArtifactDialog({
           </DialogTitle>
           <DialogDescription>
             Select resources to generate a {ARTIFACT_LABELS[artifactType].toLowerCase()} from.
+            {resources.length > MAX_SELECTED_RESOURCES
+              ? ` Up to ${MAX_SELECTED_RESOURCES} resources can be selected.`
+              : ""}
           </DialogDescription>
         </DialogHeader>
 
         <div className="max-h-64 space-y-2 overflow-y-auto py-2">
           {resources.map((r) => {
-            const title = (r.resource_data as Record<string, unknown>)?.title as string | undefined;
+            const title = r.resource_data.title;
             return (
               <label
                 key={r.id}

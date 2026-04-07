@@ -1,5 +1,6 @@
 import uuid as uuid_lib
 from datetime import datetime
+from typing import Any
 
 from sqlalchemy import (
     Boolean,
@@ -96,15 +97,15 @@ class ClassroomPreset(Base):
     eal_d_students: Mapped[int | None] = mapped_column(Integer, nullable=True)
     reading_support_students: Mapped[int | None] = mapped_column(Integer, nullable=True)
     extension_students: Mapped[int | None] = mapped_column(Integer, nullable=True)
-    student_interests: Mapped[list] = mapped_column(
+    student_interests: Mapped[list[str]] = mapped_column(
         JSONB, default=list, server_default="[]"
     )
-    language_backgrounds: Mapped[list] = mapped_column(
+    language_backgrounds: Mapped[list[str]] = mapped_column(
         JSONB, default=list, server_default="[]"
     )
     average_reading_level: Mapped[str | None] = mapped_column(String(50), nullable=True)
 
-    source_weights: Mapped[dict] = mapped_column(
+    source_weights: Mapped[dict[str, Any]] = mapped_column(
         JSONB,
         nullable=False,
         default=lambda: {"ddgs": 0.34, "youtube": 0.33, "openalex": 0.33},

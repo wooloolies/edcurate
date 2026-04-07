@@ -79,6 +79,16 @@ export function ArtifactList({ presetId }: ArtifactListProps) {
                 key={artifact.id}
                 className="cursor-pointer transition-colors hover:bg-muted/30"
                 onClick={() => setViewingArtifact(artifact)}
+                onKeyDown={(event) => {
+                  if (event.target !== event.currentTarget) return;
+                  if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    setViewingArtifact(artifact);
+                  }
+                }}
+                aria-label={`View ${meta.label}`}
+                role="button"
+                tabIndex={0}
               >
                 <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
                   <div className="flex items-center gap-2">
@@ -91,6 +101,7 @@ export function ArtifactList({ presetId }: ArtifactListProps) {
                     className="h-7 w-7 text-destructive hover:bg-destructive/10"
                     onClick={(e) => handleDelete(e, artifact.id)}
                     disabled={deletingId === artifact.id}
+                    aria-label={`Delete ${meta.label}`}
                   >
                     {deletingId === artifact.id ? (
                       <Loader2 className="h-3 w-3 animate-spin" />

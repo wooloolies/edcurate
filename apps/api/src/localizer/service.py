@@ -6,7 +6,11 @@ from sqlalchemy import select
 from src.discovery.schemas import ResourceCard
 from src.lib.dependencies import DBSession
 from src.localizer.model import GeneratedArtifact
-from src.localizer.notebooklm_client import ResourceInfo, generate_artifact
+from src.localizer.notebooklm_client import (
+    NotebookLMConfigurationError,
+    ResourceInfo,
+    generate_artifact,
+)
 from src.localizer.schemas import (
     ArtifactListResponse,
     GenerateArtifactRequest,
@@ -30,7 +34,13 @@ async def create_artifact(
 
     resource_infos = [_to_resource_info(r) for r in resources]
 
-    content = await generate_artifact(resource_infos, request.artifact_type)
+    try:
+        content = await generate_artifact(resource_infos, request.artifact_type)
+    except NotebookLMConfigurationError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="NotebookLM artifact generation is not configured",
+        ) from exc
 
     artifact = GeneratedArtifact(
         user_id=user_id,

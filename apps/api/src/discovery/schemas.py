@@ -1,5 +1,5 @@
 import uuid
-from typing import Annotated, Literal
+from typing import Annotated, Any, Literal
 
 from pydantic import BaseModel, Field, field_validator
 
@@ -18,7 +18,7 @@ class SearchStageEvent(BaseModel):
     status: Literal["working", "done"]
     resource_url: str | None = None
     cached: bool = False
-    data: dict | None = None
+    data: dict[str, Any] | None = None
 
 
 # --- Source-specific metadata ---
@@ -107,7 +107,7 @@ class GeneratedSearchQueries(BaseModel):
 
     @field_validator("ddgs", "youtube", "openalex", mode="before")
     @classmethod
-    def _clamp_length(cls, v: list) -> list:
+    def _clamp_length(cls, v: list[Any]) -> list[str]:
         if not isinstance(v, list):
             raise ValueError("Expected a list of query strings")
         return [str(q) for q in v if q][:_MAX_QUERIES_PER_PROVIDER]

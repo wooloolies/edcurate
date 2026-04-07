@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime
-from typing import Literal
+from typing import Any, Literal
 
 from pydantic import BaseModel, Field
 
@@ -17,7 +17,7 @@ class GeneratedArtifactResponse(BaseModel):
     id: uuid.UUID
     preset_id: uuid.UUID
     artifact_type: str
-    content: dict
+    content: dict[str, Any]
     source_resource_ids: list[uuid.UUID]
     created_at: datetime
 

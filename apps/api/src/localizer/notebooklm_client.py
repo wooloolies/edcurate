@@ -5,24 +5,23 @@ import tempfile
 import uuid
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 import structlog
 
-logger = structlog.get_logger(__name__)
+from src.lib.config import settings
 
-ARTIFACT_TYPE_ALIAS = {
-    "quiz": "quiz",
-    "mindmap": "mind_map",
-    "summary": "summary",
-    "flashcards": "flashcards",
-}
+logger = structlog.get_logger(__name__)
 
 
 @dataclass(frozen=True)
 class ResourceInfo:
     url: str
     source_type: str  # "webpage" | "video" | "paper"
+
+
+class NotebookLMConfigurationError(RuntimeError):
+    """NotebookLM authentication is not available in this runtime."""
 
 
 async def generate_artifact(
@@ -39,7 +38,16 @@ async def generate_artifact(
     nb_name = f"EdCurate-{uuid.uuid4().hex[:8]}"
     nb_id: str | None = None
 
-    async with await NotebookLMClient.from_storage() as client:
+    try:
+        client_context = await NotebookLMClient.from_storage(
+            path=settings.NOTEBOOKLM_STORAGE_STATE_PATH
+        )
+    except FileNotFoundError as exc:
+        raise NotebookLMConfigurationError(
+            "NotebookLM storage state is not configured"
+        ) from exc
+
+    async with client_context as client:
         try:
             nb = await client.notebooks.create(nb_name)
             nb_id = nb.id
@@ -102,4 +110,9 @@ async def _generate_and_download(
         else:
             raise ValueError(f"Unsupported artifact type: {artifact_type}")
 
-        return json.loads(out_path.read_text(encoding="utf-8"))
+        content = json.loads(out_path.read_text(encoding="utf-8"))
+        if not isinstance(content, dict):
+            raise ValueError(
+                "NotebookLM artifact download did not return a JSON object"
+            )
+        return cast(dict[str, Any], content)

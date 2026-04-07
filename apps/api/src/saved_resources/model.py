@@ -1,5 +1,6 @@
 import uuid as uuid_lib
 from datetime import datetime
+from typing import Any
 
 from sqlalchemy import DateTime, ForeignKey, Index, String, UniqueConstraint, func, text
 from sqlalchemy.dialects.postgresql import JSONB
@@ -86,12 +87,14 @@ class SavedResource(Base):
     )
     resource_url: Mapped[str] = mapped_column(String(2048), nullable=False)
 
-    resource_data: Mapped[dict] = mapped_column(
+    resource_data: Mapped[dict[str, Any]] = mapped_column(
         JSONB,
         nullable=False,
         server_default="{}",
     )
-    evaluation_data: Mapped[dict | None] = mapped_column(JSONB, nullable=True)
+    evaluation_data: Mapped[dict[str, Any] | None] = mapped_column(
+        JSONB, nullable=True
+    )
 
     saved_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),

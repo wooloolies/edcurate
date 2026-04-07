@@ -1,5 +1,6 @@
 import uuid as uuid_lib
 from datetime import datetime
+from typing import Any
 
 from sqlalchemy import DateTime, ForeignKey, Index, String, func, text
 from sqlalchemy.dialects.postgresql import JSONB
@@ -33,12 +34,12 @@ class GeneratedArtifact(Base):
         String(50),
         nullable=False,
     )
-    content: Mapped[dict] = mapped_column(
+    content: Mapped[dict[str, Any]] = mapped_column(
         JSONB,
         nullable=False,
         server_default="{}",
     )
-    source_resource_ids: Mapped[list] = mapped_column(
+    source_resource_ids: Mapped[list[str]] = mapped_column(
         JSONB,
         nullable=False,
         server_default="[]",

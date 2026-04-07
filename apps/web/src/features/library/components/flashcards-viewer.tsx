@@ -50,6 +50,14 @@ export function FlashcardsViewer({ data }: FlashcardsViewerProps) {
       <Card
         className="cursor-pointer min-h-[200px] flex items-center justify-center transition-all hover:shadow-md"
         onClick={() => setFlipped((p) => !p)}
+        onKeyDown={(event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            setFlipped((p) => !p);
+          }
+        }}
+        role="button"
+        tabIndex={0}
       >
         <CardContent className="flex flex-col items-center justify-center p-8 text-center">
           <span className="mb-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">

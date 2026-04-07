@@ -76,6 +76,9 @@ class Settings(BaseSettings):
     YOUTUBE_API_KEY: str | None = None
     OPENALEX_API_KEY: str | None = None
 
+    # NotebookLM (optional)
+    NOTEBOOKLM_STORAGE_STATE_PATH: str | None = None
+
     # Storage (optional)
     STORAGE_BACKEND: Literal["gcs", "s3", "minio"] = "minio"
     GCS_BUCKET_NAME: str | None = None

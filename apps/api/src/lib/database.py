@@ -1,4 +1,5 @@
 from collections.abc import AsyncGenerator
+from typing import Any
 
 from sqlalchemy import MetaData
 from sqlalchemy.ext.asyncio import (
@@ -28,7 +29,7 @@ class Base(DeclarativeBase):
 
 
 # SSL and PgBouncer/Supavisor compat for non-local environments
-_connect_args: dict = {}
+_connect_args: dict[str, Any] = {}
 _is_remote = (
     "localhost" not in settings.DATABASE_URL
     and "127.0.0.1" not in settings.DATABASE_URL
@@ -41,7 +42,7 @@ if _is_remote:
 _pool_class = NullPool if settings.PROJECT_ENV != "local" else None
 
 # Async engine
-_engine_kwargs: dict = {
+_engine_kwargs: dict[str, Any] = {
     "echo": settings.PROJECT_ENV == "local",
     "pool_pre_ping": True,
     "connect_args": _connect_args,

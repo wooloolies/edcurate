@@ -15,6 +15,7 @@ export * from './ddgs-metadata';
 export * from './email-login-request';
 export * from './evaluate-saved-resources-endpoint-api-saved-evaluate-post200';
 export * from './evaluate-single-request';
+export * from './evaluation-result-input';
 export * from './generate-artifact-request';
 export * from './generated-artifact-response';
 export * from './generated-search-queries';
