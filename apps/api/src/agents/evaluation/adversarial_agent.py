@@ -42,6 +42,7 @@ If evidence is thin, say so in review_summary and set verdict to "approved".\
 _USER_TEMPLATE = """\
 TEACHER CONTEXT:
 {teacher_context}
+*(Note: ignore the 'Language' parameter when evaluating risks)*
 
 RESOURCE:
 - Title: {title}

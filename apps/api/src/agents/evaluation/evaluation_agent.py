@@ -11,6 +11,7 @@ You MUST return ONLY valid JSON — no markdown, no explanation outside JSON.
 
 _EVAL_TEMPLATE = """TEACHER CONTEXT:
 {teacher_context}
+*(Note: ignore the 'Language' parameter when scoring resources)*
 
 RESOURCE:
 - Title: {title}
