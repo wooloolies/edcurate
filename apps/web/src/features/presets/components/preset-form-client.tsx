@@ -163,10 +163,10 @@ export function PresetFormClient({ presetId }: PresetFormClientProps) {
     if (isEdit && presetId) {
       updateMutation.mutate(
         { presetId, data: form },
-        { onSuccess: () => router.push("/dashboard/presets") }
+        { onSuccess: () => router.push("/presets") }
       );
     } else {
-      createMutation.mutate({ data: form }, { onSuccess: () => router.push("/dashboard/presets") });
+      createMutation.mutate({ data: form }, { onSuccess: () => router.push("/presets") });
     }
   };
 
@@ -407,7 +407,7 @@ export function PresetFormClient({ presetId }: PresetFormClientProps) {
         <Button type="submit" disabled={isPending}>
           {isPending ? t("saving") : t("savePreset")}
         </Button>
-        <Button type="button" variant="outline" onClick={() => router.push("/dashboard/presets")}>
+        <Button type="button" variant="outline" onClick={() => router.push("/presets")}>
           {tRoot("common.cancel")}
         </Button>
       </div>

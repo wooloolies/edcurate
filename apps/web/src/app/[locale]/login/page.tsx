@@ -54,7 +54,7 @@ export default function LoginPage() {
         });
         setAccessToken(data.access_token);
         setRefreshToken(data.refresh_token);
-        router.push("/dashboard");
+        router.push("/presets");
       } catch (err: unknown) {
         const status = (err as { response?: { status?: number } })?.response?.status;
         if (status === 403) {
@@ -85,7 +85,7 @@ export default function LoginPage() {
         }
         if (data.access_token) setAccessToken(data.access_token);
         if (data.refresh_token) setRefreshToken(data.refresh_token);
-        router.push("/dashboard");
+        router.push("/presets");
       } catch (err: unknown) {
         const msg =
           (err as { response?: { data?: { detail?: string } } })?.response?.data?.detail ??

@@ -82,7 +82,7 @@ export function UserMenu() {
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onSelect={() => router.push("/dashboard/profile")}>
+        <DropdownMenuItem onSelect={() => router.push("/profile")}>
           {t("profile")}
         </DropdownMenuItem>
         <DropdownMenuSeparator />

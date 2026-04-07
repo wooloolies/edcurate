@@ -66,13 +66,13 @@ export function PresetCard({ preset }: PresetCardProps) {
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm" asChild>
-            <Link href={`/dashboard/presets/${preset.id}/edit`}>
+            <Link href={`/presets/${preset.id}/edit`}>
               <Pencil className="mr-1 h-3 w-3" />
               {t("editPreset")}
             </Link>
           </Button>
           <Button variant="outline" size="sm" asChild>
-            <Link href={`/dashboard?tab=search&preset_id=${preset.id}`}>
+            <Link href={`/search?preset_id=${preset.id}`}>
               <Search className="mr-1 h-3 w-3" />
               {t("searchWithPreset")}
             </Link>

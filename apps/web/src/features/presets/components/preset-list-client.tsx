@@ -19,7 +19,7 @@ export function PresetListClient() {
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">{t("title")}</h1>
         <Button asChild>
-          <Link href="/dashboard/presets/new">
+          <Link href="/presets/new">
             <Plus className="mr-1 h-4 w-4" />
             {t("newPreset")}
           </Link>
@@ -37,7 +37,7 @@ export function PresetListClient() {
         <div className="rounded-lg border border-dashed p-12 text-center">
           <p className="text-muted-foreground">{t("emptyState")}</p>
           <Button className="mt-4" asChild>
-            <Link href="/dashboard/presets/new">
+            <Link href="/presets/new">
               <Plus className="mr-1 h-4 w-4" />
               {t("createPreset")}
             </Link>
