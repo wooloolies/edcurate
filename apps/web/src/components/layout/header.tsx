@@ -36,15 +36,15 @@ export function Header() {
       <div className="flex-1 hidden md:block" />
 
       {/* ===== Desktop nav ===== */}
-      <nav className="hidden md:flex mx-auto w-fit items-center gap-8 rounded-[2.5rem] bg-white/60 px-8 py-3 backdrop-blur-xl shadow-[0_4px_32px_rgba(0,0,0,0.04)] border border-white/60">
-        <Link href="/" className="font-bold text-xl tracking-tight mr-2">
-          Edcurate
+      <nav className="hidden md:flex mx-auto w-fit items-center gap-10 rounded-[2.5rem] bg-white/60 px-10 py-4 backdrop-blur-xl shadow-[0_4px_32px_rgba(0,0,0,0.04)] border border-white/60">
+        <Link href="/" className="font-bold text-2xl tracking-tight mr-2">
+          <span className="text-blue-600">Ed</span>curate
         </Link>
         {NAV_LINKS.map((link) => (
           <Link
             key={link.href}
             href={link.href}
-            className="text-sm font-medium text-gray-500 hover:text-black transition-colors"
+            className="text-base font-medium text-gray-500 hover:text-black transition-colors"
           >
             {link.label}
           </Link>
@@ -54,7 +54,7 @@ export function Header() {
         ) : (
           <Link
             href="/login"
-            className="text-sm font-semibold bg-brand-green text-brand-ink px-6 py-2.5 rounded-[2rem] hover:bg-brand-ink hover:text-white transition-all ml-2 shadow-sm"
+            className="text-base font-semibold bg-[#B7FF70] text-[#111827] px-7 py-3 rounded-[2rem] hover:bg-[#111827] hover:text-white transition-all ml-2 shadow-sm"
           >
             Sign in
           </Link>

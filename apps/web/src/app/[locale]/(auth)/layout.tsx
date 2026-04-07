@@ -30,7 +30,7 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
         <div className="hidden md:flex flex-col justify-between w-full md:w-1/2 p-10 lg:p-14 relative overflow-hidden bg-[#F0FDF4] rounded-[2rem] shadow-xl shadow-black/10 border border-black/5">
           <LineCanvasBackground />
           <div className="relative z-10 flex items-center gap-2 mt-4 ml-2">
-            <span className="font-bold text-2xl text-[#111827] tracking-tight">Edcurate</span>
+            <span className="font-bold text-2xl text-[#111827] tracking-tight"><span className="text-blue-600">Ed</span>curate</span>
           </div>
           <div className="relative z-10 w-full max-w-lg mb-10 ml-2 pointer-events-none">
             <h2 className="text-4xl lg:text-[2.7rem] font-bold tracking-tight text-[#111827] leading-[1.1]">
