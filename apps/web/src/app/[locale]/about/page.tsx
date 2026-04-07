@@ -1,6 +1,7 @@
 import type { Locale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Header } from "@/components/layout/header";
+import { CanvasBackground } from "@/components/ui/canvas-background";
 
 interface AboutPageProps {
   params: Promise<{ locale: string }>;
@@ -39,7 +40,8 @@ export default async function AboutPage({ params }: AboutPageProps) {
   const t = await getTranslations("team");
 
   return (
-    <div className="relative min-h-screen bg-[#F8F9FA] text-[#111827] font-sans">
+    <div className="relative min-h-screen bg-[#F8F9FA] overflow-hidden text-[#111827] font-sans">
+      <CanvasBackground />
       <Header />
 
       <main className="relative z-10 mx-auto max-w-5xl px-4 pt-32 pb-16">

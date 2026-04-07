@@ -2,7 +2,8 @@
 
 import { useForm } from "@tanstack/react-form";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { z } from "zod";
 import { ArrowLeft } from "lucide-react";
 
@@ -38,8 +39,9 @@ type MessageResponse = {
 export default function LoginPage() {
   const t = useTranslations("login");
   const router = useRouter();
-  // We keep mode defaulting to sign up as requested in the reference image
-  const [mode, setMode] = useState<Mode>("signUp");
+  const searchParams = useSearchParams();
+  const initialMode = searchParams.get("mode") === "signin" ? "signIn" : "signUp";
+  const [mode, setMode] = useState<Mode>(initialMode);
   const [error, setError] = useState("");
   const [pendingEmail, setPendingEmail] = useState("");
   const [resendMessage, setResendMessage] = useState("");

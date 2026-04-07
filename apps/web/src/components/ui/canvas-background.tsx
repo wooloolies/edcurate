@@ -55,7 +55,7 @@ export function CanvasBackground() {
             offsetY: Math.random() * 20 - 10,
             vx: Math.random() * 0.5 - 0.25,
             vy: Math.random() * 0.5 - 0.25,
-            nodeId: `ND-${(counter++).toString().padStart(3, '0')}` // Digital identifier
+            nodeId: `ED-${(counter++).toString().padStart(3, '0')}` // Digital identifier
           });
         }
       }

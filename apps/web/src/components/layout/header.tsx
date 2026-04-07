@@ -13,7 +13,7 @@ export function Header() {
         <Link href="/about" className="text-sm font-medium text-gray-500 hover:text-black transition-colors">About us</Link>
         <Link href="/collections" className="text-sm font-medium text-gray-500 hover:text-black transition-colors">Your collection</Link>
         <Link href="/contact" className="text-sm font-medium text-gray-500 hover:text-black transition-colors">Contact Us</Link>
-        <Link href="/login" className="text-sm font-semibold bg-[#B7FF70] text-[#111827] px-6 py-2.5 rounded-[2rem] hover:bg-[#111827] hover:text-white transition-all ml-2 shadow-sm">Sign in</Link>
+        <Link href="/login?mode=signin" className="text-sm font-semibold bg-[#B7FF70] text-[#111827] px-6 py-2.5 rounded-[2rem] hover:bg-[#111827] hover:text-white transition-all ml-2 shadow-sm">Sign in</Link>
       </nav>
 
       {/* Right corner: Language Switcher */}
