@@ -431,6 +431,34 @@
   "@home__startResearch": {
     "description": "Homepage button to start research"
   },
+  "home__featureTagYear": "7~12학년",
+  "@home__featureTagYear": {
+    "description": "Homepage feature tag for supported year levels"
+  },
+  "home__featureTagDesigner": "커리큘럼 디자이너",
+  "@home__featureTagDesigner": {
+    "description": "Homepage feature tag for curriculum design"
+  },
+  "home__featureTagGlobal": "전 세계",
+  "@home__featureTagGlobal": {
+    "description": "Homepage feature tag for global reach"
+  },
+  "overview__defaultTitle": "자료 개요",
+  "@overview__defaultTitle": {
+    "description": "Default title for overview page"
+  },
+  "overview__defaultType": "문서",
+  "@overview__defaultType": {
+    "description": "Default type label for overview page"
+  },
+  "overview__comingSoonTitle": "상세 분석 준비 중",
+  "@overview__comingSoonTitle": {
+    "description": "Coming soon heading on overview page"
+  },
+  "overview__comingSoonDescription": "이 페이지에서 AI 기반 분석 결과를 확인할 수 있습니다. 교육과정 정합성, 교수법적 근거, 근거 추출 등을 포함합니다.",
+  "@overview__comingSoonDescription": {
+    "description": "Coming soon description on overview page"
+  },
   "errors__title": "오류",
   "@errors__title": {
     "description": "Generic error page title"
@@ -550,6 +578,30 @@
   "search__savedError": "자료 저장에 실패했습니다",
   "@search__savedError": {
     "description": "Error message when saving resources fails"
+  },
+  "search__overview": "개요",
+  "@search__overview": {
+    "description": "Overview button label on resource cards"
+  },
+  "search__changePreset": "프리셋 변경",
+  "@search__changePreset": {
+    "description": "Aria label for preset picker button"
+  },
+  "search__bookmark__save": "저장",
+  "@search__bookmark__save": {
+    "description": "Save button label on resource cards"
+  },
+  "search__bookmark__saved": "저장됨",
+  "@search__bookmark__saved": {
+    "description": "Saved state label on resource cards"
+  },
+  "search__bookmark__saveLabel": "라이브러리에 저장",
+  "@search__bookmark__saveLabel": {
+    "description": "Accessible label for save button"
+  },
+  "search__bookmark__removeLabel": "라이브러리에서 제거",
+  "@search__bookmark__removeLabel": {
+    "description": "Accessible label for remove button"
   },
   "search__clearSelection": "선택 해제",
   "@search__clearSelection": {

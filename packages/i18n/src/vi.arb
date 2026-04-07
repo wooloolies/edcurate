@@ -431,6 +431,34 @@
   "@home__startResearch": {
     "description": "Homepage button to start research"
   },
+  "home__featureTagYear": "Lớp 7 đến 12",
+  "@home__featureTagYear": {
+    "description": "Homepage feature tag for supported year levels"
+  },
+  "home__featureTagDesigner": "Nhà thiết kế chương trình",
+  "@home__featureTagDesigner": {
+    "description": "Homepage feature tag for curriculum design"
+  },
+  "home__featureTagGlobal": "Toàn cầu",
+  "@home__featureTagGlobal": {
+    "description": "Homepage feature tag for global reach"
+  },
+  "overview__defaultTitle": "Tổng quan tài liệu",
+  "@overview__defaultTitle": {
+    "description": "Default title for overview page"
+  },
+  "overview__defaultType": "Tài liệu",
+  "@overview__defaultType": {
+    "description": "Default type label for overview page"
+  },
+  "overview__comingSoonTitle": "Phân tích chi tiết sắp ra mắt",
+  "@overview__comingSoonTitle": {
+    "description": "Coming soon heading on overview page"
+  },
+  "overview__comingSoonDescription": "Trang này sẽ hiển thị phân tích do AI tạo ra về tài liệu, bao gồm sự phù hợp với chương trình giảng dạy, lý luận sư phạm và trích xuất bằng chứng.",
+  "@overview__comingSoonDescription": {
+    "description": "Coming soon description on overview page"
+  },
   "errors__title": "Lỗi",
   "@errors__title": {
     "description": "Generic error page title"
@@ -550,6 +578,30 @@
   "search__savedError": "Không thể lưu tài nguyên",
   "@search__savedError": {
     "description": "Error message when saving resources fails"
+  },
+  "search__overview": "Tổng quan",
+  "@search__overview": {
+    "description": "Overview button label on resource cards"
+  },
+  "search__changePreset": "Thay đổi preset",
+  "@search__changePreset": {
+    "description": "Aria label for preset picker button"
+  },
+  "search__bookmark__save": "Lưu",
+  "@search__bookmark__save": {
+    "description": "Save button label on resource cards"
+  },
+  "search__bookmark__saved": "Đã lưu",
+  "@search__bookmark__saved": {
+    "description": "Saved state label on resource cards"
+  },
+  "search__bookmark__saveLabel": "Lưu vào thư viện",
+  "@search__bookmark__saveLabel": {
+    "description": "Accessible label for save button"
+  },
+  "search__bookmark__removeLabel": "Xóa khỏi thư viện",
+  "@search__bookmark__removeLabel": {
+    "description": "Accessible label for remove button"
   },
   "search__clearSelection": "Bỏ chọn",
   "@search__clearSelection": {

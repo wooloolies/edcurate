@@ -431,6 +431,34 @@
   "@home__startResearch": {
     "description": "Homepage button to start research"
   },
+  "home__featureTagYear": "ปี 7 ถึง 12",
+  "@home__featureTagYear": {
+    "description": "Homepage feature tag for supported year levels"
+  },
+  "home__featureTagDesigner": "นักออกแบบหลักสูตร",
+  "@home__featureTagDesigner": {
+    "description": "Homepage feature tag for curriculum design"
+  },
+  "home__featureTagGlobal": "ทั่วโลก",
+  "@home__featureTagGlobal": {
+    "description": "Homepage feature tag for global reach"
+  },
+  "overview__defaultTitle": "ภาพรวมทรัพยากร",
+  "@overview__defaultTitle": {
+    "description": "Default title for overview page"
+  },
+  "overview__defaultType": "เอกสาร",
+  "@overview__defaultType": {
+    "description": "Default type label for overview page"
+  },
+  "overview__comingSoonTitle": "การวิเคราะห์โดยละเอียดเร็ว ๆ นี้",
+  "@overview__comingSoonTitle": {
+    "description": "Coming soon heading on overview page"
+  },
+  "overview__comingSoonDescription": "หน้านี้จะแสดงการวิเคราะห์ที่สร้างโดย AI ของทรัพยากร รวมถึงความสอดคล้องกับหลักสูตร เหตุผลทางการสอน และการสกัดหลักฐาน",
+  "@overview__comingSoonDescription": {
+    "description": "Coming soon description on overview page"
+  },
   "errors__title": "ข้อผิดพลาด",
   "@errors__title": {
     "description": "Generic error page title"
@@ -550,6 +578,30 @@
   "search__savedError": "ไม่สามารถบันทึกสื่อได้",
   "@search__savedError": {
     "description": "Error message when saving resources fails"
+  },
+  "search__overview": "ภาพรวม",
+  "@search__overview": {
+    "description": "Overview button label on resource cards"
+  },
+  "search__changePreset": "เปลี่ยนพรีเซ็ต",
+  "@search__changePreset": {
+    "description": "Aria label for preset picker button"
+  },
+  "search__bookmark__save": "บันทึก",
+  "@search__bookmark__save": {
+    "description": "Save button label on resource cards"
+  },
+  "search__bookmark__saved": "บันทึกแล้ว",
+  "@search__bookmark__saved": {
+    "description": "Saved state label on resource cards"
+  },
+  "search__bookmark__saveLabel": "บันทึกไปยังไลบรารี",
+  "@search__bookmark__saveLabel": {
+    "description": "Accessible label for save button"
+  },
+  "search__bookmark__removeLabel": "ลบออกจากไลบรารี",
+  "@search__bookmark__removeLabel": {
+    "description": "Accessible label for remove button"
   },
   "search__clearSelection": "ล้างการเลือก",
   "@search__clearSelection": {
