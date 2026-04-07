@@ -139,6 +139,7 @@ async def _run_rag_pipeline(
     preset: ClassroomPreset,
     query: str,
     search_id: str,
+    eval_vector: list[float] | None = None,
 ) -> list[EvaluationResult]:
     """Run the full RAG pipeline on top-4 resources.
 
@@ -192,15 +193,18 @@ async def _run_rag_pipeline(
                 error=str(e),
             )
 
-    # Step 4: Build and embed BOTH queries in parallel
-    eval_query_text = _build_eval_query(preset, query)
+    # Step 4: Embed queries — reuse eval_vector if provided by pre-sort
     hybrid_text = build_adversarial_hybrid_query_text(preset, query)
 
     try:
-        eval_vector, adv_vector = await asyncio.gather(
-            embed_single(eval_query_text),
-            embed_single(hybrid_text),
-        )
+        if eval_vector is None:
+            eval_query_text = _build_eval_query(preset, query)
+            eval_vector, adv_vector = await asyncio.gather(
+                embed_single(eval_query_text),
+                embed_single(hybrid_text),
+            )
+        else:
+            adv_vector = await embed_single(hybrid_text)
     except Exception as e:
         logger.error("Query embedding failed", error=str(e))
         return []
