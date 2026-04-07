@@ -4,10 +4,8 @@ from uuid import uuid4
 
 import httpx
 import pytest
-from fastapi import HTTPException
 from sqlalchemy.dialects import postgresql
 
-from src.agents.schemas import DimensionScore, EvaluationResult
 from src.discovery.schemas import CustomMetadata, ResourceCard
 from src.saved_resources.schemas import AddCustomLinkRequest
 from src.saved_resources.service import _dump_eval_data, add_custom_link
@@ -68,7 +66,8 @@ class _DB:
                 raise AssertionError("Unexpected DB.execute call")
 
 
-def test_dump_eval_data_rejects_mismatched_resource_url() -> None:
+def test_dump_eval_data_returns_none() -> None:
+    """_dump_eval_data always returns None — evaluation is now server-side only."""
     resource = ResourceCard(
         title="Fractions resource",
         url="https://example.com/fractions",
@@ -77,18 +76,7 @@ def test_dump_eval_data_rejects_mismatched_resource_url() -> None:
         snippet="example.com",
         metadata=CustomMetadata(domain="example.com"),
     )
-    evaluation = EvaluationResult(
-        resource_url="https://example.com/other",
-        overall_score=8,
-        relevance_reason="Strong fit",
-        recommended_use="supplementary",
-        scores={"curriculum_alignment": DimensionScore(score=8, reason="Aligned")},
-    )
-
-    with pytest.raises(HTTPException) as exc_info:
-        _dump_eval_data(evaluation, resource)
-
-    assert exc_info.value.status_code == 400
+    assert _dump_eval_data(resource) is None
 
 
 @pytest.mark.asyncio
