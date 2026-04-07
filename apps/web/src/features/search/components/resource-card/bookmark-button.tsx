@@ -1,7 +1,7 @@
 "use client";
 
 import { useQueryClient } from "@tanstack/react-query";
-import { Bookmark } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useQueryState } from "nuqs";
 import { toast } from "sonner";
 
@@ -27,6 +27,7 @@ export function BookmarkButton({
   checked,
   onToggleChecked,
 }: BookmarkButtonProps) {
+  const t = useTranslations("search");
   const queryClient = useQueryClient();
   const { data: savedData, isFetching: isLoadingList } = useListSavedResourcesEndpointApiSavedGet();
   const { mutateAsync: saveResource, isPending: isSaving } = useSaveResourceEndpointApiSavedPost();
@@ -94,13 +95,12 @@ export function BookmarkButton({
       variant="default"
       onClick={handleToggle}
       disabled={isPending}
+      aria-label={isSaved ? t("bookmark.removeLabel") : t("bookmark.saveLabel")}
       className={`rounded-full px-5 py-2 text-sm font-bold shadow-sm transition-all duration-300 hover:scale-105 active:scale-95 text-white border-0 ${
-        isSaved
-          ? "bg-slate-900"
-          : "bg-black btn-rainbow-hover"
+        isSaved ? "bg-slate-900" : "bg-black btn-rainbow-hover"
       }`}
     >
-      {isSaved ? "Saved" : "Save"}
+      {isSaved ? t("bookmark.saved") : t("bookmark.save")}
     </Button>
   );
 }

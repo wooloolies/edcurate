@@ -142,7 +142,12 @@ body {
   background-size: 300% 300%;
   opacity: 0;
   transition: opacity 0.3s ease;
-  animation: rainbow-shift 4s ease infinite;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .btn-rainbow-hover::before {
+    animation: rainbow-shift 4s ease infinite;
+  }
 }
 
 .btn-rainbow-hover:hover::before {

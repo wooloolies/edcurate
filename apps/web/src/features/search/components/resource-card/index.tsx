@@ -1,9 +1,10 @@
-import { Link } from "@/lib/i18n/routing";
+import { useTranslations } from "next-intl";
 import { CustomCard } from "@/features/search/components/resource-card/custom-card";
 import { DdgsCard } from "@/features/search/components/resource-card/ddgs-card";
 import { OpenAlexCard } from "@/features/search/components/resource-card/open-alex-card";
 import { YoutubeCard } from "@/features/search/components/resource-card/youtube-card";
 import type { ResourceCard } from "@/lib/api/model";
+import { Link } from "@/lib/i18n/routing";
 
 interface ResourceCardRendererProps {
   index: number;
@@ -25,6 +26,7 @@ export function ResourceCardRenderer({
   onToggleChecked,
   customAction,
 }: ResourceCardRendererProps & { customAction?: React.ReactNode }) {
+  const t = useTranslations("search");
   const isSearchPageMode = checked !== undefined && onToggleChecked !== undefined;
 
   let action: React.ReactNode;
@@ -39,7 +41,7 @@ export function ResourceCardRenderer({
           target="_blank"
           className="rounded-full px-5 py-2 text-sm font-bold shadow-sm transition-transform hover:scale-105 active:scale-95 bg-slate-100 text-slate-800 hover:bg-slate-200 border border-slate-200 whitespace-nowrap"
         >
-          Overview
+          {t("overview")}
         </Link>
         <BookmarkButton
           presetId={presetId}

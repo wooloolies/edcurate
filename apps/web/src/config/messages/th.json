@@ -152,6 +152,14 @@
     "saving": "กำลังบันทึก...",
     "savedSuccess": "บันทึกลงคลังสื่อแล้ว!",
     "savedError": "ไม่สามารถบันทึกสื่อได้",
+    "overview": "ภาพรวม",
+    "changePreset": "เปลี่ยนพรีเซ็ต",
+    "bookmark": {
+      "save": "บันทึก",
+      "saved": "บันทึกแล้ว",
+      "saveLabel": "บันทึกไปยังไลบรารี",
+      "removeLabel": "ลบออกจากไลบรารี"
+    },
     "clearSelection": "ล้างการเลือก",
     "remainingResources": "ยังมี {count} รายการที่ยังไม่ได้ประเมิน",
     "evaluateNext": "ประเมิน {count} รายการถัดไป",
@@ -300,7 +308,16 @@
     "tagline": "การค้นหาและปรับใช้ทรัพยากรตามบริบทสำหรับครูผู้สอน",
     "heroTitlePart1": "เครื่องมือการปรับใช้",
     "heroTitlePart2": "สำหรับครูผู้สอน",
-    "startResearch": "เริ่มการวิจัยของคุณ"
+    "startResearch": "เริ่มการวิจัยของคุณ",
+    "featureTagYear": "ปี 7 ถึง 12",
+    "featureTagDesigner": "นักออกแบบหลักสูตร",
+    "featureTagGlobal": "ทั่วโลก"
+  },
+  "overview": {
+    "defaultTitle": "ภาพรวมทรัพยากร",
+    "defaultType": "เอกสาร",
+    "comingSoonTitle": "การวิเคราะห์โดยละเอียดเร็ว ๆ นี้",
+    "comingSoonDescription": "หน้านี้จะแสดงการวิเคราะห์ที่สร้างโดย AI ของทรัพยากร รวมถึงความสอดคล้องกับหลักสูตร เหตุผลทางการสอน และการสกัดหลักฐาน"
   },
   "errors": {
     "title": "ข้อผิดพลาด",
