@@ -664,6 +664,22 @@
   "@search__classroom__bubbles__bear__done": {
     "description": "Bear agent speech bubble when done"
   },
+  "search__classroom__bubbles__bear__working2": "检查课程适配度...",
+  "@search__classroom__bubbles__bear__working2": {
+    "description": "Bear agent cycling hint 1 while evaluating"
+  },
+  "search__classroom__bubbles__bear__working3": "评估阅读水平...",
+  "@search__classroom__bubbles__bear__working3": {
+    "description": "Bear agent cycling hint 2 while evaluating"
+  },
+  "search__classroom__bubbles__bear__working4": "核实事实准确性...",
+  "@search__classroom__bubbles__bear__working4": {
+    "description": "Bear agent cycling hint 3 while evaluating"
+  },
+  "search__classroom__bubbles__bear__working5": "评估来源质量...",
+  "@search__classroom__bubbles__bear__working5": {
+    "description": "Bear agent cycling hint 4 while evaluating"
+  },
   "search__classroom__bubbles__rabbit__working": "正在检查偏差...",
   "@search__classroom__bubbles__rabbit__working": {
     "description": "Rabbit agent speech bubble while working"
@@ -671,6 +687,22 @@
   "search__classroom__bubbles__rabbit__done": "审查完毕！",
   "@search__classroom__bubbles__rabbit__done": {
     "description": "Rabbit agent speech bubble when done"
+  },
+  "search__classroom__bubbles__rabbit__working2": "扫描隐藏偏见...",
+  "@search__classroom__bubbles__rabbit__working2": {
+    "description": "Rabbit agent cycling hint 1 while evaluating"
+  },
+  "search__classroom__bubbles__rabbit__working3": "验证许可证...",
+  "@search__classroom__bubbles__rabbit__working3": {
+    "description": "Rabbit agent cycling hint 2 while evaluating"
+  },
+  "search__classroom__bubbles__rabbit__working4": "交叉核实声明...",
+  "@search__classroom__bubbles__rabbit__working4": {
+    "description": "Rabbit agent cycling hint 3 while evaluating"
+  },
+  "search__classroom__bubbles__rabbit__working5": "寻找危险信号...",
+  "@search__classroom__bubbles__rabbit__working5": {
+    "description": "Rabbit agent cycling hint 4 while evaluating"
   },
   "search__evaluation__unevaluated": "未评估",
   "@search__evaluation__unevaluated": {

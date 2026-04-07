@@ -688,6 +688,22 @@
   "@search__classroom__bubbles__bear__done": {
     "description": "Bear agent speech bubble when done"
   },
+  "search__classroom__bubbles__bear__working2": "Checking curriculum fit...",
+  "@search__classroom__bubbles__bear__working2": {
+    "description": "Bear agent cycling hint 1 while evaluating"
+  },
+  "search__classroom__bubbles__bear__working3": "Assessing reading level...",
+  "@search__classroom__bubbles__bear__working3": {
+    "description": "Bear agent cycling hint 2 while evaluating"
+  },
+  "search__classroom__bubbles__bear__working4": "Reviewing factual accuracy...",
+  "@search__classroom__bubbles__bear__working4": {
+    "description": "Bear agent cycling hint 3 while evaluating"
+  },
+  "search__classroom__bubbles__bear__working5": "Evaluating source quality...",
+  "@search__classroom__bubbles__bear__working5": {
+    "description": "Bear agent cycling hint 4 while evaluating"
+  },
   "search__classroom__bubbles__rabbit__working": "Checking for bias...",
   "@search__classroom__bubbles__rabbit__working": {
     "description": "Rabbit agent speech bubble while working"
@@ -695,6 +711,22 @@
   "search__classroom__bubbles__rabbit__done": "Review done!",
   "@search__classroom__bubbles__rabbit__done": {
     "description": "Rabbit agent speech bubble when done"
+  },
+  "search__classroom__bubbles__rabbit__working2": "Scanning for hidden bias...",
+  "@search__classroom__bubbles__rabbit__working2": {
+    "description": "Rabbit agent cycling hint 1 while evaluating"
+  },
+  "search__classroom__bubbles__rabbit__working3": "Verifying licensing...",
+  "@search__classroom__bubbles__rabbit__working3": {
+    "description": "Rabbit agent cycling hint 2 while evaluating"
+  },
+  "search__classroom__bubbles__rabbit__working4": "Cross-checking claims...",
+  "@search__classroom__bubbles__rabbit__working4": {
+    "description": "Rabbit agent cycling hint 3 while evaluating"
+  },
+  "search__classroom__bubbles__rabbit__working5": "Looking for red flags...",
+  "@search__classroom__bubbles__rabbit__working5": {
+    "description": "Rabbit agent cycling hint 4 while evaluating"
   },
   "search__evaluation__unevaluated": "Unevaluated",
   "@search__evaluation__unevaluated": {

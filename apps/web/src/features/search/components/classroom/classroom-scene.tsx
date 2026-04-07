@@ -22,23 +22,6 @@ const STAGE_KEY: Record<Stage, string> = {
   complete: "complete",
 };
 
-/** Extra cycling messages for long-running working states (hardcoded English
- *  is fine — these are supplementary hints, the primary message comes from i18n) */
-const WORKING_HINTS: Record<string, string[]> = {
-  bear: [
-    "Checking curriculum fit...",
-    "Assessing reading level...",
-    "Reviewing factual accuracy...",
-    "Evaluating source quality...",
-  ],
-  rabbit: [
-    "Scanning for hidden bias...",
-    "Verifying licensing...",
-    "Cross-checking claims...",
-    "Looking for red flags...",
-  ],
-};
-
 function resolveStatus(
   status: StageStatus | undefined,
   isCached: boolean,
@@ -69,11 +52,16 @@ export function ClassroomScene({ stages, activeStage, isCached }: ClassroomScene
   ): string | string[] | null => {
     if (!status) return null;
     if (status === "done") return tBubbles(`${character}.${status}`);
-    // working — return array with primary message + hints for cycling
+    // working — collect primary + working2..working5 from i18n
     const primary = tBubbles(`${character}.working`);
-    const hints = WORKING_HINTS[character];
-    if (hints) return [primary, ...hints];
-    return primary;
+    const hints: string[] = [primary];
+    for (let i = 2; i <= 5; i++) {
+      const key = `${character}.working${i}`;
+      if (tBubbles.has(key)) {
+        hints.push(tBubbles(key));
+      }
+    }
+    return hints.length > 1 ? hints : primary;
   };
 
   return (

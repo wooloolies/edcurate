@@ -191,11 +191,19 @@
         },
         "bear": {
           "working": "Scoring resources...",
-          "done": "All scored!"
+          "done": "All scored!",
+          "working2": "Checking curriculum fit...",
+          "working3": "Assessing reading level...",
+          "working4": "Reviewing factual accuracy...",
+          "working5": "Evaluating source quality..."
         },
         "rabbit": {
           "working": "Checking for bias...",
-          "done": "Review done!"
+          "done": "Review done!",
+          "working2": "Scanning for hidden bias...",
+          "working3": "Verifying licensing...",
+          "working4": "Cross-checking claims...",
+          "working5": "Looking for red flags..."
         }
       }
     },

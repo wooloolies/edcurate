@@ -664,6 +664,22 @@
   "@search__classroom__bubbles__bear__done": {
     "description": "Bear agent speech bubble when done"
   },
+  "search__classroom__bubbles__bear__working2": "Kiểm tra sự phù hợp chương trình...",
+  "@search__classroom__bubbles__bear__working2": {
+    "description": "Bear agent cycling hint 1 while evaluating"
+  },
+  "search__classroom__bubbles__bear__working3": "Đánh giá trình độ đọc...",
+  "@search__classroom__bubbles__bear__working3": {
+    "description": "Bear agent cycling hint 2 while evaluating"
+  },
+  "search__classroom__bubbles__bear__working4": "Xác minh độ chính xác...",
+  "@search__classroom__bubbles__bear__working4": {
+    "description": "Bear agent cycling hint 3 while evaluating"
+  },
+  "search__classroom__bubbles__bear__working5": "Đánh giá chất lượng nguồn...",
+  "@search__classroom__bubbles__bear__working5": {
+    "description": "Bear agent cycling hint 4 while evaluating"
+  },
   "search__classroom__bubbles__rabbit__working": "Đang kiểm tra thiên lệch...",
   "@search__classroom__bubbles__rabbit__working": {
     "description": "Rabbit agent speech bubble while working"
@@ -671,6 +687,22 @@
   "search__classroom__bubbles__rabbit__done": "Đánh giá xong!",
   "@search__classroom__bubbles__rabbit__done": {
     "description": "Rabbit agent speech bubble when done"
+  },
+  "search__classroom__bubbles__rabbit__working2": "Quét thiên lệch ẩn...",
+  "@search__classroom__bubbles__rabbit__working2": {
+    "description": "Rabbit agent cycling hint 1 while evaluating"
+  },
+  "search__classroom__bubbles__rabbit__working3": "Xác minh bản quyền...",
+  "@search__classroom__bubbles__rabbit__working3": {
+    "description": "Rabbit agent cycling hint 2 while evaluating"
+  },
+  "search__classroom__bubbles__rabbit__working4": "Đối chiếu các tuyên bố...",
+  "@search__classroom__bubbles__rabbit__working4": {
+    "description": "Rabbit agent cycling hint 3 while evaluating"
+  },
+  "search__classroom__bubbles__rabbit__working5": "Tìm dấu hiệu cảnh báo...",
+  "@search__classroom__bubbles__rabbit__working5": {
+    "description": "Rabbit agent cycling hint 4 while evaluating"
   },
   "search__evaluation__unevaluated": "Chưa đánh giá",
   "@search__evaluation__unevaluated": {

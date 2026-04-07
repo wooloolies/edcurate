@@ -664,6 +664,22 @@
   "@search__classroom__bubbles__bear__done": {
     "description": "Bear agent speech bubble when done"
   },
+  "search__classroom__bubbles__bear__working2": "교육과정 적합성 확인 중...",
+  "@search__classroom__bubbles__bear__working2": {
+    "description": "Bear agent cycling hint 1 while evaluating"
+  },
+  "search__classroom__bubbles__bear__working3": "읽기 수준 평가 중...",
+  "@search__classroom__bubbles__bear__working3": {
+    "description": "Bear agent cycling hint 2 while evaluating"
+  },
+  "search__classroom__bubbles__bear__working4": "사실 정확도 검토 중...",
+  "@search__classroom__bubbles__bear__working4": {
+    "description": "Bear agent cycling hint 3 while evaluating"
+  },
+  "search__classroom__bubbles__bear__working5": "출처 품질 평가 중...",
+  "@search__classroom__bubbles__bear__working5": {
+    "description": "Bear agent cycling hint 4 while evaluating"
+  },
   "search__classroom__bubbles__rabbit__working": "편향 검사 중...",
   "@search__classroom__bubbles__rabbit__working": {
     "description": "Rabbit agent speech bubble while working"
@@ -671,6 +687,22 @@
   "search__classroom__bubbles__rabbit__done": "검토 끝!",
   "@search__classroom__bubbles__rabbit__done": {
     "description": "Rabbit agent speech bubble when done"
+  },
+  "search__classroom__bubbles__rabbit__working2": "숨겨진 편향 탐지 중...",
+  "@search__classroom__bubbles__rabbit__working2": {
+    "description": "Rabbit agent cycling hint 1 while evaluating"
+  },
+  "search__classroom__bubbles__rabbit__working3": "라이선스 확인 중...",
+  "@search__classroom__bubbles__rabbit__working3": {
+    "description": "Rabbit agent cycling hint 2 while evaluating"
+  },
+  "search__classroom__bubbles__rabbit__working4": "주장 교차 검증 중...",
+  "@search__classroom__bubbles__rabbit__working4": {
+    "description": "Rabbit agent cycling hint 3 while evaluating"
+  },
+  "search__classroom__bubbles__rabbit__working5": "위험 요소 탐색 중...",
+  "@search__classroom__bubbles__rabbit__working5": {
+    "description": "Rabbit agent cycling hint 4 while evaluating"
   },
   "search__evaluation__unevaluated": "미평가",
   "@search__evaluation__unevaluated": {

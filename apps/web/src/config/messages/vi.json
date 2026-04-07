@@ -191,11 +191,19 @@
         },
         "bear": {
           "working": "Đang chấm điểm...",
-          "done": "Chấm điểm xong!"
+          "done": "Chấm điểm xong!",
+          "working2": "Kiểm tra sự phù hợp chương trình...",
+          "working3": "Đánh giá trình độ đọc...",
+          "working4": "Xác minh độ chính xác...",
+          "working5": "Đánh giá chất lượng nguồn..."
         },
         "rabbit": {
           "working": "Đang kiểm tra thiên lệch...",
-          "done": "Đánh giá xong!"
+          "done": "Đánh giá xong!",
+          "working2": "Quét thiên lệch ẩn...",
+          "working3": "Xác minh bản quyền...",
+          "working4": "Đối chiếu các tuyên bố...",
+          "working5": "Tìm dấu hiệu cảnh báo..."
         }
       }
     },
