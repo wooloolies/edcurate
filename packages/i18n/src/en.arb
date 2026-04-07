@@ -589,6 +589,10 @@
   "@search__savedError": {
     "description": "Error message when saving resources fails"
   },
+  "search__cancel": "Cancel",
+  "@search__cancel": {
+    "description": "Cancel button label in search dialogs"
+  },
   "search__clearSelection": "Clear selection",
   "@search__clearSelection": {
     "description": "Button to clear resource selection"
@@ -1099,5 +1103,175 @@
   "contact__location": "Location",
   "@contact__location": { "description": "Location section heading" },
   "contact__teamEmails": "Team Emails",
-  "@contact__teamEmails": { "description": "Team emails section heading" }
+  "@contact__teamEmails": { "description": "Team emails section heading" },
+  "search__evaluation__verdicts__use_it": "Use it",
+  "@search__evaluation__verdicts__use_it": {
+    "description": "Verdict badge label when the resource should be used as-is"
+  },
+  "search__evaluation__verdicts__adapt_it": "Adapt it",
+  "@search__evaluation__verdicts__adapt_it": {
+    "description": "Verdict badge label when the resource needs adaptation"
+  },
+  "search__evaluation__verdicts__skip_it": "Skip it",
+  "@search__evaluation__verdicts__skip_it": {
+    "description": "Verdict badge label when the resource should be skipped"
+  },
+  "search__evaluation__confidence__high": "High confidence",
+  "@search__evaluation__confidence__high": {
+    "description": "Confidence level label for high confidence"
+  },
+  "search__evaluation__confidence__moderate": "Moderate confidence",
+  "@search__evaluation__confidence__moderate": {
+    "description": "Confidence level label for moderate confidence"
+  },
+  "search__evaluation__confidence__low": "Low confidence",
+  "@search__evaluation__confidence__low": {
+    "description": "Confidence level label for low confidence"
+  },
+  "search__evaluation__flags": "{count, plural, one {# flag} other {# flags}}",
+  "@search__evaluation__flags": {
+    "description": "Number of flags found during risk scan",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "description": "Number of flags"
+      }
+    }
+  },
+  "search__evaluation__hideDetails": "Hide details",
+  "@search__evaluation__hideDetails": {
+    "description": "Button to collapse evaluation details"
+  },
+  "search__evaluation__showDetails": "Show details",
+  "@search__evaluation__showDetails": {
+    "description": "Button to expand evaluation details"
+  },
+  "search__evaluation__noFlags": "No issues found",
+  "@search__evaluation__noFlags": {
+    "description": "Message when no risk flags were found"
+  },
+  "search__evaluation__evidence": "Evidence",
+  "@search__evaluation__evidence": {
+    "description": "Label for the evidence quote in a flag card"
+  },
+  "search__evaluation__suggested": "Suggested action",
+  "@search__evaluation__suggested": {
+    "description": "Label for the suggested action in a flag card"
+  },
+  "search__evaluation__overrideNote": "Override note",
+  "@search__evaluation__overrideNote": {
+    "description": "Label for override notes in the final reasoning"
+  },
+  "search__evaluation__sections__triage": "Triage",
+  "@search__evaluation__sections__triage": {
+    "description": "Section heading for the triage evaluation"
+  },
+  "search__evaluation__sections__adaptations": "Adaptations",
+  "@search__evaluation__sections__adaptations": {
+    "description": "Section heading for adaptation suggestions"
+  },
+  "search__evaluation__sections__riskScan": "Risk Scan",
+  "@search__evaluation__sections__riskScan": {
+    "description": "Section heading for the risk scan results"
+  },
+  "search__evaluation__sections__reasoning": "Reasoning",
+  "@search__evaluation__sections__reasoning": {
+    "description": "Section heading for the final reasoning chain"
+  },
+  "search__evaluation__metrics__curriculumFit": "Curriculum Fit",
+  "@search__evaluation__metrics__curriculumFit": {
+    "description": "Metric label for curriculum fit"
+  },
+  "search__evaluation__metrics__accessibility": "Accessibility",
+  "@search__evaluation__metrics__accessibility": {
+    "description": "Metric label for accessibility"
+  },
+  "search__evaluation__metrics__trustworthiness": "Trustworthiness",
+  "@search__evaluation__metrics__trustworthiness": {
+    "description": "Metric label for trustworthiness"
+  },
+  "search__evaluation__ratings__strong": "Strong",
+  "@search__evaluation__ratings__strong": {
+    "description": "Rating label for strong metric score"
+  },
+  "search__evaluation__ratings__adequate": "Adequate",
+  "@search__evaluation__ratings__adequate": {
+    "description": "Rating label for adequate metric score"
+  },
+  "search__evaluation__ratings__weak": "Weak",
+  "@search__evaluation__ratings__weak": {
+    "description": "Rating label for weak metric score"
+  },
+  "search__evaluation__flagCategories__outdated_content": "Outdated content",
+  "@search__evaluation__flagCategories__outdated_content": {
+    "description": "Flag category label for outdated content"
+  },
+  "search__evaluation__flagCategories__bias_or_framing": "Bias or framing",
+  "@search__evaluation__flagCategories__bias_or_framing": {
+    "description": "Flag category label for bias or framing issues"
+  },
+  "search__evaluation__flagCategories__factual_concern": "Factual concern",
+  "@search__evaluation__flagCategories__factual_concern": {
+    "description": "Flag category label for factual concerns"
+  },
+  "search__evaluation__flagCategories__safety_concern": "Safety concern",
+  "@search__evaluation__flagCategories__safety_concern": {
+    "description": "Flag category label for safety concerns"
+  },
+  "search__evaluation__flagCategories__misleading_match": "Misleading match",
+  "@search__evaluation__flagCategories__misleading_match": {
+    "description": "Flag category label for misleading matches"
+  },
+  "search__suggestedCollections__title": "Suggested Collections",
+  "@search__suggestedCollections__title": {
+    "description": "Title for the suggested collections rail"
+  },
+  "search__suggestedCollections__clone": "Clone",
+  "@search__suggestedCollections__clone": {
+    "description": "Button to clone a suggested collection"
+  },
+  "search__suggestedCollections__cloned": "Cloned",
+  "@search__suggestedCollections__cloned": {
+    "description": "Button text when a suggested collection has been cloned"
+  },
+  "search__suggestedCollections__clonesCount": "{count, plural, one {# clone} other {# clones}}",
+  "@search__suggestedCollections__clonesCount": {
+    "description": "Label showing number of times a collection was cloned",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "description": "Number of clones"
+      }
+    }
+  },
+  "search__suggestedCollections__empty": "No public collections found for similar queries.",
+  "@search__suggestedCollections__empty": {
+    "description": "Empty state message for suggested collections"
+  },
+  "search__suggestedCollections__sourcesCount": "{count, plural, one {# source} other {# sources}}",
+  "@search__suggestedCollections__sourcesCount": {
+    "description": "Label showing number of sources in a suggested collection",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "description": "Number of sources"
+      }
+    }
+  },
+  "search__suggestedCollections__cloneCollection": "Clone Collection",
+  "@search__suggestedCollections__cloneCollection": {
+    "description": "Button to clone a suggested collection"
+  },
+  "search__suggestedCollections__previewDescription": "Review this collection before cloning it to your library.",
+  "@search__suggestedCollections__previewDescription": {
+    "description": "Dialog description for previewing a suggested collection before cloning"
+  },
+  "search__suggestedCollections__syncCollection": "Sync Collection",
+  "@search__suggestedCollections__syncCollection": {
+    "description": "Button to sync a previously cloned collection"
+  },
+  "search__suggestedCollections__syncSuccess": "Collection synced!",
+  "@search__suggestedCollections__syncSuccess": {
+    "description": "Success message when syncing collection"
+  }
 }

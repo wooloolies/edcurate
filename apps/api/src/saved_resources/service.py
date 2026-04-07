@@ -24,12 +24,13 @@ from src.saved_resources.schemas import (
     SaveResourceToCollectionRequest,
     SuggestedCollectionResponse,
 )
+from src.users.model import User
 
 
 def _dump_eval_data(
-    evaluation_data: dict[str, Any] | BaseModel | None,
+    evaluation_data: Any, resource: ResourceCard
 ) -> dict[str, Any] | None:
-    if isinstance(evaluation_data, BaseModel):
+    if hasattr(evaluation_data, "model_dump"):
         return evaluation_data.model_dump(mode="json")
     return evaluation_data
 
@@ -212,6 +213,16 @@ async def clone_collection(
     if orig_collection.user_id == user_id:
         raise HTTPException(status_code=400, detail="Cannot clone your own collection")
 
+    # Check if already cloned
+    existing_clone_exec = await db.execute(
+        select(LibraryCollection).where(
+            LibraryCollection.user_id == user_id,
+            LibraryCollection.cloned_from_id == collection_id,
+        )
+    )
+    if existing_clone_exec.scalar_one_or_none():
+        raise HTTPException(status_code=400, detail="Collection already cloned")
+
     # Increment clone count
     orig_collection.clone_count += 1
 
@@ -222,6 +233,7 @@ async def clone_collection(
         search_query=orig_collection.search_query,
         name=f"Copy of {orig_collection.name}",
         is_public=False,  # default to private
+        cloned_from_id=collection_id,
     )
     db.add(cloned_col)
     await db.flush()
@@ -257,6 +269,56 @@ async def clone_collection(
     return LibraryCollectionResponse.model_validate(cloned_col)
 
 
+async def sync_cloned_collection(
+    db: DBSession, user_id: uuid.UUID, collection_id: uuid.UUID
+) -> LibraryCollectionResponse:
+    # `collection_id` here is the id of the ORIGINAL collection we want to sync from.
+    # First, find the user's cloned copy of this collection.
+    clone_exec = await db.execute(
+        select(LibraryCollection).where(
+            LibraryCollection.user_id == user_id,
+            LibraryCollection.cloned_from_id == collection_id,
+        )
+    )
+    cloned_col = clone_exec.scalar_one_or_none()
+
+    if not cloned_col:
+        raise HTTPException(status_code=400, detail="Collection not cloned by you")
+
+    # Fetch resources from original
+    orig_items_exec = await db.execute(
+        select(SavedResource).where(SavedResource.collection_id == collection_id)
+    )
+    orig_items = orig_items_exec.scalars().all()
+
+    if orig_items:
+        # Prepare the new resources
+        rows = [
+            {
+                "user_id": user_id,
+                "preset_id": cloned_col.preset_id,
+                "search_query": cloned_col.search_query,
+                "collection_id": cloned_col.id,
+                "resource_url": i.resource_url,
+                "resource_data": i.resource_data,
+                "evaluation_data": i.evaluation_data,
+            }
+            for i in orig_items
+        ]
+
+        # Insert avoiding duplicates (returns quietly for duplicates)
+        stmt = (
+            insert(SavedResource)
+            .values(rows)
+            .on_conflict_do_nothing(constraint="uq_saved_resource_v2")
+        )
+        await db.execute(stmt)
+
+    await db.commit()
+    await db.refresh(cloned_col)
+    return LibraryCollectionResponse.model_validate(cloned_col)
+
+
 async def get_suggested_collections(
     db: DBSession,
     user_id: uuid.UUID,
@@ -264,35 +326,101 @@ async def get_suggested_collections(
     preset_id: uuid.UUID | None,
     limit: int,
 ) -> list[SuggestedCollectionResponse]:
+    from sqlalchemy import case
+
+    user_preset = None
+    if preset_id:
+        preset_exec = await db.execute(
+            select(ClassroomPreset).where(ClassroomPreset.id == preset_id)
+        )
+        user_preset = preset_exec.scalar_one_or_none()
+
     # TFIDF equivalent using PostgreSQL Full Text Search
     doc_col = LibraryCollection.name + " " + LibraryCollection.search_query
     document = func.to_tsvector("english", doc_col)
     query = func.plainto_tsquery("english", search_query)
     rank = func.ts_rank_cd(document, query)
 
-    stmt = select(LibraryCollection).where(
-        LibraryCollection.is_public.is_(True),
-        LibraryCollection.user_id != user_id,
-        document.bool_op("@@")(query),
+    count_subq = (
+        select(func.count(SavedResource.id))
+        .where(SavedResource.collection_id == LibraryCollection.id)
+        .correlate(LibraryCollection)
+        .scalar_subquery()
     )
-    if preset_id:
-        stmt = stmt.where(LibraryCollection.preset_id == preset_id)
+
+    stmt = (
+        select(LibraryCollection, count_subq, User.name)
+        .join(User, LibraryCollection.user_id == User.id, isouter=True)
+        .where(
+            LibraryCollection.is_public.is_(True),
+            LibraryCollection.user_id != user_id,
+            document.bool_op("@@")(query),
+        )
+    )
+
+    if user_preset:
+        stmt = stmt.join(
+            ClassroomPreset, LibraryCollection.preset_id == ClassroomPreset.id
+        )
+        subject_match = case(
+            (ClassroomPreset.subject == user_preset.subject, 1.0), else_=0.0
+        )
+        year_match = case(
+            (ClassroomPreset.year_level == user_preset.year_level, 0.5), else_=0.0
+        )
+        final_rank = rank + subject_match + year_match
+    else:
+        final_rank = rank
 
     stmt = stmt.order_by(
-        rank.desc(),
+        final_rank.desc(),
         LibraryCollection.clone_count.desc(),
         LibraryCollection.created_at.desc(),
     ).limit(limit)
 
     result = await db.execute(stmt)
-    collections = result.scalars().all()
+    rows = result.all()
+
+    if not rows:
+        return []
+
+    collection_ids = [c.id for c, _count, _name in rows]
+
+    # Fetch all resources for those collections in one query
+    resources_result = await db.execute(
+        select(SavedResource)
+        .where(SavedResource.collection_id.in_(collection_ids))
+        .order_by(SavedResource.saved_at.desc())
+    )
+    all_resources = resources_result.scalars().all()
+
+    # Check which ones the user has already cloned
+    cloned_result = await db.execute(
+        select(LibraryCollection.cloned_from_id).where(
+            LibraryCollection.user_id == user_id,
+            LibraryCollection.cloned_from_id.in_(collection_ids),
+        )
+    )
+    cloned_by_user_ids = {row[0] for row in cloned_result.all() if row[0]}
+
+    # Group resources by collection_id
+    resources_by_col: dict[uuid.UUID, list[SavedResource]] = defaultdict(list)
+    for r in all_resources:
+        resources_by_col[r.collection_id].append(r)
 
     return [
         SuggestedCollectionResponse(
             collection=LibraryCollectionResponse.model_validate(c),
             matched_by="TFIDF",
+            resources_count=count or 0,
+            publisher_name=name,
+            is_cloned_by_user=c.id in cloned_by_user_ids,
+            resources=[
+                SavedResourceResponse.model_validate(r)
+                for r in resources_by_col.get(c.id, [])
+            ],
         )
-        for c in collections
+        for c, count, name in rows
     ]
 
 

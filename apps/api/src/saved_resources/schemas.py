@@ -2,10 +2,13 @@ import uuid
 from datetime import datetime
 from typing import Any
 
-from pydantic import BaseModel, ConfigDict, HttpUrl
+import structlog
+from pydantic import BaseModel, ConfigDict, HttpUrl, model_validator
 
 from src.agents.schemas import JudgmentResult
 from src.discovery.schemas import ResourceCard
+
+logger = structlog.get_logger(__name__)
 
 
 class SaveResourceRequest(BaseModel):
@@ -71,8 +74,48 @@ class SavedResourceResponse(BaseModel):
     search_query: str
     resource_url: str
     resource_data: ResourceCard
-    evaluation_data: JudgmentResult | None
+    evaluation_data: JudgmentResult | None = None
     saved_at: datetime
+
+    @model_validator(mode="before")
+    @classmethod
+    def _coerce_legacy_evaluation_data(
+        cls,
+        values: Any,
+    ) -> Any:
+        """Handle old-format evaluation_data gracefully."""
+        # When validating from ORM, values is the ORM object
+        if hasattr(values, "evaluation_data"):
+            raw = values.evaluation_data
+        elif isinstance(values, dict):
+            raw = values.get("evaluation_data")
+        else:
+            return values
+
+        if raw is None:
+            return values
+
+        # Try to validate as JudgmentResult; if it fails, null it out
+        try:
+            JudgmentResult.model_validate(raw)
+        except Exception:
+            rid = getattr(
+                values,
+                "id",
+                values.get("id") if isinstance(values, dict) else None,
+            )
+            logger.warning(
+                "Legacy eval_data, setting to None",
+                resource_id=rid,
+            )
+            if hasattr(values, "__dict__"):
+                # ORM object: override via a wrapper dict
+                data = {c.key: getattr(values, c.key) for c in values.__table__.columns}
+                data["evaluation_data"] = None
+                return data
+            elif isinstance(values, dict):
+                values["evaluation_data"] = None
+        return values
 
 
 class CollectionGroup(BaseModel):
@@ -85,6 +128,10 @@ class CollectionGroup(BaseModel):
 class SuggestedCollectionResponse(BaseModel):
     collection: LibraryCollectionResponse
     matched_by: str  # "TFIDF", "Exact", etc.
+    resources_count: int = 0
+    publisher_name: str | None = None
+    is_cloned_by_user: bool = False
+    resources: list[SavedResourceResponse] = []
 
 
 class QueryGroup(BaseModel):

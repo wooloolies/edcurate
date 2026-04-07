@@ -13,6 +13,6 @@ export interface SavedResourceResponse {
   search_query: string;
   resource_url: string;
   resource_data: ResourceCard;
-  evaluation_data: JudgmentResult | null;
+  evaluation_data?: JudgmentResult | null;
   saved_at: string;
 }

@@ -7,7 +7,6 @@
 
 export * from './adaptation-suggestion';
 export * from './add-custom-link-request';
-export * from './artifact-list-response';
 export * from './batch-evaluate-request';
 export * from './collection-group';
 export * from './country-option';
@@ -16,10 +15,6 @@ export * from './ddgs-metadata';
 export * from './email-login-request';
 export * from './evaluate-saved-resources-endpoint-api-saved-evaluate-post200';
 export * from './evaluate-single-request';
-export * from './generate-artifact-request-artifact-type';
-export * from './generate-artifact-request';
-export * from './generated-artifact-response-content';
-export * from './generated-artifact-response';
 export * from './generated-search-queries';
 export * from './get-frameworks-api-curriculum-frameworks-get-params';
 export * from './get-grades-api-curriculum-grades-get-params';
@@ -38,7 +33,6 @@ export * from './judgment-result';
 export * from './library-collection-create';
 export * from './library-collection-response';
 export * from './library-collection-update';
-export * from './list-artifacts-endpoint-api-localizer-get-params';
 export * from './list-presets-api-presets-get-params';
 export * from './list-saved-resources-endpoint-api-saved-get-params';
 export * from './liveness-check-health-live-get200';
