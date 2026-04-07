@@ -19,6 +19,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ErrorBanner } from "@/features/search/components/error-banner";
 import { EvaluationProgress } from "@/features/search/components/evaluation-progress";
+import { GeneratedQueriesPanel } from "@/features/search/components/generated-queries";
 import { ResourceCardRenderer } from "@/features/search/components/resource-card";
 import { ResourceCardSkeleton } from "@/features/search/components/skeleton/resource-card-skeleton";
 import { useSearchApiDiscoverySearchGet } from "@/lib/api/discovery/discovery";
@@ -91,12 +92,12 @@ export function SearchPageClient() {
         )
       );
       setSelectedResources(new Map());
-      toast.success("Resources saved to library!");
+      toast.success(t("savedSuccess"));
       queryClient.invalidateQueries({
         queryKey: getListSavedResourcesEndpointApiSavedGetQueryKey(),
       });
     } catch (_e) {
-      toast.error("Failed to save resources");
+      toast.error(t("savedError"));
     }
   };
 
@@ -167,6 +168,10 @@ export function SearchPageClient() {
       </div>
 
       {results && results.errors.length > 0 ? <ErrorBanner errors={results.errors} /> : null}
+
+      {results?.generated_queries && !isFetching ? (
+        <GeneratedQueriesPanel queries={results.generated_queries} />
+      ) : null}
 
       {isFetching ? (
         <div className="space-y-4">
@@ -267,17 +272,17 @@ export function SearchPageClient() {
       {selectedResources.size > 0 && (
         <div className="fixed bottom-6 left-1/2 z-50 flex -translate-x-1/2 items-center gap-4 rounded-full border bg-background px-6 py-3 shadow-lg">
           <span className="text-sm font-medium">
-            {selectedResources.size} resource{selectedResources.size === 1 ? "" : "s"} selected
+            {t("resourcesSelected", { count: selectedResources.size })}
           </span>
           <Button size="sm" onClick={handleSaveSelected} disabled={isSaving}>
-            {isSaving ? "Saving..." : "Save to Library"}
+            {isSaving ? t("saving") : t("saveToLibrary")}
           </Button>
           <Button
             variant="ghost"
             size="icon"
             className="h-7 w-7 shrink-0"
             onClick={handleClearSelection}
-            aria-label="Clear selection"
+            aria-label={t("clearSelection")}
           >
             <X className="h-4 w-4" />
           </Button>

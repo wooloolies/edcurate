@@ -1,7 +1,7 @@
 import uuid
 from typing import Annotated, Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 # --- Source-specific metadata ---
 
@@ -79,6 +79,24 @@ class SourceError(BaseModel):
     message: str
 
 
+_MAX_QUERIES_PER_PROVIDER = 3
+
+
+class GeneratedSearchQueries(BaseModel):
+    """Agent-generated queries sent to each provider."""
+
+    ddgs: list[str]
+    youtube: list[str]
+    openalex: list[str]
+
+    @field_validator("ddgs", "youtube", "openalex", mode="before")
+    @classmethod
+    def _clamp_length(cls, v: list) -> list:
+        if not isinstance(v, list):
+            raise ValueError("Expected a list of query strings")
+        return [str(q) for q in v if q][:_MAX_QUERIES_PER_PROVIDER]
+
+
 class SearchResponse(BaseModel):
     """Unified federated search response."""
 
@@ -88,3 +106,4 @@ class SearchResponse(BaseModel):
     counts_by_source: dict[str, int]
     results: list[ResourceCard]
     errors: list[SourceError]
+    generated_queries: GeneratedSearchQueries | None = None

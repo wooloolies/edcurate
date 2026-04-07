@@ -48,42 +48,56 @@ class YoutubeProvider(SearchProvider):
         query: str,
         context: ClassroomPreset,
         limit: int,
+        queries: list[str] | None = None,
     ) -> list[ResourceCard]:
         if not settings.YOUTUBE_API_KEY:
             return []
 
-        built_query = f"{query} {context.subject} lesson".strip()
+        if queries is None:
+            queries = [f"{query} {context.subject} lesson".strip()]
 
-        params: dict[str, str | int] = {
-            "key": settings.YOUTUBE_API_KEY,
-            "q": built_query,
-            "part": "snippet",
-            "type": "video",
-            "safeSearch": "strict",
-            "relevanceLanguage": context.teaching_language,
-            "maxResults": limit,
-        }
         region_code = _country_to_region_code(context.country)
-        if region_code:
-            params["regionCode"] = region_code
+        per_query_limit = max(1, limit // len(queries)) + 2
+
+        all_items: list[dict] = []
+        seen_video_ids: set[str] = set()
 
         async with httpx.AsyncClient(timeout=10.0) as client:
-            response = await client.get(_YOUTUBE_SEARCH_URL, params=params)
-            response.raise_for_status()
-            data = response.json()
+            for q in queries:
+                params: dict[str, str | int] = {
+                    "key": settings.YOUTUBE_API_KEY,
+                    "q": q,
+                    "part": "snippet",
+                    "type": "video",
+                    "safeSearch": "strict",
+                    "relevanceLanguage": context.teaching_language,
+                    "maxResults": per_query_limit,
+                }
+                if region_code:
+                    params["regionCode"] = region_code
 
-        items = data.get("items", [])
+                response = await client.get(_YOUTUBE_SEARCH_URL, params=params)
+                response.raise_for_status()
+                data = response.json()
+
+                for item in data.get("items", []):
+                    vid = item.get("id", {}).get("videoId", "")
+                    if vid and vid not in seen_video_ids:
+                        seen_video_ids.add(vid)
+                        all_items.append(item)
+
+        all_items = all_items[:limit]
+
         video_ids = [
             item.get("id", {}).get("videoId", "")
-            for item in items
+            for item in all_items
             if item.get("id", {}).get("videoId")
         ]
 
-        # Enrich with videos endpoint for full details
         video_details = await self._fetch_video_details(video_ids)
 
         cards: list[ResourceCard] = []
-        for item in items:
+        for item in all_items:
             snippet = item.get("snippet", {})
             video_id = item.get("id", {}).get("videoId", "")
             if not video_id:

@@ -1489,6 +1489,16 @@
             "type": "array",
             "title": "Errors"
           },
+          "generated_queries": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/GeneratedSearchQueries"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "evaluations": {
             "items": {
               "$ref": "#/components/schemas/EvaluationResult"
@@ -1562,6 +1572,39 @@
         ],
         "title": "EvaluationResult",
         "description": "Full evaluation of a single resource across 7 dimensions."
+      },
+      "GeneratedSearchQueries": {
+        "properties": {
+          "ddgs": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Ddgs"
+          },
+          "youtube": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Youtube"
+          },
+          "openalex": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Openalex"
+          }
+        },
+        "type": "object",
+        "required": [
+          "ddgs",
+          "youtube",
+          "openalex"
+        ],
+        "title": "GeneratedSearchQueries",
+        "description": "Agent-generated queries sent to each provider."
       },
       "GradeOption": {
         "properties": {

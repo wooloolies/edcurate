@@ -25,6 +25,7 @@ export * from './evaluated-search-response';
 export * from './evaluation-result-recommended-use';
 export * from './evaluation-result-scores';
 export * from './evaluation-result';
+export * from './generated-search-queries';
 export * from './get-frameworks-api-curriculum-frameworks-get-params';
 export * from './get-grades-api-curriculum-grades-get-params';
 export * from './get-subjects-api-curriculum-subjects-get-params';

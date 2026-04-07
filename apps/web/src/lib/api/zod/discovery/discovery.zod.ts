@@ -85,6 +85,11 @@ export const SearchApiDiscoverySearchGetResponse = zod.object({
   "source": zod.enum(['ddgs', 'youtube', 'openalex', 'custom']),
   "message": zod.string()
 }).describe('Error from a single search provider.')),
+  "generated_queries": zod.union([zod.object({
+  "ddgs": zod.array(zod.string()),
+  "youtube": zod.array(zod.string()),
+  "openalex": zod.array(zod.string())
+}).describe('Agent-generated queries sent to each provider.'),zod.null()]).optional(),
   "evaluations": zod.array(zod.object({
   "resource_url": zod.string(),
   "overall_score": zod.number().min(searchApiDiscoverySearchGetResponseEvaluationsItemOverallScoreMin).max(searchApiDiscoverySearchGetResponseEvaluationsItemOverallScoreMax),

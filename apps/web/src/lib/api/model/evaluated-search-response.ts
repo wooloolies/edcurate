@@ -6,6 +6,7 @@
  */
 import type { EvaluatedSearchResponseCountsBySource } from './evaluated-search-response-counts-by-source';
 import type { EvaluationResult } from './evaluation-result';
+import type { GeneratedSearchQueries } from './generated-search-queries';
 import type { ResourceCard } from './resource-card';
 import type { SourceError } from './source-error';
 
@@ -19,5 +20,6 @@ export interface EvaluatedSearchResponse {
   counts_by_source: EvaluatedSearchResponseCountsBySource;
   results: ResourceCard[];
   errors: SourceError[];
+  generated_queries?: GeneratedSearchQueries | null;
   evaluations?: EvaluationResult[];
 }

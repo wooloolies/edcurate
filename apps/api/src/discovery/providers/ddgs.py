@@ -58,37 +58,46 @@ class DdgsProvider(SearchProvider):
         query: str,
         context: ClassroomPreset,
         limit: int,
+        queries: list[str] | None = None,
     ) -> list[ResourceCard]:
-        built_query = (
-            f"{query} {context.subject} {context.year_level} resources".strip()
-        )
         region = _country_to_region(context.country)
 
-        loop = asyncio.get_running_loop()
-        raw_results: list[dict] = await loop.run_in_executor(
-            None,
-            partial(_sync_ddgs_search, built_query, region, limit),
-        )
+        if queries is None:
+            queries = [
+                f"{query} {context.subject} {context.year_level} resources".strip()
+            ]
 
+        loop = asyncio.get_running_loop()
+        per_query_limit = max(1, limit // len(queries)) + 2
+
+        seen_urls: set[str] = set()
         cards: list[ResourceCard] = []
-        for item in raw_results:
-            url: str = item.get("href", "")
-            if not url:
-                continue
-            domain = urlparse(url).netloc or url
-            cards.append(
-                ResourceCard(
-                    title=item.get("title", ""),
-                    url=url,
-                    source="ddgs",
-                    type="webpage",
-                    snippet=item.get("body", ""),
-                    thumbnail_url=None,
-                    metadata=DdgsMetadata(
-                        domain=domain,
-                        published_date=item.get("published"),
-                        language=context.teaching_language,
-                    ),
-                )
+
+        for q in queries:
+            raw_results: list[dict] = await loop.run_in_executor(
+                None,
+                partial(_sync_ddgs_search, q, region, per_query_limit),
             )
-        return cards
+            for item in raw_results:
+                url: str = item.get("href", "")
+                if not url or url in seen_urls:
+                    continue
+                seen_urls.add(url)
+                domain = urlparse(url).netloc or url
+                cards.append(
+                    ResourceCard(
+                        title=item.get("title", ""),
+                        url=url,
+                        source="ddgs",
+                        type="webpage",
+                        snippet=item.get("body", ""),
+                        thumbnail_url=None,
+                        metadata=DdgsMetadata(
+                            domain=domain,
+                            published_date=item.get("published"),
+                            language=context.teaching_language,
+                        ),
+                    )
+                )
+
+        return cards[:limit]

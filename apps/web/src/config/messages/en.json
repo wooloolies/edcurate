@@ -128,10 +128,22 @@
       "views": "views",
       "by": "by"
     },
+    "generatedQueries": {
+      "title": "What we searched for",
+      "ddgs": "Web",
+      "youtube": "Video",
+      "openalex": "Papers"
+    },
     "idleState": "Select a preset and enter a search query to discover educational resources.",
     "searchingButton": "Searching...",
     "showUnscored": "Show {count} more unscored results",
     "hideUnscored": "Hide unscored results",
+    "resourcesSelected": "{count, plural, one {# resource} other {# resources}} selected",
+    "saveToLibrary": "Save to Library",
+    "saving": "Saving...",
+    "savedSuccess": "Resources saved to library!",
+    "savedError": "Failed to save resources",
+    "clearSelection": "Clear selection",
     "progress": {
       "title": "Deep Evaluation in Progress",
       "duration": "This usually takes 60–90 seconds",

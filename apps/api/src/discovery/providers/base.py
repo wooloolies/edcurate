@@ -13,6 +13,7 @@ class SearchProvider(ABC):
         query: str,
         context: ClassroomPreset,
         limit: int,
+        queries: list[str] | None = None,
     ) -> list[ResourceCard]:
         """
         Search for educational resources.
@@ -21,6 +22,10 @@ class SearchProvider(ABC):
             query: The user's search query string.
             context: Classroom preset providing search context and filters.
             limit: Maximum number of results to return.
+            queries: Optional agent-generated queries. When provided, the
+                provider runs each query and merges/deduplicates results.
+                When None, falls back to the provider's default query
+                construction.
 
         Returns:
             List of normalised ResourceCard objects.

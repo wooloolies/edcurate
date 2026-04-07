@@ -20,13 +20,13 @@ import {
   coerceSourceWeights,
   type SourceWeights,
 } from "@/features/presets/utils/normalize-weights";
-import type { PresetCreate } from "@/lib/api/model";
 import {
   useGetCountriesApiCurriculumCountriesGet,
   useGetFrameworksApiCurriculumFrameworksGet,
   useGetGradesApiCurriculumGradesGet,
   useGetSubjectsApiCurriculumSubjectsGet,
 } from "@/lib/api/curriculum/curriculum";
+import type { PresetCreate } from "@/lib/api/model";
 import {
   useCreatePresetApiPresetsPost,
   useGetPresetApiPresetsPresetIdGet,
@@ -62,7 +62,7 @@ export function PresetFormClient({ presetId }: PresetFormClientProps) {
   const { data: countries } = useGetCountriesApiCurriculumCountriesGet();
   const { data: subjects } = useGetSubjectsApiCurriculumSubjectsGet(
     { country: countryCode },
-    { query: { enabled: !!countryCode } },
+    { query: { enabled: !!countryCode } }
   );
   const [form, setForm] = useState<PresetCreate>(() => ({
     name: "",
@@ -86,11 +86,11 @@ export function PresetFormClient({ presetId }: PresetFormClientProps) {
 
   const { data: frameworks } = useGetFrameworksApiCurriculumFrameworksGet(
     { country: countryCode, subject: form.subject },
-    { query: { enabled: !!countryCode && !!form.subject } },
+    { query: { enabled: !!countryCode && !!form.subject } }
   );
   const { data: grades } = useGetGradesApiCurriculumGradesGet(
     { country: countryCode, subject: form.subject, framework: form.curriculum_framework ?? "" },
-    { query: { enabled: !!countryCode && !!form.subject && !!form.curriculum_framework } },
+    { query: { enabled: !!countryCode && !!form.subject && !!form.curriculum_framework } }
   );
 
   // Sync form when existing data loads
