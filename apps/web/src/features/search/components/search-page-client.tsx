@@ -179,7 +179,7 @@ export function SearchPageClient() {
   const hasContent = results || stream.isStreaming || isFetching;
 
   return (
-    <div className="space-y-6">
+    <div className={`w-full space-y-6 ${hasContent ? "max-w-6xl" : "max-w-4xl my-auto"}`}>
       <h1 className="text-2xl font-bold">{t("title")}</h1>
 
       <div className="flex flex-wrap items-end gap-3">
