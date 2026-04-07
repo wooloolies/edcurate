@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useQueryState } from "nuqs";
-import { Pen, ChevronDown, AlertCircle, Loader2 } from "lucide-react";
+import { Pen, ChevronDown, AlertCircle, Loader2, Search, Repeat } from "lucide-react";
 import { Link, useRouter } from "@/lib/i18n/routing";
 import {
   useGetCountriesApiCurriculumCountriesGet,
@@ -21,6 +21,13 @@ export function CollectionOnboarding() {
   const [stepStr, setStepStr] = useQueryState("step", { defaultValue: "1", history: "push" });
   const currentStep = parseInt(stepStr || "1") as 1 | 2 | 3;
   const setCurrentStep = (val: 1 | 2 | 3) => setStepStr(val.toString());
+
+  const [completeStr, setCompleteStr] = useQueryState("complete", { defaultValue: "false", history: "push" });
+  const isComplete = completeStr === "true";
+  const setIsComplete = (val: boolean) => setCompleteStr(val.toString());
+
+  const [searchTextRaw, setSearchText] = useQueryState("search", { defaultValue: "" });
+  const searchText = searchTextRaw || "";
 
   const [presetNameRaw, setPresetName] = useQueryState("preset", { defaultValue: "Collection 1" });
   const presetName = presetNameRaw || "Collection 1";
@@ -362,14 +369,14 @@ export function CollectionOnboarding() {
         {currentStep === 1 ? (
           <Link
             href="/"
-            className="px-8 py-3 rounded-[2rem] text-base font-semibold text-[#111827] bg-white border-2 border-[#111827] hover:!bg-[#111827] hover:!text-white transition-all duration-300 shadow-sm inline-flex items-center justify-center"
+            className="px-8 py-3 rounded-[2rem] text-base font-semibold text-[#111827] bg-white border-2 border-[#111827] hover:!bg-[#111827] hover:!text-white transition-all duration-300 shadow-sm inline-flex items-center justify-center cursor-pointer"
           >
             Back
           </Link>
         ) : (
           <button
             onClick={handleBack}
-            className="px-8 py-3 rounded-[2rem] text-base font-semibold text-[#111827] bg-white border-2 border-[#111827] hover:!bg-[#111827] hover:!text-white transition-all duration-300 shadow-sm"
+            className="px-8 py-3 rounded-[2rem] text-base font-semibold text-[#111827] bg-white border-2 border-[#111827] hover:!bg-[#111827] hover:!text-white transition-all duration-300 shadow-sm cursor-pointer"
           >
             Back
           </button>
@@ -378,7 +385,7 @@ export function CollectionOnboarding() {
         <button
           onClick={handleNext}
           disabled={createMutation.isPending}
-          className="px-8 py-3 rounded-[2rem] text-base font-semibold text-[#111827] bg-[#B7FF70] border-2 border-[#B7FF70] hover:!bg-[#111827] hover:!text-[#B7FF70] hover:!border-[#111827] transition-all duration-300 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+          className="px-8 py-3 rounded-[2rem] text-base font-semibold text-[#111827] bg-[#B7FF70] border-2 border-[#B7FF70] hover:!bg-[#111827] hover:!text-[#B7FF70] hover:!border-[#111827] transition-all duration-300 shadow-sm cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {createMutation.isPending ? (
             <Loader2 className="w-5 h-5 animate-spin" />
