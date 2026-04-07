@@ -288,7 +288,7 @@ export function SearchPageClient() {
             <button
               type="button"
               onClick={() => setActiveCategory("all")}
-              className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${activeCategory === "all" ? "bg-white shadow-sm border border-slate-200 text-slate-900" : "text-slate-600 hover:bg-slate-100/60"}`}
+              className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors cursor-pointer ${activeCategory === "all" ? "bg-white shadow-sm border border-slate-200 text-slate-900" : "text-slate-600 hover:bg-slate-100/60"}`}
             >
               <div className="flex items-center gap-2">
                 <Layers className="h-4 w-4" />
@@ -299,7 +299,7 @@ export function SearchPageClient() {
             <button
               type="button"
               onClick={() => setActiveCategory("youtube")}
-              className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${activeCategory === "youtube" ? "bg-white shadow-sm border border-slate-200 text-slate-900" : "text-slate-600 hover:bg-slate-100/60"}`}
+              className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors cursor-pointer ${activeCategory === "youtube" ? "bg-white shadow-sm border border-slate-200 text-slate-900" : "text-slate-600 hover:bg-slate-100/60"}`}
             >
               <div className="flex items-center gap-2">
                 <Play className="h-4 w-4" />
@@ -310,7 +310,7 @@ export function SearchPageClient() {
             <button
               type="button"
               onClick={() => setActiveCategory("ddgs")}
-              className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${activeCategory === "ddgs" ? "bg-white shadow-sm border border-slate-200 text-slate-900" : "text-slate-600 hover:bg-slate-100/60"}`}
+              className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors cursor-pointer ${activeCategory === "ddgs" ? "bg-white shadow-sm border border-slate-200 text-slate-900" : "text-slate-600 hover:bg-slate-100/60"}`}
             >
               <div className="flex items-center gap-2">
                 <Globe className="h-4 w-4" />
@@ -321,7 +321,7 @@ export function SearchPageClient() {
             <button
               type="button"
               onClick={() => setActiveCategory("openalex")}
-              className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${activeCategory === "openalex" ? "bg-white shadow-sm border border-slate-200 text-slate-900" : "text-slate-600 hover:bg-slate-100/60"}`}
+              className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors cursor-pointer ${activeCategory === "openalex" ? "bg-white shadow-sm border border-slate-200 text-slate-900" : "text-slate-600 hover:bg-slate-100/60"}`}
             >
               <div className="flex items-center gap-2">
                 <BookOpen className="h-4 w-4" />

@@ -41,7 +41,7 @@ export function ResourceListRow({
           {!!expandedDetailsNode && (
             <button
               onClick={() => setIsExpanded(p => !p)}
-              className="flex h-8 w-8 items-center justify-center rounded-full hover:bg-slate-200 text-slate-500 transition-colors"
+              className="flex h-8 w-8 items-center justify-center rounded-full hover:bg-slate-200 text-slate-500 transition-colors cursor-pointer"
               title={isExpanded ? "Hide evaluation details" : "Show evaluation details"}
             >
               <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isExpanded ? "rotate-180" : ""}`} />
