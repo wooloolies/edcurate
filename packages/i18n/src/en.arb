@@ -818,6 +818,135 @@
   "@search__evaluation__dimensions__licensingIp": {
     "description": "Evaluation dimension label for licensing and intellectual property"
   },
+  "search__evaluation__verdicts__use_it": "Use it",
+  "@search__evaluation__verdicts__use_it": {
+    "description": "Verdict badge when resource is ready to use"
+  },
+  "search__evaluation__verdicts__adapt_it": "Adapt it",
+  "@search__evaluation__verdicts__adapt_it": {
+    "description": "Verdict badge when resource needs adaptation"
+  },
+  "search__evaluation__verdicts__skip_it": "Skip it",
+  "@search__evaluation__verdicts__skip_it": {
+    "description": "Verdict badge when resource should be skipped"
+  },
+  "search__evaluation__confidence__high": "High confidence",
+  "@search__evaluation__confidence__high": {
+    "description": "Confidence level label for high"
+  },
+  "search__evaluation__confidence__moderate": "Moderate confidence",
+  "@search__evaluation__confidence__moderate": {
+    "description": "Confidence level label for moderate"
+  },
+  "search__evaluation__confidence__low": "Low confidence",
+  "@search__evaluation__confidence__low": {
+    "description": "Confidence level label for low"
+  },
+  "search__evaluation__showDetails": "Show details",
+  "@search__evaluation__showDetails": {
+    "description": "Button to expand evaluation details"
+  },
+  "search__evaluation__hideDetails": "Hide details",
+  "@search__evaluation__hideDetails": {
+    "description": "Button to collapse evaluation details"
+  },
+  "search__evaluation__flags": "{count, plural, one {{count} flag} other {{count} flags}}",
+  "@search__evaluation__flags": {
+    "description": "Number of flags detected on a resource",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "search__evaluation__noFlags": "No flags detected",
+  "@search__evaluation__noFlags": {
+    "description": "Message when no risk flags are found"
+  },
+  "search__evaluation__overrideNote": "Override note",
+  "@search__evaluation__overrideNote": {
+    "description": "Label for teacher override notes"
+  },
+  "search__evaluation__evidence": "Evidence",
+  "@search__evaluation__evidence": {
+    "description": "Label for evidence quote in flag details"
+  },
+  "search__evaluation__suggested": "Suggested action",
+  "@search__evaluation__suggested": {
+    "description": "Label for suggested action in flag details"
+  },
+  "search__evaluation__sections__triage": "Triage",
+  "@search__evaluation__sections__triage": {
+    "description": "Section heading for triage metrics"
+  },
+  "search__evaluation__sections__adaptations": "Adaptations",
+  "@search__evaluation__sections__adaptations": {
+    "description": "Section heading for adaptation suggestions"
+  },
+  "search__evaluation__sections__riskScan": "Risk Scan",
+  "@search__evaluation__sections__riskScan": {
+    "description": "Section heading for risk flag scan"
+  },
+  "search__evaluation__sections__reasoning": "Reasoning",
+  "@search__evaluation__sections__reasoning": {
+    "description": "Section heading for final reasoning chain"
+  },
+  "search__evaluation__metrics__curriculumFit": "Curriculum fit",
+  "@search__evaluation__metrics__curriculumFit": {
+    "description": "Metric label for curriculum fit rating"
+  },
+  "search__evaluation__metrics__accessibility": "Accessibility",
+  "@search__evaluation__metrics__accessibility": {
+    "description": "Metric label for accessibility rating"
+  },
+  "search__evaluation__metrics__trustworthiness": "Trustworthiness",
+  "@search__evaluation__metrics__trustworthiness": {
+    "description": "Metric label for trustworthiness rating"
+  },
+  "search__evaluation__ratings__strong": "Strong",
+  "@search__evaluation__ratings__strong": {
+    "description": "Rating badge for strong score"
+  },
+  "search__evaluation__ratings__adequate": "Adequate",
+  "@search__evaluation__ratings__adequate": {
+    "description": "Rating badge for adequate score"
+  },
+  "search__evaluation__ratings__weak": "Weak",
+  "@search__evaluation__ratings__weak": {
+    "description": "Rating badge for weak score"
+  },
+  "search__evaluation__flagCategories__bias": "Bias",
+  "@search__evaluation__flagCategories__bias": {
+    "description": "Flag category label for bias"
+  },
+  "search__evaluation__flagCategories__factual_error": "Factual error",
+  "@search__evaluation__flagCategories__factual_error": {
+    "description": "Flag category label for factual errors"
+  },
+  "search__evaluation__flagCategories__outdated": "Outdated",
+  "@search__evaluation__flagCategories__outdated": {
+    "description": "Flag category label for outdated content"
+  },
+  "search__evaluation__flagCategories__inappropriate_content": "Inappropriate content",
+  "@search__evaluation__flagCategories__inappropriate_content": {
+    "description": "Flag category label for inappropriate content"
+  },
+  "search__evaluation__flagCategories__licensing": "Licensing",
+  "@search__evaluation__flagCategories__licensing": {
+    "description": "Flag category label for licensing issues"
+  },
+  "search__evaluation__flagCategories__reading_level": "Reading level",
+  "@search__evaluation__flagCategories__reading_level": {
+    "description": "Flag category label for reading level issues"
+  },
+  "search__evaluation__flagCategories__accessibility": "Accessibility",
+  "@search__evaluation__flagCategories__accessibility": {
+    "description": "Flag category label for accessibility issues"
+  },
+  "search__evaluation__flagCategories__cultural_sensitivity": "Cultural sensitivity",
+  "@search__evaluation__flagCategories__cultural_sensitivity": {
+    "description": "Flag category label for cultural sensitivity issues"
+  },
   "userMenu__profile": "Profile",
   "@userMenu__profile": {
     "description": "User menu link to profile page"
