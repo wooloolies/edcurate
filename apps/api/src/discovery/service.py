@@ -434,18 +434,30 @@ async def search_resources(
 
     from itertools import zip_longest
 
-    all_results: list[ResourceCard] = []
     errors: list[SourceError] = []
-    seen_urls: set[str] = set()
-
-    # Collect successful iterables for round-robin interleaving
-    valid_results_lists: list[list[ResourceCard]] = []
+    results_by_source: dict[str, list[ResourceCard]] = {}
 
     for source, result in zip(_SOURCE_KEYS, raw_results, strict=True):
         if isinstance(result, Exception):
             errors.append(SourceError(source=source, message=str(result)))
+            results_by_source[source] = []
         elif isinstance(result, list):
-            valid_results_lists.append(result)
+            results_by_source[source] = result
+        else:
+            results_by_source[source] = []
+
+    # Pre-sort each provider's results by embedding similarity
+    eval_query_text = _build_eval_query(preset, query)
+    results_by_source, eval_vector = await _sort_by_relevance(
+        eval_query_text, results_by_source
+    )
+
+    # Interleave round-robin
+    all_results: list[ResourceCard] = []
+    seen_urls: set[str] = set()
+    valid_results_lists = [
+        cards for cards in results_by_source.values() if cards
+    ]
 
     # Interleave 1 item from each provider round-robin
     for interleaved_tuple in zip_longest(*valid_results_lists):
@@ -471,7 +483,10 @@ async def search_resources(
     evaluations: list[EvaluationResult] = []
     try:
         evaluations = await asyncio.wait_for(
-            _run_rag_pipeline(top_cards, preset, query, search_id), timeout=120.0
+            _run_rag_pipeline(
+                top_cards, preset, query, search_id, eval_vector=eval_vector
+            ),
+            timeout=120.0,
         )
         # Create a lookup mapping by URL
         eval_map = {e.resource_url: e for e in evaluations}
