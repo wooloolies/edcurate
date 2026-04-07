@@ -4,7 +4,7 @@
  * edcurate-api
  * OpenAPI spec version: 0.1.0
  */
-import type { EvaluationResult } from './evaluation-result';
+import type { EvaluationResultOutput } from './evaluation-result-output';
 import type { ResourceCard } from './resource-card';
 
 export interface SavedResourceResponse {
@@ -13,6 +13,6 @@ export interface SavedResourceResponse {
   search_query: string;
   resource_url: string;
   resource_data: ResourceCard;
-  evaluation_data: EvaluationResult | null;
+  evaluation_data: EvaluationResultOutput | null;
   saved_at: string;
 }

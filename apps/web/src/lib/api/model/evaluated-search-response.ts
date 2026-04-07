@@ -5,7 +5,7 @@
  * OpenAPI spec version: 0.1.0
  */
 import type { EvaluatedSearchResponseCountsBySource } from './evaluated-search-response-counts-by-source';
-import type { EvaluationResult } from './evaluation-result';
+import type { EvaluationResultOutput } from './evaluation-result-output';
 import type { GeneratedSearchQueries } from './generated-search-queries';
 import type { ResourceCard } from './resource-card';
 import type { SourceError } from './source-error';
@@ -21,5 +21,5 @@ export interface EvaluatedSearchResponse {
   results: ResourceCard[];
   errors: SourceError[];
   generated_queries?: GeneratedSearchQueries | null;
-  evaluations?: EvaluationResult[];
+  evaluations?: EvaluationResultOutput[];
 }

@@ -39,20 +39,23 @@ async def save_resource(
             status_code=status.HTTP_404_NOT_FOUND, detail="Preset not found"
         )
 
-    eval_data = request.evaluation_data or _build_eval_data(request.resource)
+    eval_data = _dump_eval_data(request.evaluation_data, request.resource)
 
-    stmt = insert(SavedResource).values(
-        user_id=user_id,
-        preset_id=request.preset_id,
-        search_query=request.search_query,
-        resource_url=request.resource.url,
-        resource_data=request.resource.model_dump(mode="json"),
-        evaluation_data=eval_data,
+    stmt = (
+        insert(SavedResource)
+        .values(
+            user_id=user_id,
+            preset_id=request.preset_id,
+            search_query=request.search_query,
+            resource_url=request.resource.url,
+            resource_data=request.resource.model_dump(mode="json"),
+            evaluation_data=eval_data,
+        )
+        .on_conflict_do_nothing(
+            constraint="uq_saved_resource_v2",
+        )
+        .returning(SavedResource)
     )
-    stmt = stmt.on_conflict_do_nothing(
-        constraint="uq_saved_resource_v2",
-    )
-    stmt = stmt.returning(SavedResource)
     result = await db.execute(stmt)
     saved = result.scalar_one_or_none()
 
@@ -70,7 +73,7 @@ async def save_resource(
     return SavedResourceResponse.model_validate(saved)
 
 
-def _build_eval_data(resource: ResourceCard) -> dict | None:
+def _build_eval_data(resource: ResourceCard) -> dict[str, Any] | None:
     if resource.relevance_score is None:
         return None
     from src.agents.schemas import DimensionScore
@@ -85,6 +88,19 @@ def _build_eval_data(resource: ResourceCard) -> dict | None:
             for k, v in (resource.evaluation_details or {}).items()
         },
     ).model_dump(mode="json")
+
+
+def _dump_eval_data(
+    evaluation_data: EvaluationResult | None, resource: ResourceCard
+) -> dict[str, Any] | None:
+    if evaluation_data is not None:
+        if evaluation_data.resource_url != resource.url:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Evaluation data does not match resource URL",
+            )
+        return evaluation_data.model_dump(mode="json")
+    return _build_eval_data(resource)
 
 
 async def bulk_save_resources(
@@ -110,20 +126,23 @@ async def bulk_save_resources(
             "search_query": request.search_query,
             "resource_url": r.url,
             "resource_data": r.model_dump(mode="json"),
-            "evaluation_data": (
+            "evaluation_data": _dump_eval_data(
                 request.evaluation_data_list[idx]
                 if request.evaluation_data_list
                 and idx < len(request.evaluation_data_list)
-                else None
-            )
-            or _build_eval_data(r),
+                else None,
+                r,
+            ),
         }
         for idx, r in enumerate(request.resources)
     ]
 
-    stmt = insert(SavedResource).values(rows)
-    stmt = stmt.on_conflict_do_nothing(constraint="uq_saved_resource_v2")
-    stmt = stmt.returning(SavedResource)
+    stmt = (
+        insert(SavedResource)
+        .values(rows)
+        .on_conflict_do_nothing(constraint="uq_saved_resource_v2")
+        .returning(SavedResource)
+    )
     result = await db.execute(stmt)
     inserted = list(result.scalars().all())
 
@@ -303,18 +322,21 @@ async def add_custom_link(
         metadata=metadata,
     )
 
-    stmt = insert(SavedResource).values(
-        user_id=user_id,
-        preset_id=request.preset_id,
-        search_query=request.search_query,
-        resource_url=str(request.url),
-        resource_data=card.model_dump(mode="json"),
-        evaluation_data=None,
+    stmt = (
+        insert(SavedResource)
+        .values(
+            user_id=user_id,
+            preset_id=request.preset_id,
+            search_query=request.search_query,
+            resource_url=str(request.url),
+            resource_data=card.model_dump(mode="json"),
+            evaluation_data=None,
+        )
+        .on_conflict_do_nothing(
+            constraint="uq_saved_resource_v2",
+        )
+        .returning(SavedResource)
     )
-    stmt = stmt.on_conflict_do_nothing(
-        constraint="uq_saved_resource_v2",
-    )
-    stmt = stmt.returning(SavedResource)
     result = await db.execute(stmt)
     saved = result.scalar_one_or_none()
 

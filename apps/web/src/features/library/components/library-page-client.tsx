@@ -21,7 +21,12 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ResourceCardRenderer } from "@/features/search/components/resource-card";
-import type { QueryGroup, SavedResourceResponse } from "@/lib/api/model";
+import type {
+  QueryGroup,
+  ResourceCard,
+  ResourceCardEvaluationDetails,
+  SavedResourceResponse,
+} from "@/lib/api/model";
 import {
   getListSavedResourcesEndpointApiSavedGetQueryKey,
   useAddCustomLinkEndpointApiSavedLinkPost,
@@ -30,6 +35,13 @@ import {
   useEvaluateSingleResourceEndpointApiSavedEvaluateSinglePost,
   useListSavedResourcesEndpointApiSavedGet,
 } from "@/lib/api/saved-resources/saved-resources";
+
+function toResourceEvaluationDetails(
+  scores: NonNullable<SavedResourceResponse["evaluation_data"]>["scores"] | undefined
+): ResourceCardEvaluationDetails {
+  if (!scores) return null;
+  return Object.fromEntries(Object.entries(scores).map(([key, score]) => [key, { ...score }]));
+}
 
 export function LibraryPageClient() {
   const queryClient = useQueryClient();
@@ -150,7 +162,7 @@ export function LibraryPageClient() {
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
-            handleEvaluateSingle(item.id);
+            void handleEvaluateSingle(item.id);
           }}
           disabled={isEvaluatingThis}
         >
@@ -163,7 +175,7 @@ export function LibraryPageClient() {
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
-            handleDelete(item.id);
+            void handleDelete(item.id);
           }}
           disabled={isDeletingThis}
           className="text-destructive hover:bg-destructive/10 hover:text-destructive shrink-0 self-end"
@@ -195,10 +207,14 @@ export function LibraryPageClient() {
     return (
       <Collapsible key={queryKey} open={isOpen} onOpenChange={() => toggleGroup(queryKey)}>
         <Card className="overflow-hidden">
-          <CollapsibleTrigger asChild>
-            <CardHeader className="bg-muted/50 py-3 border-b cursor-pointer select-none hover:bg-muted/80 transition-colors">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
+          <CardHeader className="bg-muted/50 py-3 border-b select-none">
+            <div className="flex items-center justify-between gap-2">
+              <CollapsibleTrigger asChild>
+                <button
+                  type="button"
+                  className="flex min-w-0 flex-1 items-center gap-2 text-left"
+                  aria-label={`${isOpen ? "Collapse" : "Expand"} ${qGroup.search_query} resources`}
+                >
                   <ChevronDown
                     className={`h-4 w-4 text-muted-foreground transition-transform duration-200 ${
                       isOpen ? "rotate-0" : "-rotate-90"
@@ -212,97 +228,86 @@ export function LibraryPageClient() {
                     ({qGroup.items.length} resource{qGroup.items.length === 1 ? "" : "s"}
                     {unevaluatedCount > 0 ? `, ${unevaluatedCount} unevaluated` : ""})
                   </span>
-                </div>
+                </button>
+              </CollapsibleTrigger>
 
-                {/* Right-side actions — stop propagation so they don't toggle */}
-                <div
-                  role="toolbar"
-                  className="flex items-center gap-2"
-                  onClick={(e) => e.stopPropagation()}
-                  onKeyDown={(e) => e.stopPropagation()}
+              <div role="toolbar" className="flex items-center gap-2">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-8 text-xs"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (isAddLinkOpen) {
+                      setAddLinkOpenFor(null);
+                      setLinkUrl("");
+                    } else {
+                      setAddLinkOpenFor(queryKey);
+                    }
+                  }}
                 >
+                  {isAddLinkOpen ? (
+                    <X className="mr-1 h-3.5 w-3.5" />
+                  ) : (
+                    <LinkIcon className="mr-1 h-3.5 w-3.5" />
+                  )}
+                  {isAddLinkOpen ? "Cancel" : "Add Link"}
+                </Button>
+
+                {unevaluatedCount > 0 && (
                   <Button
-                    variant="ghost"
+                    variant="outline"
                     size="sm"
                     className="h-8 text-xs"
-                    onClick={() => {
-                      if (isAddLinkOpen) {
-                        setAddLinkOpenFor(null);
-                        setLinkUrl("");
-                      } else {
-                        setAddLinkOpenFor(queryKey);
-                      }
-                    }}
+                    onClick={() => void handleEvaluateGroup(presetId, qGroup.search_query)}
+                    disabled={isEvaluatingGroup || isBatchEvaluating}
                   >
-                    {isAddLinkOpen ? (
-                      <X className="mr-1 h-3.5 w-3.5" />
-                    ) : (
-                      <LinkIcon className="mr-1 h-3.5 w-3.5" />
-                    )}
-                    {isAddLinkOpen ? "Cancel" : "Add Link"}
+                    <Wand2 className="mr-2 h-3.5 w-3.5" />
+                    Evaluate All ({unevaluatedCount})
                   </Button>
-
-                  {unevaluatedCount > 0 && (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="h-8 text-xs"
-                      onClick={() => handleEvaluateGroup(presetId, qGroup.search_query)}
-                      disabled={isEvaluatingGroup || isBatchEvaluating}
-                    >
-                      <Wand2 className="mr-2 h-3.5 w-3.5" />
-                      Evaluate All ({unevaluatedCount})
-                    </Button>
-                  )}
-                </div>
+                )}
               </div>
+            </div>
 
-              {/* Inline add-link form */}
-              {isAddLinkOpen && (
-                <div
-                  role="toolbar"
-                  className="mt-3"
-                  onClick={(e) => e.stopPropagation()}
-                  onKeyDown={(e) => e.stopPropagation()}
+            {/* Inline add-link form */}
+            {isAddLinkOpen && (
+              <form
+                onSubmit={(e) => handleAddLink(e, presetId, qGroup.search_query)}
+                className="mt-3 flex gap-2"
+              >
+                <Input
+                  className="h-8 text-sm"
+                  placeholder="https://example.com/useful-link"
+                  value={linkUrl}
+                  onChange={(e) => setLinkUrl(e.target.value)}
+                  disabled={isAdding}
+                  autoFocus
+                />
+                <Button
+                  size="sm"
+                  type="submit"
+                  disabled={!linkUrl || isAdding}
+                  className="h-8 shrink-0"
                 >
-                  <form
-                    onSubmit={(e) => handleAddLink(e, presetId, qGroup.search_query)}
-                    className="flex gap-2"
-                  >
-                    <Input
-                      className="h-8 text-sm"
-                      placeholder="https://example.com/useful-link"
-                      value={linkUrl}
-                      onChange={(e) => setLinkUrl(e.target.value)}
-                      disabled={isAdding}
-                      autoFocus
-                    />
-                    <Button
-                      size="sm"
-                      type="submit"
-                      disabled={!linkUrl || isAdding}
-                      className="h-8 shrink-0"
-                    >
-                      <Plus className="mr-1 h-3.5 w-3.5" /> Add
-                    </Button>
-                  </form>
-                </div>
-              )}
-            </CardHeader>
-          </CollapsibleTrigger>
+                  <Plus className="mr-1 h-3.5 w-3.5" /> Add
+                </Button>
+              </form>
+            )}
+          </CardHeader>
 
           <CollapsibleContent>
             <CardContent className="p-4 grid gap-4 sm:grid-cols-1 lg:grid-cols-2">
               {sortedItems.map((item) => {
-                const resourceWithEval = {
+                const resourceWithEval: ResourceCard = {
                   ...item.resource_data,
                   relevance_score:
                     item.evaluation_data?.overall_score ?? item.resource_data.relevance_score,
                   relevance_reason:
                     item.evaluation_data?.relevance_reason ?? item.resource_data.relevance_reason,
                   evaluation_details:
-                    (item.evaluation_data?.scores as any) ?? item.resource_data.evaluation_details,
-                } as any;
+                    toResourceEvaluationDetails(item.evaluation_data?.scores) ??
+                    item.resource_data.evaluation_details,
+                };
 
                 return (
                   <ResourceCardRenderer

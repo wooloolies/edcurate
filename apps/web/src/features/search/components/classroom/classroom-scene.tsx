@@ -65,7 +65,7 @@ export function ClassroomScene({ stages, activeStage, isCached }: ClassroomScene
   };
 
   return (
-    <div
+    <section
       className="relative mx-auto w-full max-w-4xl overflow-hidden rounded-2xl"
       style={{
         aspectRatio: "5 / 3",
@@ -77,7 +77,6 @@ export function ClassroomScene({ stages, activeStage, isCached }: ClassroomScene
         ].join(", "),
         boxShadow: "0 8px 32px rgba(0,0,0,0.10), inset 0 0 0 1px rgba(0,0,0,0.06)",
       }}
-      role="region"
       aria-label="Classroom scene showing search progress"
     >
       {/* Floor line */}
@@ -98,7 +97,7 @@ export function ClassroomScene({ stages, activeStage, isCached }: ClassroomScene
           className="absolute"
           style={{ left: pos.x, top: pos.y, transform: "translateX(-50%)" }}
         >
-          <svg viewBox="0 0 80 16" className="h-3 w-16">
+          <svg viewBox="0 0 80 16" className="h-3 w-16" aria-hidden="true">
             <rect x="4" y="0" width="72" height="12" rx="3" fill="#B8904A" opacity="0.7" />
             <rect x="7" y="2" width="66" height="7" rx="2" fill="#D4A96A" opacity="0.8" />
           </svg>
@@ -142,6 +141,6 @@ export function ClassroomScene({ stages, activeStage, isCached }: ClassroomScene
         label={tAgents("adversarial")}
         message={getBubble("rabbit", rabbitStatus)}
       />
-    </div>
+    </section>
   );
 }

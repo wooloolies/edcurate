@@ -5,10 +5,10 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export type EvaluationResultRecommendedUse = typeof EvaluationResultRecommendedUse[keyof typeof EvaluationResultRecommendedUse];
+export type EvaluationResultInputRecommendedUse = typeof EvaluationResultInputRecommendedUse[keyof typeof EvaluationResultInputRecommendedUse];
 
 
-export const EvaluationResultRecommendedUse = {
+export const EvaluationResultInputRecommendedUse = {
   primary_resource: 'primary_resource',
   supplementary: 'supplementary',
   reference_only: 'reference_only',

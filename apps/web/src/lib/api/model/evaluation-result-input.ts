@@ -5,13 +5,13 @@
  * OpenAPI spec version: 0.1.0
  */
 import type { AdversarialReviewResult } from './adversarial-review-result';
-import type { EvaluationResultRecommendedUse } from './evaluation-result-recommended-use';
-import type { EvaluationResultScores } from './evaluation-result-scores';
+import type { EvaluationResultInputRecommendedUse } from './evaluation-result-input-recommended-use';
+import type { EvaluationResultInputScores } from './evaluation-result-input-scores';
 
 /**
  * Full evaluation of a single resource across 7 dimensions.
  */
-export interface EvaluationResult {
+export interface EvaluationResultInput {
   resource_url: string;
   /**
      * @minimum 0
@@ -19,7 +19,7 @@ export interface EvaluationResult {
      */
   overall_score: number;
   relevance_reason: string;
-  recommended_use: EvaluationResultRecommendedUse;
-  scores: EvaluationResultScores;
+  recommended_use: EvaluationResultInputRecommendedUse;
+  scores: EvaluationResultInputScores;
   adversarial?: AdversarialReviewResult | null;
 }

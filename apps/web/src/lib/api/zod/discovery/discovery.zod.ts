@@ -118,3 +118,25 @@ export const SearchApiDiscoverySearchGetResponse = zod.object({
 }).describe('Full evaluation of a single resource across 7 dimensions.')).optional()
 }).describe('Extends SearchResponse with evaluation data for the top 4 results.')
 
+/**
+ * SSE stream of search pipeline progress.
+
+Emits `SearchStageEvent` messages under the `stage` event name as the
+multi-agent pipeline executes.  Rate limited to 20 requests per minute
+per user.
+
+The stream always terminates with a ``complete / done`` event whose
+``data`` field contains the full ``EvaluatedSearchResponse``.
+ * @summary Search Stream
+ */
+export const searchStreamApiDiscoverySearchStreamGetQueryQueryMax = 500;
+
+
+
+export const SearchStreamApiDiscoverySearchStreamGetQueryParams = zod.object({
+  "preset_id": zod.uuid(),
+  "query": zod.string().min(1).max(searchStreamApiDiscoverySearchStreamGetQueryQueryMax)
+})
+
+export const SearchStreamApiDiscoverySearchStreamGetResponse = zod.unknown()
+

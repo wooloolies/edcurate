@@ -34,7 +34,7 @@ export function SpeechBubble({ text, position = "left", cycleInterval = 4000 }: 
 
   return (
     <AnimatePresence mode="wait">
-      {displayText && (
+      {displayText ? (
         <motion.div
           key={displayText}
           className="absolute -top-12 left-1/2 z-20 -translate-x-1/2"
@@ -61,12 +61,13 @@ export function SpeechBubble({ text, position = "left", cycleInterval = 4000 }: 
               className="absolute -bottom-1.5 h-2 w-3"
               style={{ left: tailOffset, transform: "translateX(-50%)" }}
               viewBox="0 0 12 8"
+              aria-hidden="true"
             >
               <path d="M0 0 L6 8 L12 0 Z" fill="rgba(255,255,255,0.95)" />
             </svg>
           </div>
         </motion.div>
-      )}
+      ) : null}
     </AnimatePresence>
   );
 }

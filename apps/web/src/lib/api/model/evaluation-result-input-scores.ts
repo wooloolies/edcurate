@@ -6,4 +6,4 @@
  */
 import type { DimensionScore } from './dimension-score';
 
-export type EvaluationResultScores = {[key: string]: DimensionScore};
+export type EvaluationResultInputScores = {[key: string]: DimensionScore};

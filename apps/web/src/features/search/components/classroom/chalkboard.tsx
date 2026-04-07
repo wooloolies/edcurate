@@ -42,7 +42,7 @@ export function Chalkboard({ activeStage, isCached }: ChalkboardProps) {
 
       {/* Stage text with fade transition */}
       <AnimatePresence mode="wait">
-        {text && (
+        {text ? (
           <motion.p
             key={text}
             initial={{ opacity: 0, y: 4 }}
@@ -57,7 +57,7 @@ export function Chalkboard({ activeStage, isCached }: ChalkboardProps) {
           >
             {text}
           </motion.p>
-        )}
+        ) : null}
       </AnimatePresence>
 
       {/* Chalk tray at the bottom */}

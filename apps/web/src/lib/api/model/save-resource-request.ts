@@ -4,10 +4,12 @@
  * edcurate-api
  * OpenAPI spec version: 0.1.0
  */
+import type { EvaluationResultInput } from './evaluation-result-input';
 import type { ResourceCard } from './resource-card';
 
 export interface SaveResourceRequest {
   preset_id: string;
   search_query: string;
   resource: ResourceCard;
+  evaluation_data?: EvaluationResultInput | null;
 }

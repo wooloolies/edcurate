@@ -6,7 +6,7 @@ import { useQueryState } from "nuqs";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
-import type { AdversarialReviewResult, ResourceCard } from "@/lib/api/model";
+import type { EvaluationResultOutput, ResourceCard, SaveResourceRequest } from "@/lib/api/model";
 import {
   getListSavedResourcesEndpointApiSavedGetQueryKey,
   useDeleteSavedResourceEndpointApiSavedIdDelete,
@@ -19,7 +19,7 @@ interface BookmarkButtonProps {
   resource: ResourceCard;
   checked?: boolean;
   onToggleChecked?: (e: React.MouseEvent, checked: boolean) => void;
-  adversarial?: AdversarialReviewResult | null;
+  evaluation?: EvaluationResultOutput | null;
 }
 
 export function BookmarkButton({
@@ -27,7 +27,7 @@ export function BookmarkButton({
   resource,
   checked,
   onToggleChecked,
-  adversarial,
+  evaluation,
 }: BookmarkButtonProps) {
   const queryClient = useQueryClient();
   const { data: savedData, isFetching: isLoadingList } = useListSavedResourcesEndpointApiSavedGet();
@@ -75,26 +75,19 @@ export function BookmarkButton({
         await deleteResource({ id: savedId! });
         toast.success("Resource removed from library");
       } else {
-        const payload: Record<string, any> = {
+        const payload: SaveResourceRequest = {
           preset_id: presetId,
           search_query: searchQuery || "custom",
           resource,
         };
 
-        if (resource.relevance_score != null) {
-          payload.evaluation_data = {
-            resource_url: resource.url,
-            overall_score: resource.relevance_score,
-            relevance_reason: resource.relevance_reason || "",
-            recommended_use: "supplementary", // Safe default, actual value might differ but isn't critical for peer check
-            scores: resource.evaluation_details || {},
-            adversarial: adversarial || null,
-          };
+        if (evaluation) {
+          payload.evaluation_data = evaluation;
         }
 
         await saveResource({
           data: payload,
-        } as any);
+        });
         toast.success("Resource saved to library");
       }
       queryClient.invalidateQueries({

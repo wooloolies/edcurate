@@ -885,6 +885,59 @@
         }
       }
     },
+    "/api/discovery/search/stream": {
+      "get": {
+        "tags": [
+          "discovery"
+        ],
+        "summary": "Search Stream",
+        "description": "SSE stream of search pipeline progress.\n\nEmits `SearchStageEvent` messages under the `stage` event name as the\nmulti-agent pipeline executes.  Rate limited to 20 requests per minute\nper user.\n\nThe stream always terminates with a ``complete / done`` event whose\n``data`` field contains the full ``EvaluatedSearchResponse``.",
+        "operationId": "search_stream_api_discovery_search_stream_get",
+        "parameters": [
+          {
+            "name": "preset_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Preset Id"
+            }
+          },
+          {
+            "name": "query",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 500,
+              "title": "Query"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/saved": {
       "get": {
         "tags": [
@@ -1340,6 +1393,27 @@
             },
             "type": "array",
             "title": "Resources"
+          },
+          "evaluation_data_list": {
+            "anyOf": [
+              {
+                "items": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/EvaluationResult-Input"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Evaluation Data List"
           }
         },
         "type": "object",
@@ -1591,7 +1665,7 @@
           },
           "evaluations": {
             "items": {
-              "$ref": "#/components/schemas/EvaluationResult"
+              "$ref": "#/components/schemas/EvaluationResult-Output"
             },
             "type": "array",
             "title": "Evaluations"
@@ -1609,7 +1683,61 @@
         "title": "EvaluatedSearchResponse",
         "description": "Extends SearchResponse with evaluation data for the top 4 results."
       },
-      "EvaluationResult": {
+      "EvaluationResult-Input": {
+        "properties": {
+          "resource_url": {
+            "type": "string",
+            "title": "Resource Url"
+          },
+          "overall_score": {
+            "type": "number",
+            "maximum": 10.0,
+            "minimum": 0.0,
+            "title": "Overall Score"
+          },
+          "relevance_reason": {
+            "type": "string",
+            "title": "Relevance Reason"
+          },
+          "recommended_use": {
+            "type": "string",
+            "enum": [
+              "primary_resource",
+              "supplementary",
+              "reference_only"
+            ],
+            "title": "Recommended Use"
+          },
+          "scores": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/DimensionScore"
+            },
+            "type": "object",
+            "title": "Scores"
+          },
+          "adversarial": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AdversarialReviewResult"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "resource_url",
+          "overall_score",
+          "relevance_reason",
+          "recommended_use",
+          "scores"
+        ],
+        "title": "EvaluationResult",
+        "description": "Full evaluation of a single resource across 7 dimensions."
+      },
+      "EvaluationResult-Output": {
         "properties": {
           "resource_url": {
             "type": "string",
@@ -2781,6 +2909,16 @@
           },
           "resource": {
             "$ref": "#/components/schemas/ResourceCard"
+          },
+          "evaluation_data": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/EvaluationResult-Input"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "type": "object",
@@ -2838,7 +2976,7 @@
           "evaluation_data": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/EvaluationResult"
+                "$ref": "#/components/schemas/EvaluationResult-Output"
               },
               {
                 "type": "null"

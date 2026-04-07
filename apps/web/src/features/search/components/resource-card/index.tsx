@@ -2,10 +2,15 @@ import { CustomCard } from "@/features/search/components/resource-card/custom-ca
 import { DdgsCard } from "@/features/search/components/resource-card/ddgs-card";
 import { OpenAlexCard } from "@/features/search/components/resource-card/open-alex-card";
 import { YoutubeCard } from "@/features/search/components/resource-card/youtube-card";
-import type { AdversarialReviewResult, ResourceCard } from "@/lib/api/model";
+import type {
+  AdversarialReviewResult,
+  EvaluationResultOutput,
+  ResourceCard,
+} from "@/lib/api/model";
 
 interface ResourceCardRendererProps {
   resource: ResourceCard;
+  evaluation?: EvaluationResultOutput | null;
   adversarial?: AdversarialReviewResult | null;
   presetId?: string;
   hideAction?: boolean;
@@ -17,6 +22,7 @@ import { BookmarkButton } from "./bookmark-button";
 
 export function ResourceCardRenderer({
   resource,
+  evaluation,
   adversarial,
   presetId,
   hideAction,
@@ -36,7 +42,7 @@ export function ResourceCardRenderer({
         resource={resource}
         checked={checked}
         onToggleChecked={onToggleChecked}
-        adversarial={adversarial}
+        evaluation={evaluation}
       />
     );
   }
