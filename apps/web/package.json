@@ -8,7 +8,7 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "biome check src",
+    "lint": "biome check --write --unsafe --error-on-warnings src",
     "format": "biome check --write src",
     "check": "biome check --write src",
     "typecheck": "tsc --noEmit",
