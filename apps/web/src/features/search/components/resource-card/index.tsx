@@ -5,6 +5,7 @@ import { YoutubeCard } from "@/features/search/components/resource-card/youtube-
 import type { JudgmentResult, ResourceCard } from "@/lib/api/model";
 
 interface ResourceCardRendererProps {
+  index: number;
   resource: ResourceCard;
   judgment?: JudgmentResult | null;
   presetId?: string;
@@ -16,6 +17,7 @@ interface ResourceCardRendererProps {
 import { BookmarkButton } from "./bookmark-button";
 
 export function ResourceCardRenderer({
+  index,
   resource,
   judgment,
   presetId,
@@ -42,13 +44,13 @@ export function ResourceCardRenderer({
 
   switch (resource.source) {
     case "ddgs":
-      return <DdgsCard resource={resource} judgment={judgment} action={action} />;
+      return <DdgsCard index={index} resource={resource} judgment={judgment} action={action} />;
     case "youtube":
-      return <YoutubeCard resource={resource} judgment={judgment} action={action} />;
+      return <YoutubeCard index={index} resource={resource} judgment={judgment} action={action} />;
     case "openalex":
-      return <OpenAlexCard resource={resource} judgment={judgment} action={action} />;
+      return <OpenAlexCard index={index} resource={resource} judgment={judgment} action={action} />;
     case "custom":
-      return <CustomCard resource={resource} judgment={judgment} action={action} />;
+      return <CustomCard index={index} resource={resource} judgment={judgment} action={action} />;
     default:
       return null;
   }

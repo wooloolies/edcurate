@@ -1,7 +1,7 @@
 "use client";
 
 import { useQueryClient } from "@tanstack/react-query";
-import { ChevronDown, ChevronUp, Repeat, Search, X } from "lucide-react";
+import { ChevronDown, X, Inbox, Globe, Play, BookOpen, Layers, Search } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useQueryState } from "nuqs";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -9,11 +9,12 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { ClassroomScene } from "@/features/search/components/classroom/classroom-scene";
 import { ErrorBanner } from "@/features/search/components/error-banner";
 import { EvaluationProgress } from "@/features/search/components/evaluation-progress";
@@ -37,6 +38,13 @@ export function SearchPageClient() {
   const [searchQuery, setSearchQuery] = useQueryState("q");
   const [draft, setDraft] = useState(searchQuery ?? "");
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const [activeCategory, setActiveCategory] = useState<string>("all");
+  const [visibleCount, setVisibleCount] = useState<number>(4);
+
+  // Reset pagination when query or category changes
+  useEffect(() => {
+    setVisibleCount(4);
+  }, [searchQuery, activeCategory]);
 
   const { data: presetsData } = useListPresetsApiPresetsGet();
   const presets = presetsData?.data ?? [];
@@ -171,41 +179,23 @@ export function SearchPageClient() {
   const hasContent = results || stream.isStreaming || isFetching;
 
   return (
-    <div className={`w-full max-w-4xl space-y-6 ${!hasContent ? "my-auto" : ""}`}>
-      {/* Preset Header */}
-      <div className="flex flex-col mb-2 pl-2">
-        <div className="flex items-center gap-3">
-          <h2 className="text-3xl font-bold text-[#111827] leading-none mb-1">
-            {activePreset?.name ?? t("selectCollection")}
-          </h2>
-          <Popover>
-            <PopoverTrigger asChild>
-              <button
-                type="button"
-                className="p-2 border-2 border-white/40 rounded-xl bg-white/30 backdrop-blur-md shadow-sm flex items-center justify-center shrink-0 hover:bg-white transition-all transform hover:scale-105 cursor-pointer"
-              >
-                <Repeat className="w-5 h-5 text-[#111827] stroke-[2.5]" />
-              </button>
-            </PopoverTrigger>
-            <PopoverContent align="start" className="w-56 p-2">
-              <div className="flex flex-col gap-1">
-                {presets.map((p) => (
-                  <button
-                    key={p.id}
-                    type="button"
-                    onClick={() => setPresetId(p.id)}
-                    className={`w-full text-left px-3 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer ${
-                      p.id === presetId
-                        ? "bg-[#B7FF70] text-[#111827]"
-                        : "hover:bg-gray-100 text-gray-700"
-                    }`}
-                  >
-                    {p.name}
-                  </button>
-                ))}
-              </div>
-            </PopoverContent>
-          </Popover>
+    <div className="space-y-6">
+      <h1 className="text-2xl font-bold">{t("title")}</h1>
+
+      <div className="flex flex-wrap items-end gap-3">
+        <div className="w-64">
+          <Select value={presetId ?? ""} onValueChange={(v: string) => setPresetId(v)}>
+            <SelectTrigger>
+              <SelectValue placeholder={t("selectPreset")} />
+            </SelectTrigger>
+            <SelectContent>
+              {presets.map((p) => (
+                <SelectItem key={p.id} value={p.id}>
+                  {p.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
         <p className="text-lg font-medium text-[#111827]/60 mt-1 pl-1">
           {t("subtitle")}
@@ -292,36 +282,78 @@ export function SearchPageClient() {
       ) : null}
 
       {results && !isFetching && !stream.isStreaming ? (
-        <Tabs defaultValue="all">
-          <TabsList>
-            <TabsTrigger value="all">
-              {t("tabs.all")} ({totalCount})
-            </TabsTrigger>
-            <TabsTrigger value="ddgs">
-              {t("tabs.web")} ({counts.ddgs ?? 0})
-            </TabsTrigger>
-            <TabsTrigger value="youtube">
-              {t("tabs.video")} ({counts.youtube ?? 0})
-            </TabsTrigger>
-            <TabsTrigger value="openalex">
-              {t("tabs.papers")} ({counts.openalex ?? 0})
-            </TabsTrigger>
-          </TabsList>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* Left Sidebar: Categories Overview */}
+          <aside className="lg:col-span-3 space-y-1 bg-slate-50/50 p-2 rounded-xl border border-slate-100">
+            <button
+              type="button"
+              onClick={() => setActiveCategory("all")}
+              className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${activeCategory === "all" ? "bg-white shadow-sm border border-slate-200 text-slate-900" : "text-slate-600 hover:bg-slate-100/60"}`}
+            >
+              <div className="flex items-center gap-2">
+                <Layers className="h-4 w-4" />
+                <span>{t("tabs.all")}</span>
+              </div>
+              <span className="text-xs text-slate-400">({totalCount})</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveCategory("youtube")}
+              className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${activeCategory === "youtube" ? "bg-white shadow-sm border border-slate-200 text-slate-900" : "text-slate-600 hover:bg-slate-100/60"}`}
+            >
+              <div className="flex items-center gap-2">
+                <Play className="h-4 w-4" />
+                <span>{t("tabs.video")}</span>
+              </div>
+              <span className="text-xs text-slate-400">({counts.youtube ?? 0})</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveCategory("ddgs")}
+              className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${activeCategory === "ddgs" ? "bg-white shadow-sm border border-slate-200 text-slate-900" : "text-slate-600 hover:bg-slate-100/60"}`}
+            >
+              <div className="flex items-center gap-2">
+                <Globe className="h-4 w-4" />
+                <span>{t("tabs.web")}</span>
+              </div>
+              <span className="text-xs text-slate-400">({counts.ddgs ?? 0})</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveCategory("openalex")}
+              className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${activeCategory === "openalex" ? "bg-white shadow-sm border border-slate-200 text-slate-900" : "text-slate-600 hover:bg-slate-100/60"}`}
+            >
+              <div className="flex items-center gap-2">
+                <BookOpen className="h-4 w-4" />
+                <span>{t("tabs.papers")}</span>
+              </div>
+              <span className="text-xs text-slate-400">({counts.openalex ?? 0})</span>
+            </button>
+          </aside>
 
-          {["all", "ddgs", "youtube", "openalex"].map((tab) => {
-            const items = filterBySource(tab === "all" ? undefined : tab);
-            const evaluated = items.filter((r) => r.relevance_score != null);
-            const unevaluated = items.filter((r) => r.relevance_score == null);
+          {/* Right Content: Results List */}
+          <section className="lg:col-span-9 bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden min-h-[400px]">
+            {(() => {
+              const items = filterBySource(activeCategory === "all" ? undefined : activeCategory);
+              const visibleItems = items.slice(0, visibleCount);
+              const remainingCount = items.length - visibleCount;
 
-            return (
-              <TabsContent key={tab} value={tab} className="space-y-3">
-                {items.length === 0 ? (
-                  <p className="py-8 text-center text-muted-foreground">{t("noResults")}</p>
-                ) : (
-                  <>
-                    {evaluated.map((resource) => (
+              if (items.length === 0) {
+                return (
+                  <div className="flex flex-col items-center justify-center p-12 text-center text-slate-500">
+                    <Inbox className="h-10 w-10 text-slate-300 mb-4" />
+                    <p>{t("noResults")}</p>
+                  </div>
+                );
+              }
+
+              return (
+                <div>
+                  <div className="divide-y divide-slate-100">
+                    {visibleItems.map((resource, i) => (
                       <ResourceCardRenderer
                         key={resource.url}
+                        index={i + 1}
                         resource={resource}
                         judgment={judgmentByUrl.get(resource.url)}
                         presetId={presetId ?? undefined}
@@ -329,44 +361,29 @@ export function SearchPageClient() {
                         onToggleChecked={(_, c) => handleToggleChecked(resource, c)}
                       />
                     ))}
-                    {unevaluated.length > 0 ? (
-                      <>
-                        <Button
-                          variant="ghost"
-                          className="w-full text-muted-foreground"
-                          onClick={() => setShowUnscored((prev) => !prev)}
-                        >
-                          {showUnscored ? (
-                            <ChevronUp className="mr-2 h-4 w-4" />
-                          ) : (
-                            <ChevronDown className="mr-2 h-4 w-4" />
-                          )}
-                          {showUnscored
-                            ? t("hideUnscored")
-                            : t("showUnscored", { count: unevaluated.length })}
-                        </Button>
-                        {showUnscored ? (
-                          <div className="space-y-3 pt-2">
-                            {unevaluated.map((resource) => (
-                              <ResourceCardRenderer
-                                key={resource.url}
-                                resource={resource}
-                                judgment={judgmentByUrl.get(resource.url)}
-                                presetId={presetId ?? undefined}
-                                checked={isChecked(resource.url)}
-                                onToggleChecked={(_, c) => handleToggleChecked(resource, c)}
-                              />
-                            ))}
-                          </div>
-                        ) : null}
-                      </>
-                    ) : null}
-                  </>
-                )}
-              </TabsContent>
-            );
-          })}
-        </Tabs>
+                  </div>
+                  
+                  {remainingCount > 0 && (
+                    <div className="bg-slate-50 border-t border-slate-100 p-6 flex flex-col items-center justify-center gap-4 text-center">
+                      <p className="text-sm font-medium text-slate-500">
+                        {remainingCount} resources not evaluated yet
+                      </p>
+                      <Button 
+                        variant="secondary" 
+                        onClick={() => setVisibleCount((v) => v + 4)}
+                        className="rounded-full px-8 shadow-sm"
+                      >
+                        Evaluate next 4 resources
+                        <ChevronDown className="ml-2 h-4 w-4" />
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              );
+            })()}
+          </section>
+
+        </div>
       ) : null}
 
 

@@ -112,166 +112,133 @@ function FlagCard({ flag, t }: { flag: ResourceFlag; t: ReturnType<typeof useTra
   );
 }
 
-export function RelevanceIndicator({ verdict, judgment }: RelevanceIndicatorProps) {
+export function VerdictBadge({ verdict }: { verdict?: string | null }) {
   const t = useTranslations("search.evaluation");
-  const [open, setOpen] = useState(false);
 
   if (!verdict) {
     return (
-      <div className="mt-3 flex flex-col gap-2 rounded-md border bg-slate-50/50 p-3">
-        <Badge variant="outline" className="w-fit text-slate-500 bg-slate-100 border-slate-200">
-          {t("unevaluated")}
-        </Badge>
-      </div>
+      <Badge variant="outline" className="w-fit text-slate-500 bg-slate-100 border-slate-200">
+        {t("unevaluated")}
+      </Badge>
     );
   }
 
   const config = VERDICT_CONFIG[verdict as JudgmentResultVerdict] ?? VERDICT_CONFIG.adapt_it;
-  const flags = judgment?.flags ?? [];
-  const highFlags = flags.filter((f) => f.severity === "high");
-  const adaptations = judgment?.adaptations ?? [];
-
-  const metrics = judgment
-    ? ([
-        ["curriculumFit", judgment.curriculum_fit],
-        ["accessibility", judgment.accessibility],
-        ["trustworthiness", judgment.trustworthiness],
-      ] as const)
-    : null;
 
   return (
-    <div className="mt-3 rounded-md border bg-slate-50/50">
-      {/* ── Header row ─────────────────────────────────────────── */}
-      <div className="flex items-center justify-between gap-2 p-3">
-        <div className="flex min-w-0 flex-wrap items-center gap-2">
-          <Badge variant="outline" className={`shrink-0 ${config.badgeClass}`}>
-            {config.icon}
-            {t(config.labelKey)}
-          </Badge>
+    <Badge variant="outline" className={`shrink-0 ${config.badgeClass} flex items-center w-fit`}>
+      {config.icon}
+      {t(config.labelKey)}
+    </Badge>
+  );
+}
 
-          {!!judgment?.confidence && (
-            <span className="text-xs text-slate-500">{t(`confidence.${judgment.confidence}`)}</span>
-          )}
+export function RelevanceDetails({ judgment }: { judgment: JudgmentResult }) {
+  const t = useTranslations("search.evaluation");
+  
+  const flags = judgment?.flags ?? [];
+  const adaptations = judgment?.adaptations ?? [];
 
-          <span className="text-xs font-medium text-slate-600">{t("agent")}</span>
+  const metrics = [
+    ["curriculumFit", judgment.curriculum_fit],
+    ["accessibility", judgment.accessibility],
+    ["trustworthiness", judgment.trustworthiness],
+  ] as const;
 
-          {highFlags.length > 0 && (
-            <div className="flex items-center gap-1">
-              <AlertTriangle className="h-3.5 w-3.5 text-red-500" />
-              <span className="text-xs text-red-600 font-medium">
-                {t("flags", { count: flags.length })}
-              </span>
-            </div>
+  return (
+    <div className="divide-y divide-slate-100 bg-white">
+      {/* Call 1 — Triage */}
+      <div className="p-4 space-y-3">
+        <div className="flex items-center justify-between">
+          <p className="flex items-center gap-1.5 text-xs font-semibold text-slate-500 uppercase tracking-wide">
+            <ClipboardCheck className="h-3.5 w-3.5" />
+            {t("sections.triage")}
+          </p>
+          {!!judgment.confidence && (
+            <span className="text-xs font-medium text-slate-500 bg-slate-50 px-2 py-0.5 rounded border border-slate-100">
+              {t(`confidence.${judgment.confidence}`)}
+            </span>
           )}
         </div>
-
-        {!!judgment && (
-          <button
-            type="button"
-            onClick={() => setOpen((p) => !p)}
-            className="flex shrink-0 items-center gap-1 text-xs text-slate-500 hover:text-slate-700 rounded px-1.5 py-0.5 hover:bg-slate-100 transition-colors"
-          >
-            <span>{open ? t("hideDetails") : t("showDetails")}</span>
-            <ChevronDown
-              aria-hidden
-              className={`h-3 w-3 transition-transform ${open ? "rotate-180" : ""}`}
-            />
-          </button>
+        <ul className="space-y-3">
+          {metrics.map(([key, metric]) => (
+            <li key={key} className="space-y-1">
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-medium text-slate-700">
+                  {t(`metrics.${key}`)}
+                </span>
+                <Badge
+                  variant="outline"
+                  className={`text-[10px] px-1.5 py-0 ${RATING_BADGE[metric.rating]}`}
+                >
+                  {t(`ratings.${metric.rating}`)}
+                </Badge>
+              </div>
+              {!!metric.reason && (
+                <p className="text-sm text-slate-600 leading-snug">{metric.reason}</p>
+              )}
+            </li>
+          ))}
+        </ul>
+        {adaptations.length > 0 && (
+          <div className="pt-2 space-y-1.5">
+            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
+              {t("sections.adaptations")}
+            </p>
+            <ul className="space-y-1.5">
+              {adaptations.map((a, i) => (
+                // biome-ignore lint/suspicious/noArrayIndexKey: adaptation list is ordered
+                <li key={i} className="text-sm text-slate-600 flex gap-2">
+                  <span className="mt-0.5 shrink-0 text-amber-500">•</span>
+                  <span>
+                    <span className="font-medium text-slate-800">{a.action}</span>
+                    {!!a.rationale && a.rationale !== "—" && (
+                      <span className="text-slate-500"> — {a.rationale}</span>
+                    )}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
         )}
       </div>
 
-      {/* ── Expanded details ────────────────────────────────────── */}
-      {!!open && !!judgment && (
-        <div className="border-t border-slate-200 divide-y divide-slate-100">
-          {/* Call 1 — Triage */}
-          {!!metrics && (
-            <div className="p-3 space-y-2">
-              <p className="flex items-center gap-1.5 text-xs font-semibold text-slate-500 uppercase tracking-wide">
-                <ClipboardCheck className="h-3 w-3" />
-                {t("sections.triage")}
-              </p>
-              <ul className="space-y-2">
-                {metrics.map(([key, metric]) => (
-                  <li key={key} className="space-y-0.5">
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs font-medium text-slate-700">
-                        {t(`metrics.${key}`)}
-                      </span>
-                      <Badge
-                        variant="outline"
-                        className={`text-[10px] px-1.5 py-0 ${RATING_BADGE[metric.rating]}`}
-                      >
-                        {t(`ratings.${metric.rating}`)}
-                      </Badge>
-                    </div>
-                    {!!metric.reason && (
-                      <p className="text-xs text-slate-500 leading-snug pl-0.5">{metric.reason}</p>
-                    )}
-                  </li>
-                ))}
-              </ul>
-              {adaptations.length > 0 && (
-                <div className="pt-1 space-y-1">
-                  <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
-                    {t("sections.adaptations")}
-                  </p>
-                  <ul className="space-y-1">
-                    {adaptations.map((a, i) => (
-                      // biome-ignore lint/suspicious/noArrayIndexKey: adaptation list is ordered
-                      <li key={i} className="text-xs text-slate-600 flex gap-1.5">
-                        <span className="mt-0.5 shrink-0 text-amber-500">•</span>
-                        <span>
-                          <span className="font-medium">{a.action}</span>
-                          {!!a.rationale && a.rationale !== "—" && (
-                            <span className="text-slate-400"> — {a.rationale}</span>
-                          )}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* Call 2 — Risk Scan */}
-          <div className="p-3 space-y-2">
-            <p className="flex items-center gap-1.5 text-xs font-semibold text-slate-500 uppercase tracking-wide">
-              <ShieldAlert className="h-3 w-3" />
-              {t("sections.riskScan")}
-            </p>
-            {flags.length === 0 ? (
-              <p className="text-xs text-emerald-600 flex items-center gap-1">
-                <CheckCircle2 className="h-3 w-3" />
-                {t("noFlags")}
-              </p>
-            ) : (
-              <div className="space-y-1.5">
-                {flags.map((flag, i) => (
-                  // biome-ignore lint/suspicious/noArrayIndexKey: flag list is ordered
-                  <FlagCard key={i} flag={flag} t={t} />
-                ))}
-              </div>
-            )}
+      {/* Call 2 — Risk Scan */}
+      <div className="p-4 space-y-3">
+        <p className="flex items-center gap-1.5 text-xs font-semibold text-slate-500 uppercase tracking-wide">
+          <ShieldAlert className="h-3.5 w-3.5" />
+          {t("sections.riskScan")}
+        </p>
+        {flags.length === 0 ? (
+          <p className="text-sm font-medium text-emerald-600 flex items-center gap-1.5">
+            <CheckCircle2 className="h-4 w-4" />
+            {t("noFlags")}
+          </p>
+        ) : (
+          <div className="space-y-2">
+            {flags.map((flag, i) => (
+              // biome-ignore lint/suspicious/noArrayIndexKey: flag list is ordered
+              <FlagCard key={i} flag={flag} t={t} />
+            ))}
           </div>
+        )}
+      </div>
 
-          {/* Call 3 — Final Reasoning */}
-          {!!judgment.reasoning_chain && (
-            <div className="p-3 space-y-1.5">
-              <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
-                {t("sections.reasoning")}
+      {/* Call 3 — Final Reasoning */}
+      {!!judgment.reasoning_chain && (
+        <div className="p-4 space-y-2 bg-slate-50/50">
+          <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
+            {t("sections.reasoning")}
+          </p>
+          <p className="text-sm text-slate-700 leading-relaxed italic">
+            "{judgment.reasoning_chain}"
+          </p>
+          {!!judgment.override_notes && (
+            <div className="rounded bg-orange-50 border border-orange-100 px-3 py-2 mt-2">
+              <p className="text-[10px] font-semibold uppercase tracking-wide text-orange-600 mb-1">
+                {t("overrideNote")}
               </p>
-              <p className="text-xs text-slate-600 leading-relaxed italic">
-                {judgment.reasoning_chain}
-              </p>
-              {!!judgment.override_notes && (
-                <div className="rounded bg-orange-50 border border-orange-100 px-2 py-1 mt-1">
-                  <p className="text-[10px] font-semibold uppercase tracking-wide text-orange-600 mb-0.5">
-                    {t("overrideNote")}
-                  </p>
-                  <p className="text-xs text-orange-800 leading-snug">{judgment.override_notes}</p>
-                </div>
-              )}
+              <p className="text-sm text-orange-800 leading-snug">{judgment.override_notes}</p>
             </div>
           )}
         </div>
