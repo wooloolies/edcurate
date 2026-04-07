@@ -1,5 +1,3 @@
 {
-  "git": {
-    "deploymentEnabled": false
-  }
+  "ignoreCommand": "[ \"$VERCEL_ENV\" != \"production\" ]"
 }
