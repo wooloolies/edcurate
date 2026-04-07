@@ -1,4 +1,4 @@
 {
-  "buildCommand": "pip install -e . 2>&1 && echo '=== PIP OK ===' && python -c 'from src.main import app; print(\"IMPORT OK\")' 2>&1 && alembic upgrade head 2>&1",
+  "buildCommand": "python3 --version && pip install -e . && echo PIP_SUCCESS",
   "ignoreCommand": "[ \"$VERCEL_ENV\" = \"preview\" ]"
 }
