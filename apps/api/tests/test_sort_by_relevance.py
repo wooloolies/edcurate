@@ -44,7 +44,7 @@ async def test_sort_by_relevance_sorts_by_cosine_similarity(monkeypatch):
 
     results_by_source = {"ddgs": cards, "youtube": [], "openalex": []}
 
-    sorted_results, eval_vector = await service._sort_by_relevance(
+    sorted_results, eval_vector, _scores = await service._sort_by_relevance(
         "test query", results_by_source
     )
 
@@ -78,7 +78,7 @@ async def test_sort_by_relevance_skips_empty_providers(monkeypatch):
         "openalex": [],
     }
 
-    sorted_results, _ = await service._sort_by_relevance(
+    sorted_results, _, _ = await service._sort_by_relevance(
         "test query", results_by_source
     )
 
@@ -104,11 +104,12 @@ async def test_sort_by_relevance_graceful_on_embed_failure(monkeypatch):
     ]
     results_by_source = {"ddgs": cards, "youtube": [], "openalex": []}
 
-    sorted_results, eval_vector = await service._sort_by_relevance(
+    sorted_results, eval_vector, scores = await service._sort_by_relevance(
         "test query", results_by_source
     )
 
     assert eval_vector is None
+    assert scores == {}
     assert sorted_results["ddgs"][0].title == "Card A"
     assert sorted_results["ddgs"][1].title == "Card B"
 
@@ -178,7 +179,7 @@ async def test_presort_changes_interleave_order(monkeypatch):
 
     results_by_source = {"ddgs": ddgs_cards, "youtube": [], "openalex": []}
 
-    sorted_results, _ = await service._sort_by_relevance(
+    sorted_results, _, _ = await service._sort_by_relevance(
         "test query", results_by_source
     )
 

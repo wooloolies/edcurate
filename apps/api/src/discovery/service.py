@@ -98,18 +98,21 @@ _SNIPPET_EMBED_LIMIT = 4000
 async def _sort_by_relevance(
     eval_query_text: str,
     results_by_source: dict[str, list[ResourceCard]],
-) -> tuple[dict[str, list[ResourceCard]], list[float] | None]:
+) -> tuple[dict[str, list[ResourceCard]], list[float] | None, dict[str, float]]:
     """Sort each provider's results by cosine similarity to the eval query.
 
-    Returns the (possibly reordered) results dict and the eval_vector for
-    reuse in the RAG pipeline.  On failure, returns the original order and
-    eval_vector=None.
+    Returns:
+        - (possibly reordered) results dict
+        - eval_vector for reuse in the RAG pipeline (None on failure)
+        - scores_by_url mapping each card URL to its cosine similarity score
     """
+    scores_by_url: dict[str, float] = {}
+
     try:
         eval_vector = await embed_single(eval_query_text)
     except Exception as e:
         logger.warning("Pre-sort embedding failed — skipping sort", error=str(e))
-        return results_by_source, None
+        return results_by_source, None, scores_by_url
 
     sorted_results: dict[str, list[ResourceCard]] = {}
     for source, cards in results_by_source.items():
@@ -134,11 +137,36 @@ async def _sort_by_relevance(
         scored = []
         for card, vec in zip(cards, vectors, strict=True):
             score = sum(a * b for a, b in zip(eval_vector, vec, strict=True))
+            scores_by_url[card.url] = score
             scored.append((score, card))
         scored.sort(key=lambda t: t[0], reverse=True)
         sorted_results[source] = [card for _, card in scored]
 
-    return sorted_results, eval_vector
+    return sorted_results, eval_vector, scores_by_url
+
+
+def _select_candidates(
+    results_by_source: dict[str, list[ResourceCard]],
+    scores_by_url: dict[str, float],
+    top_k: int = _TOP_K_EVALUATE,
+) -> tuple[list[ResourceCard], list[ResourceCard]]:
+    """Flatten, dedupe, and globally rank candidates by embedding similarity.
+
+    Returns (all_results, top_cards) where both lists are sorted by
+    descending embedding score.  Cards without a score default to 0.0.
+    """
+    seen_urls: set[str] = set()
+    all_cards: list[ResourceCard] = []
+
+    for cards in results_by_source.values():
+        for card in cards:
+            if card.url not in seen_urls:
+                seen_urls.add(card.url)
+                all_cards.append(card)
+
+    all_cards.sort(key=lambda c: scores_by_url.get(c.url, 0.0), reverse=True)
+
+    return all_cards, all_cards[:top_k]
 
 
 async def _run_rag_pipeline(
@@ -444,8 +472,6 @@ async def search_resources(
 
     raw_results = await asyncio.gather(*tasks, return_exceptions=True)
 
-    from itertools import zip_longest
-
     errors: list[SourceError] = []
     results_by_source: dict[str, list[ResourceCard]] = {}
 
@@ -460,21 +486,14 @@ async def search_resources(
 
     # Pre-sort each provider's results by embedding similarity
     eval_query_text = _build_eval_query(preset, query)
-    results_by_source, eval_vector = await _sort_by_relevance(
+    results_by_source, eval_vector, scores_by_url = await _sort_by_relevance(
         eval_query_text, results_by_source
     )
 
-    # Interleave round-robin
-    all_results: list[ResourceCard] = []
-    seen_urls: set[str] = set()
-    valid_results_lists = [cards for cards in results_by_source.values() if cards]
-
-    # Interleave 1 item from each provider round-robin
-    for interleaved_tuple in zip_longest(*valid_results_lists):
-        for card in interleaved_tuple:
-            if card is not None and card.url not in seen_urls:
-                seen_urls.add(card.url)
-                all_results.append(card)
+    # Global ranking: flatten, dedupe, pick top-k by embedding score
+    all_results, top_cards = _select_candidates(
+        results_by_source, scores_by_url, top_k=_TOP_K_EVALUATE
+    )
 
     if not all_results and len(errors) == len(_SOURCE_KEYS):
         raise HTTPException(
@@ -485,9 +504,6 @@ async def search_resources(
     counts_by_source: dict[str, int] = {source: 0 for source in _SOURCE_KEYS}
     for card in all_results:
         counts_by_source[card.source] += 1
-
-    # Take top 4 for evaluation
-    top_cards = all_results[:_TOP_K_EVALUATE]
 
     # Run RAG pipeline + evaluation (graceful degradation)
     _VERDICT_SCORE: dict[str, float] = {"use_it": 1.0, "adapt_it": 0.5, "skip_it": 0.0}
@@ -560,8 +576,6 @@ async def search_resources_stream(
     Cache hit:
         complete  done  cached=True  (full JudgedSearchResponse)
     """
-    from itertools import zip_longest
-
     # Cache check — emit single complete event and return early
     cache_key = _cache_key(str(preset.id), query)
     cached = await _get_cached(cache_key)
@@ -673,22 +687,15 @@ async def search_resources_stream(
     yield SearchStageEvent(stage="rag_preparation", status="working")
 
     eval_query_text = _build_eval_query(preset, query)
-    results_by_source, eval_vector = await _sort_by_relevance(
+    results_by_source, eval_vector, scores_by_url = await _sort_by_relevance(
         eval_query_text, results_by_source
     )
 
-    # Interleave round-robin (same logic as search_resources)
-    all_results: list[ResourceCard] = []
-    seen_urls: set[str] = set()
-    valid_results_lists = [cards for cards in results_by_source.values() if cards]
+    # Global ranking: flatten, dedupe, pick top-k by embedding score
+    all_results, top_cards = _select_candidates(
+        results_by_source, scores_by_url, top_k=_TOP_K_EVALUATE
+    )
 
-    for interleaved_tuple in zip_longest(*valid_results_lists):
-        for card in interleaved_tuple:
-            if card is not None and card.url not in seen_urls:
-                seen_urls.add(card.url)
-                all_results.append(card)
-
-    # Compute counts after dedup to match displayed results
     counts_by_source: dict[str, int] = {source: 0 for source in _SOURCE_KEYS}
     for card in all_results:
         counts_by_source[card.source] += 1
@@ -698,8 +705,6 @@ async def search_resources_stream(
         status="done",
         data={"counts": counts_by_source},
     )
-
-    top_cards = all_results[:_TOP_K_EVALUATE]
 
     yield SearchStageEvent(stage="rag_preparation", status="done")
 
