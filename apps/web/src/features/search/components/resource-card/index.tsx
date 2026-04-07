@@ -27,6 +27,7 @@ function buildOverviewHref(resource: ResourceCard, evaluationId?: string) {
   const params = new URLSearchParams({
     title: resource.title || "Resource Overview",
     type: resource.source || "general",
+    ...(resource.verdict && { verdict: resource.verdict }),
   });
   return `/overview?${params.toString()}`;
 }
