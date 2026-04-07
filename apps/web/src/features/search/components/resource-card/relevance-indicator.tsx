@@ -5,7 +5,7 @@ import {
   ChevronDown,
   Info,
   ShieldAlert,
-  Sparkles,
+  ClipboardCheck,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
@@ -187,7 +187,7 @@ export function RelevanceIndicator({ verdict, judgment }: RelevanceIndicatorProp
           {!!metrics && (
             <div className="p-3 space-y-2">
               <p className="flex items-center gap-1.5 text-xs font-semibold text-slate-500 uppercase tracking-wide">
-                <Sparkles className="h-3 w-3" />
+                <ClipboardCheck className="h-3 w-3" />
                 {t("sections.triage")}
               </p>
               <ul className="space-y-2">
