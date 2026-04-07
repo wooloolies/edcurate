@@ -13,6 +13,12 @@ class SaveResourceRequest(BaseModel):
     resource: ResourceCard
 
 
+class BulkSaveResourceRequest(BaseModel):
+    preset_id: uuid.UUID
+    search_query: str
+    resources: list[ResourceCard]
+
+
 class AddCustomLinkRequest(BaseModel):
     preset_id: uuid.UUID
     search_query: str
@@ -39,6 +45,11 @@ class SavedResourceResponse(BaseModel):
     resource_data: ResourceCard
     evaluation_data: EvaluationResult | None
     saved_at: datetime
+
+
+class BulkSaveResourceResponse(BaseModel):
+    saved: list[SavedResourceResponse]
+    total: int
 
 
 class QueryGroup(BaseModel):

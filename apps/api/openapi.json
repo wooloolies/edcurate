@@ -976,6 +976,48 @@
         }
       }
     },
+    "/api/saved/bulk": {
+      "post": {
+        "tags": [
+          "saved_resources"
+        ],
+        "summary": "Bulk Save Resources Endpoint",
+        "description": "Save multiple resources in a single request.",
+        "operationId": "bulk_save_resources_endpoint_api_saved_bulk_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BulkSaveResourceRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BulkSaveResourceResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/saved/{id}": {
       "delete": {
         "tags": [
@@ -1280,6 +1322,54 @@
           "search_query"
         ],
         "title": "BatchEvaluateRequest"
+      },
+      "BulkSaveResourceRequest": {
+        "properties": {
+          "preset_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Preset Id"
+          },
+          "search_query": {
+            "type": "string",
+            "title": "Search Query"
+          },
+          "resources": {
+            "items": {
+              "$ref": "#/components/schemas/ResourceCard"
+            },
+            "type": "array",
+            "title": "Resources"
+          }
+        },
+        "type": "object",
+        "required": [
+          "preset_id",
+          "search_query",
+          "resources"
+        ],
+        "title": "BulkSaveResourceRequest"
+      },
+      "BulkSaveResourceResponse": {
+        "properties": {
+          "saved": {
+            "items": {
+              "$ref": "#/components/schemas/SavedResourceResponse"
+            },
+            "type": "array",
+            "title": "Saved"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          }
+        },
+        "type": "object",
+        "required": [
+          "saved",
+          "total"
+        ],
+        "title": "BulkSaveResourceResponse"
       },
       "CountryOption": {
         "properties": {

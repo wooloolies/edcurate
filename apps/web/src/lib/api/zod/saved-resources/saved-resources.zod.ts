@@ -255,6 +255,149 @@ export const ToggleSaveResourceEndpointApiSavedPostResponse = zod.object({
 })
 
 /**
+ * Save multiple resources in a single request.
+ * @summary Bulk Save Resources Endpoint
+ */
+export const bulkSaveResourcesEndpointApiSavedBulkPostBodyResourcesItemMetadataOneSourceDefault = `ddgs`;
+export const bulkSaveResourcesEndpointApiSavedBulkPostBodyResourcesItemMetadataTwoSourceDefault = `youtube`;
+export const bulkSaveResourcesEndpointApiSavedBulkPostBodyResourcesItemMetadataTwoDurationDefault = ``;
+export const bulkSaveResourcesEndpointApiSavedBulkPostBodyResourcesItemMetadataThreeSourceDefault = `openalex`;
+export const bulkSaveResourcesEndpointApiSavedBulkPostBodyResourcesItemMetadataFourSourceDefault = `custom`;
+
+export const BulkSaveResourcesEndpointApiSavedBulkPostBody = zod.object({
+  "preset_id": zod.uuid(),
+  "search_query": zod.string(),
+  "resources": zod.array(zod.object({
+  "title": zod.string(),
+  "url": zod.string(),
+  "source": zod.enum(['ddgs', 'youtube', 'openalex', 'custom']),
+  "type": zod.enum(['webpage', 'video', 'paper']),
+  "snippet": zod.string(),
+  "thumbnail_url": zod.union([zod.string(),zod.null()]).optional(),
+  "metadata": zod.union([zod.object({
+  "source": zod.literal("ddgs").default(bulkSaveResourcesEndpointApiSavedBulkPostBodyResourcesItemMetadataOneSourceDefault),
+  "domain": zod.string(),
+  "published_date": zod.union([zod.string(),zod.null()]).optional(),
+  "language": zod.union([zod.string(),zod.null()]).optional()
+}).describe('Metadata from DuckDuckGo search results.'),zod.object({
+  "source": zod.literal("youtube").default(bulkSaveResourcesEndpointApiSavedBulkPostBodyResourcesItemMetadataTwoSourceDefault),
+  "channel": zod.string(),
+  "duration": zod.string().default(bulkSaveResourcesEndpointApiSavedBulkPostBodyResourcesItemMetadataTwoDurationDefault),
+  "view_count": zod.union([zod.number(),zod.null()]).optional(),
+  "published_date": zod.union([zod.string(),zod.null()]).optional(),
+  "tags": zod.array(zod.string()).optional(),
+  "full_description": zod.union([zod.string(),zod.null()]).optional()
+}).describe('Metadata from YouTube Data API results.'),zod.object({
+  "source": zod.literal("openalex").default(bulkSaveResourcesEndpointApiSavedBulkPostBodyResourcesItemMetadataThreeSourceDefault),
+  "authors": zod.array(zod.string()).optional(),
+  "journal": zod.union([zod.string(),zod.null()]).optional(),
+  "citation_count": zod.union([zod.number(),zod.null()]).optional(),
+  "doi": zod.union([zod.string(),zod.null()]).optional(),
+  "published_date": zod.union([zod.string(),zod.null()]).optional()
+}).describe('Metadata from OpenAlex works results.'),zod.object({
+  "source": zod.literal("custom").default(bulkSaveResourcesEndpointApiSavedBulkPostBodyResourcesItemMetadataFourSourceDefault),
+  "domain": zod.string(),
+  "og_title": zod.union([zod.string(),zod.null()]).optional(),
+  "og_description": zod.union([zod.string(),zod.null()]).optional(),
+  "og_image": zod.union([zod.string(),zod.null()]).optional()
+}).describe('Metadata from manually added custom links.')]),
+  "relevance_score": zod.union([zod.number(),zod.null()]).optional(),
+  "relevance_reason": zod.union([zod.string(),zod.null()]).optional(),
+  "evaluation_details": zod.union([zod.record(zod.string(), zod.record(zod.string(), zod.unknown())),zod.null()]).optional().describe('Detailed dimension scores')
+}).describe('Normalised resource card returned by all providers.'))
+})
+
+export const bulkSaveResourcesEndpointApiSavedBulkPostResponseSavedItemResourceDataMetadataOneSourceDefault = `ddgs`;
+export const bulkSaveResourcesEndpointApiSavedBulkPostResponseSavedItemResourceDataMetadataTwoSourceDefault = `youtube`;
+export const bulkSaveResourcesEndpointApiSavedBulkPostResponseSavedItemResourceDataMetadataTwoDurationDefault = ``;
+export const bulkSaveResourcesEndpointApiSavedBulkPostResponseSavedItemResourceDataMetadataThreeSourceDefault = `openalex`;
+export const bulkSaveResourcesEndpointApiSavedBulkPostResponseSavedItemResourceDataMetadataFourSourceDefault = `custom`;
+export const bulkSaveResourcesEndpointApiSavedBulkPostResponseSavedItemEvaluationDataOneOverallScoreMin = 0;
+export const bulkSaveResourcesEndpointApiSavedBulkPostResponseSavedItemEvaluationDataOneOverallScoreMax = 10;
+
+export const bulkSaveResourcesEndpointApiSavedBulkPostResponseSavedItemEvaluationDataOneScoresScoreMax = 10;
+
+export const bulkSaveResourcesEndpointApiSavedBulkPostResponseSavedItemEvaluationDataOneScoresMaxDefault = 10;
+export const bulkSaveResourcesEndpointApiSavedBulkPostResponseSavedItemEvaluationDataOneAdversarialOneScoreAdjustmentsScoreMax = 10;
+
+export const bulkSaveResourcesEndpointApiSavedBulkPostResponseSavedItemEvaluationDataOneAdversarialOneScoreAdjustmentsMaxDefault = 10;
+
+export const BulkSaveResourcesEndpointApiSavedBulkPostResponse = zod.object({
+  "saved": zod.array(zod.object({
+  "id": zod.uuid(),
+  "preset_id": zod.uuid(),
+  "search_query": zod.string(),
+  "resource_url": zod.string(),
+  "resource_data": zod.object({
+  "title": zod.string(),
+  "url": zod.string(),
+  "source": zod.enum(['ddgs', 'youtube', 'openalex', 'custom']),
+  "type": zod.enum(['webpage', 'video', 'paper']),
+  "snippet": zod.string(),
+  "thumbnail_url": zod.union([zod.string(),zod.null()]).optional(),
+  "metadata": zod.union([zod.object({
+  "source": zod.literal("ddgs").default(bulkSaveResourcesEndpointApiSavedBulkPostResponseSavedItemResourceDataMetadataOneSourceDefault),
+  "domain": zod.string(),
+  "published_date": zod.union([zod.string(),zod.null()]).optional(),
+  "language": zod.union([zod.string(),zod.null()]).optional()
+}).describe('Metadata from DuckDuckGo search results.'),zod.object({
+  "source": zod.literal("youtube").default(bulkSaveResourcesEndpointApiSavedBulkPostResponseSavedItemResourceDataMetadataTwoSourceDefault),
+  "channel": zod.string(),
+  "duration": zod.string().default(bulkSaveResourcesEndpointApiSavedBulkPostResponseSavedItemResourceDataMetadataTwoDurationDefault),
+  "view_count": zod.union([zod.number(),zod.null()]).optional(),
+  "published_date": zod.union([zod.string(),zod.null()]).optional(),
+  "tags": zod.array(zod.string()).optional(),
+  "full_description": zod.union([zod.string(),zod.null()]).optional()
+}).describe('Metadata from YouTube Data API results.'),zod.object({
+  "source": zod.literal("openalex").default(bulkSaveResourcesEndpointApiSavedBulkPostResponseSavedItemResourceDataMetadataThreeSourceDefault),
+  "authors": zod.array(zod.string()).optional(),
+  "journal": zod.union([zod.string(),zod.null()]).optional(),
+  "citation_count": zod.union([zod.number(),zod.null()]).optional(),
+  "doi": zod.union([zod.string(),zod.null()]).optional(),
+  "published_date": zod.union([zod.string(),zod.null()]).optional()
+}).describe('Metadata from OpenAlex works results.'),zod.object({
+  "source": zod.literal("custom").default(bulkSaveResourcesEndpointApiSavedBulkPostResponseSavedItemResourceDataMetadataFourSourceDefault),
+  "domain": zod.string(),
+  "og_title": zod.union([zod.string(),zod.null()]).optional(),
+  "og_description": zod.union([zod.string(),zod.null()]).optional(),
+  "og_image": zod.union([zod.string(),zod.null()]).optional()
+}).describe('Metadata from manually added custom links.')]),
+  "relevance_score": zod.union([zod.number(),zod.null()]).optional(),
+  "relevance_reason": zod.union([zod.string(),zod.null()]).optional(),
+  "evaluation_details": zod.union([zod.record(zod.string(), zod.record(zod.string(), zod.unknown())),zod.null()]).optional().describe('Detailed dimension scores')
+}).describe('Normalised resource card returned by all providers.'),
+  "evaluation_data": zod.union([zod.object({
+  "resource_url": zod.string(),
+  "overall_score": zod.number().min(bulkSaveResourcesEndpointApiSavedBulkPostResponseSavedItemEvaluationDataOneOverallScoreMin).max(bulkSaveResourcesEndpointApiSavedBulkPostResponseSavedItemEvaluationDataOneOverallScoreMax),
+  "relevance_reason": zod.string(),
+  "recommended_use": zod.enum(['primary_resource', 'supplementary', 'reference_only']),
+  "scores": zod.record(zod.string(), zod.object({
+  "score": zod.number().min(1).max(bulkSaveResourcesEndpointApiSavedBulkPostResponseSavedItemEvaluationDataOneScoresScoreMax),
+  "max": zod.number().default(bulkSaveResourcesEndpointApiSavedBulkPostResponseSavedItemEvaluationDataOneScoresMaxDefault),
+  "reason": zod.string()
+}).describe('Score for a single evaluation dimension.')),
+  "adversarial": zod.union([zod.object({
+  "verdict": zod.enum(['approved', 'approved_with_caveats', 'flagged_for_teacher_review', 'not_recommended']),
+  "flags": zod.array(zod.object({
+  "category": zod.enum(['false_positive', 'hidden_bias', 'accuracy_gap', 'safety', 'licensing_trap']),
+  "severity": zod.enum(['high', 'medium', 'low']),
+  "explanation": zod.string(),
+  "suggested_action": zod.string()
+}).describe('Single issue raised by the adversarial reviewer.')).optional(),
+  "score_adjustments": zod.record(zod.string(), zod.object({
+  "score": zod.number().min(1).max(bulkSaveResourcesEndpointApiSavedBulkPostResponseSavedItemEvaluationDataOneAdversarialOneScoreAdjustmentsScoreMax),
+  "max": zod.number().default(bulkSaveResourcesEndpointApiSavedBulkPostResponseSavedItemEvaluationDataOneAdversarialOneScoreAdjustmentsMaxDefault),
+  "reason": zod.string()
+}).describe('Score for a single evaluation dimension.')).optional(),
+  "review_summary": zod.string()
+}).describe('Output of Agent 4 — challenges Agent 3 scores and surfaces risks.'),zod.null()]).optional()
+}).describe('Full evaluation of a single resource across 7 dimensions.'),zod.null()]),
+  "saved_at": zod.iso.datetime({})
+})),
+  "total": zod.number()
+})
+
+/**
  * Remove a saved resource from library.
  * @summary Delete Saved Resource Endpoint
  */

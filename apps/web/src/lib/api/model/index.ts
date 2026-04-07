@@ -13,6 +13,8 @@ export * from './adversarial-review-result-score-adjustments';
 export * from './adversarial-review-result-verdict';
 export * from './adversarial-review-result';
 export * from './batch-evaluate-request';
+export * from './bulk-save-resource-request';
+export * from './bulk-save-resource-response';
 export * from './country-option';
 export * from './custom-metadata';
 export * from './ddgs-metadata';

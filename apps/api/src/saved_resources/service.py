@@ -13,6 +13,8 @@ from src.presets.model import ClassroomPreset
 from src.saved_resources.model import SavedResource
 from src.saved_resources.schemas import (
     AddCustomLinkRequest,
+    BulkSaveResourceRequest,
+    BulkSaveResourceResponse,
     PresetGroup,
     QueryGroup,
     SavedResourceListResponse,
@@ -37,23 +39,7 @@ async def save_resource(
             status_code=status.HTTP_404_NOT_FOUND, detail="Preset not found"
         )
 
-    eval_data = None
-    if request.resource.relevance_score is not None:
-        # Mocking an EvaluationResult from the card
-        # In a real scenario, this would either be passed fully
-        # or we construct what we can.
-        from src.agents.schemas import DimensionScore
-
-        eval_data = EvaluationResult(
-            resource_url=request.resource.url,
-            overall_score=request.resource.relevance_score,
-            relevance_reason=request.resource.relevance_reason or "",
-            recommended_use="supplementary",
-            scores={
-                k: DimensionScore(**v)
-                for k, v in (request.resource.evaluation_details or {}).items()
-            },
-        ).model_dump(mode="json")
+    eval_data = _build_eval_data(request.resource)
 
     stmt = insert(SavedResource).values(
         user_id=user_id,
@@ -82,6 +68,78 @@ async def save_resource(
         saved = exist_result.scalar_one()
 
     return SavedResourceResponse.model_validate(saved)
+
+
+def _build_eval_data(resource: ResourceCard) -> dict | None:
+    if resource.relevance_score is None:
+        return None
+    from src.agents.schemas import DimensionScore
+
+    return EvaluationResult(
+        resource_url=resource.url,
+        overall_score=resource.relevance_score,
+        relevance_reason=resource.relevance_reason or "",
+        recommended_use="supplementary",
+        scores={
+            k: DimensionScore(**v)
+            for k, v in (resource.evaluation_details or {}).items()
+        },
+    ).model_dump(mode="json")
+
+
+async def bulk_save_resources(
+    db: DBSession, user_id: uuid.UUID, request: BulkSaveResourceRequest
+) -> BulkSaveResourceResponse:
+    """Save multiple resources in a single transaction."""
+    preset_exec = await db.execute(
+        select(ClassroomPreset).where(
+            ClassroomPreset.id == request.preset_id,
+            ClassroomPreset.user_id == user_id,
+        )
+    )
+    preset = preset_exec.scalar_one_or_none()
+    if preset is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Preset not found"
+        )
+
+    rows = [
+        {
+            "user_id": user_id,
+            "preset_id": request.preset_id,
+            "search_query": request.search_query,
+            "resource_url": r.url,
+            "resource_data": r.model_dump(mode="json"),
+            "evaluation_data": _build_eval_data(r),
+        }
+        for r in request.resources
+    ]
+
+    stmt = insert(SavedResource).values(rows)
+    stmt = stmt.on_conflict_do_nothing(constraint="uq_saved_resource_v2")
+    stmt = stmt.returning(SavedResource)
+    result = await db.execute(stmt)
+    inserted = list(result.scalars().all())
+
+    # Fetch any that already existed (conflict skip)
+    if len(inserted) < len(request.resources):
+        inserted_urls = {r.resource_url for r in inserted}
+        missing_urls = [
+            r.url for r in request.resources if r.url not in inserted_urls
+        ]
+        if missing_urls:
+            exist_result = await db.execute(
+                select(SavedResource).where(
+                    SavedResource.user_id == user_id,
+                    SavedResource.preset_id == request.preset_id,
+                    SavedResource.search_query == request.search_query,
+                    SavedResource.resource_url.in_(missing_urls),
+                )
+            )
+            inserted.extend(exist_result.scalars().all())
+
+    saved = [SavedResourceResponse.model_validate(s) for s in inserted]
+    return BulkSaveResourceResponse(saved=saved, total=len(saved))
 
 
 async def delete_saved_resource(

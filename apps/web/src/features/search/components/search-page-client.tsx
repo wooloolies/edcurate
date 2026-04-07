@@ -27,8 +27,8 @@ import type { AdversarialReviewResult, ResourceCard } from "@/lib/api/model";
 import { useListPresetsApiPresetsGet } from "@/lib/api/presets/presets";
 import {
   getListSavedResourcesEndpointApiSavedGetQueryKey,
+  useBulkSaveResourcesEndpointApiSavedBulkPost,
   useListSavedResourcesEndpointApiSavedGet,
-  useToggleSaveResourceEndpointApiSavedPost,
 } from "@/lib/api/saved-resources/saved-resources";
 
 export function SearchPageClient() {
@@ -42,8 +42,8 @@ export function SearchPageClient() {
   const presets = presetsData?.data ?? [];
 
   const { data: savedData } = useListSavedResourcesEndpointApiSavedGet();
-  const { mutateAsync: saveResource, isPending: isSaving } =
-    useToggleSaveResourceEndpointApiSavedPost();
+  const { mutateAsync: bulkSave, isPending: isSaving } =
+    useBulkSaveResourcesEndpointApiSavedBulkPost();
   const [selectedResources, setSelectedResources] = useState<Map<string, ResourceCard>>(new Map());
 
   // Build a set of already-saved URLs for the active preset
@@ -80,17 +80,13 @@ export function SearchPageClient() {
   const handleSaveSelected = async () => {
     if (!presetId || selectedResources.size === 0) return;
     try {
-      await Promise.all(
-        Array.from(selectedResources.values()).map((r) =>
-          saveResource({
-            data: {
-              preset_id: presetId,
-              search_query: searchQuery || "custom",
-              resource: r,
-            },
-          })
-        )
-      );
+      await bulkSave({
+        data: {
+          preset_id: presetId,
+          search_query: searchQuery || "custom",
+          resources: Array.from(selectedResources.values()),
+        },
+      });
       setSelectedResources(new Map());
       toast.success(t("savedSuccess"));
       queryClient.invalidateQueries({

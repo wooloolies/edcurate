@@ -38,6 +38,8 @@ import {
 import type {
   AddCustomLinkRequest,
   BatchEvaluateRequest,
+  BulkSaveResourceRequest,
+  BulkSaveResourceResponse,
   EvaluateSavedResourcesEndpointApiSavedEvaluatePost200,
   EvaluateSingleRequest,
   HTTPValidationError,
@@ -335,6 +337,72 @@ export const useToggleSaveResourceEndpointApiSavedPost = <TError = HTTPValidatio
         TContext
       > => {
       return useMutation(useToggleSaveResourceEndpointApiSavedPostMutationOptions(options), queryClient);
+    }
+    /**
+ * Save multiple resources in a single request.
+ * @summary Bulk Save Resources Endpoint
+ */
+export const useBulkSaveResourcesEndpointApiSavedBulkPostHook = () => {
+        const bulkSaveResourcesEndpointApiSavedBulkPost = useCustomInstance<BulkSaveResourceResponse>();
+
+        return useCallback((
+    bulkSaveResourceRequest: BulkSaveResourceRequest,
+ signal?: AbortSignal
+) => {
+        return bulkSaveResourcesEndpointApiSavedBulkPost(
+          {url: `/api/saved/bulk`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: bulkSaveResourceRequest, signal
+    },
+          );
+        }, [bulkSaveResourcesEndpointApiSavedBulkPost])
+      }
+
+
+
+export const useBulkSaveResourcesEndpointApiSavedBulkPostMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useBulkSaveResourcesEndpointApiSavedBulkPostHook>>>, TError,{data: BulkSaveResourceRequest}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useBulkSaveResourcesEndpointApiSavedBulkPostHook>>>, TError,{data: BulkSaveResourceRequest}, TContext> => {
+
+const mutationKey = ['bulkSaveResourcesEndpointApiSavedBulkPost'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      const bulkSaveResourcesEndpointApiSavedBulkPost =  useBulkSaveResourcesEndpointApiSavedBulkPostHook()
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<ReturnType<typeof useBulkSaveResourcesEndpointApiSavedBulkPostHook>>>, {data: BulkSaveResourceRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  bulkSaveResourcesEndpointApiSavedBulkPost(data,)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type BulkSaveResourcesEndpointApiSavedBulkPostMutationResult = NonNullable<Awaited<ReturnType<ReturnType<typeof useBulkSaveResourcesEndpointApiSavedBulkPostHook>>>>
+    export type BulkSaveResourcesEndpointApiSavedBulkPostMutationBody = BulkSaveResourceRequest
+    export type BulkSaveResourcesEndpointApiSavedBulkPostMutationError = HTTPValidationError
+
+    /**
+ * @summary Bulk Save Resources Endpoint
+ */
+export const useBulkSaveResourcesEndpointApiSavedBulkPost = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useBulkSaveResourcesEndpointApiSavedBulkPostHook>>>, TError,{data: BulkSaveResourceRequest}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<ReturnType<typeof useBulkSaveResourcesEndpointApiSavedBulkPostHook>>>,
+        TError,
+        {data: BulkSaveResourceRequest},
+        TContext
+      > => {
+      return useMutation(useBulkSaveResourcesEndpointApiSavedBulkPostMutationOptions(options), queryClient);
     }
     /**
  * Remove a saved resource from library.

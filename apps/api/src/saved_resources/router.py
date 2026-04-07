@@ -8,6 +8,8 @@ from src.saved_resources import service
 from src.saved_resources.schemas import (
     AddCustomLinkRequest,
     BatchEvaluateRequest,
+    BulkSaveResourceRequest,
+    BulkSaveResourceResponse,
     EvaluateSingleRequest,
     SavedResourceListResponse,
     SavedResourceResponse,
@@ -37,6 +39,17 @@ async def toggle_save_resource_endpoint(
     """Toggle save a resource from discovery defaults to idempotent insert."""
     user_id = uuid.UUID(current_user.id)
     return await service.save_resource(db, user_id, request)
+
+
+@router.post("/bulk")
+async def bulk_save_resources_endpoint(
+    db: DBSession,
+    current_user: CurrentUser,
+    request: BulkSaveResourceRequest,
+) -> BulkSaveResourceResponse:
+    """Save multiple resources in a single request."""
+    user_id = uuid.UUID(current_user.id)
+    return await service.bulk_save_resources(db, user_id, request)
 
 
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
