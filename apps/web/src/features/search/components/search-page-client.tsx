@@ -82,12 +82,27 @@ export function SearchPageClient() {
   const handleSaveSelected = async () => {
     if (!presetId || selectedResources.size === 0) return;
     try {
+      const resourcesList = Array.from(selectedResources.values());
+      const evaluationDataList = resourcesList.map((resource) => {
+        if (resource.relevance_score == null) return null;
+
+        return {
+          resource_url: resource.url,
+          overall_score: resource.relevance_score,
+          relevance_reason: resource.relevance_reason || "",
+          recommended_use: "supplementary",
+          scores: resource.evaluation_details || {},
+          adversarial: adversarialByUrl.get(resource.url) || null,
+        };
+      });
+
       await bulkSave({
         data: {
           preset_id: presetId,
           search_query: searchQuery || "custom",
-          resources: Array.from(selectedResources.values()),
-        },
+          resources: resourcesList,
+          evaluation_data_list: evaluationDataList,
+        } as any,
       });
       setSelectedResources(new Map());
       toast.success(t("savedSuccess"));
@@ -111,7 +126,7 @@ export function SearchPageClient() {
   const useFallback = stream.error !== null;
   const { data: fallbackResults, isFetching } = useSearchApiDiscoverySearchGet(
     { preset_id: presetId!, query: searchQuery! },
-    { query: { enabled: searchEnabled && useFallback, staleTime: 3 * 60 * 1000 } },
+    { query: { enabled: searchEnabled && useFallback, staleTime: 3 * 60 * 1000 } }
   );
 
   // SSE result is primary; REST fallback is secondary
@@ -185,7 +200,10 @@ export function SearchPageClient() {
             placeholder={t("placeholder")}
             className="min-w-0 flex-1"
           />
-          <Button type="submit" disabled={!presetId || !draft.trim() || stream.isStreaming || isFetching}>
+          <Button
+            type="submit"
+            disabled={!presetId || !draft.trim() || stream.isStreaming || isFetching}
+          >
             {stream.isStreaming || isFetching ? t("searchingButton") : t("searchButton")}
           </Button>
         </form>

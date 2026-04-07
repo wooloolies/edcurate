@@ -36,6 +36,7 @@ export function ResourceCardRenderer({
         resource={resource}
         checked={checked}
         onToggleChecked={onToggleChecked}
+        adversarial={adversarial}
       />
     );
   }

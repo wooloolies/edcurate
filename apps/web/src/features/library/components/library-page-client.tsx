@@ -144,21 +144,27 @@ export function LibraryPageClient() {
     const isDeletingThis = deletingIds.has(item.id);
     return (
       <div className="flex flex-col gap-2">
-        {!item.evaluation_data && (
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => handleEvaluateSingle(item.id)}
-            disabled={isEvaluatingThis}
-          >
-            <Wand2 className="mr-2 h-4 w-4" />
-            {isEvaluatingThis ? "Evaluating..." : "Evaluate"}
-          </Button>
-        )}
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            handleEvaluateSingle(item.id);
+          }}
+          disabled={isEvaluatingThis}
+        >
+          <Wand2 className="mr-2 h-4 w-4" />
+          {isEvaluatingThis ? "Evaluating..." : item.evaluation_data ? "Re-evaluate" : "Evaluate"}
+        </Button>
         <Button
           variant="ghost"
           size="icon"
-          onClick={() => handleDelete(item.id)}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            handleDelete(item.id);
+          }}
           disabled={isDeletingThis}
           className="text-destructive hover:bg-destructive/10 hover:text-destructive shrink-0 self-end"
           aria-label="Remove resource"
@@ -172,7 +178,17 @@ export function LibraryPageClient() {
   const renderQueryGroup = (qGroup: QueryGroup, presetId: string) => {
     const queryKey = `${presetId}:${qGroup.search_query}`;
     const isEvaluatingGroup = evaluatingQueries.has(queryKey);
-    const unevaluatedCount = qGroup.items.filter((i) => !i.evaluation_data).length;
+
+    // Sort logic: Unevaluated first (recent on top), then Evaluated (highest score on top)
+    const unevaluated = qGroup.items.filter((i) => !i.evaluation_data);
+    const evaluated = qGroup.items.filter((i) => !!i.evaluation_data);
+    unevaluated.sort((a, b) => new Date(b.saved_at).getTime() - new Date(a.saved_at).getTime());
+    evaluated.sort(
+      (a, b) => (b.evaluation_data?.overall_score ?? 0) - (a.evaluation_data?.overall_score ?? 0)
+    );
+    const sortedItems = [...unevaluated, ...evaluated];
+
+    const unevaluatedCount = unevaluated.length;
     const isOpen = isGroupOpen(queryKey);
     const isAddLinkOpen = addLinkOpenFor === queryKey;
 
@@ -193,7 +209,8 @@ export function LibraryPageClient() {
                     {qGroup.search_query === "custom" ? "Custom Links" : `"${qGroup.search_query}"`}
                   </CardTitle>
                   <span className="text-xs text-muted-foreground">
-                    ({qGroup.items.length} resource{qGroup.items.length === 1 ? "" : "s"})
+                    ({qGroup.items.length} resource{qGroup.items.length === 1 ? "" : "s"}
+                    {unevaluatedCount > 0 ? `, ${unevaluatedCount} unevaluated` : ""})
                   </span>
                 </div>
 
@@ -276,15 +293,27 @@ export function LibraryPageClient() {
 
           <CollapsibleContent>
             <CardContent className="p-4 grid gap-4 sm:grid-cols-1 lg:grid-cols-2">
-              {qGroup.items.map((item) => (
-                <ResourceCardRenderer
-                  key={item.id}
-                  resource={item.resource_data}
-                  adversarial={item.evaluation_data?.adversarial}
-                  presetId={presetId}
-                  customAction={renderCardAction(item)}
-                />
-              ))}
+              {sortedItems.map((item) => {
+                const resourceWithEval = {
+                  ...item.resource_data,
+                  relevance_score:
+                    item.evaluation_data?.overall_score ?? item.resource_data.relevance_score,
+                  relevance_reason:
+                    item.evaluation_data?.relevance_reason ?? item.resource_data.relevance_reason,
+                  evaluation_details:
+                    (item.evaluation_data?.scores as any) ?? item.resource_data.evaluation_details,
+                } as any;
+
+                return (
+                  <ResourceCardRenderer
+                    key={item.id}
+                    resource={resourceWithEval}
+                    adversarial={item.evaluation_data?.adversarial}
+                    presetId={presetId}
+                    customAction={renderCardAction(item)}
+                  />
+                );
+              })}
             </CardContent>
           </CollapsibleContent>
         </Card>
