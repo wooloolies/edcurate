@@ -47,6 +47,9 @@ export function CanvasBackground() {
     let { width, height } = syncCanvasSize(container, bgCanvas, crispCanvas, bgCtx, crispCtx);
 
     const mouse = { x: -9999, y: -9999 };
+    let lastMouseMove = 0;
+    const IDLE_THRESHOLD = 2000;
+    const autoSweep = { x: -200, y: height / 2, speed: 1.5 };
     const squareSize = 80;
 
     interface Cell {
@@ -99,27 +102,30 @@ export function CanvasBackground() {
       }, 100);
     };
 
-    const handleMouseMove = (e: MouseEvent) => {
-      mouse.x = e.clientX;
-      mouse.y = e.clientY;
-
-      const radius = 250;
+    function activateCellsNear(px: number, py: number, radius: number) {
+      const now = Date.now();
+      const radiusSq = radius * radius;
       for (const cell of grid) {
-        const dx = mouse.x - (cell.x + squareSize / 2);
-        const dy = mouse.y - (cell.y + squareSize / 2);
+        const dx = px - (cell.x + squareSize / 2);
+        const dy = py - (cell.y + squareSize / 2);
         const distSq = dx * dx + dy * dy;
-        const radiusSq = radius * radius;
-
         if (distSq < radiusSq) {
           const dist = Math.sqrt(distSq);
           const intensity = 1 - dist / radius;
           if (cell.alpha < intensity) {
             cell.alpha = intensity;
-            cell.lastTouched = Date.now();
+            cell.lastTouched = now;
             cell.fading = false;
           }
         }
       }
+    }
+
+    const handleMouseMove = (e: MouseEvent) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+      lastMouseMove = Date.now();
+      activateCellsNear(mouse.x, mouse.y, 250);
     };
 
     window.addEventListener("resize", handleResize);
@@ -138,6 +144,16 @@ export function CanvasBackground() {
       crispCtx.clearRect(0, 0, width, height);
 
       const now = Date.now();
+
+      // Auto-sweep left→right when mouse is idle
+      if (now - lastMouseMove > IDLE_THRESHOLD) {
+        autoSweep.x += autoSweep.speed;
+        autoSweep.y = height / 2 + Math.sin(autoSweep.x * 0.008) * (height * 0.3);
+        if (autoSweep.x > width + 300) {
+          autoSweep.x = -300;
+        }
+        activateCellsNear(autoSweep.x, autoSweep.y, 200);
+      }
 
       for (let i = 0; i < grid.length; i++) {
         const cell = grid[i];

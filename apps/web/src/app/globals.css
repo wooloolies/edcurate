@@ -153,3 +153,29 @@ body {
 .btn-rainbow-hover:hover::before {
   opacity: 1;
 }
+
+.text-gradient-animate {
+  background: linear-gradient(
+    90deg,
+    #2563eb,
+    #7c3aed,
+    #06b6d4,
+    #2563eb
+  );
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .text-gradient-animate {
+    animation: gradient-text-shift 5s ease infinite;
+  }
+}
+
+@keyframes gradient-text-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
