@@ -59,15 +59,12 @@ export function CanvasBackground() {
       offsetY: number;
       vx: number;
       vy: number;
-      nodeId: string;
     }
 
     const grid: Cell[] = [];
-    let counter = 0;
 
     function initGrid() {
       grid.length = 0;
-      counter = 0;
       for (let x = 0; x < width; x += squareSize) {
         for (let y = 0; y < height; y += squareSize) {
           grid.push({
@@ -80,7 +77,6 @@ export function CanvasBackground() {
             offsetY: Math.random() * 20 - 10,
             vx: Math.random() * 0.5 - 0.25,
             vy: Math.random() * 0.5 - 0.25,
-            nodeId: `ED-${(counter++).toString().padStart(3, "0")}`, // Digital identifier
           });
         }
       }
@@ -203,13 +199,6 @@ export function CanvasBackground() {
           crispCtx.moveTo(gridCenterX, gridCenterY - 6);
           crispCtx.lineTo(gridCenterX, gridCenterY + 6);
           crispCtx.stroke();
-
-          // Delicate digital micro-data metrics in HUD style
-          crispCtx.fillStyle = `rgba(17, 24, 39, ${cell.alpha * 0.6})`;
-          crispCtx.font = "500 9px 'Roboto Mono', monospace";
-          crispCtx.textAlign = "left";
-          crispCtx.textBaseline = "middle";
-          crispCtx.fillText(`${cell.nodeId}`, cell.x + 4, cell.y + 12);
 
           // Draw mesh to connect adjacent active nodes
           for (let j = i + 1; j < grid.length; j++) {
