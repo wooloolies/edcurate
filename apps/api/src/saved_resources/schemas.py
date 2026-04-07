@@ -13,10 +13,35 @@ class SaveResourceRequest(BaseModel):
     resource: ResourceCard
 
 
-class BulkSaveResourceRequest(BaseModel):
+class LibraryCollectionCreate(BaseModel):
     preset_id: uuid.UUID
     search_query: str
+    name: str
+    is_public: bool = False
     resources: list[ResourceCard]
+
+
+class LibraryCollectionUpdate(BaseModel):
+    name: str | None = None
+    is_public: bool | None = None
+
+
+class LibraryCollectionResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    id: uuid.UUID
+    user_id: uuid.UUID
+    preset_id: uuid.UUID
+    search_query: str
+    name: str
+    is_public: bool
+    clone_count: int
+    created_at: datetime
+
+
+class SaveResourceToCollectionRequest(BaseModel):
+    collection_id: uuid.UUID
+    resource: ResourceCard
+    evaluation_data: EvaluationResult | None = None
 
 
 class AddCustomLinkRequest(BaseModel):
@@ -47,9 +72,16 @@ class SavedResourceResponse(BaseModel):
     saved_at: datetime
 
 
-class BulkSaveResourceResponse(BaseModel):
-    saved: list[SavedResourceResponse]
-    total: int
+class CollectionGroup(BaseModel):
+    """A collection of saved resources."""
+
+    collection: LibraryCollectionResponse
+    items: list[SavedResourceResponse]
+
+
+class SuggestedCollectionResponse(BaseModel):
+    collection: LibraryCollectionResponse
+    matched_by: str  # "TFIDF", "Exact", etc.
 
 
 class QueryGroup(BaseModel):
@@ -64,7 +96,7 @@ class PresetGroup(BaseModel):
     preset_name: str
     preset_subject: str
     preset_topic: str | None = None
-    query_groups: list[QueryGroup]
+    collections: list[CollectionGroup]
 
 
 class SavedResourceListResponse(BaseModel):

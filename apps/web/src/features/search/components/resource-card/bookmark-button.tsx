@@ -11,7 +11,7 @@ import {
   getListSavedResourcesEndpointApiSavedGetQueryKey,
   useDeleteSavedResourceEndpointApiSavedIdDelete,
   useListSavedResourcesEndpointApiSavedGet,
-  useToggleSaveResourceEndpointApiSavedPost,
+  useSaveResourceEndpointApiSavedPost,
 } from "@/lib/api/saved-resources/saved-resources";
 
 interface BookmarkButtonProps {
@@ -29,20 +29,19 @@ export function BookmarkButton({
 }: BookmarkButtonProps) {
   const queryClient = useQueryClient();
   const { data: savedData, isFetching: isLoadingList } = useListSavedResourcesEndpointApiSavedGet();
-  const { mutateAsync: saveResource, isPending: isSaving } =
-    useToggleSaveResourceEndpointApiSavedPost();
+  const { mutateAsync: saveResource, isPending: isSaving } = useSaveResourceEndpointApiSavedPost();
   const { mutateAsync: deleteResource, isPending: isDeleting } =
     useDeleteSavedResourceEndpointApiSavedIdDelete();
 
   const isControlled = checked !== undefined && onToggleChecked !== undefined;
 
-  // Find if it's saved
+  // Find if it's saved — iterate collections inside preset groups
   let savedId: string | undefined;
   if (!isControlled && presetId && savedData?.groups) {
     for (const group of savedData.groups) {
       if (group.preset_id === presetId) {
-        for (const qGroup of group.query_groups) {
-          const found = qGroup.items.find((item) => item.resource_url === resource.url);
+        for (const col of group.collections) {
+          const found = col.items.find((item) => item.resource_url === resource.url);
           if (found) {
             savedId = found.id;
             break;

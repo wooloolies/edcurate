@@ -38,15 +38,19 @@ import {
 import type {
   AddCustomLinkRequest,
   BatchEvaluateRequest,
-  BulkSaveResourceRequest,
-  BulkSaveResourceResponse,
   EvaluateSavedResourcesEndpointApiSavedEvaluatePost200,
   EvaluateSingleRequest,
+  GetSuggestedCollectionsEndpointApiSavedSuggestedGetParams,
   HTTPValidationError,
+  LibraryCollectionCreate,
+  LibraryCollectionResponse,
+  LibraryCollectionUpdate,
   ListSavedResourcesEndpointApiSavedGetParams,
   SaveResourceRequest,
+  SaveResourceToCollectionRequest,
   SavedResourceListResponse,
-  SavedResourceResponse
+  SavedResourceResponse,
+  SuggestedCollectionResponse
 } from '../model';
 
 import { useCustomInstance } from '../../../hooks/use-custom-instance';
@@ -55,7 +59,7 @@ import { useCustomInstance } from '../../../hooks/use-custom-instance';
 
 
 /**
- * List grouped saved resources in the library.
+ * List grouped saved resources in the library by collection.
  * @summary List Saved Resources Endpoint
  */
 export const useListSavedResourcesEndpointApiSavedGetHook = () => {
@@ -273,45 +277,45 @@ export function useListSavedResourcesEndpointApiSavedGetSuspense<TData = Awaited
 
 
 /**
- * Toggle save a resource from discovery defaults to idempotent insert.
- * @summary Toggle Save Resource Endpoint
+ * Save a single resource, auto-creating a collection if needed.
+ * @summary Save Resource Endpoint
  */
-export const useToggleSaveResourceEndpointApiSavedPostHook = () => {
-        const toggleSaveResourceEndpointApiSavedPost = useCustomInstance<SavedResourceResponse>();
+export const useSaveResourceEndpointApiSavedPostHook = () => {
+        const saveResourceEndpointApiSavedPost = useCustomInstance<SavedResourceResponse>();
 
         return useCallback((
     saveResourceRequest: SaveResourceRequest,
  signal?: AbortSignal
 ) => {
-        return toggleSaveResourceEndpointApiSavedPost(
+        return saveResourceEndpointApiSavedPost(
           {url: `/api/saved`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: saveResourceRequest, signal
     },
           );
-        }, [toggleSaveResourceEndpointApiSavedPost])
+        }, [saveResourceEndpointApiSavedPost])
       }
 
 
 
-export const useToggleSaveResourceEndpointApiSavedPostMutationOptions = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useToggleSaveResourceEndpointApiSavedPostHook>>>, TError,{data: SaveResourceRequest}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useToggleSaveResourceEndpointApiSavedPostHook>>>, TError,{data: SaveResourceRequest}, TContext> => {
+export const useSaveResourceEndpointApiSavedPostMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useSaveResourceEndpointApiSavedPostHook>>>, TError,{data: SaveResourceRequest}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useSaveResourceEndpointApiSavedPostHook>>>, TError,{data: SaveResourceRequest}, TContext> => {
 
-const mutationKey = ['toggleSaveResourceEndpointApiSavedPost'];
+const mutationKey = ['saveResourceEndpointApiSavedPost'];
 const {mutation: mutationOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
       : {mutation: { mutationKey, }};
 
-      const toggleSaveResourceEndpointApiSavedPost =  useToggleSaveResourceEndpointApiSavedPostHook()
+      const saveResourceEndpointApiSavedPost =  useSaveResourceEndpointApiSavedPostHook()
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<ReturnType<typeof useToggleSaveResourceEndpointApiSavedPostHook>>>, {data: SaveResourceRequest}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<ReturnType<typeof useSaveResourceEndpointApiSavedPostHook>>>, {data: SaveResourceRequest}> = (props) => {
           const {data} = props ?? {};
 
-          return  toggleSaveResourceEndpointApiSavedPost(data,)
+          return  saveResourceEndpointApiSavedPost(data,)
         }
 
 
@@ -321,63 +325,281 @@ const {mutation: mutationOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    export type ToggleSaveResourceEndpointApiSavedPostMutationResult = NonNullable<Awaited<ReturnType<ReturnType<typeof useToggleSaveResourceEndpointApiSavedPostHook>>>>
-    export type ToggleSaveResourceEndpointApiSavedPostMutationBody = SaveResourceRequest
-    export type ToggleSaveResourceEndpointApiSavedPostMutationError = HTTPValidationError
+    export type SaveResourceEndpointApiSavedPostMutationResult = NonNullable<Awaited<ReturnType<ReturnType<typeof useSaveResourceEndpointApiSavedPostHook>>>>
+    export type SaveResourceEndpointApiSavedPostMutationBody = SaveResourceRequest
+    export type SaveResourceEndpointApiSavedPostMutationError = HTTPValidationError
 
     /**
- * @summary Toggle Save Resource Endpoint
+ * @summary Save Resource Endpoint
  */
-export const useToggleSaveResourceEndpointApiSavedPost = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useToggleSaveResourceEndpointApiSavedPostHook>>>, TError,{data: SaveResourceRequest}, TContext>, }
+export const useSaveResourceEndpointApiSavedPost = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useSaveResourceEndpointApiSavedPostHook>>>, TError,{data: SaveResourceRequest}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<ReturnType<typeof useToggleSaveResourceEndpointApiSavedPostHook>>>,
+        Awaited<ReturnType<ReturnType<typeof useSaveResourceEndpointApiSavedPostHook>>>,
         TError,
         {data: SaveResourceRequest},
         TContext
       > => {
-      return useMutation(useToggleSaveResourceEndpointApiSavedPostMutationOptions(options), queryClient);
+      return useMutation(useSaveResourceEndpointApiSavedPostMutationOptions(options), queryClient);
     }
     /**
- * Save multiple resources in a single request.
- * @summary Bulk Save Resources Endpoint
+ * Get suggested public collections matching the search query via TF-IDF / FTS.
+ * @summary Get Suggested Collections Endpoint
  */
-export const useBulkSaveResourcesEndpointApiSavedBulkPostHook = () => {
-        const bulkSaveResourcesEndpointApiSavedBulkPost = useCustomInstance<BulkSaveResourceResponse>();
+export const useGetSuggestedCollectionsEndpointApiSavedSuggestedGetHook = () => {
+        const getSuggestedCollectionsEndpointApiSavedSuggestedGet = useCustomInstance<SuggestedCollectionResponse[]>();
 
         return useCallback((
-    bulkSaveResourceRequest: BulkSaveResourceRequest,
+    params: GetSuggestedCollectionsEndpointApiSavedSuggestedGetParams,
  signal?: AbortSignal
 ) => {
-        return bulkSaveResourcesEndpointApiSavedBulkPost(
-          {url: `/api/saved/bulk`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: bulkSaveResourceRequest, signal
+        return getSuggestedCollectionsEndpointApiSavedSuggestedGet(
+          {url: `/api/saved/suggested`, method: 'GET',
+        params, signal
     },
           );
-        }, [bulkSaveResourcesEndpointApiSavedBulkPost])
+        }, [getSuggestedCollectionsEndpointApiSavedSuggestedGet])
       }
 
 
 
-export const useBulkSaveResourcesEndpointApiSavedBulkPostMutationOptions = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useBulkSaveResourcesEndpointApiSavedBulkPostHook>>>, TError,{data: BulkSaveResourceRequest}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useBulkSaveResourcesEndpointApiSavedBulkPostHook>>>, TError,{data: BulkSaveResourceRequest}, TContext> => {
 
-const mutationKey = ['bulkSaveResourcesEndpointApiSavedBulkPost'];
+export const getGetSuggestedCollectionsEndpointApiSavedSuggestedGetInfiniteQueryKey = (params?: GetSuggestedCollectionsEndpointApiSavedSuggestedGetParams,) => {
+    return [
+    'infinite', `/api/saved/suggested`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+export const getGetSuggestedCollectionsEndpointApiSavedSuggestedGetQueryKey = (params?: GetSuggestedCollectionsEndpointApiSavedSuggestedGetParams,) => {
+    return [
+    `/api/saved/suggested`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+
+export const useGetSuggestedCollectionsEndpointApiSavedSuggestedGetInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<ReturnType<typeof useGetSuggestedCollectionsEndpointApiSavedSuggestedGetHook>>>>, TError = HTTPValidationError>(params: GetSuggestedCollectionsEndpointApiSavedSuggestedGetParams, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<ReturnType<typeof useGetSuggestedCollectionsEndpointApiSavedSuggestedGetHook>>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetSuggestedCollectionsEndpointApiSavedSuggestedGetInfiniteQueryKey(params);
+
+  const getSuggestedCollectionsEndpointApiSavedSuggestedGet =  useGetSuggestedCollectionsEndpointApiSavedSuggestedGetHook();
+
+    const queryFn: QueryFunction<Awaited<ReturnType<ReturnType<typeof useGetSuggestedCollectionsEndpointApiSavedSuggestedGetHook>>>> = ({ signal }) => getSuggestedCollectionsEndpointApiSavedSuggestedGet(params, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseInfiniteQueryOptions<Awaited<ReturnType<ReturnType<typeof useGetSuggestedCollectionsEndpointApiSavedSuggestedGetHook>>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetSuggestedCollectionsEndpointApiSavedSuggestedGetInfiniteQueryResult = NonNullable<Awaited<ReturnType<ReturnType<typeof useGetSuggestedCollectionsEndpointApiSavedSuggestedGetHook>>>>
+export type GetSuggestedCollectionsEndpointApiSavedSuggestedGetInfiniteQueryError = HTTPValidationError
+
+
+export function useGetSuggestedCollectionsEndpointApiSavedSuggestedGetInfinite<TData = InfiniteData<Awaited<ReturnType<ReturnType<typeof useGetSuggestedCollectionsEndpointApiSavedSuggestedGetHook>>>>, TError = HTTPValidationError>(
+ params: GetSuggestedCollectionsEndpointApiSavedSuggestedGetParams, options: { query:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<ReturnType<typeof useGetSuggestedCollectionsEndpointApiSavedSuggestedGetHook>>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<ReturnType<typeof useGetSuggestedCollectionsEndpointApiSavedSuggestedGetHook>>>,
+          TError,
+          Awaited<ReturnType<ReturnType<typeof useGetSuggestedCollectionsEndpointApiSavedSuggestedGetHook>>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSuggestedCollectionsEndpointApiSavedSuggestedGetInfinite<TData = InfiniteData<Awaited<ReturnType<ReturnType<typeof useGetSuggestedCollectionsEndpointApiSavedSuggestedGetHook>>>>, TError = HTTPValidationError>(
+ params: GetSuggestedCollectionsEndpointApiSavedSuggestedGetParams, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<ReturnType<typeof useGetSuggestedCollectionsEndpointApiSavedSuggestedGetHook>>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<ReturnType<typeof useGetSuggestedCollectionsEndpointApiSavedSuggestedGetHook>>>,
+          TError,
+          Awaited<ReturnType<ReturnType<typeof useGetSuggestedCollectionsEndpointApiSavedSuggestedGetHook>>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSuggestedCollectionsEndpointApiSavedSuggestedGetInfinite<TData = InfiniteData<Awaited<ReturnType<ReturnType<typeof useGetSuggestedCollectionsEndpointApiSavedSuggestedGetHook>>>>, TError = HTTPValidationError>(
+ params: GetSuggestedCollectionsEndpointApiSavedSuggestedGetParams, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<ReturnType<typeof useGetSuggestedCollectionsEndpointApiSavedSuggestedGetHook>>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get Suggested Collections Endpoint
+ */
+
+export function useGetSuggestedCollectionsEndpointApiSavedSuggestedGetInfinite<TData = InfiniteData<Awaited<ReturnType<ReturnType<typeof useGetSuggestedCollectionsEndpointApiSavedSuggestedGetHook>>>>, TError = HTTPValidationError>(
+ params: GetSuggestedCollectionsEndpointApiSavedSuggestedGetParams, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<ReturnType<typeof useGetSuggestedCollectionsEndpointApiSavedSuggestedGetHook>>>, TError, TData>>, }
+ , queryClient?: QueryClient
+ ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = useGetSuggestedCollectionsEndpointApiSavedSuggestedGetInfiniteQueryOptions(params,options)
+
+  const query = useInfiniteQuery(queryOptions, queryClient) as  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+export const useGetSuggestedCollectionsEndpointApiSavedSuggestedGetQueryOptions = <TData = Awaited<ReturnType<ReturnType<typeof useGetSuggestedCollectionsEndpointApiSavedSuggestedGetHook>>>, TError = HTTPValidationError>(params: GetSuggestedCollectionsEndpointApiSavedSuggestedGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<ReturnType<typeof useGetSuggestedCollectionsEndpointApiSavedSuggestedGetHook>>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetSuggestedCollectionsEndpointApiSavedSuggestedGetQueryKey(params);
+
+  const getSuggestedCollectionsEndpointApiSavedSuggestedGet =  useGetSuggestedCollectionsEndpointApiSavedSuggestedGetHook();
+
+    const queryFn: QueryFunction<Awaited<ReturnType<ReturnType<typeof useGetSuggestedCollectionsEndpointApiSavedSuggestedGetHook>>>> = ({ signal }) => getSuggestedCollectionsEndpointApiSavedSuggestedGet(params, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<ReturnType<typeof useGetSuggestedCollectionsEndpointApiSavedSuggestedGetHook>>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetSuggestedCollectionsEndpointApiSavedSuggestedGetQueryResult = NonNullable<Awaited<ReturnType<ReturnType<typeof useGetSuggestedCollectionsEndpointApiSavedSuggestedGetHook>>>>
+export type GetSuggestedCollectionsEndpointApiSavedSuggestedGetQueryError = HTTPValidationError
+
+
+export function useGetSuggestedCollectionsEndpointApiSavedSuggestedGet<TData = Awaited<ReturnType<ReturnType<typeof useGetSuggestedCollectionsEndpointApiSavedSuggestedGetHook>>>, TError = HTTPValidationError>(
+ params: GetSuggestedCollectionsEndpointApiSavedSuggestedGetParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<ReturnType<typeof useGetSuggestedCollectionsEndpointApiSavedSuggestedGetHook>>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<ReturnType<typeof useGetSuggestedCollectionsEndpointApiSavedSuggestedGetHook>>>,
+          TError,
+          Awaited<ReturnType<ReturnType<typeof useGetSuggestedCollectionsEndpointApiSavedSuggestedGetHook>>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSuggestedCollectionsEndpointApiSavedSuggestedGet<TData = Awaited<ReturnType<ReturnType<typeof useGetSuggestedCollectionsEndpointApiSavedSuggestedGetHook>>>, TError = HTTPValidationError>(
+ params: GetSuggestedCollectionsEndpointApiSavedSuggestedGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<ReturnType<typeof useGetSuggestedCollectionsEndpointApiSavedSuggestedGetHook>>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<ReturnType<typeof useGetSuggestedCollectionsEndpointApiSavedSuggestedGetHook>>>,
+          TError,
+          Awaited<ReturnType<ReturnType<typeof useGetSuggestedCollectionsEndpointApiSavedSuggestedGetHook>>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSuggestedCollectionsEndpointApiSavedSuggestedGet<TData = Awaited<ReturnType<ReturnType<typeof useGetSuggestedCollectionsEndpointApiSavedSuggestedGetHook>>>, TError = HTTPValidationError>(
+ params: GetSuggestedCollectionsEndpointApiSavedSuggestedGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<ReturnType<typeof useGetSuggestedCollectionsEndpointApiSavedSuggestedGetHook>>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get Suggested Collections Endpoint
+ */
+
+export function useGetSuggestedCollectionsEndpointApiSavedSuggestedGet<TData = Awaited<ReturnType<ReturnType<typeof useGetSuggestedCollectionsEndpointApiSavedSuggestedGetHook>>>, TError = HTTPValidationError>(
+ params: GetSuggestedCollectionsEndpointApiSavedSuggestedGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<ReturnType<typeof useGetSuggestedCollectionsEndpointApiSavedSuggestedGetHook>>>, TError, TData>>, }
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = useGetSuggestedCollectionsEndpointApiSavedSuggestedGetQueryOptions(params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+export const useGetSuggestedCollectionsEndpointApiSavedSuggestedGetSuspenseQueryOptions = <TData = Awaited<ReturnType<ReturnType<typeof useGetSuggestedCollectionsEndpointApiSavedSuggestedGetHook>>>, TError = HTTPValidationError>(params: GetSuggestedCollectionsEndpointApiSavedSuggestedGetParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<ReturnType<typeof useGetSuggestedCollectionsEndpointApiSavedSuggestedGetHook>>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetSuggestedCollectionsEndpointApiSavedSuggestedGetQueryKey(params);
+
+  const getSuggestedCollectionsEndpointApiSavedSuggestedGet =  useGetSuggestedCollectionsEndpointApiSavedSuggestedGetHook();
+
+    const queryFn: QueryFunction<Awaited<ReturnType<ReturnType<typeof useGetSuggestedCollectionsEndpointApiSavedSuggestedGetHook>>>> = ({ signal }) => getSuggestedCollectionsEndpointApiSavedSuggestedGet(params, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<ReturnType<typeof useGetSuggestedCollectionsEndpointApiSavedSuggestedGetHook>>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetSuggestedCollectionsEndpointApiSavedSuggestedGetSuspenseQueryResult = NonNullable<Awaited<ReturnType<ReturnType<typeof useGetSuggestedCollectionsEndpointApiSavedSuggestedGetHook>>>>
+export type GetSuggestedCollectionsEndpointApiSavedSuggestedGetSuspenseQueryError = HTTPValidationError
+
+
+export function useGetSuggestedCollectionsEndpointApiSavedSuggestedGetSuspense<TData = Awaited<ReturnType<ReturnType<typeof useGetSuggestedCollectionsEndpointApiSavedSuggestedGetHook>>>, TError = HTTPValidationError>(
+ params: GetSuggestedCollectionsEndpointApiSavedSuggestedGetParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<ReturnType<typeof useGetSuggestedCollectionsEndpointApiSavedSuggestedGetHook>>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSuggestedCollectionsEndpointApiSavedSuggestedGetSuspense<TData = Awaited<ReturnType<ReturnType<typeof useGetSuggestedCollectionsEndpointApiSavedSuggestedGetHook>>>, TError = HTTPValidationError>(
+ params: GetSuggestedCollectionsEndpointApiSavedSuggestedGetParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<ReturnType<typeof useGetSuggestedCollectionsEndpointApiSavedSuggestedGetHook>>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSuggestedCollectionsEndpointApiSavedSuggestedGetSuspense<TData = Awaited<ReturnType<ReturnType<typeof useGetSuggestedCollectionsEndpointApiSavedSuggestedGetHook>>>, TError = HTTPValidationError>(
+ params: GetSuggestedCollectionsEndpointApiSavedSuggestedGetParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<ReturnType<typeof useGetSuggestedCollectionsEndpointApiSavedSuggestedGetHook>>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get Suggested Collections Endpoint
+ */
+
+export function useGetSuggestedCollectionsEndpointApiSavedSuggestedGetSuspense<TData = Awaited<ReturnType<ReturnType<typeof useGetSuggestedCollectionsEndpointApiSavedSuggestedGetHook>>>, TError = HTTPValidationError>(
+ params: GetSuggestedCollectionsEndpointApiSavedSuggestedGetParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<ReturnType<typeof useGetSuggestedCollectionsEndpointApiSavedSuggestedGetHook>>>, TError, TData>>, }
+ , queryClient?: QueryClient
+ ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = useGetSuggestedCollectionsEndpointApiSavedSuggestedGetSuspenseQueryOptions(params,options)
+
+  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+/**
+ * Create a new collection from multiple resources.
+ * @summary Create Collection Endpoint
+ */
+export const useCreateCollectionEndpointApiSavedCollectionsPostHook = () => {
+        const createCollectionEndpointApiSavedCollectionsPost = useCustomInstance<LibraryCollectionResponse>();
+
+        return useCallback((
+    libraryCollectionCreate: LibraryCollectionCreate,
+ signal?: AbortSignal
+) => {
+        return createCollectionEndpointApiSavedCollectionsPost(
+          {url: `/api/saved/collections`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: libraryCollectionCreate, signal
+    },
+          );
+        }, [createCollectionEndpointApiSavedCollectionsPost])
+      }
+
+
+
+export const useCreateCollectionEndpointApiSavedCollectionsPostMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useCreateCollectionEndpointApiSavedCollectionsPostHook>>>, TError,{data: LibraryCollectionCreate}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useCreateCollectionEndpointApiSavedCollectionsPostHook>>>, TError,{data: LibraryCollectionCreate}, TContext> => {
+
+const mutationKey = ['createCollectionEndpointApiSavedCollectionsPost'];
 const {mutation: mutationOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
       : {mutation: { mutationKey, }};
 
-      const bulkSaveResourcesEndpointApiSavedBulkPost =  useBulkSaveResourcesEndpointApiSavedBulkPostHook()
+      const createCollectionEndpointApiSavedCollectionsPost =  useCreateCollectionEndpointApiSavedCollectionsPostHook()
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<ReturnType<typeof useBulkSaveResourcesEndpointApiSavedBulkPostHook>>>, {data: BulkSaveResourceRequest}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<ReturnType<typeof useCreateCollectionEndpointApiSavedCollectionsPostHook>>>, {data: LibraryCollectionCreate}> = (props) => {
           const {data} = props ?? {};
 
-          return  bulkSaveResourcesEndpointApiSavedBulkPost(data,)
+          return  createCollectionEndpointApiSavedCollectionsPost(data,)
         }
 
 
@@ -387,22 +609,283 @@ const {mutation: mutationOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    export type BulkSaveResourcesEndpointApiSavedBulkPostMutationResult = NonNullable<Awaited<ReturnType<ReturnType<typeof useBulkSaveResourcesEndpointApiSavedBulkPostHook>>>>
-    export type BulkSaveResourcesEndpointApiSavedBulkPostMutationBody = BulkSaveResourceRequest
-    export type BulkSaveResourcesEndpointApiSavedBulkPostMutationError = HTTPValidationError
+    export type CreateCollectionEndpointApiSavedCollectionsPostMutationResult = NonNullable<Awaited<ReturnType<ReturnType<typeof useCreateCollectionEndpointApiSavedCollectionsPostHook>>>>
+    export type CreateCollectionEndpointApiSavedCollectionsPostMutationBody = LibraryCollectionCreate
+    export type CreateCollectionEndpointApiSavedCollectionsPostMutationError = HTTPValidationError
 
     /**
- * @summary Bulk Save Resources Endpoint
+ * @summary Create Collection Endpoint
  */
-export const useBulkSaveResourcesEndpointApiSavedBulkPost = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useBulkSaveResourcesEndpointApiSavedBulkPostHook>>>, TError,{data: BulkSaveResourceRequest}, TContext>, }
+export const useCreateCollectionEndpointApiSavedCollectionsPost = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useCreateCollectionEndpointApiSavedCollectionsPostHook>>>, TError,{data: LibraryCollectionCreate}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<ReturnType<typeof useBulkSaveResourcesEndpointApiSavedBulkPostHook>>>,
+        Awaited<ReturnType<ReturnType<typeof useCreateCollectionEndpointApiSavedCollectionsPostHook>>>,
         TError,
-        {data: BulkSaveResourceRequest},
+        {data: LibraryCollectionCreate},
         TContext
       > => {
-      return useMutation(useBulkSaveResourcesEndpointApiSavedBulkPostMutationOptions(options), queryClient);
+      return useMutation(useCreateCollectionEndpointApiSavedCollectionsPostMutationOptions(options), queryClient);
+    }
+    /**
+ * Update a collection (e.g. rename, make public).
+ * @summary Update Collection Endpoint
+ */
+export const useUpdateCollectionEndpointApiSavedCollectionsCollectionIdPatchHook = () => {
+        const updateCollectionEndpointApiSavedCollectionsCollectionIdPatch = useCustomInstance<LibraryCollectionResponse>();
+
+        return useCallback((
+    collectionId: string,
+    libraryCollectionUpdate: LibraryCollectionUpdate,
+ signal?: AbortSignal
+) => {
+        return updateCollectionEndpointApiSavedCollectionsCollectionIdPatch(
+          {url: `/api/saved/collections/${collectionId}`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: libraryCollectionUpdate, signal
+    },
+          );
+        }, [updateCollectionEndpointApiSavedCollectionsCollectionIdPatch])
+      }
+
+
+
+export const useUpdateCollectionEndpointApiSavedCollectionsCollectionIdPatchMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useUpdateCollectionEndpointApiSavedCollectionsCollectionIdPatchHook>>>, TError,{collectionId: string;data: LibraryCollectionUpdate}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useUpdateCollectionEndpointApiSavedCollectionsCollectionIdPatchHook>>>, TError,{collectionId: string;data: LibraryCollectionUpdate}, TContext> => {
+
+const mutationKey = ['updateCollectionEndpointApiSavedCollectionsCollectionIdPatch'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      const updateCollectionEndpointApiSavedCollectionsCollectionIdPatch =  useUpdateCollectionEndpointApiSavedCollectionsCollectionIdPatchHook()
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<ReturnType<typeof useUpdateCollectionEndpointApiSavedCollectionsCollectionIdPatchHook>>>, {collectionId: string;data: LibraryCollectionUpdate}> = (props) => {
+          const {collectionId,data} = props ?? {};
+
+          return  updateCollectionEndpointApiSavedCollectionsCollectionIdPatch(collectionId,data,)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateCollectionEndpointApiSavedCollectionsCollectionIdPatchMutationResult = NonNullable<Awaited<ReturnType<ReturnType<typeof useUpdateCollectionEndpointApiSavedCollectionsCollectionIdPatchHook>>>>
+    export type UpdateCollectionEndpointApiSavedCollectionsCollectionIdPatchMutationBody = LibraryCollectionUpdate
+    export type UpdateCollectionEndpointApiSavedCollectionsCollectionIdPatchMutationError = HTTPValidationError
+
+    /**
+ * @summary Update Collection Endpoint
+ */
+export const useUpdateCollectionEndpointApiSavedCollectionsCollectionIdPatch = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useUpdateCollectionEndpointApiSavedCollectionsCollectionIdPatchHook>>>, TError,{collectionId: string;data: LibraryCollectionUpdate}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<ReturnType<typeof useUpdateCollectionEndpointApiSavedCollectionsCollectionIdPatchHook>>>,
+        TError,
+        {collectionId: string;data: LibraryCollectionUpdate},
+        TContext
+      > => {
+      return useMutation(useUpdateCollectionEndpointApiSavedCollectionsCollectionIdPatchMutationOptions(options), queryClient);
+    }
+    /**
+ * Delete a library collection permanently.
+ * @summary Delete Collection Endpoint
+ */
+export const useDeleteCollectionEndpointApiSavedCollectionsCollectionIdDeleteHook = () => {
+        const deleteCollectionEndpointApiSavedCollectionsCollectionIdDelete = useCustomInstance<void>();
+
+        return useCallback((
+    collectionId: string,
+ signal?: AbortSignal
+) => {
+        return deleteCollectionEndpointApiSavedCollectionsCollectionIdDelete(
+          {url: `/api/saved/collections/${collectionId}`, method: 'DELETE', signal
+    },
+          );
+        }, [deleteCollectionEndpointApiSavedCollectionsCollectionIdDelete])
+      }
+
+
+
+export const useDeleteCollectionEndpointApiSavedCollectionsCollectionIdDeleteMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useDeleteCollectionEndpointApiSavedCollectionsCollectionIdDeleteHook>>>, TError,{collectionId: string}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useDeleteCollectionEndpointApiSavedCollectionsCollectionIdDeleteHook>>>, TError,{collectionId: string}, TContext> => {
+
+const mutationKey = ['deleteCollectionEndpointApiSavedCollectionsCollectionIdDelete'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      const deleteCollectionEndpointApiSavedCollectionsCollectionIdDelete =  useDeleteCollectionEndpointApiSavedCollectionsCollectionIdDeleteHook()
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<ReturnType<typeof useDeleteCollectionEndpointApiSavedCollectionsCollectionIdDeleteHook>>>, {collectionId: string}> = (props) => {
+          const {collectionId} = props ?? {};
+
+          return  deleteCollectionEndpointApiSavedCollectionsCollectionIdDelete(collectionId,)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteCollectionEndpointApiSavedCollectionsCollectionIdDeleteMutationResult = NonNullable<Awaited<ReturnType<ReturnType<typeof useDeleteCollectionEndpointApiSavedCollectionsCollectionIdDeleteHook>>>>
+
+    export type DeleteCollectionEndpointApiSavedCollectionsCollectionIdDeleteMutationError = HTTPValidationError
+
+    /**
+ * @summary Delete Collection Endpoint
+ */
+export const useDeleteCollectionEndpointApiSavedCollectionsCollectionIdDelete = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useDeleteCollectionEndpointApiSavedCollectionsCollectionIdDeleteHook>>>, TError,{collectionId: string}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<ReturnType<typeof useDeleteCollectionEndpointApiSavedCollectionsCollectionIdDeleteHook>>>,
+        TError,
+        {collectionId: string},
+        TContext
+      > => {
+      return useMutation(useDeleteCollectionEndpointApiSavedCollectionsCollectionIdDeleteMutationOptions(options), queryClient);
+    }
+    /**
+ * Clone another user's public collection.
+ * @summary Clone Collection Endpoint
+ */
+export const useCloneCollectionEndpointApiSavedCollectionsCollectionIdClonePostHook = () => {
+        const cloneCollectionEndpointApiSavedCollectionsCollectionIdClonePost = useCustomInstance<LibraryCollectionResponse>();
+
+        return useCallback((
+    collectionId: string,
+ signal?: AbortSignal
+) => {
+        return cloneCollectionEndpointApiSavedCollectionsCollectionIdClonePost(
+          {url: `/api/saved/collections/${collectionId}/clone`, method: 'POST', signal
+    },
+          );
+        }, [cloneCollectionEndpointApiSavedCollectionsCollectionIdClonePost])
+      }
+
+
+
+export const useCloneCollectionEndpointApiSavedCollectionsCollectionIdClonePostMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useCloneCollectionEndpointApiSavedCollectionsCollectionIdClonePostHook>>>, TError,{collectionId: string}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useCloneCollectionEndpointApiSavedCollectionsCollectionIdClonePostHook>>>, TError,{collectionId: string}, TContext> => {
+
+const mutationKey = ['cloneCollectionEndpointApiSavedCollectionsCollectionIdClonePost'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      const cloneCollectionEndpointApiSavedCollectionsCollectionIdClonePost =  useCloneCollectionEndpointApiSavedCollectionsCollectionIdClonePostHook()
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<ReturnType<typeof useCloneCollectionEndpointApiSavedCollectionsCollectionIdClonePostHook>>>, {collectionId: string}> = (props) => {
+          const {collectionId} = props ?? {};
+
+          return  cloneCollectionEndpointApiSavedCollectionsCollectionIdClonePost(collectionId,)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CloneCollectionEndpointApiSavedCollectionsCollectionIdClonePostMutationResult = NonNullable<Awaited<ReturnType<ReturnType<typeof useCloneCollectionEndpointApiSavedCollectionsCollectionIdClonePostHook>>>>
+
+    export type CloneCollectionEndpointApiSavedCollectionsCollectionIdClonePostMutationError = HTTPValidationError
+
+    /**
+ * @summary Clone Collection Endpoint
+ */
+export const useCloneCollectionEndpointApiSavedCollectionsCollectionIdClonePost = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useCloneCollectionEndpointApiSavedCollectionsCollectionIdClonePostHook>>>, TError,{collectionId: string}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<ReturnType<typeof useCloneCollectionEndpointApiSavedCollectionsCollectionIdClonePostHook>>>,
+        TError,
+        {collectionId: string},
+        TContext
+      > => {
+      return useMutation(useCloneCollectionEndpointApiSavedCollectionsCollectionIdClonePostMutationOptions(options), queryClient);
+    }
+    /**
+ * Save a single resource to an existing collection.
+ * @summary Save Resource To Collection Endpoint
+ */
+export const useSaveResourceToCollectionEndpointApiSavedCollectionItemPostHook = () => {
+        const saveResourceToCollectionEndpointApiSavedCollectionItemPost = useCustomInstance<SavedResourceResponse>();
+
+        return useCallback((
+    saveResourceToCollectionRequest: SaveResourceToCollectionRequest,
+ signal?: AbortSignal
+) => {
+        return saveResourceToCollectionEndpointApiSavedCollectionItemPost(
+          {url: `/api/saved/collection-item`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: saveResourceToCollectionRequest, signal
+    },
+          );
+        }, [saveResourceToCollectionEndpointApiSavedCollectionItemPost])
+      }
+
+
+
+export const useSaveResourceToCollectionEndpointApiSavedCollectionItemPostMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useSaveResourceToCollectionEndpointApiSavedCollectionItemPostHook>>>, TError,{data: SaveResourceToCollectionRequest}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useSaveResourceToCollectionEndpointApiSavedCollectionItemPostHook>>>, TError,{data: SaveResourceToCollectionRequest}, TContext> => {
+
+const mutationKey = ['saveResourceToCollectionEndpointApiSavedCollectionItemPost'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      const saveResourceToCollectionEndpointApiSavedCollectionItemPost =  useSaveResourceToCollectionEndpointApiSavedCollectionItemPostHook()
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<ReturnType<typeof useSaveResourceToCollectionEndpointApiSavedCollectionItemPostHook>>>, {data: SaveResourceToCollectionRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  saveResourceToCollectionEndpointApiSavedCollectionItemPost(data,)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type SaveResourceToCollectionEndpointApiSavedCollectionItemPostMutationResult = NonNullable<Awaited<ReturnType<ReturnType<typeof useSaveResourceToCollectionEndpointApiSavedCollectionItemPostHook>>>>
+    export type SaveResourceToCollectionEndpointApiSavedCollectionItemPostMutationBody = SaveResourceToCollectionRequest
+    export type SaveResourceToCollectionEndpointApiSavedCollectionItemPostMutationError = HTTPValidationError
+
+    /**
+ * @summary Save Resource To Collection Endpoint
+ */
+export const useSaveResourceToCollectionEndpointApiSavedCollectionItemPost = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useSaveResourceToCollectionEndpointApiSavedCollectionItemPostHook>>>, TError,{data: SaveResourceToCollectionRequest}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<ReturnType<typeof useSaveResourceToCollectionEndpointApiSavedCollectionItemPostHook>>>,
+        TError,
+        {data: SaveResourceToCollectionRequest},
+        TContext
+      > => {
+      return useMutation(useSaveResourceToCollectionEndpointApiSavedCollectionItemPostMutationOptions(options), queryClient);
     }
     /**
  * Remove a saved resource from library.

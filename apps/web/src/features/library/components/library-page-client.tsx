@@ -4,8 +4,12 @@ import { useQueryClient } from "@tanstack/react-query";
 import {
   Bookmark,
   ChevronDown,
+  Globe,
   Link as LinkIcon,
+  Lock,
   MessageCircleQuestion,
+  MoreHorizontal,
+  Pencil,
   Plus,
   Trash2,
   Wand2,
@@ -18,17 +22,30 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ResourceCardRenderer } from "@/features/search/components/resource-card";
-import type { QueryGroup, SavedResourceResponse } from "@/lib/api/model";
+import type {
+  CollectionGroup,
+  ResourceCard,
+  SavedResourceResponse,
+} from "@/lib/api/model";
 import {
   getListSavedResourcesEndpointApiSavedGetQueryKey,
   useAddCustomLinkEndpointApiSavedLinkPost,
+  useDeleteCollectionEndpointApiSavedCollectionsCollectionIdDelete,
   useDeleteSavedResourceEndpointApiSavedIdDelete,
   useEvaluateSavedResourcesEndpointApiSavedEvaluatePost,
   useEvaluateSingleResourceEndpointApiSavedEvaluateSinglePost,
   useListSavedResourcesEndpointApiSavedGet,
+  useUpdateCollectionEndpointApiSavedCollectionsCollectionIdPatch,
 } from "@/lib/api/saved-resources/saved-resources";
 
 export function LibraryPageClient() {
@@ -42,6 +59,10 @@ export function LibraryPageClient() {
   const { mutateAsync: evaluateSingle } =
     useEvaluateSingleResourceEndpointApiSavedEvaluateSinglePost();
   const { mutateAsync: deleteResource } = useDeleteSavedResourceEndpointApiSavedIdDelete();
+  const { mutateAsync: updateCollection } =
+    useUpdateCollectionEndpointApiSavedCollectionsCollectionIdPatch();
+  const { mutateAsync: deleteCollection } =
+    useDeleteCollectionEndpointApiSavedCollectionsCollectionIdDelete();
 
   const [evaluatingIds, setEvaluatingIds] = useState<Set<string>>(new Set());
   const [evaluatingQueries, setEvaluatingQueries] = useState<Set<string>>(new Set());
@@ -49,6 +70,9 @@ export function LibraryPageClient() {
   const [closedGroups, setClosedGroups] = useState<Set<string>>(new Set());
   const [addLinkOpenFor, setAddLinkOpenFor] = useState<string | null>(null);
   const [linkUrl, setLinkUrl] = useState("");
+
+  const [renamingCollectionId, setRenamingCollectionId] = useState<string | null>(null);
+  const [renamingValue, setRenamingValue] = useState("");
 
   const groups = savedData?.groups ?? [];
   const activeGroup = groups.find((g) => g.preset_id === activeTab) ?? groups[0];
@@ -139,6 +163,38 @@ export function LibraryPageClient() {
     }
   };
 
+  const handleUpdateCollection = async (
+    collectionId: string,
+    updates: { name?: string; is_public?: boolean }
+  ) => {
+    try {
+      await updateCollection({ collectionId, data: updates });
+      toast.success("Collection updated");
+      invalidateLibrary();
+    } catch {
+      toast.error("Failed to update collection");
+    }
+  };
+
+  const handleDeleteCollection = async (collectionId: string) => {
+    if (!window.confirm("Are you sure you want to delete this collection and all its resources?"))
+      return;
+    try {
+      await deleteCollection({ collectionId });
+      toast.success("Collection deleted");
+      invalidateLibrary();
+    } catch {
+      toast.error("Failed to delete collection");
+    }
+  };
+
+  const handleRenameSubmit = async (e: React.FormEvent, collectionId: string) => {
+    e.preventDefault();
+    if (!renamingValue.trim()) return;
+    await handleUpdateCollection(collectionId, { name: renamingValue.trim() });
+    setRenamingCollectionId(null);
+  };
+
   const renderCardAction = (item: SavedResourceResponse) => {
     const isEvaluatingThis = evaluatingIds.has(item.id);
     const isDeletingThis = deletingIds.has(item.id);
@@ -175,28 +231,30 @@ export function LibraryPageClient() {
     );
   };
 
-  const renderQueryGroup = (qGroup: QueryGroup, presetId: string) => {
-    const queryKey = `${presetId}:${qGroup.search_query}`;
-    const isEvaluatingGroup = evaluatingQueries.has(queryKey);
+  const renderCollectionGroup = (colGroup: CollectionGroup, presetId: string) => {
+    const col = colGroup.collection;
+    const groupKey = col.id;
+    const searchQuery = col.search_query;
+    const isEvaluatingGroup = evaluatingQueries.has(`${presetId}:${searchQuery}`);
 
     // Sort logic: Unevaluated first (recent on top), then Evaluated (use_it → adapt_it → skip_it)
     const _VERDICT_ORDER: Record<string, number> = { use_it: 0, adapt_it: 1, skip_it: 2 };
-    const unevaluated = qGroup.items.filter((i) => !i.evaluation_data);
-    const evaluated = qGroup.items.filter((i) => !!i.evaluation_data);
+    const unevaluated = colGroup.items.filter((i) => !i.evaluation_data);
+    const evaluated = colGroup.items.filter((i) => !!i.evaluation_data);
     unevaluated.sort((a, b) => new Date(b.saved_at).getTime() - new Date(a.saved_at).getTime());
     evaluated.sort(
       (a, b) =>
         (_VERDICT_ORDER[a.evaluation_data?.verdict ?? ""] ?? 3) -
         (_VERDICT_ORDER[b.evaluation_data?.verdict ?? ""] ?? 3)
     );
-    const sortedItems = [...unevaluated, ...evaluated] as typeof qGroup.items;
+    const sortedItems = [...unevaluated, ...evaluated] as typeof colGroup.items;
 
     const unevaluatedCount = unevaluated.length;
-    const isOpen = isGroupOpen(queryKey);
-    const isAddLinkOpen = addLinkOpenFor === queryKey;
+    const isOpen = isGroupOpen(groupKey);
+    const isAddLinkOpen = addLinkOpenFor === groupKey;
 
     return (
-      <Collapsible key={queryKey} open={isOpen} onOpenChange={() => toggleGroup(queryKey)}>
+      <Collapsible key={groupKey} open={isOpen} onOpenChange={() => toggleGroup(groupKey)}>
         <Card className="overflow-hidden">
           <CardHeader className="bg-muted/50 py-3 border-b select-none">
             <div className="flex items-center justify-between gap-2">
@@ -204,7 +262,7 @@ export function LibraryPageClient() {
                 <button
                   type="button"
                   className="flex min-w-0 flex-1 items-center gap-2 text-left"
-                  aria-label={`${isOpen ? "Collapse" : "Expand"} ${qGroup.search_query} resources`}
+                  aria-label={`${isOpen ? "Collapse" : "Expand"} ${col.name} collection`}
                 >
                   <ChevronDown
                     className={`h-4 w-4 text-muted-foreground transition-transform duration-200 ${
@@ -212,50 +270,118 @@ export function LibraryPageClient() {
                     }`}
                   />
                   <MessageCircleQuestion className="h-4 w-4 text-muted-foreground" />
-                  <CardTitle className="text-base font-medium">
-                    {qGroup.search_query === "custom" ? "Custom Links" : `"${qGroup.search_query}"`}
-                  </CardTitle>
+                  <CardTitle className="text-base font-medium">{col.name}</CardTitle>
                   <span className="text-xs text-muted-foreground">
-                    ({qGroup.items.length} resource{qGroup.items.length === 1 ? "" : "s"}
+                    ({colGroup.items.length} resource{colGroup.items.length === 1 ? "" : "s"}
                     {unevaluatedCount > 0 ? `, ${unevaluatedCount} unevaluated` : ""})
                   </span>
+                  {col.is_public ? (
+                    <span title="Public">
+                      <Globe className="h-3.5 w-3.5 text-green-500" />
+                    </span>
+                  ) : (
+                    <span title="Private">
+                      <Lock className="h-3.5 w-3.5 text-muted-foreground" />
+                    </span>
+                  )}
                 </button>
               </CollapsibleTrigger>
 
               <div role="toolbar" className="flex items-center gap-2">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="h-8 text-xs"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    if (isAddLinkOpen) {
-                      setAddLinkOpenFor(null);
-                      setLinkUrl("");
-                    } else {
-                      setAddLinkOpenFor(queryKey);
-                    }
-                  }}
-                >
-                  {isAddLinkOpen ? (
-                    <X className="mr-1 h-3.5 w-3.5" />
-                  ) : (
-                    <LinkIcon className="mr-1 h-3.5 w-3.5" />
-                  )}
-                  {isAddLinkOpen ? "Cancel" : "Add Link"}
-                </Button>
+                {renamingCollectionId === groupKey ? (
+                  <form onSubmit={(e) => handleRenameSubmit(e, groupKey)} className="flex gap-2">
+                    <Input
+                      className="h-8 text-sm"
+                      value={renamingValue}
+                      onChange={(e) => setRenamingValue(e.target.value)}
+                      autoFocus
+                    />
+                    <Button size="sm" type="submit" className="h-8">
+                      Save
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="h-8"
+                      onClick={() => setRenamingCollectionId(null)}
+                    >
+                      Cancel
+                    </Button>
+                  </form>
+                ) : (
+                  <>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-8 text-xs"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (isAddLinkOpen) {
+                          setAddLinkOpenFor(null);
+                          setLinkUrl("");
+                        } else {
+                          setAddLinkOpenFor(groupKey);
+                        }
+                      }}
+                    >
+                      {isAddLinkOpen ? (
+                        <X className="mr-1 h-3.5 w-3.5" />
+                      ) : (
+                        <LinkIcon className="mr-1 h-3.5 w-3.5" />
+                      )}
+                      {isAddLinkOpen ? "Cancel" : "Add Link"}
+                    </Button>
 
-                {unevaluatedCount > 0 && (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="h-8 text-xs"
-                    onClick={() => void handleEvaluateGroup(presetId, qGroup.search_query)}
-                    disabled={isEvaluatingGroup || isBatchEvaluating}
-                  >
-                    <Wand2 className="mr-2 h-3.5 w-3.5" />
-                    Evaluate All ({unevaluatedCount})
-                  </Button>
+                    {unevaluatedCount > 0 && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="h-8 text-xs"
+                        onClick={() => void handleEvaluateGroup(presetId, searchQuery)}
+                        disabled={isEvaluatingGroup || isBatchEvaluating}
+                      >
+                        <Wand2 className="mr-2 h-3.5 w-3.5" />
+                        Evaluate All ({unevaluatedCount})
+                      </Button>
+                    )}
+
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon" className="h-8 w-8">
+                          <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem
+                          onClick={() => {
+                            setRenamingValue(col.name);
+                            setRenamingCollectionId(groupKey);
+                          }}
+                        >
+                          <Pencil className="mr-2 h-4 w-4" /> Rename
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() =>
+                            handleUpdateCollection(groupKey, { is_public: !col.is_public })
+                          }
+                        >
+                          {col.is_public ? (
+                            <Lock className="mr-2 h-4 w-4" />
+                          ) : (
+                            <Globe className="mr-2 h-4 w-4" />
+                          )}
+                          {col.is_public ? "Make Private" : "Make Public"}
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem
+                          className="text-destructive"
+                          onClick={() => handleDeleteCollection(groupKey)}
+                        >
+                          <Trash2 className="mr-2 h-4 w-4" /> Delete Collection
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </>
                 )}
               </div>
             </div>
@@ -263,7 +389,7 @@ export function LibraryPageClient() {
             {/* Inline add-link form */}
             {isAddLinkOpen && (
               <form
-                onSubmit={(e) => handleAddLink(e, presetId, qGroup.search_query)}
+                onSubmit={(e) => handleAddLink(e, presetId, searchQuery)}
                 className="mt-3 flex gap-2"
               >
                 <Input
@@ -288,7 +414,7 @@ export function LibraryPageClient() {
 
           <CollapsibleContent>
             <CardContent className="p-4 grid gap-4 sm:grid-cols-1 lg:grid-cols-2">
-              {sortedItems.map((item) => (
+              {sortedItems.map((item: SavedResourceResponse) => (
                 <ResourceCardRenderer
                   key={item.id}
                   resource={item.resource_data}
@@ -328,7 +454,7 @@ export function LibraryPageClient() {
                 <TabsTrigger key={group.preset_id} value={group.preset_id}>
                   {group.preset_name}
                   <span className="ml-1.5 text-xs text-muted-foreground">
-                    ({group.query_groups.length})
+                    ({group.collections.length})
                   </span>
                 </TabsTrigger>
               ))}
@@ -337,7 +463,9 @@ export function LibraryPageClient() {
 
           {groups.map((group) => (
             <TabsContent key={group.preset_id} value={group.preset_id} className="space-y-4">
-              {group.query_groups.map((qGroup) => renderQueryGroup(qGroup, group.preset_id))}
+              {group.collections.map((colGroup) =>
+                renderCollectionGroup(colGroup, group.preset_id)
+              )}
             </TabsContent>
           ))}
         </Tabs>

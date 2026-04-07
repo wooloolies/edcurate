@@ -8,6 +8,44 @@ from sqlalchemy.orm import Mapped, mapped_column
 from src.lib.database import Base
 
 
+class LibraryCollection(Base):
+    """Collection wrapper for saved resources."""
+
+    __tablename__ = "library_collections"
+    __table_args__ = (
+        Index("ix_library_collections_public", "is_public"),
+        Index("ix_library_collections_user", "user_id"),
+        Index("ix_library_collections_preset", "preset_id"),
+    )
+
+    id: Mapped[uuid_lib.UUID] = mapped_column(
+        primary_key=True,
+        default=uuid_lib.uuid4,
+        server_default=text("gen_random_uuid()"),
+    )
+    user_id: Mapped[uuid_lib.UUID] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"),
+        nullable=False,
+    )
+    preset_id: Mapped[uuid_lib.UUID] = mapped_column(
+        ForeignKey("classroom_presets.id", ondelete="CASCADE"),
+        nullable=False,
+    )
+    search_query: Mapped[str] = mapped_column(String(512), nullable=False)
+    name: Mapped[str] = mapped_column(String(256), nullable=False)
+    is_public: Mapped[bool] = mapped_column(
+        nullable=False, default=False, server_default="false"
+    )
+    clone_count: Mapped[int] = mapped_column(
+        nullable=False, default=0, server_default="0"
+    )
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+    )
+
+
 class SavedResource(Base):
     """Saved resource bookmark model."""
 
@@ -20,6 +58,7 @@ class SavedResource(Base):
             "resource_url",
             name="uq_saved_resource_v2",
         ),
+        Index("ix_saved_resources_collection", "collection_id"),
         Index("ix_saved_resources_user_preset", "user_id", "preset_id"),
     )
 
@@ -27,6 +66,10 @@ class SavedResource(Base):
         primary_key=True,
         default=uuid_lib.uuid4,
         server_default=text("gen_random_uuid()"),
+    )
+    collection_id: Mapped[uuid_lib.UUID | None] = mapped_column(
+        ForeignKey("library_collections.id", ondelete="CASCADE"),
+        nullable=True,
     )
     user_id: Mapped[uuid_lib.UUID] = mapped_column(
         ForeignKey("users.id", ondelete="CASCADE"),

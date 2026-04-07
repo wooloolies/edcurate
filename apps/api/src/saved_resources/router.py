@@ -8,12 +8,15 @@ from src.saved_resources import service
 from src.saved_resources.schemas import (
     AddCustomLinkRequest,
     BatchEvaluateRequest,
-    BulkSaveResourceRequest,
-    BulkSaveResourceResponse,
     EvaluateSingleRequest,
+    LibraryCollectionCreate,
+    LibraryCollectionResponse,
+    LibraryCollectionUpdate,
     SavedResourceListResponse,
     SavedResourceResponse,
     SaveResourceRequest,
+    SaveResourceToCollectionRequest,
+    SuggestedCollectionResponse,
 )
 
 router = APIRouter()
@@ -25,31 +28,91 @@ async def list_saved_resources_endpoint(
     current_user: CurrentUser,
     preset_id: uuid.UUID | None = None,
 ) -> SavedResourceListResponse:
-    """List grouped saved resources in the library."""
+    """List grouped saved resources in the library by collection."""
     user_id = uuid.UUID(current_user.id)
     return await service.list_saved_resources(db, user_id, preset_id)
 
 
+@router.get("/suggested")
+async def get_suggested_collections_endpoint(
+    search_query: str,
+    db: DBSession,
+    current_user: CurrentUser,
+    preset_id: uuid.UUID | None = None,
+    limit: int = 5,
+) -> list[SuggestedCollectionResponse]:
+    """Get suggested public collections matching the search query via TF-IDF / FTS."""
+    user_id = uuid.UUID(current_user.id)
+    return await service.get_suggested_collections(
+        db, user_id, search_query, preset_id, limit
+    )
+
+
+@router.post("/collections")
+async def create_collection_endpoint(
+    db: DBSession,
+    current_user: CurrentUser,
+    request: LibraryCollectionCreate,
+) -> LibraryCollectionResponse:
+    """Create a new collection from multiple resources."""
+    user_id = uuid.UUID(current_user.id)
+    return await service.create_collection(db, user_id, request)
+
+
+@router.patch("/collections/{collection_id}")
+async def update_collection_endpoint(
+    collection_id: uuid.UUID,
+    db: DBSession,
+    current_user: CurrentUser,
+    request: LibraryCollectionUpdate,
+) -> LibraryCollectionResponse:
+    """Update a collection (e.g. rename, make public)."""
+    user_id = uuid.UUID(current_user.id)
+    return await service.update_collection(db, user_id, collection_id, request)
+
+
+@router.delete("/collections/{collection_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_collection_endpoint(
+    collection_id: uuid.UUID,
+    db: DBSession,
+    current_user: CurrentUser,
+) -> None:
+    """Delete a library collection permanently."""
+    user_id = uuid.UUID(current_user.id)
+    await service.delete_collection(db, user_id, collection_id)
+
+
+@router.post("/collections/{collection_id}/clone")
+async def clone_collection_endpoint(
+    collection_id: uuid.UUID,
+    db: DBSession,
+    current_user: CurrentUser,
+) -> LibraryCollectionResponse:
+    """Clone another user's public collection."""
+    user_id = uuid.UUID(current_user.id)
+    return await service.clone_collection(db, user_id, collection_id)
+
+
 @router.post("")
-async def toggle_save_resource_endpoint(
+async def save_resource_endpoint(
     db: DBSession,
     current_user: CurrentUser,
     request: SaveResourceRequest,
 ) -> SavedResourceResponse:
-    """Toggle save a resource from discovery defaults to idempotent insert."""
+    """Save a single resource, auto-creating a collection if needed."""
     user_id = uuid.UUID(current_user.id)
     return await service.save_resource(db, user_id, request)
 
 
-@router.post("/bulk")
-async def bulk_save_resources_endpoint(
+@router.post("/collection-item")
+async def save_resource_to_collection_endpoint(
     db: DBSession,
     current_user: CurrentUser,
-    request: BulkSaveResourceRequest,
-) -> BulkSaveResourceResponse:
-    """Save multiple resources in a single request."""
+    request: SaveResourceToCollectionRequest,
+) -> SavedResourceResponse:
+    """Save a single resource to an existing collection."""
     user_id = uuid.UUID(current_user.id)
-    return await service.bulk_save_resources(db, user_id, request)
+    return await service.save_to_collection(db, user_id, request)
 
 
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)

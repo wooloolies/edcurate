@@ -4,12 +4,12 @@
  * edcurate-api
  * OpenAPI spec version: 0.1.0
  */
-import type { QueryGroup } from './query-group';
+import type { CollectionGroup } from './collection-group';
 
 export interface PresetGroup {
   preset_id: string;
   preset_name: string;
   preset_subject: string;
   preset_topic?: string | null;
-  query_groups: QueryGroup[];
+  collections: CollectionGroup[];
 }

@@ -4,12 +4,13 @@
  * edcurate-api
  * OpenAPI spec version: 0.1.0
  */
+import type { LibraryCollectionResponse } from './library-collection-response';
 import type { SavedResourceResponse } from './saved-resource-response';
 
 /**
- * A group of saved resources from the same search query.
+ * A collection of saved resources.
  */
-export interface QueryGroup {
-  search_query: string;
+export interface CollectionGroup {
+  collection: LibraryCollectionResponse;
   items: SavedResourceResponse[];
 }
