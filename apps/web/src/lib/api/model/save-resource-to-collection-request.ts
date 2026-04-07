@@ -4,11 +4,11 @@
  * edcurate-api
  * OpenAPI spec version: 0.1.0
  */
-import type { EvaluationResultInput } from './evaluation-result-input';
+import type { JudgmentResult } from './judgment-result';
 import type { ResourceCard } from './resource-card';
 
 export interface SaveResourceToCollectionRequest {
   collection_id: string;
   resource: ResourceCard;
-  evaluation_data?: EvaluationResultInput | null;
+  evaluation_data?: JudgmentResult | null;
 }

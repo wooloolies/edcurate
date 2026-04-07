@@ -13,10 +13,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useGenerateArtifactApiLocalizerGeneratePost } from "@/lib/api/localizer/localizer";
-import type { ArtifactType, SavedResourceResponse } from "@/lib/api/model";
+import { useGenerateArtifactEndpointApiLocalizerGeneratePost } from "@/lib/api/localizer/localizer";
+import type { GenerateArtifactRequestArtifactType, SavedResourceResponse } from "@/lib/api/model";
 
-const ARTIFACT_LABELS: Record<ArtifactType, string> = {
+const ARTIFACT_LABELS: Record<GenerateArtifactRequestArtifactType, string> = {
   quiz: "Quiz",
   mindmap: "Mind Map",
   summary: "Summary",
@@ -28,7 +28,7 @@ const MAX_SELECTED_RESOURCES = 10;
 interface GenerateArtifactDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  artifactType: ArtifactType;
+  artifactType: GenerateArtifactRequestArtifactType;
   presetId: string;
   resources: SavedResourceResponse[];
   onSuccess: (artifact: {
@@ -50,7 +50,7 @@ export function GenerateArtifactDialog({
     () => new Set(resources.slice(0, MAX_SELECTED_RESOURCES).map((r) => r.id))
   );
 
-  const { mutateAsync: generate, isPending } = useGenerateArtifactApiLocalizerGeneratePost();
+  const { mutateAsync: generate, isPending } = useGenerateArtifactEndpointApiLocalizerGeneratePost();
 
   const toggleResource = (id: string) => {
     setSelectedIds((prev) => {
@@ -76,9 +76,11 @@ export function GenerateArtifactDialog({
     }
     try {
       const result = await generate({
-        preset_id: presetId,
-        saved_resource_ids: ids,
-        artifact_type: artifactType,
+        data: {
+          preset_id: presetId,
+          saved_resource_ids: ids,
+          artifact_type: artifactType,
+        },
       });
       toast.success(`${ARTIFACT_LABELS[artifactType]} generated successfully`);
       onSuccess(result);

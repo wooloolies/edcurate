@@ -31,7 +31,7 @@ export const GetSubjectsApiCurriculumSubjectsGetResponse = zod.array(GetSubjects
  */
 export const GetFrameworksApiCurriculumFrameworksGetQueryParams = zod.object({
   "country": zod.string(),
-  "subject": zod.string()
+  "subject": zod.union([zod.string(),zod.null()]).optional()
 })
 
 export const GetFrameworksApiCurriculumFrameworksGetResponseItem = zod.string()
@@ -42,8 +42,8 @@ export const GetFrameworksApiCurriculumFrameworksGetResponse = zod.array(GetFram
  */
 export const GetGradesApiCurriculumGradesGetQueryParams = zod.object({
   "country": zod.string(),
-  "subject": zod.string(),
-  "framework": zod.string()
+  "framework": zod.string(),
+  "subject": zod.union([zod.string(),zod.null()]).optional()
 })
 
 export const GetGradesApiCurriculumGradesGetResponseItem = zod.object({

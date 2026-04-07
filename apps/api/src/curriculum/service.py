@@ -30,31 +30,35 @@ async def list_subjects(db: AsyncSession, country_code: str) -> list[str]:
 
 
 async def list_frameworks(
-    db: AsyncSession, country_code: str, subject: str
+    db: AsyncSession, country_code: str, subject: str | None = None
 ) -> list[str]:
-    result = await db.execute(
+    stmt = (
         select(distinct(CurriculumEntry.framework))
         .where(
             CurriculumEntry.country_code == country_code,
-            CurriculumEntry.subject == subject,
             CurriculumEntry.is_active.is_(True),
         )
         .order_by(CurriculumEntry.framework)
     )
+    if subject:
+        stmt = stmt.where(CurriculumEntry.subject == subject)
+    result = await db.execute(stmt)
     return list(result.scalars().all())
 
 
 async def list_grades(
-    db: AsyncSession, country_code: str, subject: str, framework: str
+    db: AsyncSession, country_code: str, subject: str | None, framework: str
 ) -> list[dict]:
-    result = await db.execute(
+    stmt = (
         select(CurriculumEntry.grade, CurriculumEntry.grade_sort)
         .where(
             CurriculumEntry.country_code == country_code,
-            CurriculumEntry.subject == subject,
             CurriculumEntry.framework == framework,
             CurriculumEntry.is_active.is_(True),
         )
         .order_by(CurriculumEntry.grade_sort)
     )
+    if subject:
+        stmt = stmt.where(CurriculumEntry.subject == subject)
+    result = await db.execute(stmt)
     return [{"name": r.grade, "sort_order": r.grade_sort} for r in result.all()]

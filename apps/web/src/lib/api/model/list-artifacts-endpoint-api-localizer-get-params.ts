@@ -5,8 +5,6 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export type GetGradesApiCurriculumGradesGetParams = {
-country: string;
-framework: string;
-subject?: string | null;
+export type ListArtifactsEndpointApiLocalizerGetParams = {
+preset_id: string;
 };

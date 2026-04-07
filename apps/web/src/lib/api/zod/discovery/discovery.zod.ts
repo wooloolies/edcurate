@@ -121,7 +121,7 @@ multi-agent pipeline executes.  Rate limited to 20 requests per minute
 per user.
 
 The stream always terminates with a ``complete / done`` event whose
-``data`` field contains the full ``EvaluatedSearchResponse``.
+``data`` field contains the full ``JudgedSearchResponse``.
  * @summary Search Stream
  */
 export const searchStreamApiDiscoverySearchStreamGetQueryQueryMax = 500;

@@ -35,7 +35,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArtifactList } from "@/features/library/components/artifact-list";
 import { GenerateArtifactDialog } from "@/features/library/components/generate-artifact-dialog";
 import { ResourceCardRenderer } from "@/features/search/components/resource-card";
-import type { ArtifactType, CollectionGroup, SavedResourceResponse } from "@/lib/api/model";
+import type { GenerateArtifactRequestArtifactType, CollectionGroup, SavedResourceResponse } from "@/lib/api/model";
 import {
   getListSavedResourcesEndpointApiSavedGetQueryKey,
   useAddCustomLinkEndpointApiSavedLinkPost,
@@ -71,7 +71,7 @@ export function LibraryPageClient() {
   const [linkUrl, setLinkUrl] = useState("");
   const [generateDialog, setGenerateDialog] = useState<{
     open: boolean;
-    artifactType: ArtifactType;
+    artifactType: GenerateArtifactRequestArtifactType;
     presetId: string;
     resources: SavedResourceResponse[];
   } | null>(null);
@@ -455,9 +455,10 @@ export function LibraryPageClient() {
 
           <CollapsibleContent>
             <CardContent className="p-4 grid gap-4 sm:grid-cols-1 lg:grid-cols-2">
-              {sortedItems.map((item: SavedResourceResponse) => (
+              {sortedItems.map((item: SavedResourceResponse, idx: number) => (
                 <ResourceCardRenderer
                   key={item.id}
+                  index={idx}
                   resource={item.resource_data}
                   judgment={item.evaluation_data ?? undefined}
                   presetId={presetId}

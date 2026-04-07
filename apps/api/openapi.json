@@ -437,9 +437,16 @@
           {
             "name": "subject",
             "in": "query",
-            "required": true,
+            "required": false,
             "schema": {
-              "type": "string",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
               "title": "Subject"
             }
           }
@@ -490,21 +497,28 @@
             }
           },
           {
-            "name": "subject",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "title": "Subject"
-            }
-          },
-          {
             "name": "framework",
             "in": "query",
             "required": true,
             "schema": {
               "type": "string",
               "title": "Framework"
+            }
+          },
+          {
+            "name": "subject",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Subject"
             }
           }
         ],
@@ -885,13 +899,66 @@
         }
       }
     },
+    "/api/discovery/search/stream": {
+      "get": {
+        "tags": [
+          "discovery"
+        ],
+        "summary": "Search Stream",
+        "description": "SSE stream of search pipeline progress.\n\nEmits `SearchStageEvent` messages under the `stage` event name as the\nmulti-agent pipeline executes.  Rate limited to 20 requests per minute\nper user.\n\nThe stream always terminates with a ``complete / done`` event whose\n``data`` field contains the full ``JudgedSearchResponse``.",
+        "operationId": "search_stream_api_discovery_search_stream_get",
+        "parameters": [
+          {
+            "name": "preset_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Preset Id"
+            }
+          },
+          {
+            "name": "query",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 500,
+              "title": "Query"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/saved": {
       "get": {
         "tags": [
           "saved_resources"
         ],
         "summary": "List Saved Resources Endpoint",
-        "description": "List grouped saved resources in the library.",
+        "description": "List grouped saved resources in the library by collection.",
         "operationId": "list_saved_resources_endpoint_api_saved_get",
         "parameters": [
           {
@@ -939,9 +1006,9 @@
         "tags": [
           "saved_resources"
         ],
-        "summary": "Toggle Save Resource Endpoint",
-        "description": "Toggle save a resource from discovery defaults to idempotent insert.",
-        "operationId": "toggle_save_resource_endpoint_api_saved_post",
+        "summary": "Save Resource Endpoint",
+        "description": "Save a single resource, auto-creating a collection if needed.",
+        "operationId": "save_resource_endpoint_api_saved_post",
         "requestBody": {
           "required": true,
           "content": {
@@ -976,19 +1043,93 @@
         }
       }
     },
-    "/api/saved/bulk": {
+    "/api/saved/suggested": {
+      "get": {
+        "tags": [
+          "saved_resources"
+        ],
+        "summary": "Get Suggested Collections Endpoint",
+        "description": "Get suggested public collections matching the search query via TF-IDF / FTS.",
+        "operationId": "get_suggested_collections_endpoint_api_saved_suggested_get",
+        "parameters": [
+          {
+            "name": "search_query",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Search Query"
+            }
+          },
+          {
+            "name": "preset_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Preset Id"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 5,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SuggestedCollectionResponse"
+                  },
+                  "title": "Response Get Suggested Collections Endpoint Api Saved Suggested Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/saved/collections": {
       "post": {
         "tags": [
           "saved_resources"
         ],
-        "summary": "Bulk Save Resources Endpoint",
-        "description": "Save multiple resources in a single request.",
-        "operationId": "bulk_save_resources_endpoint_api_saved_bulk_post",
+        "summary": "Create Collection Endpoint",
+        "description": "Create a new collection from multiple resources.",
+        "operationId": "create_collection_endpoint_api_saved_collections_post",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/BulkSaveResourceRequest"
+                "$ref": "#/components/schemas/LibraryCollectionCreate"
               }
             }
           },
@@ -1000,7 +1141,182 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/BulkSaveResourceResponse"
+                  "$ref": "#/components/schemas/LibraryCollectionResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/saved/collections/{collection_id}": {
+      "patch": {
+        "tags": [
+          "saved_resources"
+        ],
+        "summary": "Update Collection Endpoint",
+        "description": "Update a collection (e.g. rename, make public).",
+        "operationId": "update_collection_endpoint_api_saved_collections__collection_id__patch",
+        "parameters": [
+          {
+            "name": "collection_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Collection Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LibraryCollectionUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LibraryCollectionResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "saved_resources"
+        ],
+        "summary": "Delete Collection Endpoint",
+        "description": "Delete a library collection permanently.",
+        "operationId": "delete_collection_endpoint_api_saved_collections__collection_id__delete",
+        "parameters": [
+          {
+            "name": "collection_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Collection Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/saved/collections/{collection_id}/clone": {
+      "post": {
+        "tags": [
+          "saved_resources"
+        ],
+        "summary": "Clone Collection Endpoint",
+        "description": "Clone another user's public collection.",
+        "operationId": "clone_collection_endpoint_api_saved_collections__collection_id__clone_post",
+        "parameters": [
+          {
+            "name": "collection_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Collection Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LibraryCollectionResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/saved/collection-item": {
+      "post": {
+        "tags": [
+          "saved_resources"
+        ],
+        "summary": "Save Resource To Collection Endpoint",
+        "description": "Save a single resource to an existing collection.",
+        "operationId": "save_resource_to_collection_endpoint_api_saved_collection_item_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SaveResourceToCollectionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SavedResourceResponse"
                 }
               }
             }
@@ -1182,6 +1498,171 @@
           }
         }
       }
+    },
+    "/api/localizer/generate": {
+      "post": {
+        "tags": [
+          "localizer"
+        ],
+        "summary": "Generate Artifact Endpoint",
+        "description": "Generate a learning artifact from saved resources via NotebookLM.",
+        "operationId": "generate_artifact_endpoint_api_localizer_generate_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenerateArtifactRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GeneratedArtifactResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/localizer": {
+      "get": {
+        "tags": [
+          "localizer"
+        ],
+        "summary": "List Artifacts Endpoint",
+        "description": "List generated artifacts for a preset.",
+        "operationId": "list_artifacts_endpoint_api_localizer_get",
+        "parameters": [
+          {
+            "name": "preset_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Preset Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArtifactListResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/localizer/{artifact_id}": {
+      "get": {
+        "tags": [
+          "localizer"
+        ],
+        "summary": "Get Artifact Endpoint",
+        "description": "Get a single generated artifact.",
+        "operationId": "get_artifact_endpoint_api_localizer__artifact_id__get",
+        "parameters": [
+          {
+            "name": "artifact_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Artifact Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GeneratedArtifactResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "localizer"
+        ],
+        "summary": "Delete Artifact Endpoint",
+        "description": "Delete a generated artifact.",
+        "operationId": "delete_artifact_endpoint_api_localizer__artifact_id__delete",
+        "parameters": [
+          {
+            "name": "artifact_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Artifact Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1243,6 +1724,27 @@
         ],
         "title": "AddCustomLinkRequest"
       },
+      "ArtifactListResponse": {
+        "properties": {
+          "artifacts": {
+            "items": {
+              "$ref": "#/components/schemas/GeneratedArtifactResponse"
+            },
+            "type": "array",
+            "title": "Artifacts"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          }
+        },
+        "type": "object",
+        "required": [
+          "artifacts",
+          "total"
+        ],
+        "title": "ArtifactListResponse"
+      },
       "BatchEvaluateRequest": {
         "properties": {
           "preset_id": {
@@ -1262,53 +1764,26 @@
         ],
         "title": "BatchEvaluateRequest"
       },
-      "BulkSaveResourceRequest": {
+      "CollectionGroup": {
         "properties": {
-          "preset_id": {
-            "type": "string",
-            "format": "uuid",
-            "title": "Preset Id"
+          "collection": {
+            "$ref": "#/components/schemas/LibraryCollectionResponse"
           },
-          "search_query": {
-            "type": "string",
-            "title": "Search Query"
-          },
-          "resources": {
-            "items": {
-              "$ref": "#/components/schemas/ResourceCard"
-            },
-            "type": "array",
-            "title": "Resources"
-          }
-        },
-        "type": "object",
-        "required": [
-          "preset_id",
-          "search_query",
-          "resources"
-        ],
-        "title": "BulkSaveResourceRequest"
-      },
-      "BulkSaveResourceResponse": {
-        "properties": {
-          "saved": {
+          "items": {
             "items": {
               "$ref": "#/components/schemas/SavedResourceResponse"
             },
             "type": "array",
-            "title": "Saved"
-          },
-          "total": {
-            "type": "integer",
-            "title": "Total"
+            "title": "Items"
           }
         },
         "type": "object",
         "required": [
-          "saved",
-          "total"
+          "collection",
+          "items"
         ],
-        "title": "BulkSaveResourceResponse"
+        "title": "CollectionGroup",
+        "description": "A collection of saved resources."
       },
       "CountryOption": {
         "properties": {
@@ -1455,6 +1930,88 @@
           "saved_resource_id"
         ],
         "title": "EvaluateSingleRequest"
+      },
+      "GenerateArtifactRequest": {
+        "properties": {
+          "preset_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Preset Id"
+          },
+          "saved_resource_ids": {
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "type": "array",
+            "maxItems": 10,
+            "minItems": 1,
+            "title": "Saved Resource Ids"
+          },
+          "artifact_type": {
+            "type": "string",
+            "enum": [
+              "quiz",
+              "mindmap",
+              "summary",
+              "flashcards"
+            ],
+            "title": "Artifact Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "preset_id",
+          "saved_resource_ids",
+          "artifact_type"
+        ],
+        "title": "GenerateArtifactRequest"
+      },
+      "GeneratedArtifactResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "preset_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Preset Id"
+          },
+          "artifact_type": {
+            "type": "string",
+            "title": "Artifact Type"
+          },
+          "content": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Content"
+          },
+          "source_resource_ids": {
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "type": "array",
+            "title": "Source Resource Ids"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "preset_id",
+          "artifact_type",
+          "content",
+          "source_resource_ids",
+          "created_at"
+        ],
+        "title": "GeneratedArtifactResponse"
       },
       "GeneratedSearchQueries": {
         "properties": {
@@ -1693,6 +2250,144 @@
         ],
         "title": "JudgmentResult",
         "description": "Final judgment combining triage + risk scan, presented to the teacher."
+      },
+      "LibraryCollectionCreate": {
+        "properties": {
+          "preset_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Preset Id"
+          },
+          "search_query": {
+            "type": "string",
+            "title": "Search Query"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "is_public": {
+            "type": "boolean",
+            "title": "Is Public",
+            "default": false
+          },
+          "resources": {
+            "items": {
+              "$ref": "#/components/schemas/ResourceCard"
+            },
+            "type": "array",
+            "title": "Resources"
+          },
+          "evaluation_data_list": {
+            "anyOf": [
+              {
+                "items": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/JudgmentResult"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Evaluation Data List"
+          }
+        },
+        "type": "object",
+        "required": [
+          "preset_id",
+          "search_query",
+          "name",
+          "resources"
+        ],
+        "title": "LibraryCollectionCreate"
+      },
+      "LibraryCollectionResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "user_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "User Id"
+          },
+          "preset_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Preset Id"
+          },
+          "search_query": {
+            "type": "string",
+            "title": "Search Query"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "is_public": {
+            "type": "boolean",
+            "title": "Is Public"
+          },
+          "clone_count": {
+            "type": "integer",
+            "title": "Clone Count"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "user_id",
+          "preset_id",
+          "search_query",
+          "name",
+          "is_public",
+          "clone_count",
+          "created_at"
+        ],
+        "title": "LibraryCollectionResponse"
+      },
+      "LibraryCollectionUpdate": {
+        "properties": {
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "is_public": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Is Public"
+          }
+        },
+        "type": "object",
+        "title": "LibraryCollectionUpdate"
       },
       "MetricResult": {
         "properties": {
@@ -2106,12 +2801,12 @@
             ],
             "title": "Preset Topic"
           },
-          "query_groups": {
+          "collections": {
             "items": {
-              "$ref": "#/components/schemas/QueryGroup"
+              "$ref": "#/components/schemas/CollectionGroup"
             },
             "type": "array",
-            "title": "Query Groups"
+            "title": "Collections"
           }
         },
         "type": "object",
@@ -2119,7 +2814,7 @@
           "preset_id",
           "preset_name",
           "preset_subject",
-          "query_groups"
+          "collections"
         ],
         "title": "PresetGroup"
       },
@@ -2485,28 +3180,6 @@
         "title": "PresetUpdate",
         "description": "Schema for updating a classroom preset (full replacement)."
       },
-      "QueryGroup": {
-        "properties": {
-          "search_query": {
-            "type": "string",
-            "title": "Search Query"
-          },
-          "items": {
-            "items": {
-              "$ref": "#/components/schemas/SavedResourceResponse"
-            },
-            "type": "array",
-            "title": "Items"
-          }
-        },
-        "type": "object",
-        "required": [
-          "search_query",
-          "items"
-        ],
-        "title": "QueryGroup",
-        "description": "A group of saved resources from the same search query."
-      },
       "RefreshTokenRequest": {
         "properties": {
           "refresh_token": {
@@ -2782,6 +3455,21 @@
           },
           "resource": {
             "$ref": "#/components/schemas/ResourceCard"
+          },
+          "evaluation_data": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/JudgmentResult"
+              },
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Evaluation Data"
           }
         },
         "type": "object",
@@ -2791,6 +3479,34 @@
           "resource"
         ],
         "title": "SaveResourceRequest"
+      },
+      "SaveResourceToCollectionRequest": {
+        "properties": {
+          "collection_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Collection Id"
+          },
+          "resource": {
+            "$ref": "#/components/schemas/ResourceCard"
+          },
+          "evaluation_data": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/JudgmentResult"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "collection_id",
+          "resource"
+        ],
+        "title": "SaveResourceToCollectionRequest"
       },
       "SavedResourceListResponse": {
         "properties": {
@@ -2956,6 +3672,23 @@
         "type": "object",
         "title": "SourceWeights",
         "description": "Source weights for federated search result distribution."
+      },
+      "SuggestedCollectionResponse": {
+        "properties": {
+          "collection": {
+            "$ref": "#/components/schemas/LibraryCollectionResponse"
+          },
+          "matched_by": {
+            "type": "string",
+            "title": "Matched By"
+          }
+        },
+        "type": "object",
+        "required": [
+          "collection",
+          "matched_by"
+        ],
+        "title": "SuggestedCollectionResponse"
       },
       "TokenResponse": {
         "properties": {

@@ -38,9 +38,6 @@ export function CollectionOnboarding() {
   const [countryNameRaw, setCountryName] = useQueryState("country", { defaultValue: "" });
   const countryName = countryNameRaw || "";
 
-  const [subjectRaw, setSubject] = useQueryState("subject", { defaultValue: "" });
-  const subject = subjectRaw || "";
-
   const [frameworkRaw, setFramework] = useQueryState("framework", { defaultValue: "" });
   const framework = frameworkRaw || "";
 
@@ -51,6 +48,9 @@ export function CollectionOnboarding() {
   const [classSizeRaw, setClassSize] = useQueryState("size", { defaultValue: "" });
   const classSize = classSizeRaw || "";
 
+  const [subjectRaw, setSubject] = useQueryState("subject", { defaultValue: "" });
+  const subject = subjectRaw || "";
+
   // Step 3
   const [additionalNotesRaw, setAdditionalNotes] = useQueryState("notes", { defaultValue: "" });
   const additionalNotes = additionalNotesRaw || "";
@@ -58,19 +58,19 @@ export function CollectionOnboarding() {
   // --- Curriculum API (cascading) ---
   const { data: countries } = useGetCountriesApiCurriculumCountriesGet();
 
-  const { data: subjects } = useGetSubjectsApiCurriculumSubjectsGet(
+  const { data: frameworks } = useGetFrameworksApiCurriculumFrameworksGet(
     { country: countryCode },
     { query: { enabled: !!countryCode } },
   );
 
-  const { data: frameworks } = useGetFrameworksApiCurriculumFrameworksGet(
-    { country: countryCode, subject },
-    { query: { enabled: !!countryCode && !!subject } },
+  const { data: grades } = useGetGradesApiCurriculumGradesGet(
+    { country: countryCode, framework },
+    { query: { enabled: !!countryCode && !!framework } },
   );
 
-  const { data: grades } = useGetGradesApiCurriculumGradesGet(
-    { country: countryCode, subject, framework },
-    { query: { enabled: !!countryCode && !!subject && !!framework } },
+  const { data: subjects } = useGetSubjectsApiCurriculumSubjectsGet(
+    { country: countryCode },
+    { query: { enabled: !!countryCode } },
   );
 
   useEffect(() => {
@@ -88,13 +88,6 @@ export function CollectionOnboarding() {
     const match = countries?.find((c) => c.code === code);
     setCountryCode(code);
     setCountryName(match?.name ?? "");
-    setSubject("");
-    setFramework("");
-    setGrade("");
-  };
-
-  const handleSubjectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSubject(e.target.value);
     setFramework("");
     setGrade("");
   };
@@ -110,10 +103,6 @@ export function CollectionOnboarding() {
         setErrorMsg("Please select a country to proceed.");
         return;
       }
-      if (!subject) {
-        setErrorMsg("Please select a subject to proceed.");
-        return;
-      }
       if (!grade) {
         setErrorMsg("Please select a year level to proceed.");
         return;
@@ -123,6 +112,10 @@ export function CollectionOnboarding() {
       const sizeParsed = parseInt(classSize);
       if (!classSize || isNaN(sizeParsed) || sizeParsed <= 0) {
         setErrorMsg("Please enter a valid class size (e.g. 25).");
+        return;
+      }
+      if (!subject) {
+        setErrorMsg("Please select a relevant field to proceed.");
         return;
       }
       setCurrentStep(3);
@@ -226,27 +219,6 @@ export function CollectionOnboarding() {
               </div>
             </div>
 
-            {/* Subject */}
-            <div className="w-full">
-              <label className="block text-xl font-bold text-[#111827] mb-3 text-left">Subject</label>
-              <div className="relative">
-                <select
-                  value={subject}
-                  onChange={handleSubjectChange}
-                  disabled={!countryCode}
-                  className={selectClass}
-                >
-                  <option value="">Select a subject...</option>
-                  {subjects?.map((s) => (
-                    <option key={s} value={s}>{s}</option>
-                  ))}
-                </select>
-                <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
-                  <ChevronDown className="w-5 h-5" />
-                </div>
-              </div>
-            </div>
-
             {/* Curriculum Framework */}
             <div className="w-full">
               <label className="block text-xl font-bold text-[#111827] mb-3 text-left">Curriculum Framework</label>
@@ -254,7 +226,7 @@ export function CollectionOnboarding() {
                 <select
                   value={framework}
                   onChange={handleFrameworkChange}
-                  disabled={!subject}
+                  disabled={!countryCode}
                   className={`${selectClass} text-ellipsis`}
                 >
                   <option value="">Select a framework...</option>
@@ -311,6 +283,7 @@ export function CollectionOnboarding() {
           </div>
 
           <div className="flex flex-col gap-8 max-w-xl mx-auto">
+            {/* Class Size */}
             <div className="w-full">
               <label className="block text-xl font-bold text-[#111827] mb-3 text-left">Class Size</label>
               <input
@@ -322,6 +295,26 @@ export function CollectionOnboarding() {
                 onChange={(e) => setClassSize(e.target.value)}
                 className="w-full appearance-none bg-white border-2 border-gray-200 rounded-2xl px-6 py-4 text-sm font-semibold text-[#111827] hover:border-gray-300 focus:outline-none focus:border-[#B7FF70] transition-colors shadow-sm placeholder:text-gray-400 placeholder:font-normal"
               />
+            </div>
+
+            {/* Relevant Field (Subject from DB) */}
+            <div className="w-full">
+              <label className="block text-xl font-bold text-[#111827] mb-3 text-left">Relevant field</label>
+              <div className="relative">
+                <select
+                  value={subject}
+                  onChange={(e) => setSubject(e.target.value)}
+                  className={`${selectClass} text-ellipsis`}
+                >
+                  <option value="">Select a field...</option>
+                  {subjects?.map((s) => (
+                    <option key={s} value={s}>{s}</option>
+                  ))}
+                </select>
+                <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
+                  <ChevronDown className="w-5 h-5" />
+                </div>
+              </div>
             </div>
           </div>
         </div>

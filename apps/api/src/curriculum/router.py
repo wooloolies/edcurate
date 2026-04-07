@@ -17,10 +17,14 @@ async def get_subjects(db: DBSession, country: str):
 
 
 @router.get("/frameworks", response_model=list[str])
-async def get_frameworks(db: DBSession, country: str, subject: str):
+async def get_frameworks(
+    db: DBSession, country: str, subject: str | None = None
+):
     return await service.list_frameworks(db, country.upper(), subject)
 
 
 @router.get("/grades", response_model=list[schemas.GradeOption])
-async def get_grades(db: DBSession, country: str, subject: str, framework: str):
+async def get_grades(
+    db: DBSession, country: str, framework: str, subject: str | None = None
+):
     return await service.list_grades(db, country.upper(), subject, framework)

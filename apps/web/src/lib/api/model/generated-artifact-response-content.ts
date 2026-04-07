@@ -5,7 +5,4 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export type GetFrameworksApiCurriculumFrameworksGetParams = {
-country: string;
-subject?: string | null;
-};
+export type GeneratedArtifactResponseContent = { [key: string]: unknown };

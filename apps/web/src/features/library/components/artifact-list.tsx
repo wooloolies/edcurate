@@ -9,8 +9,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import {
-  useDeleteArtifactApiLocalizerArtifactIdDelete,
-  useListArtifactsApiLocalizerGet,
+  useDeleteArtifactEndpointApiLocalizerArtifactIdDelete,
+  useListArtifactsEndpointApiLocalizerGet,
 } from "@/lib/api/localizer/localizer";
 import type { GeneratedArtifactResponse } from "@/lib/api/model";
 
@@ -31,8 +31,8 @@ interface ArtifactListProps {
 }
 
 export function ArtifactList({ presetId }: ArtifactListProps) {
-  const { data, isLoading } = useListArtifactsApiLocalizerGet(presetId);
-  const { mutateAsync: deleteArtifact } = useDeleteArtifactApiLocalizerArtifactIdDelete();
+  const { data, isLoading } = useListArtifactsEndpointApiLocalizerGet({ preset_id: presetId });
+  const { mutateAsync: deleteArtifact } = useDeleteArtifactEndpointApiLocalizerArtifactIdDelete();
   const [viewingArtifact, setViewingArtifact] = useState<GeneratedArtifactResponse | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
@@ -52,7 +52,7 @@ export function ArtifactList({ presetId }: ArtifactListProps) {
     e.stopPropagation();
     setDeletingId(id);
     try {
-      await deleteArtifact(id);
+      await deleteArtifact({ artifactId: id });
       toast.success("Artifact deleted");
       if (viewingArtifact?.id === id) setViewingArtifact(null);
     } catch {
