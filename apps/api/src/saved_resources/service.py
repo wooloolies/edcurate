@@ -3,7 +3,6 @@ from collections import defaultdict
 from typing import Any
 
 from fastapi import HTTPException, status
-from pydantic import BaseModel
 from sqlalchemy import func, select
 from sqlalchemy.dialects.postgresql import insert
 

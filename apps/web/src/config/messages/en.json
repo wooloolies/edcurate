@@ -253,13 +253,13 @@
         "moderate": "Moderate confidence",
         "low": "Low confidence"
       },
-      "flags": "{count, plural, one {# flag} other {# flags}}",
-      "hideDetails": "Hide details",
       "showDetails": "Show details",
+      "hideDetails": "Hide details",
+      "flags": "{count, plural, one {# flag} other {# flags}}",
       "noFlags": "No issues found",
+      "overrideNote": "Override note",
       "evidence": "Evidence",
       "suggested": "Suggested action",
-      "overrideNote": "Override note",
       "sections": {
         "triage": "Triage",
         "adaptations": "Adaptations",
@@ -277,6 +277,14 @@
         "weak": "Weak"
       },
       "flagCategories": {
+        "bias": "Bias",
+        "factual_error": "Factual error",
+        "outdated": "Outdated",
+        "inappropriate_content": "Inappropriate content",
+        "licensing": "Licensing",
+        "reading_level": "Reading level",
+        "accessibility": "Accessibility",
+        "cultural_sensitivity": "Cultural sensitivity",
         "outdated_content": "Outdated content",
         "bias_or_framing": "Bias or framing",
         "factual_concern": "Factual concern",
