@@ -21,10 +21,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ResourceCardRenderer } from "@/features/search/components/resource-card";
-import type {
-  QueryGroup,
-  SavedResourceResponse,
-} from "@/lib/api/model";
+import type { QueryGroup, SavedResourceResponse } from "@/lib/api/model";
 import {
   getListSavedResourcesEndpointApiSavedGetQueryKey,
   useAddCustomLinkEndpointApiSavedLinkPost,
@@ -182,14 +179,17 @@ export function LibraryPageClient() {
     const queryKey = `${presetId}:${qGroup.search_query}`;
     const isEvaluatingGroup = evaluatingQueries.has(queryKey);
 
-    // Sort logic: Unevaluated first (recent on top), then Evaluated (highest score on top)
+    // Sort logic: Unevaluated first (recent on top), then Evaluated (use_it → adapt_it → skip_it)
+    const _VERDICT_ORDER: Record<string, number> = { use_it: 0, adapt_it: 1, skip_it: 2 };
     const unevaluated = qGroup.items.filter((i) => !i.evaluation_data);
     const evaluated = qGroup.items.filter((i) => !!i.evaluation_data);
     unevaluated.sort((a, b) => new Date(b.saved_at).getTime() - new Date(a.saved_at).getTime());
     evaluated.sort(
-      (a, b) => (b.evaluation_data?.overall_score ?? 0) - (a.evaluation_data?.overall_score ?? 0)
+      (a, b) =>
+        (_VERDICT_ORDER[a.evaluation_data?.verdict ?? ""] ?? 3) -
+        (_VERDICT_ORDER[b.evaluation_data?.verdict ?? ""] ?? 3)
     );
-    const sortedItems = [...unevaluated, ...evaluated];
+    const sortedItems = [...unevaluated, ...evaluated] as typeof qGroup.items;
 
     const unevaluatedCount = unevaluated.length;
     const isOpen = isGroupOpen(queryKey);
@@ -288,7 +288,7 @@ export function LibraryPageClient() {
 
           <CollapsibleContent>
             <CardContent className="p-4 grid gap-4 sm:grid-cols-1 lg:grid-cols-2">
-              {qGroup.items.map((item) => (
+              {sortedItems.map((item) => (
                 <ResourceCardRenderer
                   key={item.id}
                   resource={item.resource_data}

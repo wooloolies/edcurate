@@ -11,14 +11,12 @@ class SaveResourceRequest(BaseModel):
     preset_id: uuid.UUID
     search_query: str
     resource: ResourceCard
-    evaluation_data: EvaluationResult | None = None
 
 
 class BulkSaveResourceRequest(BaseModel):
     preset_id: uuid.UUID
     search_query: str
     resources: list[ResourceCard]
-    evaluation_data_list: list[EvaluationResult | None] | None = None
 
 
 class AddCustomLinkRequest(BaseModel):

@@ -38,7 +38,7 @@ async def save_resource(
             status_code=status.HTTP_404_NOT_FOUND, detail="Preset not found"
         )
 
-    eval_data = _dump_eval_data(request.evaluation_data, request.resource)
+    eval_data = _dump_eval_data(request.resource)
 
     stmt = (
         insert(SavedResource)
@@ -83,16 +83,7 @@ def _build_eval_data(resource: ResourceCard) -> dict | None:
     return None
 
 
-def _dump_eval_data(
-    evaluation_data: EvaluationResult | None, resource: ResourceCard
-) -> dict[str, Any] | None:
-    if evaluation_data is not None:
-        if evaluation_data.resource_url != resource.url:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Evaluation data does not match resource URL",
-            )
-        return evaluation_data.model_dump(mode="json")
+def _dump_eval_data(resource: ResourceCard) -> dict[str, Any] | None:
     return _build_eval_data(resource)
 
 
@@ -119,13 +110,7 @@ async def bulk_save_resources(
             "search_query": request.search_query,
             "resource_url": r.url,
             "resource_data": r.model_dump(mode="json"),
-            "evaluation_data": _dump_eval_data(
-                request.evaluation_data_list[idx]
-                if request.evaluation_data_list
-                and idx < len(request.evaluation_data_list)
-                else None,
-                r,
-            ),
+            "evaluation_data": _dump_eval_data(r),
         }
         for idx, r in enumerate(request.resources)
     ]

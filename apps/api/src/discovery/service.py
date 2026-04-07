@@ -557,14 +557,14 @@ async def search_resources_stream(
         query_generation  working → done
         federated_search  working → done
         rag_preparation   working → done
-        evaluation        working (per resource)
-        adversarial       working (per resource)
+        evaluation        working (per resource, = triage + risk scan)
+        adversarial       working (per resource, = risk scan in progress)
         evaluation        done    (per resource, after pipeline)
         adversarial       done    (per resource, after pipeline)
-        complete          done    (full EvaluatedSearchResponse)
+        complete          done    (full JudgedSearchResponse)
 
     Cache hit:
-        complete  done  cached=True  (full EvaluatedSearchResponse)
+        complete  done  cached=True  (full JudgedSearchResponse)
     """
     from itertools import zip_longest
 
@@ -659,14 +659,14 @@ async def search_resources_stream(
             results_by_source[source] = []
 
     if not any(results_by_source.values()) and len(errors) == len(_SOURCE_KEYS):
-        error_response = EvaluatedSearchResponse(
+        error_response = JudgedSearchResponse(
             query=query,
             preset_id=uuid.UUID(str(preset.id)),
             total_results=0,
             counts_by_source={s: 0 for s in _SOURCE_KEYS},
             results=[],
             errors=errors,
-            evaluations=[],
+            judgments=[],
             generated_queries=generated_queries,
         )
         yield SearchStageEvent(
@@ -719,10 +719,11 @@ async def search_resources_stream(
             stage="adversarial", status="working", resource_url=card.url
         )
 
-    # Run the full RAG pipeline (fetch → chunk → embed → eval + adversarial → reconcile)
-    evaluations: list = []
+    # Run the full RAG pipeline (fetch → chunk → embed → triage + risk scan → judge)
+    _VERDICT_SCORE: dict[str, float] = {"use_it": 1.0, "adapt_it": 0.5, "skip_it": 0.0}
+    judgments: list[JudgmentResult] = []
     try:
-        evaluations = await asyncio.wait_for(
+        judgments = await asyncio.wait_for(
             _run_rag_pipeline(
                 top_cards, preset, query, search_id, eval_vector=eval_vector
             ),
@@ -734,10 +735,10 @@ async def search_resources_stream(
             error=str(e),
         )
 
-    # Emit done events for evaluation/adversarial per resource that was processed
-    evaluated_urls = {e.resource_url for e in evaluations}
+    # Emit done events per resource that was judged
+    judged_urls = {j.resource_url for j in judgments}
     for card in top_cards:
-        if card.url in evaluated_urls:
+        if card.url in judged_urls:
             yield SearchStageEvent(
                 stage="evaluation", status="done", resource_url=card.url
             )
@@ -745,18 +746,16 @@ async def search_resources_stream(
                 stage="adversarial", status="done", resource_url=card.url
             )
 
-    # Attach scores to cards (same logic as search_resources)
-    eval_map = {e.resource_url: e for e in evaluations}
+    # Attach verdict, relevance score proxy, and reasoning to each card
+    judgment_map = {j.resource_url: j for j in judgments}
     for card in all_results:
-        if card.url in eval_map:
-            evaluation = eval_map[card.url]
-            card.relevance_score = evaluation.overall_score
-            card.relevance_reason = evaluation.relevance_reason
-            card.evaluation_details = {
-                k: v.model_dump() for k, v in evaluation.scores.items()
-            }
+        if card.url in judgment_map:
+            j = judgment_map[card.url]
+            card.verdict = j.verdict
+            card.relevance_score = _VERDICT_SCORE.get(j.verdict, 0.5)
+            card.relevance_reason = j.reasoning_chain
 
-    # Sort results by relevance_score descending (None values at end)
+    # Sort: judged resources first (by verdict proxy), unevaluated at end
     all_results.sort(
         key=lambda card: (
             card.relevance_score if card.relevance_score is not None else -1.0
@@ -764,14 +763,14 @@ async def search_resources_stream(
         reverse=True,
     )
 
-    response = EvaluatedSearchResponse(
+    response = JudgedSearchResponse(
         query=query,
         preset_id=uuid.UUID(str(preset.id)),
         total_results=len(all_results),
         counts_by_source=counts_by_source,
         results=all_results,
         errors=errors,
-        evaluations=evaluations,
+        judgments=judgments,
         generated_queries=generated_queries,
     )
 

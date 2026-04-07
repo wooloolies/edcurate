@@ -6,7 +6,7 @@ import { useQueryState } from "nuqs";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
-import type { EvaluationResultOutput, ResourceCard, SaveResourceRequest } from "@/lib/api/model";
+import type { ResourceCard } from "@/lib/api/model";
 import {
   getListSavedResourcesEndpointApiSavedGetQueryKey,
   useDeleteSavedResourceEndpointApiSavedIdDelete,
@@ -19,7 +19,6 @@ interface BookmarkButtonProps {
   resource: ResourceCard;
   checked?: boolean;
   onToggleChecked?: (e: React.MouseEvent, checked: boolean) => void;
-  evaluation?: EvaluationResultOutput | null;
 }
 
 export function BookmarkButton({
@@ -27,7 +26,6 @@ export function BookmarkButton({
   resource,
   checked,
   onToggleChecked,
-  evaluation,
 }: BookmarkButtonProps) {
   const queryClient = useQueryClient();
   const { data: savedData, isFetching: isLoadingList } = useListSavedResourcesEndpointApiSavedGet();
@@ -75,18 +73,12 @@ export function BookmarkButton({
         await deleteResource({ id: savedId! });
         toast.success("Resource removed from library");
       } else {
-        const payload: SaveResourceRequest = {
-          preset_id: presetId,
-          search_query: searchQuery || "custom",
-          resource,
-        };
-
-        if (evaluation) {
-          payload.evaluation_data = evaluation;
-        }
-
         await saveResource({
-          data: payload,
+          data: {
+            preset_id: presetId,
+            search_query: searchQuery || "custom",
+            resource,
+          },
         });
         toast.success("Resource saved to library");
       }

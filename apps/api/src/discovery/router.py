@@ -86,7 +86,7 @@ async def search_stream(
     per user.
 
     The stream always terminates with a ``complete / done`` event whose
-    ``data`` field contains the full ``EvaluatedSearchResponse``.
+    ``data`` field contains the full ``JudgedSearchResponse``.
     """
     user_id = uuid.UUID(current_user.id)
 

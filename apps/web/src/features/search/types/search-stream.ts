@@ -1,4 +1,4 @@
-import type { EvaluatedSearchResponse } from "@/lib/api/model/evaluated-search-response";
+import type { JudgedSearchResponse } from "@/lib/api/model/judged-search-response";
 
 export type Stage =
   | "query_generation"
@@ -30,7 +30,7 @@ export interface SearchStreamState {
   activeStage: Stage | null;
   /** Keyed by resource_url. */
   resourceProgress: Map<string, ResourceAgentProgress>;
-  result: EvaluatedSearchResponse | null;
+  result: JudgedSearchResponse | null;
   isCached: boolean;
   isStreaming: boolean;
   error: string | null;

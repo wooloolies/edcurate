@@ -3,7 +3,7 @@
 /**
  * SSE endpoint /api/discovery/search/stream is exempt from Orval codegen
  * because it returns text/event-stream, not JSON. The final `complete` event
- * payload is typed using the Orval-generated EvaluatedSearchResponse.
+ * payload is typed using the Orval-generated JudgedSearchResponse.
  */
 
 import { useLatest, useMemoizedFn, useUnmount } from "ahooks";
@@ -17,7 +17,7 @@ import type {
 } from "@/features/search/types/search-stream";
 import { fetchSSE } from "@/features/search/utils/fetch-sse";
 import { parseSSEBuffer } from "@/features/search/utils/parse-sse";
-import type { EvaluatedSearchResponse } from "@/lib/api/model/evaluated-search-response";
+import type { JudgedSearchResponse } from "@/lib/api/model/judged-search-response";
 
 // ---------------------------------------------------------------------------
 // Reducer
@@ -76,8 +76,8 @@ function streamReducer(state: SearchStreamState, action: Action): SearchStreamSt
 
       // On complete stage, extract result
       const isComplete = stage === "complete" && status === "done";
-      const result: EvaluatedSearchResponse | null = isComplete
-        ? ((data as unknown as EvaluatedSearchResponse) ?? state.result)
+      const result: JudgedSearchResponse | null = isComplete
+        ? ((data as unknown as JudgedSearchResponse) ?? state.result)
         : state.result;
 
       return {
