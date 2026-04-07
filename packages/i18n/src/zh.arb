@@ -576,6 +576,50 @@
   "@search__progress__step9": {
     "description": "Evaluation progress step 9"
   },
+  "search__classroom__chalkboard__queryGeneration": "正在生成搜索查询...",
+  "@search__classroom__chalkboard__queryGeneration": {
+    "description": "Chalkboard text during query generation stage"
+  },
+  "search__classroom__chalkboard__federatedSearch": "正在跨多个搜索引擎搜索...",
+  "@search__classroom__chalkboard__federatedSearch": {
+    "description": "Chalkboard text during federated search stage"
+  },
+  "search__classroom__chalkboard__ragPreparation": "正在准备分析内容...",
+  "@search__classroom__chalkboard__ragPreparation": {
+    "description": "Chalkboard text during RAG preparation stage"
+  },
+  "search__classroom__chalkboard__evaluation": "正在评估资源...",
+  "@search__classroom__chalkboard__evaluation": {
+    "description": "Chalkboard text during evaluation stage"
+  },
+  "search__classroom__chalkboard__adversarial": "正在进行同行评审...",
+  "@search__classroom__chalkboard__adversarial": {
+    "description": "Chalkboard text during adversarial review stage"
+  },
+  "search__classroom__chalkboard__complete": "全部完成！",
+  "@search__classroom__chalkboard__complete": {
+    "description": "Chalkboard text when all stages are complete"
+  },
+  "search__classroom__chalkboard__cached": "已经准备好了！",
+  "@search__classroom__chalkboard__cached": {
+    "description": "Chalkboard text when result is served from cache"
+  },
+  "search__classroom__agents__queryGeneration": "查询代理",
+  "@search__classroom__agents__queryGeneration": {
+    "description": "Label for the query generation agent"
+  },
+  "search__classroom__agents__federatedSearch": "搜索代理",
+  "@search__classroom__agents__federatedSearch": {
+    "description": "Label for the federated search agent"
+  },
+  "search__classroom__agents__evaluation": "评估代理",
+  "@search__classroom__agents__evaluation": {
+    "description": "Label for the evaluation agent"
+  },
+  "search__classroom__agents__adversarial": "审查代理",
+  "@search__classroom__agents__adversarial": {
+    "description": "Label for the adversarial review agent"
+  },
   "search__evaluation__unevaluated": "未评估",
   "@search__evaluation__unevaluated": {
     "description": "Badge shown when a resource has not been evaluated yet"

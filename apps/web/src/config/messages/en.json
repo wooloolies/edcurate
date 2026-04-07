@@ -157,6 +157,23 @@
       "step8": "Evaluating reading level and bias representation",
       "step9": "Finalising scores and ranking results"
     },
+    "classroom": {
+      "chalkboard": {
+        "queryGeneration": "Generating search queries...",
+        "federatedSearch": "Searching across providers...",
+        "ragPreparation": "Preparing content for analysis...",
+        "evaluation": "Evaluating resources...",
+        "adversarial": "Running peer review...",
+        "complete": "All done!",
+        "cached": "Already prepared!"
+      },
+      "agents": {
+        "queryGeneration": "Query Agent",
+        "federatedSearch": "Search Agent",
+        "evaluation": "Evaluation Agent",
+        "adversarial": "Review Agent"
+      }
+    },
     "evaluation": {
       "unevaluated": "Unevaluated",
       "score": "Score: {score}/10",

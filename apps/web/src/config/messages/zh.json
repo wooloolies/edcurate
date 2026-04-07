@@ -157,6 +157,23 @@
       "step8": "正在评估阅读难度与偏见呈现",
       "step9": "正在完成评分并排序结果"
     },
+    "classroom": {
+      "chalkboard": {
+        "queryGeneration": "正在生成搜索查询...",
+        "federatedSearch": "正在跨多个搜索引擎搜索...",
+        "ragPreparation": "正在准备分析内容...",
+        "evaluation": "正在评估资源...",
+        "adversarial": "正在进行同行评审...",
+        "complete": "全部完成！",
+        "cached": "已经准备好了！"
+      },
+      "agents": {
+        "queryGeneration": "查询代理",
+        "federatedSearch": "搜索代理",
+        "evaluation": "评估代理",
+        "adversarial": "审查代理"
+      }
+    },
     "evaluation": {
       "unevaluated": "未评估",
       "score": "评分：{score}/10",

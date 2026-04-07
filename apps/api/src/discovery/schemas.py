@@ -3,6 +3,24 @@ from typing import Annotated, Literal
 
 from pydantic import BaseModel, Field, field_validator
 
+
+class SearchStageEvent(BaseModel):
+    """SSE payload emitted for each stage of the search pipeline."""
+
+    stage: Literal[
+        "query_generation",
+        "federated_search",
+        "rag_preparation",
+        "evaluation",
+        "adversarial",
+        "complete",
+    ]
+    status: Literal["working", "done"]
+    resource_url: str | None = None
+    cached: bool = False
+    data: dict | None = None
+
+
 # --- Source-specific metadata ---
 
 

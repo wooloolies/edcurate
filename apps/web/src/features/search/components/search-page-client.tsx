@@ -4,7 +4,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { ChevronDown, ChevronUp, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useQueryState } from "nuqs";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -17,11 +17,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ClassroomScene } from "@/features/search/components/classroom/classroom-scene";
 import { ErrorBanner } from "@/features/search/components/error-banner";
 import { EvaluationProgress } from "@/features/search/components/evaluation-progress";
 import { GeneratedQueriesPanel } from "@/features/search/components/generated-queries";
 import { ResourceCardRenderer } from "@/features/search/components/resource-card";
 import { ResourceCardSkeleton } from "@/features/search/components/skeleton/resource-card-skeleton";
+import { useSearchStream } from "@/features/search/hooks/use-search-stream";
 import { useSearchApiDiscoverySearchGet } from "@/lib/api/discovery/discovery";
 import type { AdversarialReviewResult, ResourceCard } from "@/lib/api/model";
 import { useListPresetsApiPresetsGet } from "@/lib/api/presets/presets";
@@ -101,17 +103,37 @@ export function SearchPageClient() {
     setSelectedResources(new Map());
   };
 
+  const stream = useSearchStream(presetId, searchQuery);
+
   const searchEnabled = !!presetId && !!searchQuery;
-  const { data: results, isFetching } = useSearchApiDiscoverySearchGet(
+
+  // SSE failure → REST fallback
+  const useFallback = stream.error !== null;
+  const { data: fallbackResults, isFetching } = useSearchApiDiscoverySearchGet(
     { preset_id: presetId!, query: searchQuery! },
-    { query: { enabled: searchEnabled, staleTime: 3 * 60 * 1000 } }
+    { query: { enabled: searchEnabled && useFallback, staleTime: 3 * 60 * 1000 } },
   );
+
+  // SSE result is primary; REST fallback is secondary
+  const results = stream.result ?? fallbackResults;
+
+  // Track pending stream start — ensures React re-renders with updated
+  // searchQuery before startStream reads it via useLatest.
+  const pendingStreamRef = useRef(false);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (!presetId || !draft.trim()) return;
     setSearchQuery(draft.trim());
+    pendingStreamRef.current = true;
   };
+
+  useEffect(() => {
+    if (pendingStreamRef.current && searchQuery) {
+      pendingStreamRef.current = false;
+      stream.startStream();
+    }
+  }, [searchQuery, stream.startStream]);
 
   const counts = results?.counts_by_source ?? { ddgs: 0, youtube: 0, openalex: 0 };
   const totalCount = results?.total_results ?? 0;
@@ -157,8 +179,8 @@ export function SearchPageClient() {
             placeholder={t("placeholder")}
             className="min-w-0 flex-1"
           />
-          <Button type="submit" disabled={!presetId || !draft.trim() || isFetching}>
-            {isFetching ? t("searchingButton") : t("searchButton")}
+          <Button type="submit" disabled={!presetId || !draft.trim() || stream.isStreaming || isFetching}>
+            {stream.isStreaming || isFetching ? t("searchingButton") : t("searchButton")}
           </Button>
         </form>
       </div>
@@ -169,7 +191,13 @@ export function SearchPageClient() {
         <GeneratedQueriesPanel queries={results.generated_queries} />
       ) : null}
 
-      {isFetching ? (
+      {stream.isStreaming ? (
+        <ClassroomScene
+          stages={stream.stages}
+          activeStage={stream.activeStage}
+          isCached={stream.isCached}
+        />
+      ) : isFetching ? (
         <div className="space-y-4">
           <EvaluationProgress />
           <div className="space-y-3">
@@ -181,7 +209,7 @@ export function SearchPageClient() {
         </div>
       ) : null}
 
-      {results && !isFetching ? (
+      {results && !isFetching && !stream.isStreaming ? (
         <Tabs defaultValue="all">
           <TabsList>
             <TabsTrigger value="all">
@@ -259,7 +287,7 @@ export function SearchPageClient() {
         </Tabs>
       ) : null}
 
-      {!results && !isFetching ? (
+      {!results && !isFetching && !stream.isStreaming ? (
         <div className="rounded-lg border border-dashed p-12 text-center">
           <p className="text-muted-foreground">{t("idleState")}</p>
         </div>

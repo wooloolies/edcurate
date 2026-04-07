@@ -157,6 +157,23 @@
       "step8": "읽기 수준과 편향 표현을 평가하는 중",
       "step9": "점수를 마무리하고 결과 순위를 정하는 중"
     },
+    "classroom": {
+      "chalkboard": {
+        "queryGeneration": "검색 쿼리 생성 중...",
+        "federatedSearch": "여러 검색 엔진에서 탐색 중...",
+        "ragPreparation": "분석을 위한 콘텐츠 준비 중...",
+        "evaluation": "리소스 평가 중...",
+        "adversarial": "동료 검토 진행 중...",
+        "complete": "모두 완료!",
+        "cached": "이미 준비되었어요!"
+      },
+      "agents": {
+        "queryGeneration": "쿼리 에이전트",
+        "federatedSearch": "검색 에이전트",
+        "evaluation": "평가 에이전트",
+        "adversarial": "검토 에이전트"
+      }
+    },
     "evaluation": {
       "unevaluated": "미평가",
       "score": "점수: {score}/10",

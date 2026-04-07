@@ -3,6 +3,7 @@
 import asyncio
 import hashlib
 import uuid
+from collections.abc import AsyncGenerator
 from typing import Literal
 
 from src.agents.evaluation.adversarial_agent import adversarial_review_resource
@@ -22,7 +23,12 @@ from src.agents.search.search_query_agent import SearchQueryAgent
 from src.discovery.providers.ddgs import DdgsProvider
 from src.discovery.providers.openalex import OpenAlexProvider
 from src.discovery.providers.youtube import YoutubeProvider
-from src.discovery.schemas import GeneratedSearchQueries, ResourceCard, SourceError
+from src.discovery.schemas import (
+    GeneratedSearchQueries,
+    ResourceCard,
+    SearchStageEvent,
+    SourceError,
+)
 from src.lib.config import settings
 from src.lib.logging import get_logger
 from src.presets.model import ClassroomPreset
@@ -529,3 +535,240 @@ async def search_resources(
 
     await _set_cached(cache_key, response)
     return response
+
+
+async def search_resources_stream(
+    preset: ClassroomPreset,
+    query: str,
+) -> AsyncGenerator[SearchStageEvent, None]:
+    """Async generator that yields SearchStageEvent at each pipeline stage.
+
+    Mirrors search_resources() but streams progress to the caller via SSE.
+    All business logic is delegated to the same helpers used by search_resources().
+
+    Stage sequence (normal flow):
+        query_generation  working → done
+        federated_search  working → done
+        rag_preparation   working → done
+        evaluation        working (per resource)
+        adversarial       working (per resource)
+        evaluation        done    (per resource, after pipeline)
+        adversarial       done    (per resource, after pipeline)
+        complete          done    (full EvaluatedSearchResponse)
+
+    Cache hit:
+        complete  done  cached=True  (full EvaluatedSearchResponse)
+    """
+    from itertools import zip_longest
+
+    # Cache check — emit single complete event and return early
+    cache_key = _cache_key(str(preset.id), query)
+    cached = await _get_cached(cache_key)
+    if cached:
+        logger.info("Cache hit (stream)", key=cache_key, query=query)
+        yield SearchStageEvent(
+            stage="complete",
+            status="done",
+            cached=True,
+            data=cached.model_dump(),
+        )
+        return
+
+    search_id = str(uuid.uuid4())
+    limits = _calculate_limits(preset.source_weights)
+
+    # Stage 1: Query Generation
+    yield SearchStageEvent(stage="query_generation", status="working")
+
+    query_map: dict[str, list[str] | None] = {s: None for s in _SOURCE_KEYS}
+    generated_queries: GeneratedSearchQueries | None = None
+    try:
+        generated_queries = await asyncio.wait_for(
+            SearchQueryAgent().run(query=query, preset=preset),
+            timeout=10.0,
+        )
+        if generated_queries is not None:
+            query_map["ddgs"] = generated_queries.ddgs or None
+            query_map["youtube"] = generated_queries.youtube or None
+            query_map["openalex"] = generated_queries.openalex or None
+            logger.info(
+                "Search query agent succeeded (stream)",
+                ddgs_queries=generated_queries.ddgs,
+                youtube_queries=generated_queries.youtube,
+                openalex_queries=generated_queries.openalex,
+            )
+    except TimeoutError:
+        logger.warning("Search query agent timed out (stream) - using provider defaults")
+    except Exception as e:
+        logger.warning(
+            "Search query agent failed (stream) - using provider defaults",
+            error=str(e),
+        )
+
+    query_gen_data: dict | None = None
+    if generated_queries is not None:
+        query_gen_data = {
+            "ddgs": generated_queries.ddgs,
+            "youtube": generated_queries.youtube,
+            "openalex": generated_queries.openalex,
+        }
+    yield SearchStageEvent(
+        stage="query_generation",
+        status="done",
+        data=query_gen_data,
+    )
+
+    # Stage 2: Federated Search
+    yield SearchStageEvent(stage="federated_search", status="working")
+
+    providers = {
+        "ddgs": DdgsProvider(),
+        "youtube": YoutubeProvider(),
+        "openalex": OpenAlexProvider(),
+    }
+
+    tasks = [
+        providers[source].search(
+            query, preset, limits[source], queries=query_map[source]
+        )
+        for source in _SOURCE_KEYS
+    ]
+
+    raw_results = await asyncio.gather(*tasks, return_exceptions=True)
+
+    errors: list[SourceError] = []
+    results_by_source: dict[str, list[ResourceCard]] = {}
+
+    for source, result in zip(_SOURCE_KEYS, raw_results, strict=True):
+        if isinstance(result, Exception):
+            errors.append(SourceError(source=source, message=str(result)))
+            results_by_source[source] = []
+        elif isinstance(result, list):
+            results_by_source[source] = result
+        else:
+            results_by_source[source] = []
+
+    if not any(results_by_source.values()) and len(errors) == len(_SOURCE_KEYS):
+        error_response = EvaluatedSearchResponse(
+            query=query,
+            preset_id=uuid.UUID(str(preset.id)),
+            total_results=0,
+            counts_by_source={s: 0 for s in _SOURCE_KEYS},
+            results=[],
+            errors=errors,
+            evaluations=[],
+            generated_queries=generated_queries,
+        )
+        yield SearchStageEvent(
+            stage="complete",
+            status="done",
+            data=error_response.model_dump(),
+        )
+        return
+
+    # Stage 3: RAG Preparation (pre-sort + interleave)
+    yield SearchStageEvent(stage="rag_preparation", status="working")
+
+    eval_query_text = _build_eval_query(preset, query)
+    results_by_source, eval_vector = await _sort_by_relevance(
+        eval_query_text, results_by_source
+    )
+
+    # Interleave round-robin (same logic as search_resources)
+    all_results: list[ResourceCard] = []
+    seen_urls: set[str] = set()
+    valid_results_lists = [cards for cards in results_by_source.values() if cards]
+
+    for interleaved_tuple in zip_longest(*valid_results_lists):
+        for card in interleaved_tuple:
+            if card is not None and card.url not in seen_urls:
+                seen_urls.add(card.url)
+                all_results.append(card)
+
+    # Compute counts after dedup to match displayed results
+    counts_by_source: dict[str, int] = {source: 0 for source in _SOURCE_KEYS}
+    for card in all_results:
+        counts_by_source[card.source] += 1
+
+    yield SearchStageEvent(
+        stage="federated_search",
+        status="done",
+        data={"counts": counts_by_source},
+    )
+
+    top_cards = all_results[:_TOP_K_EVALUATE]
+
+    yield SearchStageEvent(stage="rag_preparation", status="done")
+
+    # Stage 4 & 5: Evaluation + Adversarial — emit working events per resource
+    for card in top_cards:
+        yield SearchStageEvent(
+            stage="evaluation", status="working", resource_url=card.url
+        )
+        yield SearchStageEvent(
+            stage="adversarial", status="working", resource_url=card.url
+        )
+
+    # Run the full RAG pipeline (fetch → chunk → embed → eval + adversarial → reconcile)
+    evaluations: list = []
+    try:
+        evaluations = await asyncio.wait_for(
+            _run_rag_pipeline(
+                top_cards, preset, query, search_id, eval_vector=eval_vector
+            ),
+            timeout=120.0,
+        )
+    except Exception as e:
+        logger.error(
+            "RAG pipeline failed (stream) — returning results without evaluations",
+            error=str(e),
+        )
+
+    # Emit done events for evaluation/adversarial per resource that was processed
+    evaluated_urls = {e.resource_url for e in evaluations}
+    for card in top_cards:
+        if card.url in evaluated_urls:
+            yield SearchStageEvent(
+                stage="evaluation", status="done", resource_url=card.url
+            )
+            yield SearchStageEvent(
+                stage="adversarial", status="done", resource_url=card.url
+            )
+
+    # Attach scores to cards (same logic as search_resources)
+    eval_map = {e.resource_url: e for e in evaluations}
+    for card in all_results:
+        if card.url in eval_map:
+            evaluation = eval_map[card.url]
+            card.relevance_score = evaluation.overall_score
+            card.relevance_reason = evaluation.relevance_reason
+            card.evaluation_details = {
+                k: v.model_dump() for k, v in evaluation.scores.items()
+            }
+
+    # Sort results by relevance_score descending (None values at end)
+    all_results.sort(
+        key=lambda card: (
+            card.relevance_score if card.relevance_score is not None else -1.0
+        ),
+        reverse=True,
+    )
+
+    response = EvaluatedSearchResponse(
+        query=query,
+        preset_id=uuid.UUID(str(preset.id)),
+        total_results=len(all_results),
+        counts_by_source=counts_by_source,
+        results=all_results,
+        errors=errors,
+        evaluations=evaluations,
+        generated_queries=generated_queries,
+    )
+
+    yield SearchStageEvent(
+        stage="complete",
+        status="done",
+        data=response.model_dump(),
+    )
+
+    await _set_cached(cache_key, response)

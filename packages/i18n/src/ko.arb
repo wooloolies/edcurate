@@ -576,6 +576,50 @@
   "@search__progress__step9": {
     "description": "Evaluation progress step 9"
   },
+  "search__classroom__chalkboard__queryGeneration": "검색 쿼리 생성 중...",
+  "@search__classroom__chalkboard__queryGeneration": {
+    "description": "Chalkboard text during query generation stage"
+  },
+  "search__classroom__chalkboard__federatedSearch": "여러 검색 엔진에서 탐색 중...",
+  "@search__classroom__chalkboard__federatedSearch": {
+    "description": "Chalkboard text during federated search stage"
+  },
+  "search__classroom__chalkboard__ragPreparation": "분석을 위한 콘텐츠 준비 중...",
+  "@search__classroom__chalkboard__ragPreparation": {
+    "description": "Chalkboard text during RAG preparation stage"
+  },
+  "search__classroom__chalkboard__evaluation": "리소스 평가 중...",
+  "@search__classroom__chalkboard__evaluation": {
+    "description": "Chalkboard text during evaluation stage"
+  },
+  "search__classroom__chalkboard__adversarial": "동료 검토 진행 중...",
+  "@search__classroom__chalkboard__adversarial": {
+    "description": "Chalkboard text during adversarial review stage"
+  },
+  "search__classroom__chalkboard__complete": "모두 완료!",
+  "@search__classroom__chalkboard__complete": {
+    "description": "Chalkboard text when all stages are complete"
+  },
+  "search__classroom__chalkboard__cached": "이미 준비되었어요!",
+  "@search__classroom__chalkboard__cached": {
+    "description": "Chalkboard text when result is served from cache"
+  },
+  "search__classroom__agents__queryGeneration": "쿼리 에이전트",
+  "@search__classroom__agents__queryGeneration": {
+    "description": "Label for the query generation agent"
+  },
+  "search__classroom__agents__federatedSearch": "검색 에이전트",
+  "@search__classroom__agents__federatedSearch": {
+    "description": "Label for the federated search agent"
+  },
+  "search__classroom__agents__evaluation": "평가 에이전트",
+  "@search__classroom__agents__evaluation": {
+    "description": "Label for the evaluation agent"
+  },
+  "search__classroom__agents__adversarial": "검토 에이전트",
+  "@search__classroom__agents__adversarial": {
+    "description": "Label for the adversarial review agent"
+  },
   "search__evaluation__unevaluated": "미평가",
   "@search__evaluation__unevaluated": {
     "description": "Badge shown when a resource has not been evaluated yet"

@@ -157,6 +157,23 @@
       "step8": "Đang đánh giá mức độ đọc và cách thể hiện thiên lệch",
       "step9": "Đang hoàn tất điểm số và xếp hạng kết quả"
     },
+    "classroom": {
+      "chalkboard": {
+        "queryGeneration": "Đang tạo truy vấn tìm kiếm...",
+        "federatedSearch": "Đang tìm kiếm trên nhiều nguồn...",
+        "ragPreparation": "Đang chuẩn bị nội dung để phân tích...",
+        "evaluation": "Đang đánh giá tài nguyên...",
+        "adversarial": "Đang tiến hành đánh giá ngang hàng...",
+        "complete": "Hoàn tất!",
+        "cached": "Đã sẵn sàng!"
+      },
+      "agents": {
+        "queryGeneration": "Tác tử truy vấn",
+        "federatedSearch": "Tác tử tìm kiếm",
+        "evaluation": "Tác tử đánh giá",
+        "adversarial": "Tác tử kiểm duyệt"
+      }
+    },
     "evaluation": {
       "unevaluated": "Chưa đánh giá",
       "score": "Điểm: {score}/10",

@@ -1,38 +1,163 @@
 {
-  "feature": "Saved Resources",
-  "priority_tiers": {
-    "P0": [
-      {
-        "id": "db-1",
-        "agent": "oma-db",
-        "task": "Implement the database schema for Saved Resources",
-        "description": "Create the `SavedResource` model in `apps/api/src/presets/model.py` (or a dedicated `saved_resources/model.py` if preferred but since it FKs to presets maybe separate file). Generate Alembic migrations. The table involves JSONB columns for `resource_data` and `evaluation_data`."
-      },
-      {
-        "id": "be-1",
-        "agent": "oma-backend",
-        "task": "Update schemas and backend models",
-        "description": "Update `apps/api/src/discovery/schemas.py` to add `custom` to the `source` literal and create `CustomMetadata`. Update Pydantic response models for SavedResource.",
-        "dependencies": ["db-1"]
-      }
-    ],
-    "P1": [
-      {
-        "id": "be-2",
-        "agent": "oma-backend",
-        "task": "Implement Saved Resources API endpoints",
-        "description": "Implement `POST /api/saved`, `DELETE /api/saved/{id}`, `GET /api/saved`, `POST /api/saved/link`, and `POST /api/saved/evaluate`. Handle idempotent inserts, custom link fetching/scraping, and routing it to the _run_rag_pipeline. Create `apps/api/src/saved_resources/router.py` and `service.py`. Register the router in `main.py`.",
-        "dependencies": ["be-1"]
-      }
-    ],
-    "P2": [
-      {
-        "id": "fe-1",
-        "agent": "oma-frontend",
-        "task": "Generate API client & Implement Frontend features",
-        "description": "Run `bun run gen:api` in `apps/web`. Implement the Bookmark toggle on `ResourceCard`. Add the Sidebar drawer to the search page. Create the new `/library` page with 'Add Link' functionality and evaluation batch jobs.",
-        "dependencies": ["be-2"]
-      }
-    ]
-  }
+  "id": "classroom-animation",
+  "title": "Classroom Animation — Search Agent Visualization",
+  "created_at": "2026-04-07",
+  "difficulty": "complex",
+  "design_doc": "docs/plans/classroom-animation-design.md",
+  "api_contract": ".agents/skills/_shared/core/api-contracts/discovery-stream.md",
+  "sprints": [
+    {
+      "id": "sprint-1",
+      "title": "Foundation — SSE endpoint, SSE hook, SVG assets",
+      "tasks": [
+        {
+          "id": "T1",
+          "agent": "backend",
+          "title": "SSE schema & endpoint",
+          "priority": "P0",
+          "dependencies": [],
+          "status": "pending",
+          "acceptance_criteria": [
+            "SearchStageEvent Pydantic model defined in schemas.py",
+            "GET /search/stream route added with sse-starlette EventSourceResponse",
+            "sse-starlette added to pyproject.toml dependencies",
+            "Same auth/preset validation as existing GET /search",
+            "Rate limit 20 req/min applied"
+          ]
+        },
+        {
+          "id": "T3",
+          "agent": "frontend",
+          "title": "motion dependency + SSE utils/hook",
+          "priority": "P0",
+          "dependencies": [],
+          "status": "pending",
+          "acceptance_criteria": [
+            "motion package installed",
+            "fetchSSE helper using apiClient baseURL + getAccessToken",
+            "parseSSEBuffer SSE line parser utility",
+            "useSearchStream hook with useReducer + useMemoizedFn + useLatest + useUnmount",
+            "AbortController cleanup on unmount/re-search",
+            "SearchStreamState types defined"
+          ]
+        },
+        {
+          "id": "T4",
+          "agent": "frontend",
+          "title": "SVG placeholder characters (5 animals)",
+          "priority": "P1",
+          "dependencies": [],
+          "status": "pending",
+          "acceptance_criteria": [
+            "Quokka SVG component (teacher, with chalk prop)",
+            "Owl SVG component (magnifying glass prop)",
+            "Fox SVG component (laptop prop)",
+            "Bear SVG component (checklist prop)",
+            "Rabbit SVG component (red pen prop)",
+            "All components accept className and style props for motion integration",
+            "Placeholder quality — recognizable silhouettes, replaceable later"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sprint-2",
+      "title": "Core — Stream generator, Classroom scene",
+      "tasks": [
+        {
+          "id": "T2",
+          "agent": "backend",
+          "title": "search_resources_stream() async generator",
+          "priority": "P0",
+          "dependencies": ["T1"],
+          "status": "pending",
+          "acceptance_criteria": [
+            "AsyncGenerator[SearchStageEvent, None] yielding 6 stages",
+            "query_generation: working/done with generated queries",
+            "federated_search: working/done with counts",
+            "rag_preparation: working/done",
+            "evaluation: per-resource working/done with resource_url",
+            "adversarial: per-resource working/done with resource_url",
+            "complete: done with full EvaluatedSearchResponse",
+            "Cache hit yields single complete event with cached=true",
+            "Existing GET /search endpoint unchanged"
+          ]
+        },
+        {
+          "id": "T5",
+          "agent": "frontend",
+          "title": "ClassroomScene component",
+          "priority": "P1",
+          "dependencies": ["T3", "T4"],
+          "status": "pending",
+          "acceptance_criteria": [
+            "classroom-scene.tsx: main container with viewBox 600x400",
+            "chalkboard.tsx: chalkboard background + stage text display",
+            "quokka-teacher.tsx: spring-based position animation, direction flip, chalk writing state",
+            "student-agent.tsx: idle/working/done state animations with motion",
+            "TEACHER_POSITIONS mapping for 6 stages",
+            "Cache hit animation (all students done simultaneously)",
+            "Responsive via SVG viewBox ratio preservation"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sprint-3",
+      "title": "Integration — Page wiring, i18n",
+      "tasks": [
+        {
+          "id": "T6",
+          "agent": "frontend",
+          "title": "SearchPageClient SSE integration",
+          "priority": "P1",
+          "dependencies": ["T2", "T3", "T5"],
+          "status": "pending",
+          "acceptance_criteria": [
+            "useSearchStream replaces isFetching flow for primary search",
+            "ClassroomScene rendered during isStreaming",
+            "REST fallback on SSE error (useSearchApiDiscoverySearchGet)",
+            "EvaluationProgress retained for fallback loading UI",
+            "Search results rendered from stream.result or fallbackResults"
+          ]
+        },
+        {
+          "id": "T7",
+          "agent": "frontend",
+          "title": "i18n keys (5 languages)",
+          "priority": "P1",
+          "dependencies": ["T5"],
+          "status": "pending",
+          "acceptance_criteria": [
+            "search__classroom__chalkboard__* keys for 6 stages",
+            "search__classroom__agents__* keys for 4 agent labels",
+            "search__classroom__cached message key",
+            "All keys in en.arb, ko.arb, zh.arb, th.arb, vi.arb"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sprint-4",
+      "title": "QA — Integration testing",
+      "tasks": [
+        {
+          "id": "T8",
+          "agent": "qa",
+          "title": "Integration tests",
+          "priority": "P2",
+          "dependencies": ["T6"],
+          "status": "pending",
+          "acceptance_criteria": [
+            "SSE endpoint returns valid event-stream with correct stage sequence",
+            "Auth failure returns 401",
+            "Invalid preset returns 404",
+            "Frontend hook receives all stage events in order",
+            "REST fallback activates on SSE failure",
+            "Cache hit returns single complete event"
+          ]
+        }
+      ]
+    }
+  ]
 }
