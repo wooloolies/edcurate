@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-
 import { motion, useAnimation } from "motion/react";
+import { useEffect, useRef } from "react";
 
 import { Bear } from "@/features/search/components/classroom/characters/bear";
 import { Fox } from "@/features/search/components/classroom/characters/fox";
@@ -35,13 +34,7 @@ interface StudentAgentProps {
   message?: string | string[] | null;
 }
 
-export function StudentAgent({
-  character,
-  position,
-  status,
-  label,
-  message,
-}: StudentAgentProps) {
+export function StudentAgent({ character, position, status, label, message }: StudentAgentProps) {
   const controls = useAnimation();
   const prevStatusRef = useRef<StageStatus | undefined>(undefined);
 
@@ -82,24 +75,19 @@ export function StudentAgent({
       viewport={{ once: true }}
       transition={{ type: "spring", stiffness: 120, damping: 18, delay: 0.1 }}
     >
-      <SpeechBubble text={message ?? null} position={character === "owl" || character === "bear" ? "left" : "right"} />
+      <SpeechBubble
+        text={message ?? null}
+        position={character === "owl" || character === "bear" ? "left" : "right"}
+      />
       <motion.div animate={controls} style={{ width: 64, height: 80 }}>
-        <CharacterComponent
-          className="h-full w-full"
-          isWorking={isWorking}
-          isDone={isDone}
-        />
+        <CharacterComponent className="h-full w-full" isWorking={isWorking} isDone={isDone} />
       </motion.div>
 
       {/* Label below character */}
       <motion.span
         className="mt-1 rounded px-1.5 py-0.5 text-center text-[10px] font-medium leading-tight"
         style={{
-          color: isDone
-            ? "#166534"
-            : isWorking
-              ? "#92400e"
-              : "rgba(0,0,0,0.45)",
+          color: isDone ? "#166534" : isWorking ? "#92400e" : "rgba(0,0,0,0.45)",
           backgroundColor: isDone
             ? "rgba(220,252,231,0.85)"
             : isWorking
@@ -112,9 +100,7 @@ export function StudentAgent({
           scale: isWorking ? [1, 1.05, 1] : 1,
         }}
         transition={
-          isWorking
-            ? { duration: 1.2, repeat: Infinity, ease: "easeInOut" }
-            : { duration: 0.2 }
+          isWorking ? { duration: 1.2, repeat: Infinity, ease: "easeInOut" } : { duration: 0.2 }
         }
       >
         {label}

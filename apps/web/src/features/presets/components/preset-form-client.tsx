@@ -161,10 +161,7 @@ export function PresetFormClient({ presetId }: PresetFormClientProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (isEdit && presetId) {
-      updateMutation.mutate(
-        { presetId, data: form },
-        { onSuccess: () => router.push("/presets") }
-      );
+      updateMutation.mutate({ presetId, data: form }, { onSuccess: () => router.push("/presets") });
     } else {
       createMutation.mutate({ data: form }, { onSuccess: () => router.push("/presets") });
     }

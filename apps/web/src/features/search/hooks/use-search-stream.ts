@@ -8,9 +8,6 @@
 
 import { useLatest, useMemoizedFn, useUnmount } from "ahooks";
 import { useReducer, useRef } from "react";
-
-import type { EvaluatedSearchResponse } from "@/lib/api/model/evaluated-search-response";
-
 import type {
   ResourceAgentProgress,
   SearchStageEvent,
@@ -20,6 +17,7 @@ import type {
 } from "@/features/search/types/search-stream";
 import { fetchSSE } from "@/features/search/utils/fetch-sse";
 import { parseSSEBuffer } from "@/features/search/utils/parse-sse";
+import type { EvaluatedSearchResponse } from "@/lib/api/model/evaluated-search-response";
 
 // ---------------------------------------------------------------------------
 // Reducer
@@ -79,7 +77,7 @@ function streamReducer(state: SearchStreamState, action: Action): SearchStreamSt
       // On complete stage, extract result
       const isComplete = stage === "complete" && status === "done";
       const result: EvaluatedSearchResponse | null = isComplete
-        ? (data as unknown as EvaluatedSearchResponse) ?? state.result
+        ? ((data as unknown as EvaluatedSearchResponse) ?? state.result)
         : state.result;
 
       return {
@@ -121,7 +119,7 @@ export interface UseSearchStreamReturn extends SearchStreamState {
 
 export function useSearchStream(
   presetId: string | null,
-  query: string | null,
+  query: string | null
 ): UseSearchStreamReturn {
   const [state, dispatch] = useReducer(streamReducer, initialState);
   const abortRef = useRef<AbortController | null>(null);
@@ -146,7 +144,7 @@ export function useSearchStream(
       const response = await fetchSSE(
         "/api/discovery/search/stream",
         { preset_id: pid, query: q },
-        controller.signal,
+        controller.signal
       );
 
       if (!response.ok) {

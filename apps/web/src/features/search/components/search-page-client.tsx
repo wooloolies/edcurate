@@ -25,7 +25,12 @@ import { ResourceCardRenderer } from "@/features/search/components/resource-card
 import { ResourceCardSkeleton } from "@/features/search/components/skeleton/resource-card-skeleton";
 import { useSearchStream } from "@/features/search/hooks/use-search-stream";
 import { useSearchApiDiscoverySearchGet } from "@/lib/api/discovery/discovery";
-import type { AdversarialReviewResult, ResourceCard } from "@/lib/api/model";
+import type {
+  AdversarialReviewResult,
+  BulkSaveResourceRequest,
+  EvaluationResultOutput,
+  ResourceCard,
+} from "@/lib/api/model";
 import { useListPresetsApiPresetsGet } from "@/lib/api/presets/presets";
 import {
   getListSavedResourcesEndpointApiSavedGetQueryKey,
@@ -82,12 +87,19 @@ export function SearchPageClient() {
   const handleSaveSelected = async () => {
     if (!presetId || selectedResources.size === 0) return;
     try {
+      const resourcesList = Array.from(selectedResources.values());
+      const evaluationDataList: (EvaluationResultOutput | null)[] = resourcesList.map(
+        (resource) => evaluationByUrl.get(resource.url) ?? null
+      );
+      const payload: BulkSaveResourceRequest = {
+        preset_id: presetId,
+        search_query: searchQuery || "custom",
+        resources: resourcesList,
+        evaluation_data_list: evaluationDataList,
+      };
+
       await bulkSave({
-        data: {
-          preset_id: presetId,
-          search_query: searchQuery || "custom",
-          resources: Array.from(selectedResources.values()),
-        },
+        data: payload,
       });
       setSelectedResources(new Map());
       toast.success(t("savedSuccess"));
@@ -111,7 +123,7 @@ export function SearchPageClient() {
   const useFallback = stream.error !== null;
   const { data: fallbackResults, isFetching } = useSearchApiDiscoverySearchGet(
     { preset_id: presetId!, query: searchQuery! },
-    { query: { enabled: searchEnabled && useFallback, staleTime: 3 * 60 * 1000 } },
+    { query: { enabled: searchEnabled && useFallback, staleTime: 3 * 60 * 1000 } }
   );
 
   // SSE result is primary; REST fallback is secondary
@@ -127,7 +139,7 @@ export function SearchPageClient() {
     const trimmed = draft.trim();
     if (trimmed === searchQuery) {
       // Same query — trigger stream directly since useEffect won't fire
-      stream.startStream();
+      void stream.startStream();
     } else {
       setSearchQuery(trimmed);
       pendingStreamRef.current = true;
@@ -137,7 +149,7 @@ export function SearchPageClient() {
   useEffect(() => {
     if (pendingStreamRef.current && searchQuery) {
       pendingStreamRef.current = false;
-      stream.startStream();
+      void stream.startStream();
     }
   }, [searchQuery, stream.startStream]);
 
@@ -149,6 +161,14 @@ export function SearchPageClient() {
     const m = new Map<string, AdversarialReviewResult | null | undefined>();
     for (const ev of results?.evaluations ?? []) {
       m.set(ev.resource_url, ev.adversarial);
+    }
+    return m;
+  }, [results?.evaluations]);
+
+  const evaluationByUrl = useMemo(() => {
+    const m = new Map<string, EvaluationResultOutput>();
+    for (const evaluation of results?.evaluations ?? []) {
+      m.set(evaluation.resource_url, evaluation);
     }
     return m;
   }, [results?.evaluations]);
@@ -185,7 +205,10 @@ export function SearchPageClient() {
             placeholder={t("placeholder")}
             className="min-w-0 flex-1"
           />
-          <Button type="submit" disabled={!presetId || !draft.trim() || stream.isStreaming || isFetching}>
+          <Button
+            type="submit"
+            disabled={!presetId || !draft.trim() || stream.isStreaming || isFetching}
+          >
             {stream.isStreaming || isFetching ? t("searchingButton") : t("searchButton")}
           </Button>
         </form>
@@ -247,6 +270,7 @@ export function SearchPageClient() {
                       <ResourceCardRenderer
                         key={resource.url}
                         resource={resource}
+                        evaluation={evaluationByUrl.get(resource.url)}
                         adversarial={adversarialByUrl.get(resource.url)}
                         presetId={presetId ?? undefined}
                         checked={isChecked(resource.url)}

@@ -12,11 +12,7 @@ interface SpeechBubbleProps {
   cycleInterval?: number;
 }
 
-export function SpeechBubble({
-  text,
-  position = "left",
-  cycleInterval = 4000,
-}: SpeechBubbleProps) {
+export function SpeechBubble({ text, position = "left", cycleInterval = 4000 }: SpeechBubbleProps) {
   const tailOffset = position === "left" ? "25%" : "75%";
   // Randomize start index and interval offset so multiple bubbles don't sync
   const [index, setIndex] = useState(() => Math.floor(Math.random() * 100));
@@ -31,14 +27,14 @@ export function SpeechBubble({
         setIndex((prev) => prev + 1);
       }
     },
-    shouldCycle ? cycleInterval + jitter : undefined,
+    shouldCycle ? cycleInterval + jitter : undefined
   );
 
   const displayText = messages?.[index % messages.length] ?? null;
 
   return (
     <AnimatePresence mode="wait">
-      {displayText && (
+      {displayText ? (
         <motion.div
           key={displayText}
           className="absolute -top-12 left-1/2 z-20 -translate-x-1/2"
@@ -65,12 +61,13 @@ export function SpeechBubble({
               className="absolute -bottom-1.5 h-2 w-3"
               style={{ left: tailOffset, transform: "translateX(-50%)" }}
               viewBox="0 0 12 8"
+              aria-hidden="true"
             >
               <path d="M0 0 L6 8 L12 0 Z" fill="rgba(255,255,255,0.95)" />
             </svg>
           </div>
         </motion.div>
-      )}
+      ) : null}
     </AnimatePresence>
   );
 }

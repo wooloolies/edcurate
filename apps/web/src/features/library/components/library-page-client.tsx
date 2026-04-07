@@ -21,7 +21,12 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ResourceCardRenderer } from "@/features/search/components/resource-card";
-import type { QueryGroup, SavedResourceResponse } from "@/lib/api/model";
+import type {
+  QueryGroup,
+  ResourceCard,
+  ResourceCardEvaluationDetails,
+  SavedResourceResponse,
+} from "@/lib/api/model";
 import {
   getListSavedResourcesEndpointApiSavedGetQueryKey,
   useAddCustomLinkEndpointApiSavedLinkPost,
@@ -30,6 +35,13 @@ import {
   useEvaluateSingleResourceEndpointApiSavedEvaluateSinglePost,
   useListSavedResourcesEndpointApiSavedGet,
 } from "@/lib/api/saved-resources/saved-resources";
+
+function toResourceEvaluationDetails(
+  scores: NonNullable<SavedResourceResponse["evaluation_data"]>["scores"] | undefined
+): ResourceCardEvaluationDetails {
+  if (!scores) return null;
+  return Object.fromEntries(Object.entries(scores).map(([key, score]) => [key, { ...score }]));
+}
 
 export function LibraryPageClient() {
   const queryClient = useQueryClient();
@@ -144,21 +156,27 @@ export function LibraryPageClient() {
     const isDeletingThis = deletingIds.has(item.id);
     return (
       <div className="flex flex-col gap-2">
-        {!item.evaluation_data && (
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => handleEvaluateSingle(item.id)}
-            disabled={isEvaluatingThis}
-          >
-            <Wand2 className="mr-2 h-4 w-4" />
-            {isEvaluatingThis ? "Evaluating..." : "Evaluate"}
-          </Button>
-        )}
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            void handleEvaluateSingle(item.id);
+          }}
+          disabled={isEvaluatingThis}
+        >
+          <Wand2 className="mr-2 h-4 w-4" />
+          {isEvaluatingThis ? "Evaluating..." : item.evaluation_data ? "Re-evaluate" : "Evaluate"}
+        </Button>
         <Button
           variant="ghost"
           size="icon"
-          onClick={() => handleDelete(item.id)}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            void handleDelete(item.id);
+          }}
           disabled={isDeletingThis}
           className="text-destructive hover:bg-destructive/10 hover:text-destructive shrink-0 self-end"
           aria-label="Remove resource"
@@ -172,17 +190,31 @@ export function LibraryPageClient() {
   const renderQueryGroup = (qGroup: QueryGroup, presetId: string) => {
     const queryKey = `${presetId}:${qGroup.search_query}`;
     const isEvaluatingGroup = evaluatingQueries.has(queryKey);
-    const unevaluatedCount = qGroup.items.filter((i) => !i.evaluation_data).length;
+
+    // Sort logic: Unevaluated first (recent on top), then Evaluated (highest score on top)
+    const unevaluated = qGroup.items.filter((i) => !i.evaluation_data);
+    const evaluated = qGroup.items.filter((i) => !!i.evaluation_data);
+    unevaluated.sort((a, b) => new Date(b.saved_at).getTime() - new Date(a.saved_at).getTime());
+    evaluated.sort(
+      (a, b) => (b.evaluation_data?.overall_score ?? 0) - (a.evaluation_data?.overall_score ?? 0)
+    );
+    const sortedItems = [...unevaluated, ...evaluated];
+
+    const unevaluatedCount = unevaluated.length;
     const isOpen = isGroupOpen(queryKey);
     const isAddLinkOpen = addLinkOpenFor === queryKey;
 
     return (
       <Collapsible key={queryKey} open={isOpen} onOpenChange={() => toggleGroup(queryKey)}>
         <Card className="overflow-hidden">
-          <CollapsibleTrigger asChild>
-            <CardHeader className="bg-muted/50 py-3 border-b cursor-pointer select-none hover:bg-muted/80 transition-colors">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
+          <CardHeader className="bg-muted/50 py-3 border-b select-none">
+            <div className="flex items-center justify-between gap-2">
+              <CollapsibleTrigger asChild>
+                <button
+                  type="button"
+                  className="flex min-w-0 flex-1 items-center gap-2 text-left"
+                  aria-label={`${isOpen ? "Collapse" : "Expand"} ${qGroup.search_query} resources`}
+                >
                   <ChevronDown
                     className={`h-4 w-4 text-muted-foreground transition-transform duration-200 ${
                       isOpen ? "rotate-0" : "-rotate-90"
@@ -193,98 +225,100 @@ export function LibraryPageClient() {
                     {qGroup.search_query === "custom" ? "Custom Links" : `"${qGroup.search_query}"`}
                   </CardTitle>
                   <span className="text-xs text-muted-foreground">
-                    ({qGroup.items.length} resource{qGroup.items.length === 1 ? "" : "s"})
+                    ({qGroup.items.length} resource{qGroup.items.length === 1 ? "" : "s"}
+                    {unevaluatedCount > 0 ? `, ${unevaluatedCount} unevaluated` : ""})
                   </span>
-                </div>
+                </button>
+              </CollapsibleTrigger>
 
-                {/* Right-side actions — stop propagation so they don't toggle */}
-                <div
-                  role="toolbar"
-                  className="flex items-center gap-2"
-                  onClick={(e) => e.stopPropagation()}
-                  onKeyDown={(e) => e.stopPropagation()}
+              <div role="toolbar" className="flex items-center gap-2">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-8 text-xs"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (isAddLinkOpen) {
+                      setAddLinkOpenFor(null);
+                      setLinkUrl("");
+                    } else {
+                      setAddLinkOpenFor(queryKey);
+                    }
+                  }}
                 >
+                  {isAddLinkOpen ? (
+                    <X className="mr-1 h-3.5 w-3.5" />
+                  ) : (
+                    <LinkIcon className="mr-1 h-3.5 w-3.5" />
+                  )}
+                  {isAddLinkOpen ? "Cancel" : "Add Link"}
+                </Button>
+
+                {unevaluatedCount > 0 && (
                   <Button
-                    variant="ghost"
+                    variant="outline"
                     size="sm"
                     className="h-8 text-xs"
-                    onClick={() => {
-                      if (isAddLinkOpen) {
-                        setAddLinkOpenFor(null);
-                        setLinkUrl("");
-                      } else {
-                        setAddLinkOpenFor(queryKey);
-                      }
-                    }}
+                    onClick={() => void handleEvaluateGroup(presetId, qGroup.search_query)}
+                    disabled={isEvaluatingGroup || isBatchEvaluating}
                   >
-                    {isAddLinkOpen ? (
-                      <X className="mr-1 h-3.5 w-3.5" />
-                    ) : (
-                      <LinkIcon className="mr-1 h-3.5 w-3.5" />
-                    )}
-                    {isAddLinkOpen ? "Cancel" : "Add Link"}
+                    <Wand2 className="mr-2 h-3.5 w-3.5" />
+                    Evaluate All ({unevaluatedCount})
                   </Button>
-
-                  {unevaluatedCount > 0 && (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="h-8 text-xs"
-                      onClick={() => handleEvaluateGroup(presetId, qGroup.search_query)}
-                      disabled={isEvaluatingGroup || isBatchEvaluating}
-                    >
-                      <Wand2 className="mr-2 h-3.5 w-3.5" />
-                      Evaluate All ({unevaluatedCount})
-                    </Button>
-                  )}
-                </div>
+                )}
               </div>
+            </div>
 
-              {/* Inline add-link form */}
-              {isAddLinkOpen && (
-                <div
-                  role="toolbar"
-                  className="mt-3"
-                  onClick={(e) => e.stopPropagation()}
-                  onKeyDown={(e) => e.stopPropagation()}
+            {/* Inline add-link form */}
+            {isAddLinkOpen && (
+              <form
+                onSubmit={(e) => handleAddLink(e, presetId, qGroup.search_query)}
+                className="mt-3 flex gap-2"
+              >
+                <Input
+                  className="h-8 text-sm"
+                  placeholder="https://example.com/useful-link"
+                  value={linkUrl}
+                  onChange={(e) => setLinkUrl(e.target.value)}
+                  disabled={isAdding}
+                  autoFocus
+                />
+                <Button
+                  size="sm"
+                  type="submit"
+                  disabled={!linkUrl || isAdding}
+                  className="h-8 shrink-0"
                 >
-                  <form
-                    onSubmit={(e) => handleAddLink(e, presetId, qGroup.search_query)}
-                    className="flex gap-2"
-                  >
-                    <Input
-                      className="h-8 text-sm"
-                      placeholder="https://example.com/useful-link"
-                      value={linkUrl}
-                      onChange={(e) => setLinkUrl(e.target.value)}
-                      disabled={isAdding}
-                      autoFocus
-                    />
-                    <Button
-                      size="sm"
-                      type="submit"
-                      disabled={!linkUrl || isAdding}
-                      className="h-8 shrink-0"
-                    >
-                      <Plus className="mr-1 h-3.5 w-3.5" /> Add
-                    </Button>
-                  </form>
-                </div>
-              )}
-            </CardHeader>
-          </CollapsibleTrigger>
+                  <Plus className="mr-1 h-3.5 w-3.5" /> Add
+                </Button>
+              </form>
+            )}
+          </CardHeader>
 
           <CollapsibleContent>
             <CardContent className="p-4 grid gap-4 sm:grid-cols-1 lg:grid-cols-2">
-              {qGroup.items.map((item) => (
-                <ResourceCardRenderer
-                  key={item.id}
-                  resource={item.resource_data}
-                  adversarial={item.evaluation_data?.adversarial}
-                  presetId={presetId}
-                  customAction={renderCardAction(item)}
-                />
-              ))}
+              {sortedItems.map((item) => {
+                const resourceWithEval: ResourceCard = {
+                  ...item.resource_data,
+                  relevance_score:
+                    item.evaluation_data?.overall_score ?? item.resource_data.relevance_score,
+                  relevance_reason:
+                    item.evaluation_data?.relevance_reason ?? item.resource_data.relevance_reason,
+                  evaluation_details:
+                    toResourceEvaluationDetails(item.evaluation_data?.scores) ??
+                    item.resource_data.evaluation_details,
+                };
+
+                return (
+                  <ResourceCardRenderer
+                    key={item.id}
+                    resource={resourceWithEval}
+                    adversarial={item.evaluation_data?.adversarial}
+                    presetId={presetId}
+                    customAction={renderCardAction(item)}
+                  />
+                );
+              })}
             </CardContent>
           </CollapsibleContent>
         </Card>

@@ -22,11 +22,7 @@ interface ChalkboardProps {
 export function Chalkboard({ activeStage, isCached }: ChalkboardProps) {
   const t = useTranslations("search.classroom.chalkboard");
   const displayStage = isCached ? "complete" : activeStage;
-  const text = isCached
-    ? t("cached")
-    : displayStage
-      ? t(STAGE_KEY[displayStage])
-      : null;
+  const text = isCached ? t("cached") : displayStage ? t(STAGE_KEY[displayStage]) : null;
 
   return (
     <div
@@ -46,7 +42,7 @@ export function Chalkboard({ activeStage, isCached }: ChalkboardProps) {
 
       {/* Stage text with fade transition */}
       <AnimatePresence mode="wait">
-        {text && (
+        {text ? (
           <motion.p
             key={text}
             initial={{ opacity: 0, y: 4 }}
@@ -61,7 +57,7 @@ export function Chalkboard({ activeStage, isCached }: ChalkboardProps) {
           >
             {text}
           </motion.p>
-        )}
+        ) : null}
       </AnimatePresence>
 
       {/* Chalk tray at the bottom */}

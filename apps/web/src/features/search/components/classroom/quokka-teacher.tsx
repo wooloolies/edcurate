@@ -1,8 +1,7 @@
 "use client";
 
-import { useRef } from "react";
-
 import { motion } from "motion/react";
+import { useRef } from "react";
 
 import { Quokka } from "@/features/search/components/classroom/characters/quokka";
 import { SpeechBubble } from "@/features/search/components/classroom/speech-bubble";
@@ -32,9 +31,7 @@ interface QuokkaTeacherProps {
 export function QuokkaTeacher({ activeStage, isCached, message }: QuokkaTeacherProps) {
   const prevXRef = useRef<number>(42);
 
-  const position = activeStage
-    ? TEACHER_POSITIONS[activeStage]
-    : { x: "44%", y: "34%" };
+  const position = activeStage ? TEACHER_POSITIONS[activeStage] : { x: "44%", y: "34%" };
 
   const currentX = parsePercent(position.x);
   const isMovingLeft = currentX < prevXRef.current;
@@ -58,11 +55,7 @@ export function QuokkaTeacher({ activeStage, isCached, message }: QuokkaTeacherP
         left: position.x,
         top: position.y,
       }}
-      transition={
-        isCached
-          ? { duration: 0 }
-          : { type: "spring", stiffness: 80, damping: 15 }
-      }
+      transition={isCached ? { duration: 0 } : { type: "spring", stiffness: 80, damping: 15 }}
       aria-label="Quokka teacher"
     >
       {/* Speech bubble outside flip container so text stays readable */}

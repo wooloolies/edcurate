@@ -8,7 +8,7 @@ import { getAccessToken } from "@/lib/auth/token";
 export function fetchSSE(
   path: string,
   params: Record<string, string>,
-  signal: AbortSignal,
+  signal: AbortSignal
 ): Promise<Response> {
   const token = getAccessToken();
   const query = new URLSearchParams(params).toString();
