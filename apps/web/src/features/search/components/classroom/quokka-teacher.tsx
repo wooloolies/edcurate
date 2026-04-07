@@ -57,7 +57,6 @@ export function QuokkaTeacher({ activeStage, isCached, message }: QuokkaTeacherP
       animate={{
         left: position.x,
         top: position.y,
-        scaleX: isMovingLeft ? 1 : -1,
       }}
       transition={
         isCached
@@ -66,12 +65,16 @@ export function QuokkaTeacher({ activeStage, isCached, message }: QuokkaTeacherP
       }
       aria-label="Quokka teacher"
     >
+      {/* Speech bubble outside flip container so text stays readable */}
       <SpeechBubble text={message ?? null} />
-      <Quokka
-        className="h-full w-full"
-        isWorking={isWorking && !isWriting}
-        isDone={activeStage === "complete" || isCached}
-      />
+      {/* Only the character flips direction */}
+      <div style={{ transform: isMovingLeft ? "scaleX(1)" : "scaleX(-1)" }}>
+        <Quokka
+          className="h-full w-full"
+          isWorking={isWorking && !isWriting}
+          isDone={activeStage === "complete" || isCached}
+        />
+      </div>
     </motion.div>
   );
 }
