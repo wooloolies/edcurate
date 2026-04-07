@@ -118,6 +118,7 @@
     "placeholder": "Search for educational resources...",
     "searchButton": "Search",
     "selectPreset": "Select a preset",
+    "selectCollection": "Select your collection",
     "managePresets": "Manage",
     "noResults": "No results found. Try adjusting your search query or preset.",
     "partialError": "Some sources failed to return results.",

@@ -118,6 +118,7 @@
     "placeholder": "Tìm kiếm tài nguyên giáo dục...",
     "searchButton": "Tìm kiếm",
     "selectPreset": "Chọn thiết lập",
+    "selectCollection": "Chọn bộ sưu tập của bạn",
     "managePresets": "Quản lý",
     "noResults": "Không tìm thấy kết quả. Hãy thử điều chỉnh truy vấn hoặc thiết lập.",
     "partialError": "Một số nguồn không trả về kết quả.",

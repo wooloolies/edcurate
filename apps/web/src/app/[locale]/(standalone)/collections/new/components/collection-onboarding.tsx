@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useQueryState } from "nuqs";
-import { Pen, ChevronDown, AlertCircle, Loader2, Search, Repeat } from "lucide-react";
+import { Pen, ChevronDown, AlertCircle, Loader2 } from "lucide-react";
 import { Link, useRouter } from "@/lib/i18n/routing";
 import {
   useGetCountriesApiCurriculumCountriesGet,
@@ -22,12 +22,6 @@ export function CollectionOnboarding() {
   const currentStep = parseInt(stepStr || "1") as 1 | 2 | 3;
   const setCurrentStep = (val: 1 | 2 | 3) => setStepStr(val.toString());
 
-  const [completeStr, setCompleteStr] = useQueryState("complete", { defaultValue: "false", history: "push" });
-  const isComplete = completeStr === "true";
-  const setIsComplete = (val: boolean) => setCompleteStr(val.toString());
-
-  const [searchTextRaw, setSearchText] = useQueryState("search", { defaultValue: "" });
-  const searchText = searchTextRaw || "";
 
   const [presetNameRaw, setPresetName] = useQueryState("preset", { defaultValue: "Collection 1" });
   const presetName = presetNameRaw || "Collection 1";
@@ -144,7 +138,7 @@ export function CollectionOnboarding() {
       };
       createMutation.mutate(
         { data: payload },
-        { onSuccess: () => router.push("/collections") },
+        { onSuccess: (data) => router.push(`/search?preset_id=${data.id}`) },
       );
     }
   };

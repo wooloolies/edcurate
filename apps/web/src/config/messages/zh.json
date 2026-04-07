@@ -118,6 +118,7 @@
     "placeholder": "搜索教育资源...",
     "searchButton": "搜索",
     "selectPreset": "选择预设",
+    "selectCollection": "选择你的合集",
     "managePresets": "管理",
     "noResults": "未找到结果。请调整搜索词或预设后重试。",
     "partialError": "部分来源未能返回结果。",

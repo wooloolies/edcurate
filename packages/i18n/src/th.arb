@@ -320,6 +320,10 @@
   "@search__selectPreset": {
     "description": "Placeholder for preset selector on search page"
   },
+  "search__selectCollection": "เลือกคอลเลกชันของคุณ",
+  "@search__selectCollection": {
+    "description": "Fallback heading when no collection is selected on search page"
+  },
   "search__managePresets": "จัดการ",
   "@search__managePresets": {
     "description": "Link to manage presets from search page"
