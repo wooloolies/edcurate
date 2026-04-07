@@ -65,7 +65,7 @@ export function SuggestedCollectionsRail({
         queryKey: getListSavedResourcesEndpointApiSavedGetQueryKey(),
       });
       setSelectedColId(null);
-    } catch (e: unknown) {
+    } catch (_e: unknown) {
       toast.error(t("savedError"));
     }
   };
@@ -80,7 +80,7 @@ export function SuggestedCollectionsRail({
       queryClient.invalidateQueries({
         queryKey: getListSavedResourcesEndpointApiSavedGetQueryKey(),
       });
-    } catch (e: unknown) {
+    } catch (_e: unknown) {
       toast.error(t("savedError"));
     }
   };
@@ -103,9 +103,10 @@ export function SuggestedCollectionsRail({
                 const isCloned = clonedIds.has(item.id) || suggestion.is_cloned_by_user;
 
                 return (
-                  <div
+                  <button
+                    type="button"
                     key={item.id}
-                    className="flex flex-col gap-2 rounded-lg border bg-card p-3 shadow-sm hover:border-primary/50 cursor-pointer transition-colors"
+                    className="flex flex-col gap-2 rounded-lg border bg-card p-3 shadow-sm hover:border-primary/50 cursor-pointer transition-colors text-left w-full"
                     onClick={() => setSelectedColId(item.id)}
                   >
                     <div className="flex items-start justify-between gap-2">
@@ -114,12 +115,12 @@ export function SuggestedCollectionsRail({
                         <span className="text-xs text-muted-foreground line-clamp-1">
                           {item.search_query}
                         </span>
-                        {suggestion.publisher_name && (
+                        {suggestion.publisher_name ? (
                           <span className="text-xs text-muted-foreground">
                             Published by{" "}
                             <span className="font-medium">{suggestion.publisher_name}</span>
                           </span>
-                        )}
+                        ) : null}
                       </div>
                     </div>
                     <div className="flex items-center justify-between mt-1">
@@ -137,14 +138,14 @@ export function SuggestedCollectionsRail({
                           })}
                         </span>
                       </div>
-                      {isCloned && (
+                      {isCloned ? (
                         <div className="flex items-center gap-1 text-xs text-green-600 bg-green-50 px-2 py-0.5 rounded-full font-medium">
                           <Check className="h-3 w-3" />
                           {t("suggestedCollections.cloned", { fallback: "Cloned" })}
                         </div>
-                      )}
+                      ) : null}
                     </div>
-                  </div>
+                  </button>
                 );
               })}
             </div>
@@ -173,14 +174,14 @@ export function SuggestedCollectionsRail({
                     <span className="font-semibold text-sm">Target Query</span>
                     <p className="text-sm text-muted-foreground">{item.search_query}</p>
                   </div>
-                  {selectedSuggestion.publisher_name && (
+                  {selectedSuggestion.publisher_name ? (
                     <div className="flex flex-col gap-1">
                       <span className="font-semibold text-sm">Published by</span>
                       <p className="text-sm text-muted-foreground">
                         {selectedSuggestion.publisher_name}
                       </p>
                     </div>
-                  )}
+                  ) : null}
                   <div className="flex items-center gap-4 text-sm text-muted-foreground">
                     <div>
                       <span className="font-medium">{selectedSuggestion.resources_count || 0}</span>{" "}
@@ -190,7 +191,7 @@ export function SuggestedCollectionsRail({
                       <span className="font-medium">{item.clone_count}</span> clones
                     </div>
                   </div>
-                  {selectedSuggestion.resources && selectedSuggestion.resources.length > 0 && (
+                  {selectedSuggestion.resources && selectedSuggestion.resources.length > 0 ? (
                     <div className="flex flex-col gap-2">
                       <span className="font-semibold text-sm">Resources</span>
                       <ScrollArea className="max-h-96">
@@ -206,7 +207,7 @@ export function SuggestedCollectionsRail({
                         </div>
                       </ScrollArea>
                     </div>
-                  )}
+                  ) : null}
                 </div>
                 <DialogFooter>
                   <Button variant="outline" onClick={() => setSelectedColId(null)}>

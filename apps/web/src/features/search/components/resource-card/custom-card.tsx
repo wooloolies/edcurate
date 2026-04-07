@@ -1,5 +1,4 @@
 import { ExternalLink, Link as LinkIcon } from "lucide-react";
-import Image from "next/image";
 import {
   RelevanceDetails,
   VerdictBadge,
@@ -31,11 +30,10 @@ export function CustomCard({ index, resource, judgment, action }: CustomCardProp
       </a>
       <div className="flex flex-col gap-3 sm:flex-row mt-1">
         {!!resource.thumbnail_url && (
-          <Image
+          // biome-ignore lint/performance/noImgElement: external dynamic thumbnail URL
+          <img
             src={resource.thumbnail_url}
             alt={resource.title}
-            width={144}
-            height={80}
             className="w-full shrink-0 rounded object-cover sm:h-20 sm:w-36 border border-slate-100"
           />
         )}

@@ -108,7 +108,7 @@ export function SaveCollectionDialog({
               </Button>
             </div>
 
-            {showPublicWarning && (
+            {showPublicWarning ? (
               <div className="mt-2 rounded-md border border-amber-500/50 bg-amber-500/10 p-3 text-sm text-amber-600 dark:text-amber-500 flex flex-col gap-2">
                 <p>
                   {t("saveCollection.publicWarning", {
@@ -125,7 +125,7 @@ export function SaveCollectionDialog({
                   </Button>
                 </div>
               </div>
-            )}
+            ) : null}
           </div>
         </div>
         <DialogFooter>

@@ -19,7 +19,6 @@ export function parseSSEBuffer(buffer: string): {
 } {
   const parsed: SearchStageEvent[] = [];
 
-  // Split on double newline — handles \r\n\r\n, \n\n, \r\r
   const blocks = buffer.split(DOUBLE_NEWLINE_RE);
 
   // The last block may be incomplete; keep it as remainder

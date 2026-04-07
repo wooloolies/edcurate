@@ -59,12 +59,15 @@ export function CanvasBackground() {
       offsetY: number;
       vx: number;
       vy: number;
+      nodeId: string;
     }
 
     const grid: Cell[] = [];
+    let counter = 0;
 
     function initGrid() {
       grid.length = 0;
+      counter = 0;
       for (let x = 0; x < width; x += squareSize) {
         for (let y = 0; y < height; y += squareSize) {
           grid.push({
@@ -77,9 +80,16 @@ export function CanvasBackground() {
             offsetY: Math.random() * 20 - 10,
             vx: Math.random() * 0.5 - 0.25,
             vy: Math.random() * 0.5 - 0.25,
+            nodeId: `ED-${(counter++).toString().padStart(3, "0")}`, // Digital identifier
           });
         }
       }
+    }
+
+    function _getCellAt(x: number, y: number) {
+      return grid.find(
+        (cell) => x >= cell.x && x < cell.x + squareSize && y >= cell.y && y < cell.y + squareSize
+      );
     }
 
     // Debounce resize so rapid zoom steps don't thrash the grid
@@ -167,6 +177,7 @@ export function CanvasBackground() {
           bgCtx.fillStyle = `rgba(183, 255, 112, ${cell.alpha})`;
           bgCtx.fill();
 
+          // Draw geometric 'data fragments' orbiting the sphere that merge into the morph seamlessly
           const bitSize = 8;
           bgCtx.fillRect(
             currentX + cell.offsetX * 1.5,
@@ -182,6 +193,8 @@ export function CanvasBackground() {
           );
 
           // --- 2. CRISP CANVAS (Delicate Tech/Academic Schematics) ---
+
+          // Faint Neural Net structural crosshairs (anchoring the mathematical grid)
           crispCtx.strokeStyle = `rgba(183, 255, 112, ${cell.alpha * 0.5})`;
           crispCtx.lineWidth = 1;
           crispCtx.beginPath();
@@ -190,6 +203,13 @@ export function CanvasBackground() {
           crispCtx.moveTo(gridCenterX, gridCenterY - 6);
           crispCtx.lineTo(gridCenterX, gridCenterY + 6);
           crispCtx.stroke();
+
+          // Delicate digital micro-data metrics in HUD style
+          crispCtx.fillStyle = `rgba(17, 24, 39, ${cell.alpha * 0.6})`;
+          crispCtx.font = "500 9px 'Roboto Mono', monospace";
+          crispCtx.textAlign = "left";
+          crispCtx.textBaseline = "middle";
+          crispCtx.fillText(`${cell.nodeId}`, cell.x + 4, cell.y + 12);
 
           // Draw mesh to connect adjacent active nodes
           for (let j = i + 1; j < grid.length; j++) {
@@ -233,11 +253,10 @@ export function CanvasBackground() {
       <svg
         width="0"
         height="0"
-        aria-hidden="true"
         className="absolute pointer-events-none"
         style={{ position: "absolute" }}
       >
-        <title>Digital goo filter</title>
+        <title>Digital Goo Filter</title>
         <defs>
           <filter id="digital-goo">
             <feGaussianBlur in="SourceGraphic" stdDeviation="15" result="blur" />

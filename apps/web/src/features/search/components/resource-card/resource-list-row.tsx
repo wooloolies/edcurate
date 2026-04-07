@@ -34,7 +34,7 @@ export function ResourceListRow({
         {/* Col 4: Actions & Expand */}
         <div className="flex items-center gap-2 shrink-0 ml-4 pt-1">
           {actionsNode}
-          {!!expandedDetailsNode && (
+          {expandedDetailsNode ? (
             <button
               type="button"
               onClick={() => setIsExpanded((p) => !p)}
@@ -45,18 +45,18 @@ export function ResourceListRow({
                 className={`h-4 w-4 transition-transform duration-200 ${isExpanded ? "rotate-180" : ""}`}
               />
             </button>
-          )}
+          ) : null}
         </div>
       </div>
 
       {/* Expanded Details */}
-      {!!(isExpanded && expandedDetailsNode) && (
+      {isExpanded && expandedDetailsNode ? (
         <div className="ml-10 md:ml-48 pr-4 pb-4 animate-in fade-in slide-in-from-top-2 duration-200">
           <div className="rounded-md border bg-slate-50/80 shadow-sm overflow-hidden">
             {expandedDetailsNode}
           </div>
         </div>
-      )}
+      ) : null}
     </div>
   );
 }

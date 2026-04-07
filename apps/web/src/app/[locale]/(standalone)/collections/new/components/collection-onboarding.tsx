@@ -62,14 +62,14 @@ export function CollectionOnboarding() {
     { query: { enabled: !!countryCode && !!subject } }
   );
 
-  const { data: subjects } = useGetSubjectsApiCurriculumSubjectsGet(
-    { country: countryCode },
-    { query: { enabled: !!countryCode } }
+  const { data: grades } = useGetGradesApiCurriculumGradesGet(
+    { country: countryCode, subject, framework },
+    { query: { enabled: !!countryCode && !!subject && !!framework } }
   );
 
   const { data: subjects } = useGetSubjectsApiCurriculumSubjectsGet(
     { country: countryCode },
-    { query: { enabled: !!countryCode } },
+    { query: { enabled: !!countryCode } }
   );
 
   useEffect(() => {
@@ -87,6 +87,13 @@ export function CollectionOnboarding() {
     const match = countries?.find((c) => c.code === code);
     setCountryCode(code);
     setCountryName(match?.name ?? "");
+    setSubject("");
+    setFramework("");
+    setGrade("");
+  };
+
+  const handleSubjectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSubject(e.target.value);
     setFramework("");
     setGrade("");
   };
@@ -159,13 +166,15 @@ export function CollectionOnboarding() {
               aria-label="Edit collection name"
             />
           ) : (
-            <button
-              type="button"
-              className="text-2xl font-bold text-[#111827] cursor-pointer hover:opacity-80 transition-opacity text-left"
+            <h2
+              className="text-2xl font-bold text-[#111827] cursor-pointer hover:opacity-80 transition-opacity"
               onClick={() => setIsEditingPreset(true)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") setIsEditingPreset(true);
+              }}
             >
               {presetName}
-            </button>
+            </h2>
           )}
           {!isEditingPreset && (
             <button
@@ -218,92 +227,82 @@ export function CollectionOnboarding() {
           <div className="flex flex-col gap-8">
             {/* Country */}
             <div className="w-full">
-              <label
-                htmlFor="country-select"
-                className="block text-xl font-bold text-[#111827] mb-3 text-left"
-              >
+              <label className="block text-xl font-bold text-[#111827] mb-3 text-left">
                 Country
-              </label>
-              <div className="relative">
-                <select
-                  id="country-select"
-                  value={countryCode}
-                  onChange={handleCountryChange}
-                  className={selectClass}
-                >
-                  <option value="">Select a country...</option>
-                  {countries?.map((c) => (
-                    <option key={c.code} value={c.code}>
-                      {c.name}
-                    </option>
-                  ))}
-                </select>
-                <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
-                  <ChevronDown className="w-5 h-5" />
+                <div className="relative mt-3">
+                  <select
+                    value={countryCode}
+                    onChange={handleCountryChange}
+                    className={selectClass}
+                  >
+                    <option value="">Select a country...</option>
+                    {countries?.map((c) => (
+                      <option key={c.code} value={c.code}>
+                        {c.name}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
+                    <ChevronDown className="w-5 h-5" />
+                  </div>
                 </div>
-              </div>
+              </label>
             </div>
 
             {/* Subject */}
             <div className="w-full">
               <label className="block text-xl font-bold text-[#111827] mb-3 text-left">
                 Subject
-              </label>
-              <div className="relative">
-                <select
-                  value={subject}
-                  onChange={handleSubjectChange}
-                  disabled={!countryCode}
-                  className={selectClass}
-                >
-                  <option value="">Select a subject...</option>
-                  {subjects?.map((s) => (
-                    <option key={s} value={s}>
-                      {s}
-                    </option>
-                  ))}
-                </select>
-                <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
-                  <ChevronDown className="w-5 h-5" />
+                <div className="relative mt-3">
+                  <select
+                    value={subject}
+                    onChange={handleSubjectChange}
+                    disabled={!countryCode}
+                    className={selectClass}
+                  >
+                    <option value="">Select a subject...</option>
+                    {subjects?.map((s) => (
+                      <option key={s} value={s}>
+                        {s}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
+                    <ChevronDown className="w-5 h-5" />
+                  </div>
                 </div>
-              </div>
+              </label>
             </div>
             {/* Curriculum Framework */}
             <div className="w-full">
-              <label
-                htmlFor="framework-select"
-                className="block text-xl font-bold text-[#111827] mb-3 text-left"
-              >
+              <label className="block text-xl font-bold text-[#111827] mb-3 text-left">
                 Curriculum Framework
-              </label>
-              <div className="relative">
-                <select
-                  id="framework-select"
-                  value={framework}
-                  onChange={handleFrameworkChange}
-                  disabled={!countryCode}
-                  className={`${selectClass} text-ellipsis`}
-                >
-                  <option value="">Select a framework...</option>
-                  {frameworks?.map((f) => (
-                    <option key={f} value={f}>
-                      {f}
-                    </option>
-                  ))}
-                </select>
-                <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
-                  <ChevronDown className="w-5 h-5" />
+                <div className="relative mt-3">
+                  <select
+                    value={framework}
+                    onChange={handleFrameworkChange}
+                    disabled={!countryCode}
+                    className={`${selectClass} text-ellipsis`}
+                  >
+                    <option value="">Select a framework...</option>
+                    {frameworks?.map((f) => (
+                      <option key={f} value={f}>
+                        {f}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
+                    <ChevronDown className="w-5 h-5" />
+                  </div>
                 </div>
-              </div>
+              </label>
             </div>
 
             {/* Grade / Year Level */}
-            {grades && grades.length > 0 ? (
+            {grades && grades.length > 0 && (
               <div className="w-full">
-                <label
-                  htmlFor="grade-level"
-                  className="block text-xl font-bold text-[#111827] mb-4 text-left"
-                >
+                {/* biome-ignore lint/a11y/noLabelWithoutControl: label wraps a button grid */}
+                <label className="block text-xl font-bold text-[#111827] mb-4 text-left">
                   Year Level
                 </label>
                 <div className="grid grid-cols-3 gap-4">
@@ -327,7 +326,7 @@ export function CollectionOnboarding() {
                   })}
                 </div>
               </div>
-            ) : null}
+            )}
           </div>
         </div>
       )}
@@ -347,50 +346,42 @@ export function CollectionOnboarding() {
           <div className="flex flex-col gap-8 max-w-xl mx-auto">
             {/* Class Size */}
             <div className="w-full">
-              <label
-                htmlFor="class-size-input"
-                className="block text-xl font-bold text-[#111827] mb-3 text-left"
-              >
+              <label className="block text-xl font-bold text-[#111827] mb-3 text-left">
                 Class Size
+                <input
+                  type="number"
+                  min={1}
+                  max={150}
+                  placeholder="e.g. 25"
+                  value={classSize}
+                  onChange={(e) => setClassSize(e.target.value)}
+                  className="w-full appearance-none bg-white border-2 border-gray-200 rounded-2xl px-6 py-4 text-sm font-semibold text-[#111827] hover:border-gray-300 focus:outline-none focus:border-[#B7FF70] transition-colors shadow-sm placeholder:text-gray-400 placeholder:font-normal mt-3"
+                />
               </label>
-              <input
-                id="class-size-input"
-                type="number"
-                min={1}
-                max={150}
-                placeholder="e.g. 25"
-                value={classSize}
-                onChange={(e) => setClassSize(e.target.value)}
-                className="w-full appearance-none bg-white border-2 border-gray-200 rounded-2xl px-6 py-4 text-sm font-semibold text-[#111827] hover:border-gray-300 focus:outline-none focus:border-[#B7FF70] transition-colors shadow-sm placeholder:text-gray-400 placeholder:font-normal"
-              />
             </div>
 
             {/* Relevant Field (Subject from DB) */}
             <div className="w-full">
-              <label
-                htmlFor="subject-select"
-                className="block text-xl font-bold text-[#111827] mb-3 text-left"
-              >
+              <label className="block text-xl font-bold text-[#111827] mb-3 text-left">
                 Relevant field
-              </label>
-              <div className="relative">
-                <select
-                  id="subject-select"
-                  value={subject}
-                  onChange={(e) => setSubject(e.target.value)}
-                  className={`${selectClass} text-ellipsis`}
-                >
-                  <option value="">Select a field...</option>
-                  {subjects?.map((s) => (
-                    <option key={s} value={s}>
-                      {s}
-                    </option>
-                  ))}
-                </select>
-                <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
-                  <ChevronDown className="w-5 h-5" />
+                <div className="relative mt-3">
+                  <select
+                    value={subject}
+                    onChange={(e) => setSubject(e.target.value)}
+                    className={`${selectClass} text-ellipsis`}
+                  >
+                    <option value="">Select a field...</option>
+                    {subjects?.map((s) => (
+                      <option key={s} value={s}>
+                        {s}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
+                    <ChevronDown className="w-5 h-5" />
+                  </div>
                 </div>
-              </div>
+              </label>
             </div>
           </div>
         </div>
