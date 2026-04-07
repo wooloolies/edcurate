@@ -23,8 +23,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ResourceCardRenderer } from "@/features/search/components/resource-card";
 import type {
   QueryGroup,
-  ResourceCard,
-  ResourceCardEvaluationDetails,
   SavedResourceResponse,
 } from "@/lib/api/model";
 import {
@@ -35,13 +33,6 @@ import {
   useEvaluateSingleResourceEndpointApiSavedEvaluateSinglePost,
   useListSavedResourcesEndpointApiSavedGet,
 } from "@/lib/api/saved-resources/saved-resources";
-
-function toResourceEvaluationDetails(
-  scores: NonNullable<SavedResourceResponse["evaluation_data"]>["scores"] | undefined
-): ResourceCardEvaluationDetails {
-  if (!scores) return null;
-  return Object.fromEntries(Object.entries(scores).map(([key, score]) => [key, { ...score }]));
-}
 
 export function LibraryPageClient() {
   const queryClient = useQueryClient();
@@ -297,28 +288,15 @@ export function LibraryPageClient() {
 
           <CollapsibleContent>
             <CardContent className="p-4 grid gap-4 sm:grid-cols-1 lg:grid-cols-2">
-              {sortedItems.map((item) => {
-                const resourceWithEval: ResourceCard = {
-                  ...item.resource_data,
-                  relevance_score:
-                    item.evaluation_data?.overall_score ?? item.resource_data.relevance_score,
-                  relevance_reason:
-                    item.evaluation_data?.relevance_reason ?? item.resource_data.relevance_reason,
-                  evaluation_details:
-                    toResourceEvaluationDetails(item.evaluation_data?.scores) ??
-                    item.resource_data.evaluation_details,
-                };
-
-                return (
-                  <ResourceCardRenderer
-                    key={item.id}
-                    resource={resourceWithEval}
-                    adversarial={item.evaluation_data?.adversarial}
-                    presetId={presetId}
-                    customAction={renderCardAction(item)}
-                  />
-                );
-              })}
+              {qGroup.items.map((item) => (
+                <ResourceCardRenderer
+                  key={item.id}
+                  resource={item.resource_data}
+                  judgment={item.evaluation_data ?? undefined}
+                  presetId={presetId}
+                  customAction={renderCardAction(item)}
+                />
+              ))}
             </CardContent>
           </CollapsibleContent>
         </Card>

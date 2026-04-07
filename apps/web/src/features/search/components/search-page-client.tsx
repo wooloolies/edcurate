@@ -25,12 +25,7 @@ import { ResourceCardRenderer } from "@/features/search/components/resource-card
 import { ResourceCardSkeleton } from "@/features/search/components/skeleton/resource-card-skeleton";
 import { useSearchStream } from "@/features/search/hooks/use-search-stream";
 import { useSearchApiDiscoverySearchGet } from "@/lib/api/discovery/discovery";
-import type {
-  AdversarialReviewResult,
-  BulkSaveResourceRequest,
-  EvaluationResultOutput,
-  ResourceCard,
-} from "@/lib/api/model";
+import type { JudgmentResult, ResourceCard } from "@/lib/api/model";
 import { useListPresetsApiPresetsGet } from "@/lib/api/presets/presets";
 import {
   getListSavedResourcesEndpointApiSavedGetQueryKey,
@@ -88,18 +83,12 @@ export function SearchPageClient() {
     if (!presetId || selectedResources.size === 0) return;
     try {
       const resourcesList = Array.from(selectedResources.values());
-      const evaluationDataList: (EvaluationResultOutput | null)[] = resourcesList.map(
-        (resource) => evaluationByUrl.get(resource.url) ?? null
-      );
-      const payload: BulkSaveResourceRequest = {
-        preset_id: presetId,
-        search_query: searchQuery || "custom",
-        resources: resourcesList,
-        evaluation_data_list: evaluationDataList,
-      };
-
       await bulkSave({
-        data: payload,
+        data: {
+          preset_id: presetId,
+          search_query: searchQuery || "custom",
+          resources: resourcesList,
+        },
       });
       setSelectedResources(new Map());
       toast.success(t("savedSuccess"));
@@ -157,21 +146,13 @@ export function SearchPageClient() {
   const totalCount = results?.total_results ?? 0;
   const allResults = results?.results ?? [];
 
-  const adversarialByUrl = useMemo(() => {
-    const m = new Map<string, AdversarialReviewResult | null | undefined>();
-    for (const ev of results?.evaluations ?? []) {
-      m.set(ev.resource_url, ev.adversarial);
+  const judgmentByUrl = useMemo(() => {
+    const m = new Map<string, JudgmentResult>();
+    for (const j of results?.judgments ?? []) {
+      m.set(j.resource_url, j);
     }
     return m;
-  }, [results?.evaluations]);
-
-  const evaluationByUrl = useMemo(() => {
-    const m = new Map<string, EvaluationResultOutput>();
-    for (const evaluation of results?.evaluations ?? []) {
-      m.set(evaluation.resource_url, evaluation);
-    }
-    return m;
-  }, [results?.evaluations]);
+  }, [results?.judgments]);
 
   const [showUnscored, setShowUnscored] = useState(false);
 
@@ -270,8 +251,7 @@ export function SearchPageClient() {
                       <ResourceCardRenderer
                         key={resource.url}
                         resource={resource}
-                        evaluation={evaluationByUrl.get(resource.url)}
-                        adversarial={adversarialByUrl.get(resource.url)}
+                        judgment={judgmentByUrl.get(resource.url)}
                         presetId={presetId ?? undefined}
                         checked={isChecked(resource.url)}
                         onToggleChecked={(_, c) => handleToggleChecked(resource, c)}
@@ -299,7 +279,7 @@ export function SearchPageClient() {
                               <ResourceCardRenderer
                                 key={resource.url}
                                 resource={resource}
-                                adversarial={adversarialByUrl.get(resource.url)}
+                                judgment={judgmentByUrl.get(resource.url)}
                                 presetId={presetId ?? undefined}
                                 checked={isChecked(resource.url)}
                                 onToggleChecked={(_, c) => handleToggleChecked(resource, c)}

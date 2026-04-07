@@ -4,15 +4,15 @@ import { useTranslations } from "next-intl";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { RelevanceIndicator } from "@/features/search/components/resource-card/relevance-indicator";
-import type { AdversarialReviewResult, ResourceCard } from "@/lib/api/model";
+import type { JudgmentResult, ResourceCard } from "@/lib/api/model";
 
 interface DdgsCardProps {
   resource: ResourceCard;
-  adversarial?: AdversarialReviewResult | null;
+  judgment?: JudgmentResult | null;
   action?: React.ReactNode;
 }
 
-export function DdgsCard({ resource, adversarial, action }: DdgsCardProps) {
+export function DdgsCard({ resource, judgment, action }: DdgsCardProps) {
   const t = useTranslations("search");
 
   const meta = resource.metadata as { domain?: string };
@@ -42,10 +42,9 @@ export function DdgsCard({ resource, adversarial, action }: DdgsCardProps) {
       <CardContent>
         <p className="text-sm text-muted-foreground line-clamp-3">{resource.snippet}</p>
         <RelevanceIndicator
-          score={resource.relevance_score}
+          verdict={resource.verdict}
           reason={resource.relevance_reason}
-          details={resource.evaluation_details}
-          adversarial={adversarial}
+          judgment={judgment}
         />
       </CardContent>
     </Card>

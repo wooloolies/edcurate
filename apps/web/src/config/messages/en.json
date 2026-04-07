@@ -209,25 +209,46 @@
     },
     "evaluation": {
       "unevaluated": "Unevaluated",
-      "score": "Score: {score}/10",
-      "agent": "Deep Evaluation Agent",
-      "criteria": "Evaluation Criteria",
-      "peerCheck": "Peer check",
-      "peerCheckVerdicts": {
-        "approved": "Recommended",
-        "approvedWithCaveats": "Recommended with caveats",
-        "flaggedForTeacherReview": "Needs teacher review",
-        "notRecommended": "Not recommended"
+      "agent": "AI Evaluation",
+      "showDetails": "Show evaluation details",
+      "hideDetails": "Hide evaluation details",
+      "verdicts": {
+        "use_it": "Use it",
+        "adapt_it": "Adapt it",
+        "skip_it": "Skip it"
       },
-      "showReason": "Show evaluation reason",
-      "dimensions": {
-        "curriculumAlignment": "Curriculum alignment",
-        "pedagogicalQuality": "Pedagogical quality",
-        "readingLevel": "Reading level",
-        "biasRepresentation": "Bias and representation",
-        "factualAccuracy": "Factual accuracy",
-        "sourceCredibility": "Source credibility",
-        "licensingIp": "Licensing and IP"
+      "confidence": {
+        "high": "High confidence",
+        "moderate": "Moderate confidence",
+        "low": "Low confidence"
+      },
+      "sections": {
+        "triage": "Triage",
+        "riskScan": "Risk Scan",
+        "reasoning": "Final Reasoning",
+        "adaptations": "Suggested Adaptations"
+      },
+      "metrics": {
+        "curriculumFit": "Curriculum fit",
+        "accessibility": "Accessibility",
+        "trustworthiness": "Trustworthiness"
+      },
+      "ratings": {
+        "strong": "Strong",
+        "adequate": "Adequate",
+        "weak": "Weak"
+      },
+      "noFlags": "No issues found",
+      "overrideNote": "Override note",
+      "evidence": "Evidence",
+      "suggested": "Suggested action",
+      "flags": "{count, plural, one {# flag} other {# flags}}",
+      "flagCategories": {
+        "outdated_content": "Outdated content",
+        "bias_or_framing": "Bias or framing",
+        "factual_concern": "Factual concern",
+        "safety_concern": "Safety concern",
+        "misleading_match": "Misleading match"
       }
     }
   },

@@ -2,16 +2,11 @@ import { CustomCard } from "@/features/search/components/resource-card/custom-ca
 import { DdgsCard } from "@/features/search/components/resource-card/ddgs-card";
 import { OpenAlexCard } from "@/features/search/components/resource-card/open-alex-card";
 import { YoutubeCard } from "@/features/search/components/resource-card/youtube-card";
-import type {
-  AdversarialReviewResult,
-  EvaluationResultOutput,
-  ResourceCard,
-} from "@/lib/api/model";
+import type { JudgmentResult, ResourceCard } from "@/lib/api/model";
 
 interface ResourceCardRendererProps {
   resource: ResourceCard;
-  evaluation?: EvaluationResultOutput | null;
-  adversarial?: AdversarialReviewResult | null;
+  judgment?: JudgmentResult | null;
   presetId?: string;
   hideAction?: boolean;
   checked?: boolean;
@@ -22,8 +17,7 @@ import { BookmarkButton } from "./bookmark-button";
 
 export function ResourceCardRenderer({
   resource,
-  evaluation,
-  adversarial,
+  judgment,
   presetId,
   hideAction,
   checked,
@@ -42,20 +36,19 @@ export function ResourceCardRenderer({
         resource={resource}
         checked={checked}
         onToggleChecked={onToggleChecked}
-        evaluation={evaluation}
       />
     );
   }
 
   switch (resource.source) {
     case "ddgs":
-      return <DdgsCard resource={resource} adversarial={adversarial} action={action} />;
+      return <DdgsCard resource={resource} judgment={judgment} action={action} />;
     case "youtube":
-      return <YoutubeCard resource={resource} adversarial={adversarial} action={action} />;
+      return <YoutubeCard resource={resource} judgment={judgment} action={action} />;
     case "openalex":
-      return <OpenAlexCard resource={resource} adversarial={adversarial} action={action} />;
+      return <OpenAlexCard resource={resource} judgment={judgment} action={action} />;
     case "custom":
-      return <CustomCard resource={resource} adversarial={adversarial} action={action} />;
+      return <CustomCard resource={resource} judgment={judgment} action={action} />;
     default:
       return null;
   }

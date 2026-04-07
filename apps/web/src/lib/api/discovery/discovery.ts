@@ -32,8 +32,8 @@ import {
 } from 'react';
 
 import type {
-  EvaluatedSearchResponse,
   HTTPValidationError,
+  JudgedSearchResponse,
   SearchApiDiscoverySearchGetParams,
   SearchStreamApiDiscoverySearchStreamGetParams
 } from '../model';
@@ -51,7 +51,7 @@ Source labels: ddgs=DuckDuckGo, youtube=YouTube, openalex=OpenAlex
  * @summary Search
  */
 export const useSearchApiDiscoverySearchGetHook = () => {
-        const searchApiDiscoverySearchGet = useCustomInstance<EvaluatedSearchResponse>();
+        const searchApiDiscoverySearchGet = useCustomInstance<JudgedSearchResponse>();
 
         return useCallback((
     params: SearchApiDiscoverySearchGetParams,

@@ -20,15 +20,6 @@ export const listSavedResourcesEndpointApiSavedGetResponseGroupsItemQueryGroupsI
 export const listSavedResourcesEndpointApiSavedGetResponseGroupsItemQueryGroupsItemItemsItemResourceDataMetadataTwoDurationDefault = ``;
 export const listSavedResourcesEndpointApiSavedGetResponseGroupsItemQueryGroupsItemItemsItemResourceDataMetadataThreeSourceDefault = `openalex`;
 export const listSavedResourcesEndpointApiSavedGetResponseGroupsItemQueryGroupsItemItemsItemResourceDataMetadataFourSourceDefault = `custom`;
-export const listSavedResourcesEndpointApiSavedGetResponseGroupsItemQueryGroupsItemItemsItemEvaluationDataOneOverallScoreMin = 0;
-export const listSavedResourcesEndpointApiSavedGetResponseGroupsItemQueryGroupsItemItemsItemEvaluationDataOneOverallScoreMax = 10;
-
-export const listSavedResourcesEndpointApiSavedGetResponseGroupsItemQueryGroupsItemItemsItemEvaluationDataOneScoresScoreMax = 10;
-
-export const listSavedResourcesEndpointApiSavedGetResponseGroupsItemQueryGroupsItemItemsItemEvaluationDataOneScoresMaxDefault = 10;
-export const listSavedResourcesEndpointApiSavedGetResponseGroupsItemQueryGroupsItemItemsItemEvaluationDataOneAdversarialOneScoreAdjustmentsScoreMax = 10;
-
-export const listSavedResourcesEndpointApiSavedGetResponseGroupsItemQueryGroupsItemItemsItemEvaluationDataOneAdversarialOneScoreAdjustmentsMaxDefault = 10;
 
 export const ListSavedResourcesEndpointApiSavedGetResponse = zod.object({
   "total": zod.number(),
@@ -80,34 +71,38 @@ export const ListSavedResourcesEndpointApiSavedGetResponse = zod.object({
 }).describe('Metadata from manually added custom links.')]),
   "relevance_score": zod.union([zod.number(),zod.null()]).optional(),
   "relevance_reason": zod.union([zod.string(),zod.null()]).optional(),
-  "evaluation_details": zod.union([zod.record(zod.string(), zod.record(zod.string(), zod.unknown())),zod.null()]).optional().describe('Detailed dimension scores')
+  "verdict": zod.union([zod.string(),zod.null()]).optional().describe('use_it | adapt_it | skip_it')
 }).describe('Normalised resource card returned by all providers.'),
   "evaluation_data": zod.union([zod.object({
   "resource_url": zod.string(),
-  "overall_score": zod.number().min(listSavedResourcesEndpointApiSavedGetResponseGroupsItemQueryGroupsItemItemsItemEvaluationDataOneOverallScoreMin).max(listSavedResourcesEndpointApiSavedGetResponseGroupsItemQueryGroupsItemItemsItemEvaluationDataOneOverallScoreMax),
-  "relevance_reason": zod.string(),
-  "recommended_use": zod.enum(['primary_resource', 'supplementary', 'reference_only']),
-  "scores": zod.record(zod.string(), zod.object({
-  "score": zod.number().min(1).max(listSavedResourcesEndpointApiSavedGetResponseGroupsItemQueryGroupsItemItemsItemEvaluationDataOneScoresScoreMax),
-  "max": zod.number().default(listSavedResourcesEndpointApiSavedGetResponseGroupsItemQueryGroupsItemItemsItemEvaluationDataOneScoresMaxDefault),
+  "verdict": zod.enum(['use_it', 'adapt_it', 'skip_it']),
+  "confidence": zod.enum(['high', 'moderate', 'low']),
+  "curriculum_fit": zod.object({
+  "rating": zod.enum(['strong', 'adequate', 'weak']),
   "reason": zod.string()
-}).describe('Score for a single evaluation dimension.')),
-  "adversarial": zod.union([zod.object({
-  "verdict": zod.enum(['approved', 'approved_with_caveats', 'flagged_for_teacher_review', 'not_recommended']),
+}).describe('One of the 3 evaluation metrics.'),
+  "accessibility": zod.object({
+  "rating": zod.enum(['strong', 'adequate', 'weak']),
+  "reason": zod.string()
+}).describe('One of the 3 evaluation metrics.'),
+  "trustworthiness": zod.object({
+  "rating": zod.enum(['strong', 'adequate', 'weak']),
+  "reason": zod.string()
+}).describe('One of the 3 evaluation metrics.'),
+  "reasoning_chain": zod.string(),
   "flags": zod.array(zod.object({
-  "category": zod.enum(['false_positive', 'hidden_bias', 'accuracy_gap', 'safety', 'licensing_trap']),
+  "category": zod.enum(['outdated_content', 'bias_or_framing', 'factual_concern', 'safety_concern', 'misleading_match']),
   "severity": zod.enum(['high', 'medium', 'low']),
+  "evidence_quote": zod.string(),
   "explanation": zod.string(),
   "suggested_action": zod.string()
-}).describe('Single issue raised by the adversarial reviewer.')).optional(),
-  "score_adjustments": zod.record(zod.string(), zod.object({
-  "score": zod.number().min(1).max(listSavedResourcesEndpointApiSavedGetResponseGroupsItemQueryGroupsItemItemsItemEvaluationDataOneAdversarialOneScoreAdjustmentsScoreMax),
-  "max": zod.number().default(listSavedResourcesEndpointApiSavedGetResponseGroupsItemQueryGroupsItemItemsItemEvaluationDataOneAdversarialOneScoreAdjustmentsMaxDefault),
-  "reason": zod.string()
-}).describe('Score for a single evaluation dimension.')).optional(),
-  "review_summary": zod.string()
-}).describe('Output of Agent 4 — challenges Agent 3 scores and surfaces risks.'),zod.null()]).optional()
-}).describe('Full evaluation of a single resource across 7 dimensions.'),zod.null()]),
+}).describe('A single issue found by the risk scanner, backed by evidence.')).optional(),
+  "adaptations": zod.array(zod.object({
+  "action": zod.string(),
+  "rationale": zod.string()
+}).describe('A concrete adaptation the teacher can apply.')).optional(),
+  "override_notes": zod.union([zod.string(),zod.null()]).optional()
+}).describe('Final judgment combining triage + risk scan, presented to the teacher.'),zod.null()]),
   "saved_at": zod.iso.datetime({})
 }))
 }).describe('A group of saved resources from the same search query.'))
@@ -172,34 +167,8 @@ export const ToggleSaveResourceEndpointApiSavedPostBody = zod.object({
 }).describe('Metadata from manually added custom links.')]),
   "relevance_score": zod.union([zod.number(),zod.null()]).optional(),
   "relevance_reason": zod.union([zod.string(),zod.null()]).optional(),
-  "evaluation_details": zod.union([zod.record(zod.string(), zod.record(zod.string(), zod.unknown())),zod.null()]).optional().describe('Detailed dimension scores')
-}).describe('Normalised resource card returned by all providers.'),
-  "evaluation_data": zod.union([zod.object({
-  "resource_url": zod.string(),
-  "overall_score": zod.number().min(toggleSaveResourceEndpointApiSavedPostBodyEvaluationDataOneOverallScoreMin).max(toggleSaveResourceEndpointApiSavedPostBodyEvaluationDataOneOverallScoreMax),
-  "relevance_reason": zod.string(),
-  "recommended_use": zod.enum(['primary_resource', 'supplementary', 'reference_only']),
-  "scores": zod.record(zod.string(), zod.object({
-  "score": zod.number().min(1).max(toggleSaveResourceEndpointApiSavedPostBodyEvaluationDataOneScoresScoreMax),
-  "max": zod.number().default(toggleSaveResourceEndpointApiSavedPostBodyEvaluationDataOneScoresMaxDefault),
-  "reason": zod.string()
-}).describe('Score for a single evaluation dimension.')),
-  "adversarial": zod.union([zod.object({
-  "verdict": zod.enum(['approved', 'approved_with_caveats', 'flagged_for_teacher_review', 'not_recommended']),
-  "flags": zod.array(zod.object({
-  "category": zod.enum(['false_positive', 'hidden_bias', 'accuracy_gap', 'safety', 'licensing_trap']),
-  "severity": zod.enum(['high', 'medium', 'low']),
-  "explanation": zod.string(),
-  "suggested_action": zod.string()
-}).describe('Single issue raised by the adversarial reviewer.')).optional(),
-  "score_adjustments": zod.record(zod.string(), zod.object({
-  "score": zod.number().min(1).max(toggleSaveResourceEndpointApiSavedPostBodyEvaluationDataOneAdversarialOneScoreAdjustmentsScoreMax),
-  "max": zod.number().default(toggleSaveResourceEndpointApiSavedPostBodyEvaluationDataOneAdversarialOneScoreAdjustmentsMaxDefault),
-  "reason": zod.string()
-}).describe('Score for a single evaluation dimension.')).optional(),
-  "review_summary": zod.string()
-}).describe('Output of Agent 4 — challenges Agent 3 scores and surfaces risks.'),zod.null()]).optional()
-}).describe('Full evaluation of a single resource across 7 dimensions.'),zod.null()]).optional()
+  "verdict": zod.union([zod.string(),zod.null()]).optional().describe('use_it | adapt_it | skip_it')
+}).describe('Normalised resource card returned by all providers.')
 })
 
 export const toggleSaveResourceEndpointApiSavedPostResponseResourceDataMetadataOneSourceDefault = `ddgs`;
@@ -207,15 +176,6 @@ export const toggleSaveResourceEndpointApiSavedPostResponseResourceDataMetadataT
 export const toggleSaveResourceEndpointApiSavedPostResponseResourceDataMetadataTwoDurationDefault = ``;
 export const toggleSaveResourceEndpointApiSavedPostResponseResourceDataMetadataThreeSourceDefault = `openalex`;
 export const toggleSaveResourceEndpointApiSavedPostResponseResourceDataMetadataFourSourceDefault = `custom`;
-export const toggleSaveResourceEndpointApiSavedPostResponseEvaluationDataOneOverallScoreMin = 0;
-export const toggleSaveResourceEndpointApiSavedPostResponseEvaluationDataOneOverallScoreMax = 10;
-
-export const toggleSaveResourceEndpointApiSavedPostResponseEvaluationDataOneScoresScoreMax = 10;
-
-export const toggleSaveResourceEndpointApiSavedPostResponseEvaluationDataOneScoresMaxDefault = 10;
-export const toggleSaveResourceEndpointApiSavedPostResponseEvaluationDataOneAdversarialOneScoreAdjustmentsScoreMax = 10;
-
-export const toggleSaveResourceEndpointApiSavedPostResponseEvaluationDataOneAdversarialOneScoreAdjustmentsMaxDefault = 10;
 
 export const ToggleSaveResourceEndpointApiSavedPostResponse = zod.object({
   "id": zod.uuid(),
@@ -258,34 +218,38 @@ export const ToggleSaveResourceEndpointApiSavedPostResponse = zod.object({
 }).describe('Metadata from manually added custom links.')]),
   "relevance_score": zod.union([zod.number(),zod.null()]).optional(),
   "relevance_reason": zod.union([zod.string(),zod.null()]).optional(),
-  "evaluation_details": zod.union([zod.record(zod.string(), zod.record(zod.string(), zod.unknown())),zod.null()]).optional().describe('Detailed dimension scores')
+  "verdict": zod.union([zod.string(),zod.null()]).optional().describe('use_it | adapt_it | skip_it')
 }).describe('Normalised resource card returned by all providers.'),
   "evaluation_data": zod.union([zod.object({
   "resource_url": zod.string(),
-  "overall_score": zod.number().min(toggleSaveResourceEndpointApiSavedPostResponseEvaluationDataOneOverallScoreMin).max(toggleSaveResourceEndpointApiSavedPostResponseEvaluationDataOneOverallScoreMax),
-  "relevance_reason": zod.string(),
-  "recommended_use": zod.enum(['primary_resource', 'supplementary', 'reference_only']),
-  "scores": zod.record(zod.string(), zod.object({
-  "score": zod.number().min(1).max(toggleSaveResourceEndpointApiSavedPostResponseEvaluationDataOneScoresScoreMax),
-  "max": zod.number().default(toggleSaveResourceEndpointApiSavedPostResponseEvaluationDataOneScoresMaxDefault),
+  "verdict": zod.enum(['use_it', 'adapt_it', 'skip_it']),
+  "confidence": zod.enum(['high', 'moderate', 'low']),
+  "curriculum_fit": zod.object({
+  "rating": zod.enum(['strong', 'adequate', 'weak']),
   "reason": zod.string()
-}).describe('Score for a single evaluation dimension.')),
-  "adversarial": zod.union([zod.object({
-  "verdict": zod.enum(['approved', 'approved_with_caveats', 'flagged_for_teacher_review', 'not_recommended']),
+}).describe('One of the 3 evaluation metrics.'),
+  "accessibility": zod.object({
+  "rating": zod.enum(['strong', 'adequate', 'weak']),
+  "reason": zod.string()
+}).describe('One of the 3 evaluation metrics.'),
+  "trustworthiness": zod.object({
+  "rating": zod.enum(['strong', 'adequate', 'weak']),
+  "reason": zod.string()
+}).describe('One of the 3 evaluation metrics.'),
+  "reasoning_chain": zod.string(),
   "flags": zod.array(zod.object({
-  "category": zod.enum(['false_positive', 'hidden_bias', 'accuracy_gap', 'safety', 'licensing_trap']),
+  "category": zod.enum(['outdated_content', 'bias_or_framing', 'factual_concern', 'safety_concern', 'misleading_match']),
   "severity": zod.enum(['high', 'medium', 'low']),
+  "evidence_quote": zod.string(),
   "explanation": zod.string(),
   "suggested_action": zod.string()
-}).describe('Single issue raised by the adversarial reviewer.')).optional(),
-  "score_adjustments": zod.record(zod.string(), zod.object({
-  "score": zod.number().min(1).max(toggleSaveResourceEndpointApiSavedPostResponseEvaluationDataOneAdversarialOneScoreAdjustmentsScoreMax),
-  "max": zod.number().default(toggleSaveResourceEndpointApiSavedPostResponseEvaluationDataOneAdversarialOneScoreAdjustmentsMaxDefault),
-  "reason": zod.string()
-}).describe('Score for a single evaluation dimension.')).optional(),
-  "review_summary": zod.string()
-}).describe('Output of Agent 4 — challenges Agent 3 scores and surfaces risks.'),zod.null()]).optional()
-}).describe('Full evaluation of a single resource across 7 dimensions.'),zod.null()]),
+}).describe('A single issue found by the risk scanner, backed by evidence.')).optional(),
+  "adaptations": zod.array(zod.object({
+  "action": zod.string(),
+  "rationale": zod.string()
+}).describe('A concrete adaptation the teacher can apply.')).optional(),
+  "override_notes": zod.union([zod.string(),zod.null()]).optional()
+}).describe('Final judgment combining triage + risk scan, presented to the teacher.'),zod.null()]),
   "saved_at": zod.iso.datetime({})
 })
 
@@ -347,34 +311,8 @@ export const BulkSaveResourcesEndpointApiSavedBulkPostBody = zod.object({
 }).describe('Metadata from manually added custom links.')]),
   "relevance_score": zod.union([zod.number(),zod.null()]).optional(),
   "relevance_reason": zod.union([zod.string(),zod.null()]).optional(),
-  "evaluation_details": zod.union([zod.record(zod.string(), zod.record(zod.string(), zod.unknown())),zod.null()]).optional().describe('Detailed dimension scores')
-}).describe('Normalised resource card returned by all providers.')),
-  "evaluation_data_list": zod.union([zod.array(zod.union([zod.object({
-  "resource_url": zod.string(),
-  "overall_score": zod.number().min(bulkSaveResourcesEndpointApiSavedBulkPostBodyEvaluationDataListOneItemOneOverallScoreMin).max(bulkSaveResourcesEndpointApiSavedBulkPostBodyEvaluationDataListOneItemOneOverallScoreMax),
-  "relevance_reason": zod.string(),
-  "recommended_use": zod.enum(['primary_resource', 'supplementary', 'reference_only']),
-  "scores": zod.record(zod.string(), zod.object({
-  "score": zod.number().min(1).max(bulkSaveResourcesEndpointApiSavedBulkPostBodyEvaluationDataListOneItemOneScoresScoreMax),
-  "max": zod.number().default(bulkSaveResourcesEndpointApiSavedBulkPostBodyEvaluationDataListOneItemOneScoresMaxDefault),
-  "reason": zod.string()
-}).describe('Score for a single evaluation dimension.')),
-  "adversarial": zod.union([zod.object({
-  "verdict": zod.enum(['approved', 'approved_with_caveats', 'flagged_for_teacher_review', 'not_recommended']),
-  "flags": zod.array(zod.object({
-  "category": zod.enum(['false_positive', 'hidden_bias', 'accuracy_gap', 'safety', 'licensing_trap']),
-  "severity": zod.enum(['high', 'medium', 'low']),
-  "explanation": zod.string(),
-  "suggested_action": zod.string()
-}).describe('Single issue raised by the adversarial reviewer.')).optional(),
-  "score_adjustments": zod.record(zod.string(), zod.object({
-  "score": zod.number().min(1).max(bulkSaveResourcesEndpointApiSavedBulkPostBodyEvaluationDataListOneItemOneAdversarialOneScoreAdjustmentsScoreMax),
-  "max": zod.number().default(bulkSaveResourcesEndpointApiSavedBulkPostBodyEvaluationDataListOneItemOneAdversarialOneScoreAdjustmentsMaxDefault),
-  "reason": zod.string()
-}).describe('Score for a single evaluation dimension.')).optional(),
-  "review_summary": zod.string()
-}).describe('Output of Agent 4 — challenges Agent 3 scores and surfaces risks.'),zod.null()]).optional()
-}).describe('Full evaluation of a single resource across 7 dimensions.'),zod.null()])),zod.null()]).optional()
+  "verdict": zod.union([zod.string(),zod.null()]).optional().describe('use_it | adapt_it | skip_it')
+}).describe('Normalised resource card returned by all providers.'))
 })
 
 export const bulkSaveResourcesEndpointApiSavedBulkPostResponseSavedItemResourceDataMetadataOneSourceDefault = `ddgs`;
@@ -382,15 +320,6 @@ export const bulkSaveResourcesEndpointApiSavedBulkPostResponseSavedItemResourceD
 export const bulkSaveResourcesEndpointApiSavedBulkPostResponseSavedItemResourceDataMetadataTwoDurationDefault = ``;
 export const bulkSaveResourcesEndpointApiSavedBulkPostResponseSavedItemResourceDataMetadataThreeSourceDefault = `openalex`;
 export const bulkSaveResourcesEndpointApiSavedBulkPostResponseSavedItemResourceDataMetadataFourSourceDefault = `custom`;
-export const bulkSaveResourcesEndpointApiSavedBulkPostResponseSavedItemEvaluationDataOneOverallScoreMin = 0;
-export const bulkSaveResourcesEndpointApiSavedBulkPostResponseSavedItemEvaluationDataOneOverallScoreMax = 10;
-
-export const bulkSaveResourcesEndpointApiSavedBulkPostResponseSavedItemEvaluationDataOneScoresScoreMax = 10;
-
-export const bulkSaveResourcesEndpointApiSavedBulkPostResponseSavedItemEvaluationDataOneScoresMaxDefault = 10;
-export const bulkSaveResourcesEndpointApiSavedBulkPostResponseSavedItemEvaluationDataOneAdversarialOneScoreAdjustmentsScoreMax = 10;
-
-export const bulkSaveResourcesEndpointApiSavedBulkPostResponseSavedItemEvaluationDataOneAdversarialOneScoreAdjustmentsMaxDefault = 10;
 
 export const BulkSaveResourcesEndpointApiSavedBulkPostResponse = zod.object({
   "saved": zod.array(zod.object({
@@ -434,34 +363,38 @@ export const BulkSaveResourcesEndpointApiSavedBulkPostResponse = zod.object({
 }).describe('Metadata from manually added custom links.')]),
   "relevance_score": zod.union([zod.number(),zod.null()]).optional(),
   "relevance_reason": zod.union([zod.string(),zod.null()]).optional(),
-  "evaluation_details": zod.union([zod.record(zod.string(), zod.record(zod.string(), zod.unknown())),zod.null()]).optional().describe('Detailed dimension scores')
+  "verdict": zod.union([zod.string(),zod.null()]).optional().describe('use_it | adapt_it | skip_it')
 }).describe('Normalised resource card returned by all providers.'),
   "evaluation_data": zod.union([zod.object({
   "resource_url": zod.string(),
-  "overall_score": zod.number().min(bulkSaveResourcesEndpointApiSavedBulkPostResponseSavedItemEvaluationDataOneOverallScoreMin).max(bulkSaveResourcesEndpointApiSavedBulkPostResponseSavedItemEvaluationDataOneOverallScoreMax),
-  "relevance_reason": zod.string(),
-  "recommended_use": zod.enum(['primary_resource', 'supplementary', 'reference_only']),
-  "scores": zod.record(zod.string(), zod.object({
-  "score": zod.number().min(1).max(bulkSaveResourcesEndpointApiSavedBulkPostResponseSavedItemEvaluationDataOneScoresScoreMax),
-  "max": zod.number().default(bulkSaveResourcesEndpointApiSavedBulkPostResponseSavedItemEvaluationDataOneScoresMaxDefault),
+  "verdict": zod.enum(['use_it', 'adapt_it', 'skip_it']),
+  "confidence": zod.enum(['high', 'moderate', 'low']),
+  "curriculum_fit": zod.object({
+  "rating": zod.enum(['strong', 'adequate', 'weak']),
   "reason": zod.string()
-}).describe('Score for a single evaluation dimension.')),
-  "adversarial": zod.union([zod.object({
-  "verdict": zod.enum(['approved', 'approved_with_caveats', 'flagged_for_teacher_review', 'not_recommended']),
+}).describe('One of the 3 evaluation metrics.'),
+  "accessibility": zod.object({
+  "rating": zod.enum(['strong', 'adequate', 'weak']),
+  "reason": zod.string()
+}).describe('One of the 3 evaluation metrics.'),
+  "trustworthiness": zod.object({
+  "rating": zod.enum(['strong', 'adequate', 'weak']),
+  "reason": zod.string()
+}).describe('One of the 3 evaluation metrics.'),
+  "reasoning_chain": zod.string(),
   "flags": zod.array(zod.object({
-  "category": zod.enum(['false_positive', 'hidden_bias', 'accuracy_gap', 'safety', 'licensing_trap']),
+  "category": zod.enum(['outdated_content', 'bias_or_framing', 'factual_concern', 'safety_concern', 'misleading_match']),
   "severity": zod.enum(['high', 'medium', 'low']),
+  "evidence_quote": zod.string(),
   "explanation": zod.string(),
   "suggested_action": zod.string()
-}).describe('Single issue raised by the adversarial reviewer.')).optional(),
-  "score_adjustments": zod.record(zod.string(), zod.object({
-  "score": zod.number().min(1).max(bulkSaveResourcesEndpointApiSavedBulkPostResponseSavedItemEvaluationDataOneAdversarialOneScoreAdjustmentsScoreMax),
-  "max": zod.number().default(bulkSaveResourcesEndpointApiSavedBulkPostResponseSavedItemEvaluationDataOneAdversarialOneScoreAdjustmentsMaxDefault),
-  "reason": zod.string()
-}).describe('Score for a single evaluation dimension.')).optional(),
-  "review_summary": zod.string()
-}).describe('Output of Agent 4 — challenges Agent 3 scores and surfaces risks.'),zod.null()]).optional()
-}).describe('Full evaluation of a single resource across 7 dimensions.'),zod.null()]),
+}).describe('A single issue found by the risk scanner, backed by evidence.')).optional(),
+  "adaptations": zod.array(zod.object({
+  "action": zod.string(),
+  "rationale": zod.string()
+}).describe('A concrete adaptation the teacher can apply.')).optional(),
+  "override_notes": zod.union([zod.string(),zod.null()]).optional()
+}).describe('Final judgment combining triage + risk scan, presented to the teacher.'),zod.null()]),
   "saved_at": zod.iso.datetime({})
 })),
   "total": zod.number()
@@ -495,15 +428,6 @@ export const addCustomLinkEndpointApiSavedLinkPostResponseResourceDataMetadataTw
 export const addCustomLinkEndpointApiSavedLinkPostResponseResourceDataMetadataTwoDurationDefault = ``;
 export const addCustomLinkEndpointApiSavedLinkPostResponseResourceDataMetadataThreeSourceDefault = `openalex`;
 export const addCustomLinkEndpointApiSavedLinkPostResponseResourceDataMetadataFourSourceDefault = `custom`;
-export const addCustomLinkEndpointApiSavedLinkPostResponseEvaluationDataOneOverallScoreMin = 0;
-export const addCustomLinkEndpointApiSavedLinkPostResponseEvaluationDataOneOverallScoreMax = 10;
-
-export const addCustomLinkEndpointApiSavedLinkPostResponseEvaluationDataOneScoresScoreMax = 10;
-
-export const addCustomLinkEndpointApiSavedLinkPostResponseEvaluationDataOneScoresMaxDefault = 10;
-export const addCustomLinkEndpointApiSavedLinkPostResponseEvaluationDataOneAdversarialOneScoreAdjustmentsScoreMax = 10;
-
-export const addCustomLinkEndpointApiSavedLinkPostResponseEvaluationDataOneAdversarialOneScoreAdjustmentsMaxDefault = 10;
 
 export const AddCustomLinkEndpointApiSavedLinkPostResponse = zod.object({
   "id": zod.uuid(),
@@ -546,34 +470,38 @@ export const AddCustomLinkEndpointApiSavedLinkPostResponse = zod.object({
 }).describe('Metadata from manually added custom links.')]),
   "relevance_score": zod.union([zod.number(),zod.null()]).optional(),
   "relevance_reason": zod.union([zod.string(),zod.null()]).optional(),
-  "evaluation_details": zod.union([zod.record(zod.string(), zod.record(zod.string(), zod.unknown())),zod.null()]).optional().describe('Detailed dimension scores')
+  "verdict": zod.union([zod.string(),zod.null()]).optional().describe('use_it | adapt_it | skip_it')
 }).describe('Normalised resource card returned by all providers.'),
   "evaluation_data": zod.union([zod.object({
   "resource_url": zod.string(),
-  "overall_score": zod.number().min(addCustomLinkEndpointApiSavedLinkPostResponseEvaluationDataOneOverallScoreMin).max(addCustomLinkEndpointApiSavedLinkPostResponseEvaluationDataOneOverallScoreMax),
-  "relevance_reason": zod.string(),
-  "recommended_use": zod.enum(['primary_resource', 'supplementary', 'reference_only']),
-  "scores": zod.record(zod.string(), zod.object({
-  "score": zod.number().min(1).max(addCustomLinkEndpointApiSavedLinkPostResponseEvaluationDataOneScoresScoreMax),
-  "max": zod.number().default(addCustomLinkEndpointApiSavedLinkPostResponseEvaluationDataOneScoresMaxDefault),
+  "verdict": zod.enum(['use_it', 'adapt_it', 'skip_it']),
+  "confidence": zod.enum(['high', 'moderate', 'low']),
+  "curriculum_fit": zod.object({
+  "rating": zod.enum(['strong', 'adequate', 'weak']),
   "reason": zod.string()
-}).describe('Score for a single evaluation dimension.')),
-  "adversarial": zod.union([zod.object({
-  "verdict": zod.enum(['approved', 'approved_with_caveats', 'flagged_for_teacher_review', 'not_recommended']),
+}).describe('One of the 3 evaluation metrics.'),
+  "accessibility": zod.object({
+  "rating": zod.enum(['strong', 'adequate', 'weak']),
+  "reason": zod.string()
+}).describe('One of the 3 evaluation metrics.'),
+  "trustworthiness": zod.object({
+  "rating": zod.enum(['strong', 'adequate', 'weak']),
+  "reason": zod.string()
+}).describe('One of the 3 evaluation metrics.'),
+  "reasoning_chain": zod.string(),
   "flags": zod.array(zod.object({
-  "category": zod.enum(['false_positive', 'hidden_bias', 'accuracy_gap', 'safety', 'licensing_trap']),
+  "category": zod.enum(['outdated_content', 'bias_or_framing', 'factual_concern', 'safety_concern', 'misleading_match']),
   "severity": zod.enum(['high', 'medium', 'low']),
+  "evidence_quote": zod.string(),
   "explanation": zod.string(),
   "suggested_action": zod.string()
-}).describe('Single issue raised by the adversarial reviewer.')).optional(),
-  "score_adjustments": zod.record(zod.string(), zod.object({
-  "score": zod.number().min(1).max(addCustomLinkEndpointApiSavedLinkPostResponseEvaluationDataOneAdversarialOneScoreAdjustmentsScoreMax),
-  "max": zod.number().default(addCustomLinkEndpointApiSavedLinkPostResponseEvaluationDataOneAdversarialOneScoreAdjustmentsMaxDefault),
-  "reason": zod.string()
-}).describe('Score for a single evaluation dimension.')).optional(),
-  "review_summary": zod.string()
-}).describe('Output of Agent 4 — challenges Agent 3 scores and surfaces risks.'),zod.null()]).optional()
-}).describe('Full evaluation of a single resource across 7 dimensions.'),zod.null()]),
+}).describe('A single issue found by the risk scanner, backed by evidence.')).optional(),
+  "adaptations": zod.array(zod.object({
+  "action": zod.string(),
+  "rationale": zod.string()
+}).describe('A concrete adaptation the teacher can apply.')).optional(),
+  "override_notes": zod.union([zod.string(),zod.null()]).optional()
+}).describe('Final judgment combining triage + risk scan, presented to the teacher.'),zod.null()]),
   "saved_at": zod.iso.datetime({})
 })
 
@@ -601,15 +529,6 @@ export const evaluateSingleResourceEndpointApiSavedEvaluateSinglePostResponseRes
 export const evaluateSingleResourceEndpointApiSavedEvaluateSinglePostResponseResourceDataMetadataTwoDurationDefault = ``;
 export const evaluateSingleResourceEndpointApiSavedEvaluateSinglePostResponseResourceDataMetadataThreeSourceDefault = `openalex`;
 export const evaluateSingleResourceEndpointApiSavedEvaluateSinglePostResponseResourceDataMetadataFourSourceDefault = `custom`;
-export const evaluateSingleResourceEndpointApiSavedEvaluateSinglePostResponseEvaluationDataOneOverallScoreMin = 0;
-export const evaluateSingleResourceEndpointApiSavedEvaluateSinglePostResponseEvaluationDataOneOverallScoreMax = 10;
-
-export const evaluateSingleResourceEndpointApiSavedEvaluateSinglePostResponseEvaluationDataOneScoresScoreMax = 10;
-
-export const evaluateSingleResourceEndpointApiSavedEvaluateSinglePostResponseEvaluationDataOneScoresMaxDefault = 10;
-export const evaluateSingleResourceEndpointApiSavedEvaluateSinglePostResponseEvaluationDataOneAdversarialOneScoreAdjustmentsScoreMax = 10;
-
-export const evaluateSingleResourceEndpointApiSavedEvaluateSinglePostResponseEvaluationDataOneAdversarialOneScoreAdjustmentsMaxDefault = 10;
 
 export const EvaluateSingleResourceEndpointApiSavedEvaluateSinglePostResponse = zod.object({
   "id": zod.uuid(),
@@ -652,34 +571,38 @@ export const EvaluateSingleResourceEndpointApiSavedEvaluateSinglePostResponse = 
 }).describe('Metadata from manually added custom links.')]),
   "relevance_score": zod.union([zod.number(),zod.null()]).optional(),
   "relevance_reason": zod.union([zod.string(),zod.null()]).optional(),
-  "evaluation_details": zod.union([zod.record(zod.string(), zod.record(zod.string(), zod.unknown())),zod.null()]).optional().describe('Detailed dimension scores')
+  "verdict": zod.union([zod.string(),zod.null()]).optional().describe('use_it | adapt_it | skip_it')
 }).describe('Normalised resource card returned by all providers.'),
   "evaluation_data": zod.union([zod.object({
   "resource_url": zod.string(),
-  "overall_score": zod.number().min(evaluateSingleResourceEndpointApiSavedEvaluateSinglePostResponseEvaluationDataOneOverallScoreMin).max(evaluateSingleResourceEndpointApiSavedEvaluateSinglePostResponseEvaluationDataOneOverallScoreMax),
-  "relevance_reason": zod.string(),
-  "recommended_use": zod.enum(['primary_resource', 'supplementary', 'reference_only']),
-  "scores": zod.record(zod.string(), zod.object({
-  "score": zod.number().min(1).max(evaluateSingleResourceEndpointApiSavedEvaluateSinglePostResponseEvaluationDataOneScoresScoreMax),
-  "max": zod.number().default(evaluateSingleResourceEndpointApiSavedEvaluateSinglePostResponseEvaluationDataOneScoresMaxDefault),
+  "verdict": zod.enum(['use_it', 'adapt_it', 'skip_it']),
+  "confidence": zod.enum(['high', 'moderate', 'low']),
+  "curriculum_fit": zod.object({
+  "rating": zod.enum(['strong', 'adequate', 'weak']),
   "reason": zod.string()
-}).describe('Score for a single evaluation dimension.')),
-  "adversarial": zod.union([zod.object({
-  "verdict": zod.enum(['approved', 'approved_with_caveats', 'flagged_for_teacher_review', 'not_recommended']),
+}).describe('One of the 3 evaluation metrics.'),
+  "accessibility": zod.object({
+  "rating": zod.enum(['strong', 'adequate', 'weak']),
+  "reason": zod.string()
+}).describe('One of the 3 evaluation metrics.'),
+  "trustworthiness": zod.object({
+  "rating": zod.enum(['strong', 'adequate', 'weak']),
+  "reason": zod.string()
+}).describe('One of the 3 evaluation metrics.'),
+  "reasoning_chain": zod.string(),
   "flags": zod.array(zod.object({
-  "category": zod.enum(['false_positive', 'hidden_bias', 'accuracy_gap', 'safety', 'licensing_trap']),
+  "category": zod.enum(['outdated_content', 'bias_or_framing', 'factual_concern', 'safety_concern', 'misleading_match']),
   "severity": zod.enum(['high', 'medium', 'low']),
+  "evidence_quote": zod.string(),
   "explanation": zod.string(),
   "suggested_action": zod.string()
-}).describe('Single issue raised by the adversarial reviewer.')).optional(),
-  "score_adjustments": zod.record(zod.string(), zod.object({
-  "score": zod.number().min(1).max(evaluateSingleResourceEndpointApiSavedEvaluateSinglePostResponseEvaluationDataOneAdversarialOneScoreAdjustmentsScoreMax),
-  "max": zod.number().default(evaluateSingleResourceEndpointApiSavedEvaluateSinglePostResponseEvaluationDataOneAdversarialOneScoreAdjustmentsMaxDefault),
-  "reason": zod.string()
-}).describe('Score for a single evaluation dimension.')).optional(),
-  "review_summary": zod.string()
-}).describe('Output of Agent 4 — challenges Agent 3 scores and surfaces risks.'),zod.null()]).optional()
-}).describe('Full evaluation of a single resource across 7 dimensions.'),zod.null()]),
+}).describe('A single issue found by the risk scanner, backed by evidence.')).optional(),
+  "adaptations": zod.array(zod.object({
+  "action": zod.string(),
+  "rationale": zod.string()
+}).describe('A concrete adaptation the teacher can apply.')).optional(),
+  "override_notes": zod.union([zod.string(),zod.null()]).optional()
+}).describe('Final judgment combining triage + risk scan, presented to the teacher.'),zod.null()]),
   "saved_at": zod.iso.datetime({})
 })
 

@@ -4,15 +4,15 @@ import { useTranslations } from "next-intl";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { RelevanceIndicator } from "@/features/search/components/resource-card/relevance-indicator";
-import type { AdversarialReviewResult, ResourceCard } from "@/lib/api/model";
+import type { JudgmentResult, ResourceCard } from "@/lib/api/model";
 
 interface YoutubeCardProps {
   resource: ResourceCard;
-  adversarial?: AdversarialReviewResult | null;
+  judgment?: JudgmentResult | null;
   action?: React.ReactNode;
 }
 
-export function YoutubeCard({ resource, adversarial, action }: YoutubeCardProps) {
+export function YoutubeCard({ resource, judgment, action }: YoutubeCardProps) {
   const t = useTranslations("search");
   const meta = resource.metadata as {
     channel?: string;
@@ -58,10 +58,9 @@ export function YoutubeCard({ resource, adversarial, action }: YoutubeCardProps)
           <p className="text-sm text-muted-foreground line-clamp-3">{resource.snippet}</p>
         </div>
         <RelevanceIndicator
-          score={resource.relevance_score}
+          verdict={resource.verdict}
           reason={resource.relevance_reason}
-          details={resource.evaluation_details}
-          adversarial={adversarial}
+          judgment={judgment}
         />
       </CardContent>
     </Card>

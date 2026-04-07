@@ -28,15 +28,6 @@ export const searchApiDiscoverySearchGetResponseResultsItemMetadataTwoSourceDefa
 export const searchApiDiscoverySearchGetResponseResultsItemMetadataTwoDurationDefault = ``;
 export const searchApiDiscoverySearchGetResponseResultsItemMetadataThreeSourceDefault = `openalex`;
 export const searchApiDiscoverySearchGetResponseResultsItemMetadataFourSourceDefault = `custom`;
-export const searchApiDiscoverySearchGetResponseEvaluationsItemOverallScoreMin = 0;
-export const searchApiDiscoverySearchGetResponseEvaluationsItemOverallScoreMax = 10;
-
-export const searchApiDiscoverySearchGetResponseEvaluationsItemScoresScoreMax = 10;
-
-export const searchApiDiscoverySearchGetResponseEvaluationsItemScoresMaxDefault = 10;
-export const searchApiDiscoverySearchGetResponseEvaluationsItemAdversarialOneScoreAdjustmentsScoreMax = 10;
-
-export const searchApiDiscoverySearchGetResponseEvaluationsItemAdversarialOneScoreAdjustmentsMaxDefault = 10;
 
 export const SearchApiDiscoverySearchGetResponse = zod.object({
   "query": zod.string(),
@@ -79,7 +70,7 @@ export const SearchApiDiscoverySearchGetResponse = zod.object({
 }).describe('Metadata from manually added custom links.')]),
   "relevance_score": zod.union([zod.number(),zod.null()]).optional(),
   "relevance_reason": zod.union([zod.string(),zod.null()]).optional(),
-  "evaluation_details": zod.union([zod.record(zod.string(), zod.record(zod.string(), zod.unknown())),zod.null()]).optional().describe('Detailed dimension scores')
+  "verdict": zod.union([zod.string(),zod.null()]).optional().describe('use_it | adapt_it | skip_it')
 }).describe('Normalised resource card returned by all providers.')),
   "errors": zod.array(zod.object({
   "source": zod.enum(['ddgs', 'youtube', 'openalex', 'custom']),
@@ -90,33 +81,37 @@ export const SearchApiDiscoverySearchGetResponse = zod.object({
   "youtube": zod.array(zod.string()),
   "openalex": zod.array(zod.string())
 }).describe('Agent-generated queries sent to each provider.'),zod.null()]).optional(),
-  "evaluations": zod.array(zod.object({
+  "judgments": zod.array(zod.object({
   "resource_url": zod.string(),
-  "overall_score": zod.number().min(searchApiDiscoverySearchGetResponseEvaluationsItemOverallScoreMin).max(searchApiDiscoverySearchGetResponseEvaluationsItemOverallScoreMax),
-  "relevance_reason": zod.string(),
-  "recommended_use": zod.enum(['primary_resource', 'supplementary', 'reference_only']),
-  "scores": zod.record(zod.string(), zod.object({
-  "score": zod.number().min(1).max(searchApiDiscoverySearchGetResponseEvaluationsItemScoresScoreMax),
-  "max": zod.number().default(searchApiDiscoverySearchGetResponseEvaluationsItemScoresMaxDefault),
+  "verdict": zod.enum(['use_it', 'adapt_it', 'skip_it']),
+  "confidence": zod.enum(['high', 'moderate', 'low']),
+  "curriculum_fit": zod.object({
+  "rating": zod.enum(['strong', 'adequate', 'weak']),
   "reason": zod.string()
-}).describe('Score for a single evaluation dimension.')),
-  "adversarial": zod.union([zod.object({
-  "verdict": zod.enum(['approved', 'approved_with_caveats', 'flagged_for_teacher_review', 'not_recommended']),
+}).describe('One of the 3 evaluation metrics.'),
+  "accessibility": zod.object({
+  "rating": zod.enum(['strong', 'adequate', 'weak']),
+  "reason": zod.string()
+}).describe('One of the 3 evaluation metrics.'),
+  "trustworthiness": zod.object({
+  "rating": zod.enum(['strong', 'adequate', 'weak']),
+  "reason": zod.string()
+}).describe('One of the 3 evaluation metrics.'),
+  "reasoning_chain": zod.string(),
   "flags": zod.array(zod.object({
-  "category": zod.enum(['false_positive', 'hidden_bias', 'accuracy_gap', 'safety', 'licensing_trap']),
+  "category": zod.enum(['outdated_content', 'bias_or_framing', 'factual_concern', 'safety_concern', 'misleading_match']),
   "severity": zod.enum(['high', 'medium', 'low']),
+  "evidence_quote": zod.string(),
   "explanation": zod.string(),
   "suggested_action": zod.string()
-}).describe('Single issue raised by the adversarial reviewer.')).optional(),
-  "score_adjustments": zod.record(zod.string(), zod.object({
-  "score": zod.number().min(1).max(searchApiDiscoverySearchGetResponseEvaluationsItemAdversarialOneScoreAdjustmentsScoreMax),
-  "max": zod.number().default(searchApiDiscoverySearchGetResponseEvaluationsItemAdversarialOneScoreAdjustmentsMaxDefault),
-  "reason": zod.string()
-}).describe('Score for a single evaluation dimension.')).optional(),
-  "review_summary": zod.string()
-}).describe('Output of Agent 4 — challenges Agent 3 scores and surfaces risks.'),zod.null()]).optional()
-}).describe('Full evaluation of a single resource across 7 dimensions.')).optional()
-}).describe('Extends SearchResponse with evaluation data for the top 4 results.')
+}).describe('A single issue found by the risk scanner, backed by evidence.')).optional(),
+  "adaptations": zod.array(zod.object({
+  "action": zod.string(),
+  "rationale": zod.string()
+}).describe('A concrete adaptation the teacher can apply.')).optional(),
+  "override_notes": zod.union([zod.string(),zod.null()]).optional()
+}).describe('Final judgment combining triage + risk scan, presented to the teacher.')).optional()
+}).describe('Extends SearchResponse with judgment data for the top results.')
 
 /**
  * SSE stream of search pipeline progress.

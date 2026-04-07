@@ -4,22 +4,22 @@
  * edcurate-api
  * OpenAPI spec version: 0.1.0
  */
-import type { EvaluatedSearchResponseCountsBySource } from './evaluated-search-response-counts-by-source';
-import type { EvaluationResultOutput } from './evaluation-result-output';
 import type { GeneratedSearchQueries } from './generated-search-queries';
+import type { JudgedSearchResponseCountsBySource } from './judged-search-response-counts-by-source';
+import type { JudgmentResult } from './judgment-result';
 import type { ResourceCard } from './resource-card';
 import type { SourceError } from './source-error';
 
 /**
- * Extends SearchResponse with evaluation data for the top 4 results.
+ * Extends SearchResponse with judgment data for the top results.
  */
-export interface EvaluatedSearchResponse {
+export interface JudgedSearchResponse {
   query: string;
   preset_id: string;
   total_results: number;
-  counts_by_source: EvaluatedSearchResponseCountsBySource;
+  counts_by_source: JudgedSearchResponseCountsBySource;
   results: ResourceCard[];
   errors: SourceError[];
   generated_queries?: GeneratedSearchQueries | null;
-  evaluations?: EvaluationResultOutput[];
+  judgments?: JudgmentResult[];
 }

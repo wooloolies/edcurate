@@ -5,10 +5,10 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export type AdversarialFlagSeverity = typeof AdversarialFlagSeverity[keyof typeof AdversarialFlagSeverity];
+export type ResourceFlagSeverity = typeof ResourceFlagSeverity[keyof typeof ResourceFlagSeverity];
 
 
-export const AdversarialFlagSeverity = {
+export const ResourceFlagSeverity = {
   high: 'high',
   medium: 'medium',
   low: 'low',

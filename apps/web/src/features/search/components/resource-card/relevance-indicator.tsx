@@ -1,185 +1,281 @@
-import { AlertCircle, CheckCircle2, ChevronDown, HelpCircle, Info } from "lucide-react";
+import {
+  AlertCircle,
+  AlertTriangle,
+  CheckCircle2,
+  ChevronDown,
+  Info,
+  ShieldAlert,
+  Sparkles,
+} from "lucide-react";
 import { useTranslations } from "next-intl";
+import { useState } from "react";
 
 import { Badge } from "@/components/ui/badge";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import type {
-  AdversarialReviewResult,
-  AdversarialReviewResultVerdict,
-  ResourceCardEvaluationDetails,
+  JudgmentResult,
+  JudgmentResultVerdict,
+  MetricResultRating,
+  ResourceFlag,
 } from "@/lib/api/model";
 
 interface RelevanceIndicatorProps {
-  score?: number | null;
+  verdict?: string | null;
   reason?: string | null;
-  details?: ResourceCardEvaluationDetails;
-  adversarial?: AdversarialReviewResult | null;
+  judgment?: JudgmentResult | null;
 }
 
-const PEER_CHECK_BADGE_CLASS: Record<AdversarialReviewResultVerdict, string> = {
-  approved: "text-emerald-800 bg-emerald-50 border-emerald-200",
-  approved_with_caveats: "text-amber-900 bg-amber-50 border-amber-200",
-  flagged_for_teacher_review: "text-orange-900 bg-orange-50 border-orange-200",
-  not_recommended: "text-red-800 bg-red-50 border-red-200",
+const VERDICT_CONFIG: Record<
+  JudgmentResultVerdict,
+  { badgeClass: string; icon: React.ReactNode; labelKey: string }
+> = {
+  use_it: {
+    badgeClass: "text-emerald-800 bg-emerald-50 border-emerald-200",
+    icon: <CheckCircle2 className="mr-1 h-3 w-3" />,
+    labelKey: "verdicts.use_it",
+  },
+  adapt_it: {
+    badgeClass: "text-amber-900 bg-amber-50 border-amber-200",
+    icon: <Info className="mr-1 h-3 w-3" />,
+    labelKey: "verdicts.adapt_it",
+  },
+  skip_it: {
+    badgeClass: "text-red-800 bg-red-50 border-red-200",
+    icon: <AlertCircle className="mr-1 h-3 w-3" />,
+    labelKey: "verdicts.skip_it",
+  },
 };
 
-const PEER_CHECK_LABEL_KEYS: Record<AdversarialReviewResultVerdict, string> = {
-  approved: "peerCheckVerdicts.approved",
-  approved_with_caveats: "peerCheckVerdicts.approvedWithCaveats",
-  flagged_for_teacher_review: "peerCheckVerdicts.flaggedForTeacherReview",
-  not_recommended: "peerCheckVerdicts.notRecommended",
+const RATING_BADGE: Record<MetricResultRating, string> = {
+  strong: "text-emerald-700 bg-emerald-50 border-emerald-200",
+  adequate: "text-amber-700 bg-amber-50 border-amber-200",
+  weak: "text-red-700 bg-red-50 border-red-200",
 };
 
-const DIMENSION_LABEL_KEYS = {
-  curriculum_alignment: "dimensions.curriculumAlignment",
-  pedagogical_quality: "dimensions.pedagogicalQuality",
-  reading_level: "dimensions.readingLevel",
-  bias_representation: "dimensions.biasRepresentation",
-  factual_accuracy: "dimensions.factualAccuracy",
-  source_credibility: "dimensions.sourceCredibility",
-  licensing_ip: "dimensions.licensingIp",
-} as const;
+const SEVERITY_BADGE: Record<string, string> = {
+  high: "text-red-700 bg-red-50 border-red-200",
+  medium: "text-amber-700 bg-amber-50 border-amber-200",
+  low: "text-slate-600 bg-slate-50 border-slate-200",
+};
 
-function getDimensionValue(value: unknown, key: "score" | "max"): number | string {
-  if (typeof value !== "object" || value == null) {
-    return "—";
-  }
+function FlagCard({ flag, t }: { flag: ResourceFlag; t: ReturnType<typeof useTranslations> }) {
+  const [open, setOpen] = useState(false);
+  const categoryLabel = t.has(`flagCategories.${flag.category}`)
+    ? t(`flagCategories.${flag.category}`)
+    : flag.category.replace(/_/g, " ");
 
-  const candidate = value as Record<string, unknown>;
-  return typeof candidate[key] === "number" ? candidate[key] : "—";
-}
-
-export function RelevanceIndicator({
-  score,
-  reason,
-  details,
-  adversarial,
-}: RelevanceIndicatorProps) {
-  const t = useTranslations("search.evaluation");
-
-  if (score == null) {
-    return (
-      <div className="mt-3 flex flex-col gap-2 rounded-md border bg-slate-50/50 p-3">
-        <div className="flex items-center gap-2">
+  return (
+    <div className="rounded-md border border-slate-200 bg-white text-xs">
+      <button
+        type="button"
+        onClick={() => setOpen((p) => !p)}
+        className="flex w-full items-center justify-between gap-2 p-2 text-left hover:bg-slate-50 rounded-md"
+      >
+        <div className="flex min-w-0 items-center gap-1.5">
           <Badge
             variant="outline"
-            className="shrink-0 text-slate-500 bg-slate-100 border-slate-200"
+            className={`shrink-0 uppercase text-[10px] px-1 py-0 ${SEVERITY_BADGE[flag.severity] ?? SEVERITY_BADGE.low}`}
           >
-            {t("unevaluated")}
+            {flag.severity}
           </Badge>
+          <span className="font-medium text-slate-700 truncate">{categoryLabel}</span>
         </div>
+        <ChevronDown
+          aria-hidden
+          className={`h-3 w-3 shrink-0 text-slate-400 transition-transform ${open ? "rotate-180" : ""}`}
+        />
+      </button>
+
+      {!!open && (
+        <div className="border-t border-slate-100 p-2 space-y-1.5">
+          {!!flag.evidence_quote && flag.evidence_quote !== "—" && (
+            <div>
+              <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-400 mb-0.5">
+                {t("evidence")}
+              </p>
+              <p className="italic text-slate-600 leading-snug">"{flag.evidence_quote}"</p>
+            </div>
+          )}
+          {!!flag.explanation && flag.explanation !== "—" && (
+            <p className="text-slate-600 leading-snug">{flag.explanation}</p>
+          )}
+          {!!flag.suggested_action && flag.suggested_action !== "—" && (
+            <div className="rounded bg-amber-50 border border-amber-100 px-2 py-1">
+              <p className="text-[10px] font-semibold uppercase tracking-wide text-amber-600 mb-0.5">
+                {t("suggested")}
+              </p>
+              <p className="text-amber-800 leading-snug">{flag.suggested_action}</p>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+export function RelevanceIndicator({ verdict, judgment }: RelevanceIndicatorProps) {
+  const t = useTranslations("search.evaluation");
+  const [open, setOpen] = useState(false);
+
+  if (!verdict) {
+    return (
+      <div className="mt-3 flex flex-col gap-2 rounded-md border bg-slate-50/50 p-3">
+        <Badge variant="outline" className="w-fit text-slate-500 bg-slate-100 border-slate-200">
+          {t("unevaluated")}
+        </Badge>
       </div>
     );
   }
 
-  const peerCheckDisplay =
-    adversarial != null
-      ? {
-          label: t(PEER_CHECK_LABEL_KEYS[adversarial.verdict]),
-          badgeClass: PEER_CHECK_BADGE_CLASS[adversarial.verdict],
-        }
-      : null;
+  const config = VERDICT_CONFIG[verdict as JudgmentResultVerdict] ?? VERDICT_CONFIG.adapt_it;
+  const flags = judgment?.flags ?? [];
+  const highFlags = flags.filter((f) => f.severity === "high");
+  const adaptations = judgment?.adaptations ?? [];
 
-  // Determine color and icon based on score (0-10)
-  let icon = <CheckCircle2 className="mr-1 h-3 w-3" />;
-  let colorClass = "text-green-700 bg-green-50 border-green-200";
-
-  if (score >= 8) {
-    colorClass = "text-green-700 bg-green-50 border-green-200";
-    icon = <CheckCircle2 className="mr-1 h-3 w-3" />;
-  } else if (score >= 5) {
-    colorClass = "text-yellow-700 bg-yellow-50 border-yellow-200";
-    icon = <Info className="mr-1 h-3 w-3" />;
-  } else {
-    colorClass = "text-red-700 bg-red-50 border-red-200";
-    icon = <AlertCircle className="mr-1 h-3 w-3" />;
-  }
+  const metrics = judgment
+    ? ([
+        ["curriculumFit", judgment.curriculum_fit],
+        ["accessibility", judgment.accessibility],
+        ["trustworthiness", judgment.trustworthiness],
+      ] as const)
+    : null;
 
   return (
-    <div className="mt-3 flex flex-col gap-2 rounded-md border bg-slate-50/50 p-3">
-      <div className="flex w-full flex-col items-start justify-between gap-3 sm:flex-row">
+    <div className="mt-3 rounded-md border bg-slate-50/50">
+      {/* ── Header row ─────────────────────────────────────────── */}
+      <div className="flex items-center justify-between gap-2 p-3">
         <div className="flex min-w-0 flex-wrap items-center gap-2">
-          <Badge variant="outline" className={`shrink-0 ${colorClass}`}>
-            {icon}
-            {t("score", { score })}
+          <Badge variant="outline" className={`shrink-0 ${config.badgeClass}`}>
+            {config.icon}
+            {t(config.labelKey)}
           </Badge>
-          <span className="text-xs font-medium text-slate-700">{t("agent")}</span>
 
-          {details ? (
-            <TooltipProvider>
-              <Tooltip delayDuration={300}>
-                <TooltipTrigger asChild>
-                  <button
-                    type="button"
-                    className="text-slate-400 hover:text-slate-600 outline-none"
-                  >
-                    <HelpCircle className="h-4 w-4" />
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent side="top" align="start" className="max-w-sm p-3">
-                  <div className="space-y-2">
-                    <p className="text-xs font-semibold">{t("criteria")}</p>
-                    <ul className="grid grid-cols-1 gap-1.5 text-xs">
-                      {Object.entries(details).map(([key, value]) => {
-                        const dimensionKey =
-                          DIMENSION_LABEL_KEYS[key as keyof typeof DIMENSION_LABEL_KEYS];
-                        const label = dimensionKey
-                          ? t(dimensionKey)
-                          : key
-                              .split("_")
-                              .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-                              .join(" ");
-                        const scoreVal = getDimensionValue(value, "score");
-                        const maxVal = getDimensionValue(value, "max");
-                        return (
-                          <li
-                            key={key}
-                            className="flex justify-between border-b border-border/40 pb-1 last:border-0 last:pb-0"
-                          >
-                            <span className="font-medium text-muted-foreground mr-4">{label}:</span>
-                            <span className="shrink-0">
-                              {scoreVal} / {maxVal}
-                            </span>
-                          </li>
-                        );
-                      })}
-                    </ul>
-                  </div>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          ) : null}
+          {!!judgment?.confidence && (
+            <span className="text-xs text-slate-500">{t(`confidence.${judgment.confidence}`)}</span>
+          )}
+
+          <span className="text-xs font-medium text-slate-600">{t("agent")}</span>
+
+          {highFlags.length > 0 && (
+            <div className="flex items-center gap-1">
+              <AlertTriangle className="h-3.5 w-3.5 text-red-500" />
+              <span className="text-xs text-red-600 font-medium">
+                {t("flags", { count: flags.length })}
+              </span>
+            </div>
+          )}
         </div>
 
-        {peerCheckDisplay ? (
-          <div className="flex shrink-0 flex-row flex-wrap items-center justify-end gap-2">
-            <span className="text-xs font-medium text-slate-600 whitespace-nowrap">
-              {t("peerCheck")}
-            </span>
-            <Badge
-              variant="outline"
-              className={`text-xs max-w-[min(100%,12rem)] whitespace-normal text-left leading-snug sm:max-w-[18rem] ${peerCheckDisplay.badgeClass}`}
-            >
-              {peerCheckDisplay.label}
-            </Badge>
-          </div>
-        ) : null}
-      </div>
-
-      {reason ? (
-        <details className="group mt-1 rounded-md border border-slate-200/80 bg-white/40 px-2 py-1.5">
-          <summary className="flex w-full cursor-pointer list-none items-center justify-between gap-2 text-xs font-medium text-slate-600 outline-none marker:hidden [&::-webkit-details-marker]:hidden hover:text-slate-800 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm">
-            <span className="min-w-0 text-left">{t("showReason")}</span>
+        {!!judgment && (
+          <button
+            type="button"
+            onClick={() => setOpen((p) => !p)}
+            className="flex shrink-0 items-center gap-1 text-xs text-slate-500 hover:text-slate-700 rounded px-1.5 py-0.5 hover:bg-slate-100 transition-colors"
+          >
+            <span>{open ? t("hideDetails") : t("showDetails")}</span>
             <ChevronDown
               aria-hidden
-              className="h-3.5 w-3.5 shrink-0 text-slate-500 transition-transform duration-200 group-open:rotate-180"
+              className={`h-3 w-3 transition-transform ${open ? "rotate-180" : ""}`}
             />
-          </summary>
-          <p className="mt-2 border-t border-slate-200/60 pt-2 text-sm italic text-slate-600">
-            {reason}
-          </p>
-        </details>
-      ) : null}
+          </button>
+        )}
+      </div>
+
+      {/* ── Expanded details ────────────────────────────────────── */}
+      {!!open && !!judgment && (
+        <div className="border-t border-slate-200 divide-y divide-slate-100">
+          {/* Call 1 — Triage */}
+          {!!metrics && (
+            <div className="p-3 space-y-2">
+              <p className="flex items-center gap-1.5 text-xs font-semibold text-slate-500 uppercase tracking-wide">
+                <Sparkles className="h-3 w-3" />
+                {t("sections.triage")}
+              </p>
+              <ul className="space-y-2">
+                {metrics.map(([key, metric]) => (
+                  <li key={key} className="space-y-0.5">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-medium text-slate-700">
+                        {t(`metrics.${key}`)}
+                      </span>
+                      <Badge
+                        variant="outline"
+                        className={`text-[10px] px-1.5 py-0 ${RATING_BADGE[metric.rating]}`}
+                      >
+                        {t(`ratings.${metric.rating}`)}
+                      </Badge>
+                    </div>
+                    {!!metric.reason && (
+                      <p className="text-xs text-slate-500 leading-snug pl-0.5">{metric.reason}</p>
+                    )}
+                  </li>
+                ))}
+              </ul>
+              {adaptations.length > 0 && (
+                <div className="pt-1 space-y-1">
+                  <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
+                    {t("sections.adaptations")}
+                  </p>
+                  <ul className="space-y-1">
+                    {adaptations.map((a, i) => (
+                      // biome-ignore lint/suspicious/noArrayIndexKey: adaptation list is ordered
+                      <li key={i} className="text-xs text-slate-600 flex gap-1.5">
+                        <span className="mt-0.5 shrink-0 text-amber-500">•</span>
+                        <span>
+                          <span className="font-medium">{a.action}</span>
+                          {!!a.rationale && a.rationale !== "—" && (
+                            <span className="text-slate-400"> — {a.rationale}</span>
+                          )}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Call 2 — Risk Scan */}
+          <div className="p-3 space-y-2">
+            <p className="flex items-center gap-1.5 text-xs font-semibold text-slate-500 uppercase tracking-wide">
+              <ShieldAlert className="h-3 w-3" />
+              {t("sections.riskScan")}
+            </p>
+            {flags.length === 0 ? (
+              <p className="text-xs text-emerald-600 flex items-center gap-1">
+                <CheckCircle2 className="h-3 w-3" />
+                {t("noFlags")}
+              </p>
+            ) : (
+              <div className="space-y-1.5">
+                {flags.map((flag, i) => (
+                  // biome-ignore lint/suspicious/noArrayIndexKey: flag list is ordered
+                  <FlagCard key={i} flag={flag} t={t} />
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Call 3 — Final Reasoning */}
+          {!!judgment.reasoning_chain && (
+            <div className="p-3 space-y-1.5">
+              <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
+                {t("sections.reasoning")}
+              </p>
+              <p className="text-xs text-slate-600 leading-relaxed italic">
+                {judgment.reasoning_chain}
+              </p>
+              {!!judgment.override_notes && (
+                <div className="rounded bg-orange-50 border border-orange-100 px-2 py-1 mt-1">
+                  <p className="text-[10px] font-semibold uppercase tracking-wide text-orange-600 mb-0.5">
+                    {t("overrideNote")}
+                  </p>
+                  <p className="text-xs text-orange-800 leading-snug">{judgment.override_notes}</p>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
