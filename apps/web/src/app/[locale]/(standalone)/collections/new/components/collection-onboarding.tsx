@@ -58,13 +58,13 @@ export function CollectionOnboarding() {
   const { data: countries } = useGetCountriesApiCurriculumCountriesGet();
 
   const { data: frameworks } = useGetFrameworksApiCurriculumFrameworksGet(
-    { country: countryCode, subject },
-    { query: { enabled: !!countryCode && !!subject } }
+    { country: countryCode, subject: subject || undefined },
+    { query: { enabled: !!countryCode } }
   );
 
   const { data: grades } = useGetGradesApiCurriculumGradesGet(
-    { country: countryCode, subject, framework },
-    { query: { enabled: !!countryCode && !!subject && !!framework } }
+    { country: countryCode, framework, subject: subject || undefined },
+    { query: { enabled: !!countryCode && !!framework } }
   );
 
   const { data: subjects } = useGetSubjectsApiCurriculumSubjectsGet(
@@ -259,30 +259,6 @@ export function CollectionOnboarding() {
               </label>
             </div>
 
-            {/* Subject */}
-            <div className="w-full">
-              <label className="block text-xl font-bold text-[#111827] mb-3 text-left">
-                Subject
-                <div className="relative mt-3">
-                  <select
-                    value={subject}
-                    onChange={handleSubjectChange}
-                    disabled={!countryCode}
-                    className={selectClass}
-                  >
-                    <option value="">Select a subject...</option>
-                    {subjects?.map((s) => (
-                      <option key={s} value={s}>
-                        {s}
-                      </option>
-                    ))}
-                  </select>
-                  <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
-                    <ChevronDown className="w-5 h-5" />
-                  </div>
-                </div>
-              </label>
-            </div>
             {/* Curriculum Framework */}
             <div className="w-full">
               <label className="block text-xl font-bold text-[#111827] mb-3 text-left">
