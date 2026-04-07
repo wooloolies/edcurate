@@ -324,6 +324,9 @@
   "@search__selectCollection": {
     "description": "Fallback heading when no collection is selected on search page"
   },
+  "search__subtitle": "สนับสนุนการวิจัยของคุณ...",
+  "search__clearInput": "ล้าง",
+  "search__classSizePeople": "{classSize} คน",
   "search__managePresets": "จัดการ",
   "@search__managePresets": {
     "description": "Link to manage presets from search page"

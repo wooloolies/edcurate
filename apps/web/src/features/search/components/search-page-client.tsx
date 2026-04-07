@@ -206,7 +206,7 @@ export function SearchPageClient() {
           </Popover>
         </div>
         <p className="text-lg font-medium text-[#111827]/60 mt-1 pl-1">
-          Your research was supported by...
+          {t("subtitle")}
         </p>
       </div>
 
@@ -232,7 +232,7 @@ export function SearchPageClient() {
                 onClick={() => setDraft("")}
                 className="px-5 py-2 text-sm font-bold text-gray-500 hover:text-black transition-colors rounded-full hover:bg-gray-200/50 hidden md:block cursor-pointer"
               >
-                Clear
+                {t("clearInput")}
               </button>
             )}
             <button
@@ -257,7 +257,7 @@ export function SearchPageClient() {
               </div>
               {activePreset.class_size && (
                 <div className="px-5 py-2.5 bg-white border border-[#111827]/10 rounded-xl text-sm font-bold text-[#111827] shadow-sm cursor-pointer">
-                  {activePreset.class_size} people
+                  {t("classSizePeople", { classSize: activePreset.class_size })}
                 </div>
               )}
             </div>

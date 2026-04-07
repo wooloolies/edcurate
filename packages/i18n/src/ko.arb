@@ -324,6 +324,9 @@
   "@search__selectCollection": {
     "description": "Fallback heading when no collection is selected on search page"
   },
+  "search__subtitle": "수업 연구를 도와드릴게요...",
+  "search__clearInput": "지우기",
+  "search__classSizePeople": "{classSize}명",
   "search__managePresets": "관리",
   "@search__managePresets": {
     "description": "Link to manage presets from search page"

@@ -324,6 +324,9 @@
   "@search__selectCollection": {
     "description": "Fallback heading when no collection is selected on search page"
   },
+  "search__subtitle": "为您的教研提供支持...",
+  "search__clearInput": "清除",
+  "search__classSizePeople": "{classSize}人",
   "search__managePresets": "管理",
   "@search__managePresets": {
     "description": "Link to manage presets from search page"

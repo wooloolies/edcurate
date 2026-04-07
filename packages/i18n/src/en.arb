@@ -348,6 +348,23 @@
   "@search__selectCollection": {
     "description": "Fallback heading when no collection is selected on search page"
   },
+  "search__subtitle": "Your research was supported by...",
+  "@search__subtitle": {
+    "description": "Subtitle shown under the preset name on the search page"
+  },
+  "search__clearInput": "Clear",
+  "@search__clearInput": {
+    "description": "Button to clear the search input field"
+  },
+  "search__classSizePeople": "{classSize} people",
+  "@search__classSizePeople": {
+    "description": "Class size label shown in preset tags",
+    "placeholders": {
+      "classSize": {
+        "type": "int"
+      }
+    }
+  },
   "search__managePresets": "Manage",
   "@search__managePresets": {
     "description": "Link to manage presets from search page"

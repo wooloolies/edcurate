@@ -324,6 +324,9 @@
   "@search__selectCollection": {
     "description": "Fallback heading when no collection is selected on search page"
   },
+  "search__subtitle": "Hỗ trợ nghiên cứu giảng dạy của bạn...",
+  "search__clearInput": "Xóa",
+  "search__classSizePeople": "{classSize} người",
   "search__managePresets": "Quản lý",
   "@search__managePresets": {
     "description": "Link to manage presets from search page"
