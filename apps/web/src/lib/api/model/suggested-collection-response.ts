@@ -5,8 +5,13 @@
  * OpenAPI spec version: 0.1.0
  */
 import type { LibraryCollectionResponse } from './library-collection-response';
+import type { SavedResourceResponse } from './saved-resource-response';
 
 export interface SuggestedCollectionResponse {
   collection: LibraryCollectionResponse;
   matched_by: string;
+  resources_count?: number;
+  publisher_name?: string | null;
+  is_cloned_by_user?: boolean;
+  resources?: SavedResourceResponse[];
 }

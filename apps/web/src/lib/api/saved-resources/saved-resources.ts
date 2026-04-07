@@ -822,6 +822,70 @@ export const useCloneCollectionEndpointApiSavedCollectionsCollectionIdClonePost 
       return useMutation(useCloneCollectionEndpointApiSavedCollectionsCollectionIdClonePostMutationOptions(options), queryClient);
     }
     /**
+ * Sync a cloned collection with its original source.
+ * @summary Sync Cloned Collection Endpoint
+ */
+export const useSyncClonedCollectionEndpointApiSavedCollectionsCollectionIdSyncPostHook = () => {
+        const syncClonedCollectionEndpointApiSavedCollectionsCollectionIdSyncPost = useCustomInstance<LibraryCollectionResponse>();
+
+        return useCallback((
+    collectionId: string,
+ signal?: AbortSignal
+) => {
+        return syncClonedCollectionEndpointApiSavedCollectionsCollectionIdSyncPost(
+          {url: `/api/saved/collections/${collectionId}/sync`, method: 'POST', signal
+    },
+          );
+        }, [syncClonedCollectionEndpointApiSavedCollectionsCollectionIdSyncPost])
+      }
+
+
+
+export const useSyncClonedCollectionEndpointApiSavedCollectionsCollectionIdSyncPostMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useSyncClonedCollectionEndpointApiSavedCollectionsCollectionIdSyncPostHook>>>, TError,{collectionId: string}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useSyncClonedCollectionEndpointApiSavedCollectionsCollectionIdSyncPostHook>>>, TError,{collectionId: string}, TContext> => {
+
+const mutationKey = ['syncClonedCollectionEndpointApiSavedCollectionsCollectionIdSyncPost'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      const syncClonedCollectionEndpointApiSavedCollectionsCollectionIdSyncPost =  useSyncClonedCollectionEndpointApiSavedCollectionsCollectionIdSyncPostHook()
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<ReturnType<typeof useSyncClonedCollectionEndpointApiSavedCollectionsCollectionIdSyncPostHook>>>, {collectionId: string}> = (props) => {
+          const {collectionId} = props ?? {};
+
+          return  syncClonedCollectionEndpointApiSavedCollectionsCollectionIdSyncPost(collectionId,)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type SyncClonedCollectionEndpointApiSavedCollectionsCollectionIdSyncPostMutationResult = NonNullable<Awaited<ReturnType<ReturnType<typeof useSyncClonedCollectionEndpointApiSavedCollectionsCollectionIdSyncPostHook>>>>
+
+    export type SyncClonedCollectionEndpointApiSavedCollectionsCollectionIdSyncPostMutationError = HTTPValidationError
+
+    /**
+ * @summary Sync Cloned Collection Endpoint
+ */
+export const useSyncClonedCollectionEndpointApiSavedCollectionsCollectionIdSyncPost = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useSyncClonedCollectionEndpointApiSavedCollectionsCollectionIdSyncPostHook>>>, TError,{collectionId: string}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<ReturnType<typeof useSyncClonedCollectionEndpointApiSavedCollectionsCollectionIdSyncPostHook>>>,
+        TError,
+        {collectionId: string},
+        TContext
+      > => {
+      return useMutation(useSyncClonedCollectionEndpointApiSavedCollectionsCollectionIdSyncPostMutationOptions(options), queryClient);
+    }
+    /**
  * Save a single resource to an existing collection.
  * @summary Save Resource To Collection Endpoint
  */

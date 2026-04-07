@@ -23,8 +23,8 @@ def test_generated_artifacts_revision_keeps_original_parent() -> None:
 def test_migration_history_has_single_merged_head() -> None:
     script = _load_script_directory()
 
-    revision = script.get_revision("e6f7a8b9c0d1")
+    revision = script.get_revision("465be38b13e8")
 
     assert revision is not None
-    assert set(revision.down_revision) == {"5899875c22d2", "c27674d0b6c1"}
-    assert script.get_current_head() == "e6f7a8b9c0d1"
+    assert set(revision.down_revision) == {"156885046efb", "e6f7a8b9c0d1"}
+    assert script.get_current_head() == "465be38b13e8"

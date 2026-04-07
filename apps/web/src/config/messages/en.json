@@ -152,6 +152,7 @@
     "saving": "Saving...",
     "savedSuccess": "Resources saved to library!",
     "savedError": "Failed to save resources",
+    "cancel": "Cancel",
     "clearSelection": "Clear selection",
     "remainingResources": "{count} resources not evaluated yet",
     "evaluateNext": "Evaluate next {count} resources",
@@ -254,8 +255,8 @@
       },
       "showDetails": "Show details",
       "hideDetails": "Hide details",
-      "flags": "{count, plural, one {{count} flag} other {{count} flags}}",
-      "noFlags": "No flags detected",
+      "flags": "{count, plural, one {# flag} other {# flags}}",
+      "noFlags": "No issues found",
       "overrideNote": "Override note",
       "evidence": "Evidence",
       "suggested": "Suggested action",
@@ -266,7 +267,7 @@
         "reasoning": "Reasoning"
       },
       "metrics": {
-        "curriculumFit": "Curriculum fit",
+        "curriculumFit": "Curriculum Fit",
         "accessibility": "Accessibility",
         "trustworthiness": "Trustworthiness"
       },
@@ -283,8 +284,25 @@
         "licensing": "Licensing",
         "reading_level": "Reading level",
         "accessibility": "Accessibility",
-        "cultural_sensitivity": "Cultural sensitivity"
+        "cultural_sensitivity": "Cultural sensitivity",
+        "outdated_content": "Outdated content",
+        "bias_or_framing": "Bias or framing",
+        "factual_concern": "Factual concern",
+        "safety_concern": "Safety concern",
+        "misleading_match": "Misleading match"
       }
+    },
+    "suggestedCollections": {
+      "title": "Suggested Collections",
+      "clone": "Clone",
+      "cloned": "Cloned",
+      "clonesCount": "{count, plural, one {# clone} other {# clones}}",
+      "empty": "No public collections found for similar queries.",
+      "sourcesCount": "{count, plural, one {# source} other {# sources}}",
+      "cloneCollection": "Clone Collection",
+      "previewDescription": "Review this collection before cloning it to your library.",
+      "syncCollection": "Sync Collection",
+      "syncSuccess": "Collection synced!"
     }
   },
   "nav": {

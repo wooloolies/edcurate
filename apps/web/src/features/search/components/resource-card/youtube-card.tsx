@@ -44,6 +44,7 @@ export function YoutubeCard({ index, resource, judgment, action }: YoutubeCardPr
             width={144}
             height={80}
             className="w-full shrink-0 rounded object-cover sm:h-20 sm:w-36 border border-slate-100"
+            unoptimized
           />
         )}
         <div className="space-y-1">

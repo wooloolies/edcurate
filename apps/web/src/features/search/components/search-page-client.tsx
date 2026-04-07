@@ -21,6 +21,7 @@ import { EvaluationProgress } from "@/features/search/components/evaluation-prog
 import { GeneratedQueriesPanel } from "@/features/search/components/generated-queries";
 import { ResourceCardRenderer } from "@/features/search/components/resource-card";
 import { ResourceCardSkeleton } from "@/features/search/components/skeleton/resource-card-skeleton";
+import { SuggestedCollectionsRail } from "@/features/search/components/suggested-collections-rail";
 import { useSearchStream } from "@/features/search/hooks/use-search-stream";
 import { useSearchApiDiscoverySearchGet } from "@/lib/api/discovery/discovery";
 import type { JudgmentResult, ResourceCard } from "@/lib/api/model";
@@ -30,6 +31,7 @@ import {
   useCreateCollectionEndpointApiSavedCollectionsPost,
   useListSavedResourcesEndpointApiSavedGet,
 } from "@/lib/api/saved-resources/saved-resources";
+import { SaveCollectionDialog } from "./save-collection-dialog";
 
 export function SearchPageClient() {
   const t = useTranslations("search");
@@ -54,6 +56,7 @@ export function SearchPageClient() {
   const { mutateAsync: createCollection, isPending: isSaving } =
     useCreateCollectionEndpointApiSavedCollectionsPost();
   const [selectedResources, setSelectedResources] = useState<Map<string, ResourceCard>>(new Map());
+  const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
 
   // Build a set of already-saved URLs for the active preset
   const savedUrls = useMemo(() => {
@@ -86,7 +89,7 @@ export function SearchPageClient() {
     });
   };
 
-  const handleSaveSelected = async () => {
+  const handleSaveSelected = async (name: string, isPublic: boolean) => {
     if (!presetId || selectedResources.size === 0) return;
     try {
       const resourcesList = Array.from(selectedResources.values());
@@ -97,13 +100,14 @@ export function SearchPageClient() {
         data: {
           preset_id: presetId,
           search_query: searchQuery || "custom",
-          name: `Search: ${searchQuery || "custom"}`,
-          is_public: false,
+          name: name,
+          is_public: isPublic,
           resources: resourcesList,
           evaluation_data_list: evaluationDataList,
         },
       });
       setSelectedResources(new Map());
+      setIsSaveModalOpen(false);
       toast.success(t("savedSuccess"));
       queryClient.invalidateQueries({
         queryKey: getListSavedResourcesEndpointApiSavedGetQueryKey(),
@@ -219,7 +223,7 @@ export function SearchPageClient() {
             className="flex-1 bg-transparent py-4 text-xl font-bold text-[#111827] placeholder:text-gray-500 outline-none w-full"
           />
           <div className="flex items-center gap-2 pr-2">
-            {!!draft && (
+            {draft ? (
               <button
                 type="button"
                 onClick={() => setDraft("")}
@@ -227,7 +231,7 @@ export function SearchPageClient() {
               >
                 {t("clearInput")}
               </button>
-            )}
+            ) : null}
             <button
               type="submit"
               disabled={!presetId || !draft.trim() || stream.isStreaming || isFetching}
@@ -285,7 +289,7 @@ export function SearchPageClient() {
       {results && !isFetching && !stream.isStreaming ? (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Left Sidebar: Categories Overview */}
-          <aside className="lg:col-span-3 space-y-1 bg-slate-50/50 p-2 rounded-xl border border-slate-100">
+          <aside className="lg:col-span-2 space-y-1 bg-slate-50/50 p-2 rounded-xl border border-slate-100">
             <button
               type="button"
               onClick={() => setActiveCategory("all")}
@@ -333,7 +337,7 @@ export function SearchPageClient() {
           </aside>
 
           {/* Right Content: Results List */}
-          <section className="lg:col-span-9 bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden min-h-[400px]">
+          <section className="lg:col-span-7 bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden min-h-[400px]">
             {(() => {
               const items = filterBySource(activeCategory === "all" ? undefined : activeCategory);
               const visibleItems = items.slice(0, visibleCount);
@@ -383,27 +387,44 @@ export function SearchPageClient() {
               );
             })()}
           </section>
+
+          {/* Suggested Collections Rail */}
+          <section className="lg:col-span-3 space-y-4">
+            {!!(presetId && searchQuery) && (
+              <SuggestedCollectionsRail presetId={presetId} searchQuery={searchQuery} />
+            )}
+          </section>
         </div>
       ) : null}
 
       {selectedResources.size > 0 && (
-        <div className="fixed bottom-6 left-1/2 z-50 flex -translate-x-1/2 items-center gap-4 rounded-full border bg-background px-6 py-3 shadow-lg">
-          <span className="text-sm font-medium">
-            {t("resourcesSelected", { count: selectedResources.size })}
-          </span>
-          <Button size="sm" onClick={handleSaveSelected} disabled={isSaving}>
-            {isSaving ? t("saving") : t("saveToLibrary")}
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-7 w-7 shrink-0"
-            onClick={handleClearSelection}
-            aria-label={t("clearSelection")}
-          >
-            <X className="h-4 w-4" />
-          </Button>
-        </div>
+        <>
+          <div className="fixed bottom-6 left-1/2 z-50 flex -translate-x-1/2 items-center gap-4 rounded-full border bg-background px-6 py-3 shadow-lg">
+            <span className="text-sm font-medium">
+              {t("resourcesSelected", { count: selectedResources.size })}
+            </span>
+            <Button size="sm" onClick={() => setIsSaveModalOpen(true)} disabled={isSaving}>
+              {t("saveToLibrary")}
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-7 w-7 shrink-0"
+              onClick={handleClearSelection}
+              aria-label={t("clearSelection")}
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          </div>
+
+          <SaveCollectionDialog
+            isOpen={isSaveModalOpen}
+            onOpenChange={setIsSaveModalOpen}
+            onSave={handleSaveSelected}
+            isSaving={isSaving}
+            defaultName={searchQuery ? `Search: ${searchQuery}` : "New Collection"}
+          />
+        </>
       )}
     </div>
   );

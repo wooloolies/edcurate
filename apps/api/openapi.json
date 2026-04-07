@@ -1292,6 +1292,50 @@
         }
       }
     },
+    "/api/saved/collections/{collection_id}/sync": {
+      "post": {
+        "tags": [
+          "saved_resources"
+        ],
+        "summary": "Sync Cloned Collection Endpoint",
+        "description": "Sync a cloned collection with its original source.",
+        "operationId": "sync_cloned_collection_endpoint_api_saved_collections__collection_id__sync_post",
+        "parameters": [
+          {
+            "name": "collection_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Collection Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LibraryCollectionResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/saved/collection-item": {
       "post": {
         "tags": [
@@ -3575,7 +3619,6 @@
           "search_query",
           "resource_url",
           "resource_data",
-          "evaluation_data",
           "saved_at"
         ],
         "title": "SavedResourceResponse"
@@ -3681,6 +3724,35 @@
           "matched_by": {
             "type": "string",
             "title": "Matched By"
+          },
+          "resources_count": {
+            "type": "integer",
+            "title": "Resources Count",
+            "default": 0
+          },
+          "publisher_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Publisher Name"
+          },
+          "is_cloned_by_user": {
+            "type": "boolean",
+            "title": "Is Cloned By User",
+            "default": false
+          },
+          "resources": {
+            "items": {
+              "$ref": "#/components/schemas/SavedResourceResponse"
+            },
+            "type": "array",
+            "title": "Resources",
+            "default": []
           }
         },
         "type": "object",

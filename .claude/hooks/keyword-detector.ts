@@ -12,9 +12,16 @@
  * exit 0 = always (allow)
  */
 
-import { readFileSync, writeFileSync, mkdirSync, existsSync, unlinkSync, readdirSync } from "node:fs";
-import { join, dirname } from "node:path";
-import { type Vendor, type ModeState, makePromptOutput, resolveGitRoot } from "./types.ts";
+import {
+  existsSync,
+  mkdirSync,
+  readdirSync,
+  readFileSync,
+  unlinkSync,
+  writeFileSync,
+} from "node:fs";
+import { dirname, join } from "node:path";
+import { type ModeState, makePromptOutput, resolveGitRoot, type Vendor } from "./types.ts";
 
 // ── Vendor Detection ──────────────────────────────────────────
 
@@ -30,10 +37,7 @@ function detectVendor(input: Record<string, unknown>): Vendor {
   return "claude";
 }
 
-function getProjectDir(
-  vendor: Vendor,
-  input: Record<string, unknown>,
-): string {
+function getProjectDir(vendor: Vendor, input: Record<string, unknown>): string {
   let dir: string;
   switch (vendor) {
     case "codex":
@@ -53,11 +57,7 @@ function getProjectDir(
 }
 
 function getSessionId(input: Record<string, unknown>): string {
-  return (
-    (input.sessionId as string) ||
-    (input.session_id as string) ||
-    "unknown"
-  );
+  return (input.sessionId as string) || (input.session_id as string) || "unknown";
 }
 
 // ── Config Loading ────────────────────────────────────────────
@@ -102,7 +102,7 @@ export function escapeRegex(s: string): string {
 export function buildPatterns(
   keywords: Record<string, string[]>,
   lang: string,
-  cjkScripts: string[],
+  cjkScripts: string[]
 ): RegExp[] {
   const allKeywords = [
     ...(keywords["*"] ?? []),
@@ -119,10 +119,7 @@ export function buildPatterns(
   });
 }
 
-function buildInformationalPatterns(
-  config: TriggerConfig,
-  lang: string,
-): RegExp[] {
+function buildInformationalPatterns(config: TriggerConfig, lang: string): RegExp[] {
   const patterns = [...(config.informationalPatterns["en"] ?? [])];
   if (lang !== "en") {
     patterns.push(...(config.informationalPatterns[lang] ?? []));
@@ -138,7 +135,7 @@ function buildInformationalPatterns(
 export function isInformationalContext(
   prompt: string,
   matchIndex: number,
-  infoPatterns: RegExp[],
+  infoPatterns: RegExp[]
 ): boolean {
   const windowStart = Math.max(0, matchIndex - 60);
   const window = prompt.slice(windowStart, matchIndex + 60);
@@ -155,7 +152,7 @@ const PERSISTENT_MATCH_LIMIT = 200;
 export function isPastedContent(
   matchIndex: number,
   isPersistent: boolean,
-  promptLength: number,
+  promptLength: number
 ): boolean {
   if (!isPersistent) return false;
   if (promptLength <= PERSISTENT_MATCH_LIMIT) return false;
@@ -195,11 +192,11 @@ export function isAnalyticalQuestion(prompt: string): boolean {
 
 export function stripCodeBlocks(text: string): string {
   return text
-    .replace(/(`{3,})[^\n]*\n[\s\S]*?\1/g, "")  // multiline fenced blocks (3+ backticks, matched closing)
-    .replace(/(`{3,})[^\n]*\n[\s\S]*/g, "")      // unclosed fenced blocks (strip to end)
-    .replace(/`{3,}[^`]*`{3,}/g, "")             // single-line fenced blocks (```...```)
-    .replace(/`[^`\n]+`/g, "")                    // inline code (no newlines allowed)
-    .replace(/"[^"\n]*"/g, "");                    // quoted strings
+    .replace(/(`{3,})[^\n]*\n[\s\S]*?\1/g, "") // multiline fenced blocks (3+ backticks, matched closing)
+    .replace(/(`{3,})[^\n]*\n[\s\S]*/g, "") // unclosed fenced blocks (strip to end)
+    .replace(/`{3,}[^`]*`{3,}/g, "") // single-line fenced blocks (```...```)
+    .replace(/`[^`\n]+`/g, "") // inline code (no newlines allowed)
+    .replace(/"[^"\n]*"/g, ""); // quoted strings
 }
 
 export function startsWithSlashCommand(prompt: string): boolean {
@@ -209,11 +206,31 @@ export function startsWithSlashCommand(prompt: string): boolean {
 // ── Extension Detection ──────────────────────────────────────
 
 const EXCLUDE_EXTS = new Set([
-  "md", "json", "yaml", "yml", "txt", "env", "git",
-  "lock", "log", "toml", "cfg", "ini", "conf",
-  "png", "jpg", "jpeg", "gif", "ico", "webp",
-  "woff", "woff2", "ttf", "eot",
-  "map", "d",
+  "md",
+  "json",
+  "yaml",
+  "yml",
+  "txt",
+  "env",
+  "git",
+  "lock",
+  "log",
+  "toml",
+  "cfg",
+  "ini",
+  "conf",
+  "png",
+  "jpg",
+  "jpeg",
+  "gif",
+  "ico",
+  "webp",
+  "woff",
+  "woff2",
+  "ttf",
+  "eot",
+  "map",
+  "d",
 ]);
 
 export function detectExtensions(prompt: string): string[] {
@@ -231,7 +248,7 @@ export function detectExtensions(prompt: string): string[] {
 
 export function resolveAgentFromExtensions(
   extensions: string[],
-  routing: Record<string, string[]>,
+  routing: Record<string, string[]>
 ): string | null {
   if (extensions.length === 0) return null;
 
@@ -264,11 +281,7 @@ function getStateDir(projectDir: string): string {
   return dir;
 }
 
-function activateMode(
-  projectDir: string,
-  workflow: string,
-  sessionId: string,
-): void {
+function activateMode(projectDir: string, workflow: string, sessionId: string): void {
   const state: ModeState = {
     workflow,
     sessionId,
@@ -277,7 +290,7 @@ function activateMode(
   };
   writeFileSync(
     join(getStateDir(projectDir), `${workflow}-state-${sessionId}.json`),
-    JSON.stringify(state, null, 2),
+    JSON.stringify(state, null, 2)
   );
 }
 

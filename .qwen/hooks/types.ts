@@ -46,10 +46,7 @@ export interface HookInput {
 
 // --- Hook Output Builders ---
 
-export function makePromptOutput(
-  vendor: Vendor,
-  additionalContext: string,
-): string {
+export function makePromptOutput(vendor: Vendor, additionalContext: string): string {
   switch (vendor) {
     case "claude":
       return JSON.stringify({ additionalContext });

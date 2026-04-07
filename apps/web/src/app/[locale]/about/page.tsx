@@ -67,6 +67,7 @@ export default async function AboutPage({ params }: AboutPageProps) {
                 width={96}
                 height={96}
                 className="rounded-full"
+                unoptimized
               />
               <h2 className="mt-4 text-lg font-semibold">{member.name}</h2>
               <p className="mt-1 text-sm text-gray-500">@{member.github}</p>

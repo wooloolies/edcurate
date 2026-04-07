@@ -93,6 +93,17 @@ async def clone_collection_endpoint(
     return await service.clone_collection(db, user_id, collection_id)
 
 
+@router.post("/collections/{collection_id}/sync")
+async def sync_cloned_collection_endpoint(
+    collection_id: uuid.UUID,
+    db: DBSession,
+    current_user: CurrentUser,
+) -> LibraryCollectionResponse:
+    """Sync a cloned collection with its original source."""
+    user_id = uuid.UUID(current_user.id)
+    return await service.sync_cloned_collection(db, user_id, collection_id)
+
+
 @router.post("")
 async def save_resource_endpoint(
     db: DBSession,

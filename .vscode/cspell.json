@@ -1,8 +1,6 @@
 {
   "useGitignore": true,
-  "words": [
-    "mise"
-  ],
+  "words": ["mise"],
   "overrides": [
     {
       "filename": "**/*.ko.{md,txt}",

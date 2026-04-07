@@ -31,11 +31,9 @@ import { Input } from "@/components/ui/input";
 import { ArtifactList } from "@/features/library/components/artifact-list";
 import { GenerateArtifactDialog } from "@/features/library/components/generate-artifact-dialog";
 import { ResourceCardRenderer } from "@/features/search/components/resource-card";
-import { useListArtifactsEndpointApiLocalizerGet } from "@/lib/api/localizer/localizer";
 import type {
   CollectionGroup,
   GenerateArtifactRequestArtifactType,
-  GeneratedArtifactResponse,
   SavedResourceResponse,
 } from "@/lib/api/model";
 import {
@@ -194,6 +192,20 @@ export function LibraryPageClient() {
     } catch {
       toast.error("Failed to update collection");
     }
+  };
+
+  const handleUpdatePrivacy = async (col: { id: string; is_public: boolean }) => {
+    const nextPrivacy = !col.is_public;
+    if (nextPrivacy) {
+      if (
+        !window.confirm(
+          "Are you sure you want to make this public? Anyone will be able to discover these resources."
+        )
+      ) {
+        return;
+      }
+    }
+    await handleUpdateCollection(col.id, { is_public: nextPrivacy });
   };
 
   const handleDeleteCollection = async (collectionId: string) => {
@@ -390,11 +402,7 @@ export function LibraryPageClient() {
                         >
                           <Pencil className="mr-2 h-4 w-4" /> Rename
                         </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onClick={() =>
-                            handleUpdateCollection(groupKey, { is_public: !col.is_public })
-                          }
-                        >
+                        <DropdownMenuItem onClick={() => handleUpdatePrivacy(col)}>
                           {col.is_public ? (
                             <Lock className="mr-2 h-4 w-4" />
                           ) : (

@@ -45,6 +45,10 @@ class LibraryCollection(Base):
         DateTime(timezone=True),
         server_default=func.now(),
     )
+    cloned_from_id: Mapped[uuid_lib.UUID | None] = mapped_column(
+        ForeignKey("library_collections.id", ondelete="SET NULL"),
+        nullable=True,
+    )
 
 
 class SavedResource(Base):
