@@ -1,7 +1,10 @@
 import { ExternalLink, Link as LinkIcon } from "lucide-react";
-
+import Image from "next/image";
+import {
+  RelevanceDetails,
+  VerdictBadge,
+} from "@/features/search/components/resource-card/relevance-indicator";
 import { ResourceListRow } from "@/features/search/components/resource-card/resource-list-row";
-import { VerdictBadge, RelevanceDetails } from "@/features/search/components/resource-card/relevance-indicator";
 import type { JudgmentResult, ResourceCard } from "@/lib/api/model";
 
 interface CustomCardProps {
@@ -13,7 +16,7 @@ interface CustomCardProps {
 
 export function CustomCard({ index, resource, judgment, action }: CustomCardProps) {
   const meta = resource.metadata as { domain?: string };
-  
+
   const contentNode = (
     <>
       <a
@@ -28,16 +31,16 @@ export function CustomCard({ index, resource, judgment, action }: CustomCardProp
       </a>
       <div className="flex flex-col gap-3 sm:flex-row mt-1">
         {!!resource.thumbnail_url && (
-          <img
+          <Image
             src={resource.thumbnail_url}
             alt={resource.title}
+            width={144}
+            height={80}
             className="w-full shrink-0 rounded object-cover sm:h-20 sm:w-36 border border-slate-100"
           />
         )}
         <div className="space-y-1">
-          <p className="text-muted-foreground line-clamp-3 leading-relaxed">
-            {resource.snippet}
-          </p>
+          <p className="text-muted-foreground line-clamp-3 leading-relaxed">{resource.snippet}</p>
           {!!meta.domain && <p className="text-xs font-medium text-slate-400">{meta.domain}</p>}
         </div>
       </div>

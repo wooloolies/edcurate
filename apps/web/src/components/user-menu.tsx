@@ -17,9 +17,11 @@ import { useGetCurrentUserProfileApiUsersMeGet } from "@/lib/api/users/users";
 import { hasBackendAccessToken, signOutAndClearBackendTokens } from "@/lib/auth/auth-client";
 import { useRouter } from "@/lib/i18n/routing";
 
+const WHITESPACE_RE = /\s+/;
+
 function getInitials(name: string | null | undefined): string {
   if (!name) return "?";
-  const parts = name.trim().split(/\s+/);
+  const parts = name.trim().split(WHITESPACE_RE);
   if (parts.length >= 2) {
     return (parts[0][0] + parts[1][0]).toUpperCase();
   }

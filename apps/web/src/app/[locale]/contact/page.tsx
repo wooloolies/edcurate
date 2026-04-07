@@ -1,8 +1,8 @@
 "use client";
 
+import { Mail, MapPin } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-import { Mail, MapPin } from "lucide-react";
 import { Header } from "@/components/layout/header";
 import { CanvasBackground } from "@/components/ui/canvas-background";
 
@@ -70,7 +70,10 @@ export default function ContactPage() {
                 <p className="mt-2 text-sm text-gray-500">{t("thankYouDescription")}</p>
                 <button
                   type="button"
-                  onClick={() => { setSubmitted(false); setFormState({ name: "", email: "", message: "" }); }}
+                  onClick={() => {
+                    setSubmitted(false);
+                    setFormState({ name: "", email: "", message: "" });
+                  }}
                   className="mt-6 text-sm font-medium text-gray-500 hover:text-black transition-colors"
                 >
                   {t("sendAnother")}
@@ -107,7 +110,10 @@ export default function ContactPage() {
                   />
                 </div>
                 <div>
-                  <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1.5">
+                  <label
+                    htmlFor="message"
+                    className="block text-sm font-medium text-gray-700 mb-1.5"
+                  >
                     {t("messageLabel")}
                   </label>
                   <textarea

@@ -1,8 +1,10 @@
 import { BookOpen, ExternalLink } from "lucide-react";
 import { useTranslations } from "next-intl";
-
+import {
+  RelevanceDetails,
+  VerdictBadge,
+} from "@/features/search/components/resource-card/relevance-indicator";
 import { ResourceListRow } from "@/features/search/components/resource-card/resource-list-row";
-import { VerdictBadge, RelevanceDetails } from "@/features/search/components/resource-card/relevance-indicator";
 import type { JudgmentResult, ResourceCard } from "@/lib/api/model";
 
 interface OpenAlexCardProps {
@@ -35,7 +37,7 @@ export function OpenAlexCard({ index, resource, judgment, action }: OpenAlexCard
         {resource.title}
         <ExternalLink className="ml-1.5 inline h-3 w-3 text-slate-400" />
       </a>
-      
+
       <div className="flex flex-wrap gap-x-2 mt-1 text-xs text-muted-foreground font-medium">
         {meta.authors && meta.authors.length > 0 && (
           <span>{meta.authors.slice(0, 3).join(", ")}</span>

@@ -1,17 +1,17 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { AlertCircle, ChevronDown, Loader2, Pen } from "lucide-react";
 import { useQueryState } from "nuqs";
-import { Pen, ChevronDown, AlertCircle, Loader2 } from "lucide-react";
-import { Link, useRouter } from "@/lib/i18n/routing";
+import { useEffect, useRef, useState } from "react";
 import {
   useGetCountriesApiCurriculumCountriesGet,
-  useGetSubjectsApiCurriculumSubjectsGet,
   useGetFrameworksApiCurriculumFrameworksGet,
   useGetGradesApiCurriculumGradesGet,
+  useGetSubjectsApiCurriculumSubjectsGet,
 } from "@/lib/api/curriculum/curriculum";
-import { useCreatePresetApiPresetsPost } from "@/lib/api/presets/presets";
 import type { PresetCreate } from "@/lib/api/model";
+import { useCreatePresetApiPresetsPost } from "@/lib/api/presets/presets";
+import { Link, useRouter } from "@/lib/i18n/routing";
 
 export function CollectionOnboarding() {
   const router = useRouter();
@@ -19,9 +19,8 @@ export function CollectionOnboarding() {
 
   // --- URL-Synchronized State ---
   const [stepStr, setStepStr] = useQueryState("step", { defaultValue: "1", history: "push" });
-  const currentStep = parseInt(stepStr || "1") as 1 | 2 | 3;
+  const currentStep = parseInt(stepStr || "1", 10) as 1 | 2 | 3;
   const setCurrentStep = (val: 1 | 2 | 3) => setStepStr(val.toString());
-
 
   const [presetNameRaw, setPresetName] = useQueryState("preset", { defaultValue: "Collection 1" });
   const presetName = presetNameRaw || "Collection 1";
@@ -60,17 +59,17 @@ export function CollectionOnboarding() {
 
   const { data: frameworks } = useGetFrameworksApiCurriculumFrameworksGet(
     { country: countryCode },
-    { query: { enabled: !!countryCode } },
+    { query: { enabled: !!countryCode } }
   );
 
   const { data: grades } = useGetGradesApiCurriculumGradesGet(
     { country: countryCode, framework },
-    { query: { enabled: !!countryCode && !!framework } },
+    { query: { enabled: !!countryCode && !!framework } }
   );
 
   const { data: subjects } = useGetSubjectsApiCurriculumSubjectsGet(
     { country: countryCode },
-    { query: { enabled: !!countryCode } },
+    { query: { enabled: !!countryCode } }
   );
 
   useEffect(() => {
@@ -81,7 +80,7 @@ export function CollectionOnboarding() {
 
   useEffect(() => {
     setErrorMsg("");
-  }, [grade, classSize, subject, additionalNotes, currentStep]);
+  }, []);
 
   const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const code = e.target.value;
@@ -109,8 +108,8 @@ export function CollectionOnboarding() {
       }
       setCurrentStep(2);
     } else if (currentStep === 2) {
-      const sizeParsed = parseInt(classSize);
-      if (!classSize || isNaN(sizeParsed) || sizeParsed <= 0) {
+      const sizeParsed = parseInt(classSize, 10);
+      if (!classSize || Number.isNaN(sizeParsed) || sizeParsed <= 0) {
         setErrorMsg("Please enter a valid class size (e.g. 25).");
         return;
       }
@@ -126,12 +125,12 @@ export function CollectionOnboarding() {
         year_level: grade,
         country: countryName,
         curriculum_framework: framework || null,
-        class_size: parseInt(classSize) || null,
+        class_size: parseInt(classSize, 10) || null,
         additional_notes: additionalNotes || null,
       };
       createMutation.mutate(
         { data: payload },
-        { onSuccess: (data) => router.push(`/search?preset_id=${data.id}`) },
+        { onSuccess: (data) => router.push(`/search?preset_id=${data.id}`) }
       );
     }
   };
@@ -160,15 +159,17 @@ export function CollectionOnboarding() {
               aria-label="Edit collection name"
             />
           ) : (
-            <h2
-              className="text-2xl font-bold text-[#111827] cursor-pointer hover:opacity-80 transition-opacity"
+            <button
+              type="button"
+              className="text-2xl font-bold text-[#111827] cursor-pointer hover:opacity-80 transition-opacity text-left"
               onClick={() => setIsEditingPreset(true)}
             >
               {presetName}
-            </h2>
+            </button>
           )}
           {!isEditingPreset && (
             <button
+              type="button"
               onClick={() => setIsEditingPreset(true)}
               className="p-2 -ml-2 text-gray-400 hover:text-black transition-colors rounded-full hover:bg-gray-100"
               aria-label="Edit collection name"
@@ -184,10 +185,22 @@ export function CollectionOnboarding() {
       </div>
 
       {/* Progress Bar */}
-      <div className="flex w-full h-2 gap-2 mb-12" role="progressbar" aria-valuenow={currentStep} aria-valuemin={1} aria-valuemax={3}>
-        <div className={`h-full w-1/3 rounded-full transition-colors duration-500 ${currentStep >= 1 ? "bg-[#B7FF70]" : "bg-gray-200"}`} />
-        <div className={`h-full w-1/3 rounded-full transition-colors duration-500 ${currentStep >= 2 ? "bg-[#B7FF70]" : "bg-gray-200"}`} />
-        <div className={`h-full w-1/3 rounded-full transition-colors duration-500 ${currentStep >= 3 ? "bg-[#B7FF70]" : "bg-gray-200"}`} />
+      <div
+        className="flex w-full h-2 gap-2 mb-12"
+        role="progressbar"
+        aria-valuenow={currentStep}
+        aria-valuemin={1}
+        aria-valuemax={3}
+      >
+        <div
+          className={`h-full w-1/3 rounded-full transition-colors duration-500 ${currentStep >= 1 ? "bg-[#B7FF70]" : "bg-gray-200"}`}
+        />
+        <div
+          className={`h-full w-1/3 rounded-full transition-colors duration-500 ${currentStep >= 2 ? "bg-[#B7FF70]" : "bg-gray-200"}`}
+        />
+        <div
+          className={`h-full w-1/3 rounded-full transition-colors duration-500 ${currentStep >= 3 ? "bg-[#B7FF70]" : "bg-gray-200"}`}
+        />
       </div>
 
       {/* --- STEP 1: Curriculum --- */}
@@ -205,12 +218,24 @@ export function CollectionOnboarding() {
           <div className="flex flex-col gap-8">
             {/* Country */}
             <div className="w-full">
-              <label className="block text-xl font-bold text-[#111827] mb-3 text-left">Country</label>
+              <label
+                htmlFor="country-select"
+                className="block text-xl font-bold text-[#111827] mb-3 text-left"
+              >
+                Country
+              </label>
               <div className="relative">
-                <select value={countryCode} onChange={handleCountryChange} className={selectClass}>
+                <select
+                  id="country-select"
+                  value={countryCode}
+                  onChange={handleCountryChange}
+                  className={selectClass}
+                >
                   <option value="">Select a country...</option>
                   {countries?.map((c) => (
-                    <option key={c.code} value={c.code}>{c.name}</option>
+                    <option key={c.code} value={c.code}>
+                      {c.name}
+                    </option>
                   ))}
                 </select>
                 <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
@@ -221,9 +246,15 @@ export function CollectionOnboarding() {
 
             {/* Curriculum Framework */}
             <div className="w-full">
-              <label className="block text-xl font-bold text-[#111827] mb-3 text-left">Curriculum Framework</label>
+              <label
+                htmlFor="framework-select"
+                className="block text-xl font-bold text-[#111827] mb-3 text-left"
+              >
+                Curriculum Framework
+              </label>
               <div className="relative">
                 <select
+                  id="framework-select"
                   value={framework}
                   onChange={handleFrameworkChange}
                   disabled={!countryCode}
@@ -231,7 +262,9 @@ export function CollectionOnboarding() {
                 >
                   <option value="">Select a framework...</option>
                   {frameworks?.map((f) => (
-                    <option key={f} value={f}>{f}</option>
+                    <option key={f} value={f}>
+                      {f}
+                    </option>
                   ))}
                 </select>
                 <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
@@ -243,7 +276,7 @@ export function CollectionOnboarding() {
             {/* Grade / Year Level */}
             {grades && grades.length > 0 && (
               <div className="w-full">
-                <label className="block text-xl font-bold text-[#111827] mb-4 text-left">Year Level</label>
+                <p className="block text-xl font-bold text-[#111827] mb-4 text-left">Year Level</p>
                 <div className="grid grid-cols-3 gap-4">
                   {grades.map((g) => {
                     const isSelected = grade === g.name;
@@ -285,8 +318,14 @@ export function CollectionOnboarding() {
           <div className="flex flex-col gap-8 max-w-xl mx-auto">
             {/* Class Size */}
             <div className="w-full">
-              <label className="block text-xl font-bold text-[#111827] mb-3 text-left">Class Size</label>
+              <label
+                htmlFor="class-size-input"
+                className="block text-xl font-bold text-[#111827] mb-3 text-left"
+              >
+                Class Size
+              </label>
               <input
+                id="class-size-input"
                 type="number"
                 min={1}
                 max={150}
@@ -299,16 +338,24 @@ export function CollectionOnboarding() {
 
             {/* Relevant Field (Subject from DB) */}
             <div className="w-full">
-              <label className="block text-xl font-bold text-[#111827] mb-3 text-left">Relevant field</label>
+              <label
+                htmlFor="subject-select"
+                className="block text-xl font-bold text-[#111827] mb-3 text-left"
+              >
+                Relevant field
+              </label>
               <div className="relative">
                 <select
+                  id="subject-select"
                   value={subject}
                   onChange={(e) => setSubject(e.target.value)}
                   className={`${selectClass} text-ellipsis`}
                 >
                   <option value="">Select a field...</option>
                   {subjects?.map((s) => (
-                    <option key={s} value={s}>{s}</option>
+                    <option key={s} value={s}>
+                      {s}
+                    </option>
                   ))}
                 </select>
                 <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
@@ -344,12 +391,12 @@ export function CollectionOnboarding() {
       )}
 
       {/* Error */}
-      {(errorMsg || createMutation.isError) && (
+      {errorMsg || createMutation.isError ? (
         <div className="mb-4 p-4 rounded-2xl bg-red-50 flex items-center justify-center gap-2 text-red-600 font-medium animate-in fade-in slide-in-from-top-2">
           <AlertCircle className="w-5 h-5" />
           <span>{errorMsg || "Failed to create collection. Please try again."}</span>
         </div>
-      )}
+      ) : null}
 
       {/* Footer */}
       <div className="flex items-center justify-end gap-4 mt-4 pt-8 border-t border-gray-100">
@@ -362,6 +409,7 @@ export function CollectionOnboarding() {
           </Link>
         ) : (
           <button
+            type="button"
             onClick={handleBack}
             className="px-8 py-3 rounded-[2rem] text-base font-semibold text-[#111827] bg-white border-2 border-[#111827] hover:!bg-[#111827] hover:!text-white transition-all duration-300 shadow-sm cursor-pointer"
           >
@@ -370,13 +418,18 @@ export function CollectionOnboarding() {
         )}
 
         <button
+          type="button"
           onClick={handleNext}
           disabled={createMutation.isPending}
           className="px-8 py-3 rounded-[2rem] text-base font-semibold text-[#111827] bg-[#B7FF70] border-2 border-[#B7FF70] hover:!bg-[#111827] hover:!text-[#B7FF70] hover:!border-[#111827] transition-all duration-300 shadow-sm cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {createMutation.isPending ? (
             <Loader2 className="w-5 h-5 animate-spin" />
-          ) : currentStep === 3 ? "Complete" : "Next"}
+          ) : currentStep === 3 ? (
+            "Complete"
+          ) : (
+            "Next"
+          )}
         </button>
       </div>
     </div>

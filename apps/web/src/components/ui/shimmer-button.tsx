@@ -1,8 +1,8 @@
 "use client";
 
 import { type ComponentPropsWithoutRef, type ReactNode, useEffect, useState } from "react";
-import { Link } from "@/lib/i18n/routing";
 import { hasBackendAccessToken } from "@/lib/auth/auth-client";
+import { Link } from "@/lib/i18n/routing";
 
 interface ShimmerLinkProps extends ComponentPropsWithoutRef<typeof Link> {
   shimmerColor?: string;

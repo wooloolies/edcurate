@@ -1,5 +1,10 @@
 import type { SearchStageEvent } from "@/features/search/types/search-stream";
 
+// SSE double-newline block separator — handles \r\n\r\n, \n\n, \r\r
+const SSE_BLOCK_SEPARATOR = /\r?\n\r?\n/;
+// SSE single-line separator
+const SSE_LINE_SEPARATOR = /\r?\n/;
+
 /**
  * Parses a raw SSE buffer string into typed events.
  *
@@ -17,7 +22,7 @@ export function parseSSEBuffer(buffer: string): {
   const parsed: SearchStageEvent[] = [];
 
   // Split on double newline — handles \r\n\r\n, \n\n, \r\r
-  const blocks = buffer.split(/\r?\n\r?\n/);
+  const blocks = buffer.split(SSE_BLOCK_SEPARATOR);
 
   // The last block may be incomplete; keep it as remainder
   const remainder = blocks.pop() ?? "";
@@ -27,7 +32,7 @@ export function parseSSEBuffer(buffer: string): {
 
     let dataLine: string | null = null;
 
-    for (const line of block.split(/\r?\n/)) {
+    for (const line of block.split(SSE_LINE_SEPARATOR)) {
       if (line.startsWith("data:")) {
         dataLine = line.slice("data:".length).trimStart();
       }

@@ -13,7 +13,7 @@ export function CanvasBackground() {
       bgCanvas: HTMLCanvasElement,
       crispCanvas: HTMLCanvasElement,
       bgCtx: CanvasRenderingContext2D,
-      crispCtx: CanvasRenderingContext2D,
+      crispCtx: CanvasRenderingContext2D
     ) => {
       const dpr = window.devicePixelRatio || 1;
       const cssW = container.clientWidth;
@@ -31,7 +31,7 @@ export function CanvasBackground() {
 
       return { width: cssW, height: cssH };
     },
-    [],
+    []
   );
 
   useEffect(() => {
@@ -44,13 +44,7 @@ export function CanvasBackground() {
     const crispCtx = crispCanvas.getContext("2d");
     if (!bgCtx || !crispCtx) return;
 
-    let { width, height } = syncCanvasSize(
-      container,
-      bgCanvas,
-      crispCanvas,
-      bgCtx,
-      crispCtx,
-    );
+    let { width, height } = syncCanvasSize(container, bgCanvas, crispCanvas, bgCtx, crispCtx);
 
     const mouse = { x: -9999, y: -9999 };
     const squareSize = 80;
@@ -83,8 +77,6 @@ export function CanvasBackground() {
             offsetY: Math.random() * 20 - 10,
             vx: Math.random() * 0.5 - 0.25,
             vy: Math.random() * 0.5 - 0.25,
-
-
           });
         }
       }
@@ -96,13 +88,7 @@ export function CanvasBackground() {
     const handleResize = () => {
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(() => {
-        ({ width, height } = syncCanvasSize(
-          container,
-          bgCanvas,
-          crispCanvas,
-          bgCtx,
-          crispCtx,
-        ));
+        ({ width, height } = syncCanvasSize(container, bgCanvas, crispCanvas, bgCtx, crispCtx));
         initGrid();
       }, 100);
     };
@@ -186,13 +172,13 @@ export function CanvasBackground() {
             currentX + cell.offsetX * 1.5,
             currentY - cell.offsetY * 1.5,
             bitSize,
-            bitSize,
+            bitSize
           );
           bgCtx.fillRect(
             currentX - cell.offsetX * 1.5,
             currentY + cell.offsetY * 1.5,
             bitSize,
-            bitSize,
+            bitSize
           );
 
           // --- 2. CRISP CANVAS (Delicate Tech/Academic Schematics) ---
@@ -213,10 +199,7 @@ export function CanvasBackground() {
               if (dist < squareSize * 1.5) {
                 crispCtx.beginPath();
                 crispCtx.moveTo(gridCenterX, gridCenterY);
-                crispCtx.lineTo(
-                  sibling.x + squareSize / 2,
-                  sibling.y + squareSize / 2,
-                );
+                crispCtx.lineTo(sibling.x + squareSize / 2, sibling.y + squareSize / 2);
                 crispCtx.strokeStyle = `rgba(183, 255, 112, ${Math.min(cell.alpha, sibling.alpha) * 0.25})`;
                 crispCtx.stroke();
               }
@@ -253,13 +236,10 @@ export function CanvasBackground() {
         className="absolute pointer-events-none"
         style={{ position: "absolute" }}
       >
+        <title>Digital goo filter</title>
         <defs>
           <filter id="digital-goo">
-            <feGaussianBlur
-              in="SourceGraphic"
-              stdDeviation="15"
-              result="blur"
-            />
+            <feGaussianBlur in="SourceGraphic" stdDeviation="15" result="blur" />
             <feColorMatrix
               in="blur"
               mode="matrix"
@@ -271,18 +251,8 @@ export function CanvasBackground() {
               "
               result="goo"
             />
-            <feMorphology
-              in="goo"
-              operator="dilate"
-              radius="2"
-              result="larger_goo"
-            />
-            <feComposite
-              in="larger_goo"
-              in2="goo"
-              operator="out"
-              result="outline"
-            />
+            <feMorphology in="goo" operator="dilate" radius="2" result="larger_goo" />
+            <feComposite in="larger_goo" in2="goo" operator="out" result="outline" />
             <feTurbulence
               type="fractalNoise"
               baseFrequency="0.05 0.5"
@@ -309,11 +279,7 @@ export function CanvasBackground() {
       />
 
       {/* Crisp un-filtered geometric schematics layer */}
-      <canvas
-        ref={crispCanvasRef}
-        className="absolute inset-0 w-full h-full"
-      />
+      <canvas ref={crispCanvasRef} className="absolute inset-0 w-full h-full" />
     </div>
   );
 }
-

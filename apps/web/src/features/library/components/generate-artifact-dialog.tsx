@@ -50,7 +50,8 @@ export function GenerateArtifactDialog({
     () => new Set(resources.slice(0, MAX_SELECTED_RESOURCES).map((r) => r.id))
   );
 
-  const { mutateAsync: generate, isPending } = useGenerateArtifactEndpointApiLocalizerGeneratePost();
+  const { mutateAsync: generate, isPending } =
+    useGenerateArtifactEndpointApiLocalizerGeneratePost();
 
   const toggleResource = (id: string) => {
     setSelectedIds((prev) => {

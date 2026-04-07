@@ -35,7 +35,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArtifactList } from "@/features/library/components/artifact-list";
 import { GenerateArtifactDialog } from "@/features/library/components/generate-artifact-dialog";
 import { ResourceCardRenderer } from "@/features/search/components/resource-card";
-import type { GenerateArtifactRequestArtifactType, CollectionGroup, SavedResourceResponse } from "@/lib/api/model";
+import type {
+  CollectionGroup,
+  GenerateArtifactRequestArtifactType,
+  SavedResourceResponse,
+} from "@/lib/api/model";
 import {
   getListSavedResourcesEndpointApiSavedGetQueryKey,
   useAddCustomLinkEndpointApiSavedLinkPost,

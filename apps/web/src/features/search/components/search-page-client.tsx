@@ -1,7 +1,7 @@
 "use client";
 
 import { useQueryClient } from "@tanstack/react-query";
-import { ChevronDown, X, Inbox, Globe, Play, BookOpen, Layers, Search } from "lucide-react";
+import { BookOpen, ChevronDown, Globe, Inbox, Layers, Play, Search, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useQueryState } from "nuqs";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -44,7 +44,7 @@ export function SearchPageClient() {
   // Reset pagination when query or category changes
   useEffect(() => {
     setVisibleCount(4);
-  }, [searchQuery, activeCategory]);
+  }, []);
 
   const { data: presetsData } = useListPresetsApiPresetsGet();
   const presets = presetsData?.data ?? [];
@@ -171,8 +171,6 @@ export function SearchPageClient() {
     return m;
   }, [results?.judgments]);
 
-  const [showUnscored, setShowUnscored] = useState(false);
-
   const filterBySource = (source?: string) =>
     source ? allResults.filter((r) => r.source === source) : allResults;
 
@@ -197,15 +195,16 @@ export function SearchPageClient() {
             </SelectContent>
           </Select>
         </div>
-        <p className="text-lg font-medium text-[#111827]/60 mt-1 pl-1">
-          {t("subtitle")}
-        </p>
+        <p className="text-lg font-medium text-[#111827]/60 mt-1 pl-1">{t("subtitle")}</p>
       </div>
 
       {/* Glassy Search Box */}
       <div className="w-full bg-white/40 backdrop-blur-2xl rounded-[2.5rem] shadow-[0_30px_100px_-15px_rgba(0,0,0,0.1)] border border-white/60 p-6 md:p-8 flex flex-col gap-6">
         {/* Search Input */}
-        <form onSubmit={handleSearch} className="w-full flex items-center bg-white/60 border-2 border-white/60 hover:bg-white/80 focus-within:bg-white focus-within:border-[#B7FF70] rounded-[2.5rem] p-2 transition-all shadow-md">
+        <form
+          onSubmit={handleSearch}
+          className="w-full flex items-center bg-white/60 border-2 border-white/60 hover:bg-white/80 focus-within:bg-white focus-within:border-[#B7FF70] rounded-[2.5rem] p-2 transition-all shadow-md"
+        >
           <div className="pl-6 pr-4 text-[#111827]">
             <Search className="w-6 h-6" />
           </div>
@@ -218,7 +217,7 @@ export function SearchPageClient() {
             className="flex-1 bg-transparent py-4 text-xl font-bold text-[#111827] placeholder:text-gray-500 outline-none w-full"
           />
           <div className="flex items-center gap-2 pr-2">
-            {draft && (
+            {draft ? (
               <button
                 type="button"
                 onClick={() => setDraft("")}
@@ -226,7 +225,7 @@ export function SearchPageClient() {
               >
                 {t("clearInput")}
               </button>
-            )}
+            ) : null}
             <button
               type="submit"
               disabled={!presetId || !draft.trim() || stream.isStreaming || isFetching}
@@ -247,11 +246,11 @@ export function SearchPageClient() {
               <div className="px-5 py-2.5 bg-white border border-[#111827]/10 rounded-xl text-sm font-bold text-[#111827] shadow-sm cursor-pointer">
                 {activePreset.year_level}
               </div>
-              {activePreset.class_size && (
+              {activePreset.class_size ? (
                 <div className="px-5 py-2.5 bg-white border border-[#111827]/10 rounded-xl text-sm font-bold text-[#111827] shadow-sm cursor-pointer">
                   {t("classSizePeople", { classSize: activePreset.class_size })}
                 </div>
-              )}
+              ) : null}
             </div>
           </div>
         )}
@@ -362,7 +361,7 @@ export function SearchPageClient() {
                       />
                     ))}
                   </div>
-                  
+
                   {remainingCount > 0 && (
                     <div className="bg-slate-50 border-t border-slate-100 p-6 flex flex-col items-center justify-center gap-4 text-center">
                       <p className="text-sm font-medium text-slate-500">
@@ -382,10 +381,8 @@ export function SearchPageClient() {
               );
             })()}
           </section>
-
         </div>
       ) : null}
-
 
       {selectedResources.size > 0 && (
         <div className="fixed bottom-6 left-1/2 z-50 flex -translate-x-1/2 items-center gap-4 rounded-full border bg-background px-6 py-3 shadow-lg">

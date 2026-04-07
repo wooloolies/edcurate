@@ -1,11 +1,10 @@
 import {
   AlertCircle,
-  AlertTriangle,
   CheckCircle2,
   ChevronDown,
+  ClipboardCheck,
   Info,
   ShieldAlert,
-  ClipboardCheck,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
@@ -17,12 +16,6 @@ import type {
   MetricResultRating,
   ResourceFlag,
 } from "@/lib/api/model";
-
-interface RelevanceIndicatorProps {
-  verdict?: string | null;
-  reason?: string | null;
-  judgment?: JudgmentResult | null;
-}
 
 const VERDICT_CONFIG: Record<
   JudgmentResultVerdict,
@@ -135,7 +128,7 @@ export function VerdictBadge({ verdict }: { verdict?: string | null }) {
 
 export function RelevanceDetails({ judgment }: { judgment: JudgmentResult }) {
   const t = useTranslations("search.evaluation");
-  
+
   const flags = judgment?.flags ?? [];
   const adaptations = judgment?.adaptations ?? [];
 
@@ -164,9 +157,7 @@ export function RelevanceDetails({ judgment }: { judgment: JudgmentResult }) {
           {metrics.map(([key, metric]) => (
             <li key={key} className="space-y-1">
               <div className="flex items-center gap-2">
-                <span className="text-sm font-medium text-slate-700">
-                  {t(`metrics.${key}`)}
-                </span>
+                <span className="text-sm font-medium text-slate-700">{t(`metrics.${key}`)}</span>
                 <Badge
                   variant="outline"
                   className={`text-[10px] px-1.5 py-0 ${RATING_BADGE[metric.rating]}`}
