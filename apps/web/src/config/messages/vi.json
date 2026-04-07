@@ -246,7 +246,7 @@
       },
       "showDetails": "Hiện chi tiết",
       "hideDetails": "Ẩn chi tiết",
-      "flags": "{count, plural, one {# cảnh báo} other {# cảnh báo}}",
+      "flags": "{count, plural, one {{count} cảnh báo} other {{count} cảnh báo}}",
       "noFlags": "Không phát hiện cảnh báo",
       "overrideNote": "Ghi chú bổ sung",
       "evidence": "Bằng chứng",
@@ -311,23 +311,6 @@
     "emailVerified": "Email đã xác minh",
     "emailNotVerified": "Email chưa xác minh",
     "memberSince": "Thành viên từ"
-  },
-  "contact": {
-    "title": "Liên hệ",
-    "subtitle": "Bạn có câu hỏi hoặc phản hồi? Chúng tôi rất muốn nghe từ bạn.",
-    "nameLabel": "Tên",
-    "namePlaceholder": "Tên của bạn",
-    "emailLabel": "Email",
-    "emailPlaceholder": "your@email.com",
-    "messageLabel": "Tin nhắn",
-    "messagePlaceholder": "Hãy cho chúng tôi biết suy nghĩ của bạn...",
-    "send": "Gửi tin nhắn",
-    "thankYou": "Tin nhắn đã sẵn sàng!",
-    "thankYouDescription": "Ứng dụng email của bạn sẽ mở ngay. Nếu không, vui lòng gửi email trực tiếp cho chúng tôi.",
-    "sendAnother": "Gửi tin nhắn khác",
-    "location": "Địa điểm",
-    "teamEmails": "Email nhóm",
-    "repository": "Kho mã nguồn"
   },
   "dashboard": {
     "title": "Bảng điều khiển",

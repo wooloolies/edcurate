@@ -246,7 +246,7 @@
       },
       "showDetails": "แสดงรายละเอียด",
       "hideDetails": "ซ่อนรายละเอียด",
-      "flags": "{count, plural, one {# แฟล็ก} other {# แฟล็ก}}",
+      "flags": "{count, plural, one {{count} แฟล็ก} other {{count} แฟล็ก}}",
       "noFlags": "ไม่พบแฟล็ก",
       "overrideNote": "หมายเหตุพิเศษ",
       "evidence": "หลักฐาน",
@@ -311,23 +311,6 @@
     "emailVerified": "ยืนยันอีเมลแล้ว",
     "emailNotVerified": "ยังไม่ได้ยืนยันอีเมล",
     "memberSince": "สมาชิกตั้งแต่"
-  },
-  "contact": {
-    "title": "ติดต่อเรา",
-    "subtitle": "มีคำถามหรือข้อเสนอแนะ? เรายินดีรับฟัง",
-    "nameLabel": "ชื่อ",
-    "namePlaceholder": "ชื่อของคุณ",
-    "emailLabel": "อีเมล",
-    "emailPlaceholder": "your@email.com",
-    "messageLabel": "ข้อความ",
-    "messagePlaceholder": "บอกเราว่าคุณคิดอะไรอยู่...",
-    "send": "ส่งข้อความ",
-    "thankYou": "ข้อความพร้อมแล้ว!",
-    "thankYouDescription": "แอปอีเมลของคุณจะเปิดในไม่ช้า หากไม่เปิด กรุณาส่งอีเมลถึงเราโดยตรง",
-    "sendAnother": "ส่งข้อความอื่น",
-    "location": "สถานที่",
-    "teamEmails": "อีเมลทีม",
-    "repository": "คลังโค้ด"
   },
   "dashboard": {
     "title": "แดชบอร์ด",

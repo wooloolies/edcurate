@@ -246,9 +246,9 @@
       },
       "showDetails": "显示详情",
       "hideDetails": "隐藏详情",
-      "flags": "{count, plural, one {#个标记} other {#个标记}}",
+      "flags": "{count, plural, one {{count}个标记} other {{count}个标记}}",
       "noFlags": "未检测到标记",
-      "overrideNote": "覆盖备注",
+      "overrideNote": "替代说明",
       "evidence": "依据",
       "suggested": "建议操作",
       "sections": {
@@ -311,23 +311,6 @@
     "emailVerified": "邮箱已验证",
     "emailNotVerified": "邮箱未验证",
     "memberSince": "注册时间"
-  },
-  "contact": {
-    "title": "联系我们",
-    "subtitle": "有问题或反馈？我们很乐意听取您的意见。",
-    "nameLabel": "姓名",
-    "namePlaceholder": "您的姓名",
-    "emailLabel": "电子邮件",
-    "emailPlaceholder": "your@email.com",
-    "messageLabel": "消息",
-    "messagePlaceholder": "请告诉我们您的想法...",
-    "send": "发送消息",
-    "thankYou": "消息已准备好！",
-    "thankYouDescription": "您的邮件客户端应该很快打开。如果没有，请直接发送邮件给我们。",
-    "sendAnother": "发送另一条消息",
-    "location": "位置",
-    "teamEmails": "团队邮箱",
-    "repository": "代码仓库"
   },
   "dashboard": {
     "title": "仪表盘",
