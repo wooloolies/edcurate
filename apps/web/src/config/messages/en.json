@@ -317,5 +317,22 @@
     "presetsToday": "{count} presets created today",
     "presetsTotal": "{count} total presets",
     "quickActions": "Quick Actions"
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "Have questions or feedback? We'd love to hear from you.",
+    "nameLabel": "Name",
+    "namePlaceholder": "Your name",
+    "emailLabel": "Email",
+    "emailPlaceholder": "your@email.com",
+    "messageLabel": "Message",
+    "messagePlaceholder": "Tell us what's on your mind...",
+    "send": "Send Message",
+    "thankYou": "Message ready!",
+    "thankYouDescription": "Your email client should open shortly. If not, please email us directly.",
+    "sendAnother": "Send another message",
+    "location": "Location",
+    "teamEmails": "Team Emails",
+    "repository": "Repository"
   }
 }

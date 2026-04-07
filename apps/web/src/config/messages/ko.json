@@ -317,5 +317,22 @@
     "presetsToday": "오늘 생성된 프리셋 {count}개",
     "presetsTotal": "전체 프리셋 {count}개",
     "quickActions": "빠른 작업"
+  },
+  "contact": {
+    "title": "문의하기",
+    "subtitle": "질문이나 피드백이 있으신가요? 언제든 연락해 주세요.",
+    "nameLabel": "이름",
+    "namePlaceholder": "이름을 입력하세요",
+    "emailLabel": "이메일",
+    "emailPlaceholder": "your@email.com",
+    "messageLabel": "메시지",
+    "messagePlaceholder": "궁금한 점을 알려주세요...",
+    "send": "메시지 보내기",
+    "thankYou": "메시지 준비 완료!",
+    "thankYouDescription": "이메일 클라이언트가 곧 열립니다. 열리지 않으면 직접 이메일을 보내주세요.",
+    "sendAnother": "다른 메시지 보내기",
+    "location": "위치",
+    "teamEmails": "팀 이메일",
+    "repository": "저장소"
   }
 }

@@ -317,5 +317,22 @@
     "presetsToday": "今日创建 {count} 个预设",
     "presetsTotal": "共 {count} 个预设",
     "quickActions": "快捷操作"
+  },
+  "contact": {
+    "title": "联系我们",
+    "subtitle": "有问题或反馈？我们很乐意听取您的意见。",
+    "nameLabel": "姓名",
+    "namePlaceholder": "您的姓名",
+    "emailLabel": "电子邮件",
+    "emailPlaceholder": "your@email.com",
+    "messageLabel": "消息",
+    "messagePlaceholder": "请告诉我们您的想法...",
+    "send": "发送消息",
+    "thankYou": "消息已准备好！",
+    "thankYouDescription": "您的邮件客户端应该很快打开。如果没有，请直接发送邮件给我们。",
+    "sendAnother": "发送另一条消息",
+    "location": "位置",
+    "teamEmails": "团队邮箱",
+    "repository": "代码仓库"
   }
 }
