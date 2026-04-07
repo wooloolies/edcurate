@@ -37,7 +37,7 @@ export function ResourceCardRenderer({
     action = (
       <div className="flex items-center gap-3">
         <Link
-          href={`/overview?title=${encodeURIComponent(resource.title || "Resource Overview")}&type=${encodeURIComponent(resource.source || "general")}`}
+          href={`/overview?title=${encodeURIComponent(resource.title || "Resource Overview")}&type=${encodeURIComponent(resource.source || "general")}&verdict=${encodeURIComponent(resource.verdict || "")}`}
           target="_blank"
           className="rounded-full px-5 py-2 text-sm font-bold shadow-sm transition-transform hover:scale-105 active:scale-95 bg-slate-100 text-slate-800 hover:bg-slate-200 border border-slate-200 whitespace-nowrap"
         >
