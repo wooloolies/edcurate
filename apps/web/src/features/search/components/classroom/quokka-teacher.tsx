@@ -26,7 +26,7 @@ function parsePercent(value: string): number {
 interface QuokkaTeacherProps {
   activeStage: Stage | null;
   isCached?: boolean;
-  message?: string | null;
+  message?: string | string[] | null;
 }
 
 export function QuokkaTeacher({ activeStage, isCached, message }: QuokkaTeacherProps) {

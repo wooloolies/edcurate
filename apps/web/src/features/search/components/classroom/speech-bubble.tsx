@@ -1,20 +1,44 @@
 "use client";
 
+import { useInterval } from "ahooks";
 import { AnimatePresence, motion } from "motion/react";
+import { useState } from "react";
 
 interface SpeechBubbleProps {
-  text: string | null;
+  /** Single message or array of messages to cycle through */
+  text: string | string[] | null;
   position?: "left" | "right";
+  /** Cycle interval in ms when text is an array (default: 4000) */
+  cycleInterval?: number;
 }
 
-export function SpeechBubble({ text, position = "left" }: SpeechBubbleProps) {
+export function SpeechBubble({
+  text,
+  position = "left",
+  cycleInterval = 4000,
+}: SpeechBubbleProps) {
   const tailOffset = position === "left" ? "25%" : "75%";
+  const [index, setIndex] = useState(0);
+
+  const messages = text === null ? null : Array.isArray(text) ? text : [text];
+  const shouldCycle = messages !== null && messages.length > 1;
+
+  useInterval(
+    () => {
+      if (messages) {
+        setIndex((prev) => (prev + 1) % messages.length);
+      }
+    },
+    shouldCycle ? cycleInterval : undefined,
+  );
+
+  const displayText = messages?.[index % messages.length] ?? null;
 
   return (
     <AnimatePresence mode="wait">
-      {text && (
+      {displayText && (
         <motion.div
-          key={text}
+          key={displayText}
           className="absolute -top-12 left-1/2 z-20 -translate-x-1/2"
           initial={{ opacity: 0, scale: 0.3, y: 8 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -33,7 +57,7 @@ export function SpeechBubble({ text, position = "left" }: SpeechBubbleProps) {
               textAlign: "center",
             }}
           >
-            {text}
+            {displayText}
             {/* Tail */}
             <svg
               className="absolute -bottom-1.5 h-2 w-3"

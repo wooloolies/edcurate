@@ -32,7 +32,7 @@ interface StudentAgentProps {
   position: { x: string; y: string };
   status: StageStatus | undefined;
   label: string;
-  message?: string | null;
+  message?: string | string[] | null;
 }
 
 export function StudentAgent({
