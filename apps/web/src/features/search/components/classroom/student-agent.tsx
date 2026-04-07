@@ -83,7 +83,7 @@ export function StudentAgent({
       transition={{ type: "spring", stiffness: 120, damping: 18, delay: 0.1 }}
     >
       <SpeechBubble text={message ?? null} position={character === "owl" || character === "bear" ? "left" : "right"} />
-      <motion.div animate={controls} style={{ width: 72, height: 90 }}>
+      <motion.div animate={controls} style={{ width: 64, height: 80 }}>
         <CharacterComponent
           className="h-full w-full"
           isWorking={isWorking}
