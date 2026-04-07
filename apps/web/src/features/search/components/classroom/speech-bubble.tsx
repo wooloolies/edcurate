@@ -8,7 +8,7 @@ interface SpeechBubbleProps {
   /** Single message or array of messages to cycle through */
   text: string | string[] | null;
   position?: "left" | "right";
-  /** Cycle interval in ms when text is an array (default: 4000) */
+  /** Base cycle interval in ms when text is an array (default: 4000) */
   cycleInterval?: number;
 }
 
@@ -18,7 +18,9 @@ export function SpeechBubble({
   cycleInterval = 4000,
 }: SpeechBubbleProps) {
   const tailOffset = position === "left" ? "25%" : "75%";
-  const [index, setIndex] = useState(0);
+  // Randomize start index and interval offset so multiple bubbles don't sync
+  const [index, setIndex] = useState(() => Math.floor(Math.random() * 100));
+  const [jitter] = useState(() => Math.floor(Math.random() * 2000) - 1000);
 
   const messages = text === null ? null : Array.isArray(text) ? text : [text];
   const shouldCycle = messages !== null && messages.length > 1;
@@ -26,10 +28,10 @@ export function SpeechBubble({
   useInterval(
     () => {
       if (messages) {
-        setIndex((prev) => (prev + 1) % messages.length);
+        setIndex((prev) => prev + 1);
       }
     },
-    shouldCycle ? cycleInterval : undefined,
+    shouldCycle ? cycleInterval + jitter : undefined,
   );
 
   const displayText = messages?.[index % messages.length] ?? null;
