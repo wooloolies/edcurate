@@ -82,9 +82,7 @@ export function UserMenu() {
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onSelect={() => router.push("/profile")}>
-          {t("profile")}
-        </DropdownMenuItem>
+        <DropdownMenuItem onSelect={() => router.push("/profile")}>{t("profile")}</DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onSelect={handleLogout}>{t("logout")}</DropdownMenuItem>
       </DropdownMenuContent>

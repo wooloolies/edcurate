@@ -9,7 +9,6 @@ from sse_starlette.sse import EventSourceResponse
 
 from src.agents.schemas import EvaluatedSearchResponse
 from src.discovery import service
-from src.discovery.schemas import SearchStageEvent
 from src.lib.auth import decode_token
 from src.lib.dependencies import CurrentUser, DBSession
 from src.lib.rate_limit import rate_limit

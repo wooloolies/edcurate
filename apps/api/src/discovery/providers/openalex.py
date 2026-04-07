@@ -73,9 +73,7 @@ class OpenAlexProvider(SearchProvider):
                 response = await client.get(
                     _OPENALEX_WORKS_URL,
                     params=params,
-                    headers={
-                        "User-Agent": "edcurate/1.0 (mailto:admin@edcurate.app)"
-                    },
+                    headers={"User-Agent": "edcurate/1.0 (mailto:admin@edcurate.app)"},
                 )
                 response.raise_for_status()
                 data = response.json()
@@ -112,9 +110,7 @@ class OpenAlexProvider(SearchProvider):
                             type="paper",
                             snippet=abstract
                             or (
-                                f"Authors: {', '.join(authors[:3])}"
-                                if authors
-                                else ""
+                                f"Authors: {', '.join(authors[:3])}" if authors else ""
                             ),
                             thumbnail_url=None,
                             metadata=OpenAlexMetadata(

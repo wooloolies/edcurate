@@ -461,9 +461,7 @@ async def search_resources(
     # Interleave round-robin
     all_results: list[ResourceCard] = []
     seen_urls: set[str] = set()
-    valid_results_lists = [
-        cards for cards in results_by_source.values() if cards
-    ]
+    valid_results_lists = [cards for cards in results_by_source.values() if cards]
 
     # Interleave 1 item from each provider round-robin
     for interleaved_tuple in zip_longest(*valid_results_lists):
@@ -598,7 +596,10 @@ async def search_resources_stream(
                 openalex_queries=generated_queries.openalex,
             )
     except TimeoutError:
-        logger.warning("Search query agent timed out (stream) - using provider defaults")
+        logger.warning(
+            "Search query agent timed out (stream)"
+            " - using provider defaults"
+        )
     except Exception as e:
         logger.warning(
             "Search query agent failed (stream) - using provider defaults",

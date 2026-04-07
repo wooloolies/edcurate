@@ -1,7 +1,7 @@
 "use client";
 
-import { DateTime } from "luxon";
 import { Plus, Search } from "lucide-react";
+import { DateTime } from "luxon";
 import { useTranslations } from "next-intl";
 
 import { Button } from "@/components/ui/button";
@@ -17,9 +17,7 @@ export default function DashboardPage() {
   const presets = data?.data ?? [];
 
   const todayStart = DateTime.now().startOf("day");
-  const todayCount = presets.filter(
-    (p) => DateTime.fromISO(p.created_at) >= todayStart
-  ).length;
+  const todayCount = presets.filter((p) => DateTime.fromISO(p.created_at) >= todayStart).length;
 
   return (
     <div className="space-y-6">
