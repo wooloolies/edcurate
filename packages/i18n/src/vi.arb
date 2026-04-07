@@ -396,6 +396,10 @@
   "@nav__library": {
     "description": "Navigation label for the Library page"
   },
+  "nav__team": "Nhóm",
+  "@nav__team": {
+    "description": "Navigation label for the Team page"
+  },
   "home__team": "Đội ngũ",
   "@home__team": {
     "description": "Homepage navigation button for the team page"

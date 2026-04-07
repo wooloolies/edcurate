@@ -235,7 +235,8 @@
     "presets": "预设",
     "search": "搜索",
     "dashboard": "仪表板",
-    "library": "资源库"
+    "library": "资源库",
+    "team": "团队"
   },
   "home": {
     "team": "团队",

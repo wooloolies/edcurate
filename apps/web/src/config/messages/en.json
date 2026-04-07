@@ -235,7 +235,8 @@
     "presets": "Presets",
     "search": "Search",
     "dashboard": "Dashboard",
-    "library": "Library"
+    "library": "Library",
+    "team": "Team"
   },
   "home": {
     "team": "Team",

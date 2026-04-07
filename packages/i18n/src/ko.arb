@@ -396,6 +396,10 @@
   "@nav__library": {
     "description": "Navigation label for the Library page"
   },
+  "nav__team": "팀",
+  "@nav__team": {
+    "description": "Navigation label for the Team page"
+  },
   "home__team": "팀 소개",
   "@home__team": {
     "description": "Homepage navigation button for the team page"

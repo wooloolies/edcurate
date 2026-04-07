@@ -235,7 +235,8 @@
     "presets": "프리셋",
     "search": "검색",
     "dashboard": "대시보드",
-    "library": "라이브러리"
+    "library": "라이브러리",
+    "team": "팀"
   },
   "home": {
     "team": "팀 소개",
