@@ -13,10 +13,10 @@
  * exit 2 = block stop
  */
 
-import { readFileSync, writeFileSync, unlinkSync, existsSync, readdirSync } from "node:fs";
-import { join, dirname } from "node:path";
-import { type Vendor, type ModeState, makeBlockOutput, resolveGitRoot } from "./types.ts";
+import { existsSync, readdirSync, readFileSync, unlinkSync, writeFileSync } from "node:fs";
+import { dirname, join } from "node:path";
 import { DEACTIVATION_PHRASES, isDeactivationRequest } from "./keyword-detector.ts";
+import { type ModeState, makeBlockOutput, resolveGitRoot, type Vendor } from "./types.ts";
 
 const MAX_REINFORCEMENTS = 5;
 const STALE_HOURS = 2;
@@ -63,10 +63,7 @@ function detectVendor(input: Record<string, unknown>): Vendor {
   return "claude";
 }
 
-function getProjectDir(
-  vendor: Vendor,
-  input: Record<string, unknown>,
-): string {
+function getProjectDir(vendor: Vendor, input: Record<string, unknown>): string {
   let dir: string;
   switch (vendor) {
     case "codex":
@@ -86,11 +83,7 @@ function getProjectDir(
 }
 
 function getSessionId(input: Record<string, unknown>): string {
-  return (
-    (input.sessionId as string) ||
-    (input.session_id as string) ||
-    "unknown"
-  );
+  return (input.sessionId as string) || (input.session_id as string) || "unknown";
 }
 
 // ── State ─────────────────────────────────────────────────────
@@ -99,11 +92,7 @@ function getStateDir(projectDir: string): string {
   return join(projectDir, ".agents", "state");
 }
 
-function readModeState(
-  projectDir: string,
-  workflow: string,
-  sessionId: string,
-): ModeState | null {
+function readModeState(projectDir: string, workflow: string, sessionId: string): ModeState | null {
   const path = join(getStateDir(projectDir), `${workflow}-state-${sessionId}.json`);
   if (!existsSync(path)) return null;
   try {
@@ -127,12 +116,12 @@ function incrementReinforcement(
   projectDir: string,
   workflow: string,
   sessionId: string,
-  state: ModeState,
+  state: ModeState
 ): void {
   state.reinforcementCount += 1;
   writeFileSync(
     join(getStateDir(projectDir), `${workflow}-state-${sessionId}.json`),
-    JSON.stringify(state, null, 2),
+    JSON.stringify(state, null, 2)
   );
 }
 
@@ -156,7 +145,7 @@ async function main() {
   // The assistant may have included "workflow done" in its response,
   // or it may appear in transcript/content fields depending on vendor.
   const textToCheck = [
-    input.prompt_response,  // Gemini AfterAgent
+    input.prompt_response, // Gemini AfterAgent
     input.response,
     input.content,
     input.message,
@@ -176,7 +165,9 @@ async function main() {
             unlinkSync(join(stateDir, file));
           }
         }
-      } catch { /* ignore */ }
+      } catch {
+        /* ignore */
+      }
     }
     process.exit(0);
   }
