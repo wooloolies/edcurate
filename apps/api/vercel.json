@@ -1,4 +1,4 @@
 {
-  "buildCommand": "pip install -e . && python -c \"from src.lib.config import settings; print('DB_SYNC:', bool(settings.DATABASE_URL_SYNC)); print('DB:', bool(settings.DATABASE_URL))\" && alembic upgrade head",
+  "buildCommand": "pip install -e . && alembic upgrade head",
   "ignoreCommand": "[ \"$VERCEL_ENV\" = \"preview\" ]"
 }
