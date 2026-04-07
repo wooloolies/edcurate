@@ -36,9 +36,14 @@ export default function ContactPage() {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const subject = encodeURIComponent(`Edcurate Contact: ${formState.name}`);
-    const body = encodeURIComponent(`From: ${formState.name} (${formState.email})\n\n${formState.message}`);
-    window.location.href = `mailto:Feihong.Pan-1@student.uts.edu.au?subject=${subject}&body=${body}`;
+    const title = encodeURIComponent(`[Contact] ${formState.name}`);
+    const body = encodeURIComponent(
+      `**From:** ${formState.name} (${formState.email})\n\n---\n\n${formState.message}`
+    );
+    window.open(
+      `https://github.com/wooloolies/edcurate/issues/new?title=${title}&body=${body}&labels=contact`,
+      "_blank"
+    );
     setSubmitted(true);
   }
 
