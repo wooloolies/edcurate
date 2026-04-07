@@ -1,43 +1,39 @@
 import { ExternalLink, Link as LinkIcon } from "lucide-react";
 import Image from "next/image";
-import {
-  RelevanceDetails,
-  VerdictBadge,
-} from "@/features/search/components/resource-card/relevance-indicator";
 import { ResourceListRow } from "@/features/search/components/resource-card/resource-list-row";
-import type { JudgmentResult, ResourceCard } from "@/lib/api/model";
+import { VerdictBadge } from "@/features/search/components/resource-card/relevance-indicator";
+import type { ResourceCard } from "@/lib/api/model";
 
 interface CustomCardProps {
   index: number;
   resource: ResourceCard;
-  judgment?: JudgmentResult | null;
   action?: React.ReactNode;
 }
 
-export function CustomCard({ index, resource, judgment, action }: CustomCardProps) {
+export function CustomCard({ index, resource, action }: CustomCardProps) {
   const meta = resource.metadata as { domain?: string };
 
   const contentNode = (
-    <>
-      <a
-        href={resource.url}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-base font-semibold text-slate-900 border-b border-transparent hover:border-slate-400 max-w-fit transition-colors leading-snug truncate"
-      >
-        <LinkIcon className="mr-1.5 inline h-4 w-4 text-slate-500" />
-        {resource.title}
-        <ExternalLink className="ml-1.5 inline h-3 w-3 text-slate-400" />
-      </a>
-      <div className="flex flex-col gap-3 sm:flex-row mt-1">
+    <div className="flex items-start gap-2.5">
+      <LinkIcon className="h-4 w-4 shrink-0 text-slate-500 mt-1" />
+      <div className="flex-1 min-w-0 flex flex-col gap-1.5">
+        <a
+          href={resource.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-base font-semibold text-slate-900 border-b border-transparent hover:border-slate-400 max-w-fit transition-colors leading-snug truncate"
+        >
+          {resource.title}
+          <ExternalLink className="ml-1.5 inline h-3 w-3 text-slate-400" />
+        </a>
         {!!resource.thumbnail_url && (
           <Image
             src={resource.thumbnail_url}
             alt={resource.title}
-            width={144}
-            height={80}
-            className="w-full shrink-0 rounded object-cover sm:h-20 sm:w-36 border border-slate-100"
-            unoptimized
+            width={320}
+            height={180}
+            sizes="(max-width: 640px) 100vw, 320px"
+            className="w-full max-w-xs rounded-lg object-cover border border-slate-100"
           />
         )}
         <div className="space-y-1">
@@ -45,7 +41,7 @@ export function CustomCard({ index, resource, judgment, action }: CustomCardProp
           {!!meta.domain && <p className="text-xs font-medium text-slate-400">{meta.domain}</p>}
         </div>
       </div>
-    </>
+    </div>
   );
 
   return (
@@ -54,7 +50,6 @@ export function CustomCard({ index, resource, judgment, action }: CustomCardProp
       verdictNode={<VerdictBadge verdict={resource.verdict} />}
       contentNode={contentNode}
       actionsNode={action}
-      expandedDetailsNode={judgment ? <RelevanceDetails judgment={judgment} /> : null}
     />
   );
 }

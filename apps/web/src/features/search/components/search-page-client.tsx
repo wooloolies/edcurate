@@ -1,20 +1,14 @@
 "use client";
 
 import { useQueryClient } from "@tanstack/react-query";
-import { BookOpen, ChevronDown, Globe, Inbox, Layers, Play, Search, X } from "lucide-react";
+import { BookOpen, ChevronDown, Globe, Inbox, Layers, Play, Repeat, Search, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useQueryState } from "nuqs";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { ClassroomScene } from "@/features/search/components/classroom/classroom-scene";
 import { ErrorBanner } from "@/features/search/components/error-banner";
 import { EvaluationProgress } from "@/features/search/components/evaluation-progress";
@@ -183,23 +177,42 @@ export function SearchPageClient() {
   const hasContent = results || stream.isStreaming || isFetching;
 
   return (
-    <div className={`w-full space-y-6 ${hasContent ? "max-w-6xl" : "max-w-4xl my-auto"}`}>
-      <h1 className="text-2xl font-bold">{t("title")}</h1>
-
-      <div className="flex flex-wrap items-end gap-3">
-        <div className="w-64">
-          <Select value={presetId ?? ""} onValueChange={(v: string) => setPresetId(v)}>
-            <SelectTrigger>
-              <SelectValue placeholder={t("selectPreset")} />
-            </SelectTrigger>
-            <SelectContent>
-              {presets.map((p) => (
-                <SelectItem key={p.id} value={p.id}>
-                  {p.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+    <div className={`w-full max-w-4xl space-y-6 ${!hasContent ? "my-auto" : ""}`}>
+      {/* Preset Header */}
+      <div className="flex flex-col mb-2 pl-2">
+        <div className="flex items-center gap-3">
+          <h2 className="text-3xl font-bold text-[#111827] leading-none mb-1">
+            {activePreset?.name ?? t("selectCollection")}
+          </h2>
+          <Popover>
+            <PopoverTrigger asChild>
+              <button
+                type="button"
+                aria-label={t("changePreset")}
+                className="p-2 border-2 border-white/40 rounded-xl bg-white/30 backdrop-blur-md shadow-sm flex items-center justify-center shrink-0 hover:bg-white transition-all transform hover:scale-105 cursor-pointer"
+              >
+                <Repeat className="w-5 h-5 text-[#111827] stroke-[2.5]" aria-hidden="true" />
+              </button>
+            </PopoverTrigger>
+            <PopoverContent align="start" className="w-56 p-2">
+              <div className="flex flex-col gap-1">
+                {presets.map((p) => (
+                  <button
+                    key={p.id}
+                    type="button"
+                    onClick={() => setPresetId(p.id)}
+                    className={`w-full text-left px-3 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer ${
+                      p.id === presetId
+                        ? "bg-[#B7FF70] text-[#111827]"
+                        : "hover:bg-gray-100 text-gray-700"
+                    }`}
+                  >
+                    {p.name}
+                  </button>
+                ))}
+              </div>
+            </PopoverContent>
+          </Popover>
         </div>
         <p className="text-lg font-medium text-[#111827]/60 mt-1 pl-1">{t("subtitle")}</p>
       </div>
@@ -246,15 +259,24 @@ export function SearchPageClient() {
         {activePreset && (
           <div className="flex flex-wrap items-start justify-between gap-4 px-2 -mt-2">
             <div className="flex flex-wrap items-center gap-3">
-              <div className="px-5 py-2.5 bg-white border border-[#111827]/10 rounded-xl text-sm font-bold text-[#111827] shadow-sm cursor-pointer">
-                {activePreset.subject}
-              </div>
-              <div className="px-5 py-2.5 bg-white border border-[#111827]/10 rounded-xl text-sm font-bold text-[#111827] shadow-sm cursor-pointer">
-                {activePreset.year_level}
-              </div>
-              {!!activePreset.class_size && (
+              {activePreset.subject && (
+                <div className="px-5 py-2.5 bg-white border border-[#111827]/10 rounded-xl text-sm font-bold text-[#111827] shadow-sm cursor-pointer">
+                  {activePreset.subject}
+                </div>
+              )}
+              {activePreset.year_level && (
+                <div className="px-5 py-2.5 bg-white border border-[#111827]/10 rounded-xl text-sm font-bold text-[#111827] shadow-sm cursor-pointer">
+                  {activePreset.year_level}
+                </div>
+              )}
+              {activePreset.class_size && (
                 <div className="px-5 py-2.5 bg-white border border-[#111827]/10 rounded-xl text-sm font-bold text-[#111827] shadow-sm cursor-pointer">
                   {t("classSizePeople", { classSize: activePreset.class_size })}
+                </div>
+              )}
+              {activePreset.country && (
+                <div className="px-5 py-2.5 bg-white border border-[#111827]/10 rounded-xl text-sm font-bold text-[#111827] shadow-sm cursor-pointer">
+                  {activePreset.country}
                 </div>
               )}
             </div>
@@ -337,7 +359,7 @@ export function SearchPageClient() {
           </aside>
 
           {/* Right Content: Results List */}
-          <section className="lg:col-span-7 bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden min-h-[400px]">
+          <section className="lg:col-span-7 min-h-[400px]">
             {(() => {
               const items = filterBySource(activeCategory === "all" ? undefined : activeCategory);
               const visibleItems = items.slice(0, visibleCount);
@@ -353,14 +375,13 @@ export function SearchPageClient() {
               }
 
               return (
-                <div>
-                  <div className="divide-y divide-slate-100">
+                <div className="flex flex-col gap-6">
+                  <div className="flex flex-col gap-6">
                     {visibleItems.map((resource, i) => (
                       <ResourceCardRenderer
                         key={resource.url}
                         index={i + 1}
                         resource={resource}
-                        judgment={judgmentByUrl.get(resource.url)}
                         presetId={presetId ?? undefined}
                         checked={isChecked(resource.url)}
                         onToggleChecked={(_, c) => handleToggleChecked(resource, c)}
