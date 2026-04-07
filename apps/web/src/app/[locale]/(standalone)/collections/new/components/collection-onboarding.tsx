@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useQueryState } from "nuqs";
-import { Pen, ChevronDown, AlertCircle, Search, Repeat } from "lucide-react";
+import { Pen, ChevronDown, AlertCircle } from "lucide-react";
 import { Link, useRouter } from "@/lib/i18n/routing";
 
 const CURRICULUM_DATA: Record<string, string[]> = {
@@ -50,7 +50,7 @@ const FIELD_DATA: string[] = [
   "Other..."
 ];
 
-export function ResearchOnboarding() {
+export function CollectionOnboarding() {
   const router = useRouter();
 
   // --- URL-Synchronized State (Preserves data on Language Switch & supports Browser Back Button) ---
@@ -58,15 +58,8 @@ export function ResearchOnboarding() {
   const currentStep = parseInt(stepStr || "1") as 1 | 2 | 3;
   const setCurrentStep = (val: 1|2|3) => setStepStr(val.toString());
 
-  const [completeStr, setCompleteStr] = useQueryState("complete", { defaultValue: "false", history: "push" });
-  const isComplete = completeStr === "true";
-  const setIsComplete = (val: boolean) => setCompleteStr(val.toString());
-
-  const [searchTextRaw, setSearchText] = useQueryState("search", { defaultValue: "" });
-  const searchText = searchTextRaw || "";
-
-  const [presetNameRaw, setPresetName] = useQueryState("preset", { defaultValue: "Preset 1" });
-  const presetName = presetNameRaw || "Preset 1";
+  const [presetNameRaw, setPresetName] = useQueryState("preset", { defaultValue: "Collection 1" });
+  const presetName = presetNameRaw || "Collection 1";
 
   const [isEditingPreset, setIsEditingPreset] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -139,89 +132,14 @@ export function ResearchOnboarding() {
       }
       setCurrentStep(3);
     } else if (currentStep === 3) {
-      // End of Onboarding flow - Submission Logic
-      setIsComplete(true);
+      // TODO: call create collection API with collected data, then redirect
+      router.push("/collections");
     }
   };
 
   const handleBack = () => {
     if (currentStep > 1) setCurrentStep((currentStep - 1) as 1 | 2 | 3);
   };
-
-  if (isComplete) {
-    const finalSubject = selectedField === "Other..." ? otherField : selectedField;
-    return (
-      <div className="w-full max-w-4xl flex flex-col items-start animate-in zoom-in-95 fade-in duration-700">
-        
-        {/* Preset Swap Header */}
-        <div className="flex flex-col mb-2 pl-2">
-          <div className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity">
-            <h2 className="text-3xl font-bold text-[#111827] leading-none mb-1">{presetName}</h2>
-            <div className="p-2 border-2 border-white/40 rounded-xl bg-white/30 backdrop-blur-md shadow-sm flex items-center justify-center shrink-0 hover:bg-white transition-all transform hover:scale-105">
-              <Repeat className="w-5 h-5 text-[#111827] stroke-[2.5]" />
-            </div>
-          </div>
-          <p className="text-lg font-medium text-[#111827]/60 mt-1 pl-1">
-            Your research was supported by...
-          </p>
-        </div>
-
-        {/* Transparent Glassy Bounding Box */}
-        <div className="w-full bg-white/40 backdrop-blur-2xl rounded-[2.5rem] shadow-[0_30px_100px_-15px_rgba(0,0,0,0.1)] border border-white/60 p-6 md:p-8 flex flex-col gap-6">
-          
-          {/* Search Input Unit - Redesigned for Clarity and Cognitive Load Reduction */}
-          <div className="w-full flex items-center bg-white/60 border-2 border-white/60 hover:bg-white/80 focus-within:bg-white focus-within:border-[#B7FF70] rounded-[2.5rem] p-2 transition-all shadow-md">
-            <div className="pl-6 pr-4 text-[#111827]">
-              <Search className="w-6 h-6" />
-            </div>
-            <input 
-              type="text"
-              value={searchText}
-              onChange={(e) => setSearchText(e.target.value)}
-              placeholder="Search or curate across the web..."
-              className="flex-1 bg-transparent py-4 text-xl font-bold text-[#111827] placeholder:text-gray-500 outline-none w-full"
-            />
-            <div className="flex items-center gap-2 pr-2">
-              {searchText && (
-                <button 
-                  onClick={() => setSearchText("")} 
-                  className="px-5 py-2 text-sm font-bold text-gray-500 hover:text-black transition-colors rounded-full hover:bg-gray-200/50 hidden md:block"
-                >
-                  Clear
-                </button>
-              )}
-              <button 
-                onClick={() => {
-                  if (searchText.trim() !== "") {
-                    router.push(`/dashboard/search?q=${encodeURIComponent(searchText)}`);
-                  }
-                }}
-                className="px-8 py-4 bg-[#111827] text-[#B7FF70] hover:scale-105 active:scale-95 transition-all rounded-[2rem] font-bold text-lg shadow-md whitespace-nowrap"
-              >
-                Search
-              </button>
-            </div>
-          </div>
-
-          {/* Secondary Controls: Applied Tags */}
-          <div className="flex flex-wrap items-start justify-between gap-4 px-2 -mt-2">
-            <div className="flex flex-wrap items-center gap-3">
-              <div className="px-5 py-2.5 bg-white border border-[#111827]/10 rounded-xl text-sm font-bold text-[#111827] shadow-sm cursor-default">
-                {finalSubject || "Subject"}
-              </div>
-              <div className="px-5 py-2.5 bg-white border border-[#111827]/10 rounded-xl text-sm font-bold text-[#111827] shadow-sm cursor-default">
-                Year {selectedYear || "Level"}
-              </div>
-              <div className="px-5 py-2.5 bg-white border border-[#111827]/10 rounded-xl text-sm font-bold text-[#111827] shadow-sm cursor-default">
-                {classSize || "0"} people
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="w-full max-w-4xl bg-white rounded-[2.5rem] shadow-xl shadow-black/[0.03] ring-1 ring-black/5 p-10 md:p-14 transition-all duration-300">

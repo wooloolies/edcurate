@@ -29,7 +29,7 @@ export default async function HomePage({ params }: HomePageProps) {
 
         {/* Glassmorphic link in the middle */}
         <Link
-          href="/research"
+          href="/collections/new"
           className="mt-16 px-10 py-5 rounded-[2.5rem] text-lg font-semibold text-[#111827] backdrop-blur-2xl bg-white/40 border border-black/10 shadow-[0_8px_32px_rgba(0,0,0,0.05)] hover:bg-[#111827] hover:text-white hover:border-[#111827] hover:shadow-[0_8px_32px_rgba(17,24,39,0.3)] hover:scale-105 duration-300 transition-all inline-block"
         >
           {t("startResearch")}
