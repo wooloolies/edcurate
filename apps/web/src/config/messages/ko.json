@@ -87,9 +87,9 @@
       "additionalNotes": "추가 메모"
     },
     "sources": {
-      "ddgs": "웹",
-      "youtube": "비디오",
-      "openalex": "학술"
+      "ddgs": "DuckDuckGo",
+      "youtube": "YouTube",
+      "openalex": "OpenAlex"
     },
     "placeholders": {
       "name": "예: 9학년 지리 - 케언스",
@@ -121,17 +121,29 @@
       "all": "전체",
       "web": "웹",
       "video": "동영상",
-      "papers": "학술"
+      "papers": "논문"
     },
     "card": {
       "citations": "인용",
       "views": "조회",
       "by": "저자"
     },
+    "generatedQueries": {
+      "title": "검색한 내용",
+      "ddgs": "웹",
+      "youtube": "동영상",
+      "openalex": "논문"
+    },
     "idleState": "프리셋을 선택하고 검색어를 입력해 교육 자료를 찾아보세요.",
     "searchingButton": "검색 중...",
     "showUnscored": "{count}개의 미평가 결과 더 보기",
     "hideUnscored": "미평가 결과 숨기기",
+    "resourcesSelected": "{count}개 자료 선택됨",
+    "saveToLibrary": "라이브러리에 저장",
+    "saving": "저장 중...",
+    "savedSuccess": "라이브러리에 저장되었습니다!",
+    "savedError": "자료 저장에 실패했습니다",
+    "clearSelection": "선택 해제",
     "progress": {
       "title": "심층 평가 진행 중",
       "duration": "보통 60~90초 정도 걸립니다",
@@ -172,7 +184,8 @@
   "nav": {
     "presets": "프리셋",
     "search": "검색",
-    "dashboard": "대시보드"
+    "dashboard": "대시보드",
+    "library": "라이브러리"
   },
   "home": {
     "team": "팀 소개",

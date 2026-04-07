@@ -364,6 +364,22 @@
   "@search__card__by": {
     "description": "Preposition before author name on a result card"
   },
+  "search__generatedQueries__title": "Nội dung đã tìm kiếm",
+  "@search__generatedQueries__title": {
+    "description": "Title for generated queries section"
+  },
+  "search__generatedQueries__ddgs": "Web",
+  "@search__generatedQueries__ddgs": {
+    "description": "Label for web search query"
+  },
+  "search__generatedQueries__youtube": "Video",
+  "@search__generatedQueries__youtube": {
+    "description": "Label for video search query"
+  },
+  "search__generatedQueries__openalex": "Bài báo",
+  "@search__generatedQueries__openalex": {
+    "description": "Label for academic papers search query"
+  },
   "nav__presets": "Thiết lập",
   "@nav__presets": {
     "description": "Navigation label for the Presets page"
@@ -375,6 +391,10 @@
   "nav__dashboard": "Bảng điều khiển",
   "@nav__dashboard": {
     "description": "Navigation label for the Dashboard page"
+  },
+  "nav__library": "Thư viện",
+  "@nav__library": {
+    "description": "Navigation label for the Library page"
   },
   "home__team": "Đội ngũ",
   "@home__team": {
@@ -481,6 +501,36 @@
   "search__hideUnscored": "Ẩn kết quả chưa chấm điểm",
   "@search__hideUnscored": {
     "description": "Button label to hide unscored results"
+  },
+  "search__resourcesSelected": "Đã chọn {count} tài nguyên",
+  "@search__resourcesSelected": {
+    "description": "Label showing number of selected resources",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "description": "Number of selected resources"
+      }
+    }
+  },
+  "search__saveToLibrary": "Lưu vào thư viện",
+  "@search__saveToLibrary": {
+    "description": "Button to save selected resources to library"
+  },
+  "search__saving": "Đang lưu...",
+  "@search__saving": {
+    "description": "Button label while saving resources"
+  },
+  "search__savedSuccess": "Đã lưu vào thư viện!",
+  "@search__savedSuccess": {
+    "description": "Success message after saving resources"
+  },
+  "search__savedError": "Không thể lưu tài nguyên",
+  "@search__savedError": {
+    "description": "Error message when saving resources fails"
+  },
+  "search__clearSelection": "Bỏ chọn",
+  "@search__clearSelection": {
+    "description": "Button to clear resource selection"
   },
   "search__progress__title": "Đang đánh giá chuyên sâu",
   "@search__progress__title": {

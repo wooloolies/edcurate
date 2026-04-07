@@ -364,6 +364,22 @@
   "@search__card__by": {
     "description": "Preposition before author name on a result card"
   },
+  "search__generatedQueries__title": "검색한 내용",
+  "@search__generatedQueries__title": {
+    "description": "Title for generated queries section"
+  },
+  "search__generatedQueries__ddgs": "웹",
+  "@search__generatedQueries__ddgs": {
+    "description": "Label for web search query"
+  },
+  "search__generatedQueries__youtube": "동영상",
+  "@search__generatedQueries__youtube": {
+    "description": "Label for video search query"
+  },
+  "search__generatedQueries__openalex": "논문",
+  "@search__generatedQueries__openalex": {
+    "description": "Label for academic papers search query"
+  },
   "nav__presets": "프리셋",
   "@nav__presets": {
     "description": "Navigation label for the Presets page"
@@ -375,6 +391,10 @@
   "nav__dashboard": "대시보드",
   "@nav__dashboard": {
     "description": "Navigation label for the Dashboard page"
+  },
+  "nav__library": "라이브러리",
+  "@nav__library": {
+    "description": "Navigation label for the Library page"
   },
   "home__team": "팀 소개",
   "@home__team": {
@@ -481,6 +501,36 @@
   "search__hideUnscored": "미평가 결과 숨기기",
   "@search__hideUnscored": {
     "description": "Button label to hide unscored results"
+  },
+  "search__resourcesSelected": "{count}개 자료 선택됨",
+  "@search__resourcesSelected": {
+    "description": "Label showing number of selected resources",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "description": "Number of selected resources"
+      }
+    }
+  },
+  "search__saveToLibrary": "라이브러리에 저장",
+  "@search__saveToLibrary": {
+    "description": "Button to save selected resources to library"
+  },
+  "search__saving": "저장 중...",
+  "@search__saving": {
+    "description": "Button label while saving resources"
+  },
+  "search__savedSuccess": "라이브러리에 저장되었습니다!",
+  "@search__savedSuccess": {
+    "description": "Success message after saving resources"
+  },
+  "search__savedError": "자료 저장에 실패했습니다",
+  "@search__savedError": {
+    "description": "Error message when saving resources fails"
+  },
+  "search__clearSelection": "선택 해제",
+  "@search__clearSelection": {
+    "description": "Button to clear resource selection"
   },
   "search__progress__title": "심층 평가 진행 중",
   "@search__progress__title": {

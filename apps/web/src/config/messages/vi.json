@@ -87,9 +87,9 @@
       "additionalNotes": "Ghi chú bổ sung"
     },
     "sources": {
-      "ddgs": "Web",
-      "youtube": "Video",
-      "openalex": "Học thuật"
+      "ddgs": "DuckDuckGo",
+      "youtube": "YouTube",
+      "openalex": "OpenAlex"
     },
     "placeholders": {
       "name": "ví dụ: Địa lý lớp 9 - Cairns",
@@ -121,17 +121,29 @@
       "all": "Tất cả",
       "web": "Web",
       "video": "Video",
-      "papers": "Học thuật"
+      "papers": "Bài báo"
     },
     "card": {
       "citations": "lượt trích dẫn",
       "views": "lượt xem",
       "by": "bởi"
     },
+    "generatedQueries": {
+      "title": "Nội dung đã tìm kiếm",
+      "ddgs": "Web",
+      "youtube": "Video",
+      "openalex": "Bài báo"
+    },
     "idleState": "Chọn một thiết lập và nhập từ khóa để khám phá tài nguyên giáo dục.",
     "searchingButton": "Đang tìm kiếm...",
     "showUnscored": "Hiện thêm {count} kết quả chưa được chấm điểm",
     "hideUnscored": "Ẩn kết quả chưa chấm điểm",
+    "resourcesSelected": "Đã chọn {count} tài nguyên",
+    "saveToLibrary": "Lưu vào thư viện",
+    "saving": "Đang lưu...",
+    "savedSuccess": "Đã lưu vào thư viện!",
+    "savedError": "Không thể lưu tài nguyên",
+    "clearSelection": "Bỏ chọn",
     "progress": {
       "title": "Đang đánh giá chuyên sâu",
       "duration": "Thường mất khoảng 60-90 giây",
@@ -172,7 +184,8 @@
   "nav": {
     "presets": "Thiết lập",
     "search": "Tìm kiếm",
-    "dashboard": "Bảng điều khiển"
+    "dashboard": "Bảng điều khiển",
+    "library": "Thư viện"
   },
   "home": {
     "team": "Đội ngũ",

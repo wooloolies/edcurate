@@ -364,6 +364,22 @@
   "@search__card__by": {
     "description": "Preposition before author name on a result card"
   },
+  "search__generatedQueries__title": "搜索内容",
+  "@search__generatedQueries__title": {
+    "description": "Title for generated queries section"
+  },
+  "search__generatedQueries__ddgs": "网页",
+  "@search__generatedQueries__ddgs": {
+    "description": "Label for web search query"
+  },
+  "search__generatedQueries__youtube": "视频",
+  "@search__generatedQueries__youtube": {
+    "description": "Label for video search query"
+  },
+  "search__generatedQueries__openalex": "论文",
+  "@search__generatedQueries__openalex": {
+    "description": "Label for academic papers search query"
+  },
   "nav__presets": "预设",
   "@nav__presets": {
     "description": "Navigation label for the Presets page"
@@ -375,6 +391,10 @@
   "nav__dashboard": "仪表板",
   "@nav__dashboard": {
     "description": "Navigation label for the Dashboard page"
+  },
+  "nav__library": "资源库",
+  "@nav__library": {
+    "description": "Navigation label for the Library page"
   },
   "home__team": "团队",
   "@home__team": {
@@ -481,6 +501,36 @@
   "search__hideUnscored": "隐藏未评分结果",
   "@search__hideUnscored": {
     "description": "Button label to hide unscored results"
+  },
+  "search__resourcesSelected": "已选择 {count} 个资源",
+  "@search__resourcesSelected": {
+    "description": "Label showing number of selected resources",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "description": "Number of selected resources"
+      }
+    }
+  },
+  "search__saveToLibrary": "保存到资源库",
+  "@search__saveToLibrary": {
+    "description": "Button to save selected resources to library"
+  },
+  "search__saving": "保存中...",
+  "@search__saving": {
+    "description": "Button label while saving resources"
+  },
+  "search__savedSuccess": "已保存到资源库！",
+  "@search__savedSuccess": {
+    "description": "Success message after saving resources"
+  },
+  "search__savedError": "保存资源失败",
+  "@search__savedError": {
+    "description": "Error message when saving resources fails"
+  },
+  "search__clearSelection": "取消选择",
+  "@search__clearSelection": {
+    "description": "Button to clear resource selection"
   },
   "search__progress__title": "深度评估进行中",
   "@search__progress__title": {

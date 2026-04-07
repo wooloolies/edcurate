@@ -388,6 +388,22 @@
   "@search__card__by": {
     "description": "Preposition before author name on a result card"
   },
+  "search__generatedQueries__title": "What we searched for",
+  "@search__generatedQueries__title": {
+    "description": "Title for generated queries section"
+  },
+  "search__generatedQueries__ddgs": "Web",
+  "@search__generatedQueries__ddgs": {
+    "description": "Label for web search query"
+  },
+  "search__generatedQueries__youtube": "Video",
+  "@search__generatedQueries__youtube": {
+    "description": "Label for video search query"
+  },
+  "search__generatedQueries__openalex": "Papers",
+  "@search__generatedQueries__openalex": {
+    "description": "Label for academic papers search query"
+  },
   "nav__presets": "Presets",
   "@nav__presets": {
     "description": "Navigation label for the Presets page"
@@ -509,6 +525,36 @@
   "search__hideUnscored": "Hide unscored results",
   "@search__hideUnscored": {
     "description": "Button label to hide unscored results"
+  },
+  "search__resourcesSelected": "{count, plural, one {# resource} other {# resources}} selected",
+  "@search__resourcesSelected": {
+    "description": "Label showing number of selected resources",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "description": "Number of selected resources"
+      }
+    }
+  },
+  "search__saveToLibrary": "Save to Library",
+  "@search__saveToLibrary": {
+    "description": "Button to save selected resources to library"
+  },
+  "search__saving": "Saving...",
+  "@search__saving": {
+    "description": "Button label while saving resources"
+  },
+  "search__savedSuccess": "Resources saved to library!",
+  "@search__savedSuccess": {
+    "description": "Success message after saving resources"
+  },
+  "search__savedError": "Failed to save resources",
+  "@search__savedError": {
+    "description": "Error message when saving resources fails"
+  },
+  "search__clearSelection": "Clear selection",
+  "@search__clearSelection": {
+    "description": "Button to clear resource selection"
   },
   "search__progress__title": "Deep Evaluation in Progress",
   "@search__progress__title": {

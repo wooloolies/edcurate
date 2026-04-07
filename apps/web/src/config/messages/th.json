@@ -87,9 +87,9 @@
       "additionalNotes": "บันทึกเพิ่มเติม"
     },
     "sources": {
-      "ddgs": "เว็บ",
-      "youtube": "วิดีโอ",
-      "openalex": "วิชาการ"
+      "ddgs": "DuckDuckGo",
+      "youtube": "YouTube",
+      "openalex": "OpenAlex"
     },
     "placeholders": {
       "name": "เช่น ภูมิศาสตร์ ม.3 - แคนส์",
@@ -121,17 +121,29 @@
       "all": "ทั้งหมด",
       "web": "เว็บ",
       "video": "วิดีโอ",
-      "papers": "วิชาการ"
+      "papers": "บทความวิชาการ"
     },
     "card": {
       "citations": "การอ้างอิง",
       "views": "การดู",
       "by": "โดย"
     },
+    "generatedQueries": {
+      "title": "คำค้นหาที่ใช้",
+      "ddgs": "เว็บ",
+      "youtube": "วิดีโอ",
+      "openalex": "บทความวิชาการ"
+    },
     "idleState": "เลือกพรีเซ็ตและกรอกคำค้นหาเพื่อค้นหาทรัพยากรการศึกษา",
     "searchingButton": "กำลังค้นหา...",
     "showUnscored": "แสดงผลลัพธ์ที่ยังไม่ประเมินอีก {count} รายการ",
     "hideUnscored": "ซ่อนผลลัพธ์ที่ยังไม่ประเมิน",
+    "resourcesSelected": "เลือกแล้ว {count} รายการ",
+    "saveToLibrary": "บันทึกลงคลังสื่อ",
+    "saving": "กำลังบันทึก...",
+    "savedSuccess": "บันทึกลงคลังสื่อแล้ว!",
+    "savedError": "ไม่สามารถบันทึกสื่อได้",
+    "clearSelection": "ล้างการเลือก",
     "progress": {
       "title": "กำลังประเมินเชิงลึก",
       "duration": "โดยปกติใช้เวลา 60-90 วินาที",
@@ -172,7 +184,8 @@
   "nav": {
     "presets": "พรีเซ็ต",
     "search": "ค้นหา",
-    "dashboard": "แดชบอร์ด"
+    "dashboard": "แดชบอร์ด",
+    "library": "คลังสื่อ"
   },
   "home": {
     "team": "ทีม",

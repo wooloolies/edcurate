@@ -87,9 +87,9 @@
       "additionalNotes": "补充说明"
     },
     "sources": {
-      "ddgs": "网页",
-      "youtube": "视频",
-      "openalex": "学术"
+      "ddgs": "DuckDuckGo",
+      "youtube": "YouTube",
+      "openalex": "OpenAlex"
     },
     "placeholders": {
       "name": "例如：九年级地理 - 凯恩斯",
@@ -121,17 +121,29 @@
       "all": "全部",
       "web": "网页",
       "video": "视频",
-      "papers": "学术"
+      "papers": "论文"
     },
     "card": {
       "citations": "引用",
       "views": "浏览",
       "by": "作者"
     },
+    "generatedQueries": {
+      "title": "搜索内容",
+      "ddgs": "网页",
+      "youtube": "视频",
+      "openalex": "论文"
+    },
     "idleState": "选择一个预设并输入搜索词，以发现教育资源。",
     "searchingButton": "搜索中...",
     "showUnscored": "显示另外 {count} 条未评分结果",
     "hideUnscored": "隐藏未评分结果",
+    "resourcesSelected": "已选择 {count} 个资源",
+    "saveToLibrary": "保存到资源库",
+    "saving": "保存中...",
+    "savedSuccess": "已保存到资源库！",
+    "savedError": "保存资源失败",
+    "clearSelection": "取消选择",
     "progress": {
       "title": "深度评估进行中",
       "duration": "通常需要 60 到 90 秒",
@@ -172,7 +184,8 @@
   "nav": {
     "presets": "预设",
     "search": "搜索",
-    "dashboard": "仪表板"
+    "dashboard": "仪表板",
+    "library": "资源库"
   },
   "home": {
     "team": "团队",

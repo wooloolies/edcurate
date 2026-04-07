@@ -364,6 +364,22 @@
   "@search__card__by": {
     "description": "Preposition before author name on a result card"
   },
+  "search__generatedQueries__title": "คำค้นหาที่ใช้",
+  "@search__generatedQueries__title": {
+    "description": "Title for generated queries section"
+  },
+  "search__generatedQueries__ddgs": "เว็บ",
+  "@search__generatedQueries__ddgs": {
+    "description": "Label for web search query"
+  },
+  "search__generatedQueries__youtube": "วิดีโอ",
+  "@search__generatedQueries__youtube": {
+    "description": "Label for video search query"
+  },
+  "search__generatedQueries__openalex": "บทความวิชาการ",
+  "@search__generatedQueries__openalex": {
+    "description": "Label for academic papers search query"
+  },
   "nav__presets": "พรีเซ็ต",
   "@nav__presets": {
     "description": "Navigation label for the Presets page"
@@ -375,6 +391,10 @@
   "nav__dashboard": "แดชบอร์ด",
   "@nav__dashboard": {
     "description": "Navigation label for the Dashboard page"
+  },
+  "nav__library": "คลังสื่อ",
+  "@nav__library": {
+    "description": "Navigation label for the Library page"
   },
   "home__team": "ทีม",
   "@home__team": {
@@ -481,6 +501,36 @@
   "search__hideUnscored": "ซ่อนผลลัพธ์ที่ยังไม่ประเมิน",
   "@search__hideUnscored": {
     "description": "Button label to hide unscored results"
+  },
+  "search__resourcesSelected": "เลือกแล้ว {count} รายการ",
+  "@search__resourcesSelected": {
+    "description": "Label showing number of selected resources",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "description": "Number of selected resources"
+      }
+    }
+  },
+  "search__saveToLibrary": "บันทึกลงคลังสื่อ",
+  "@search__saveToLibrary": {
+    "description": "Button to save selected resources to library"
+  },
+  "search__saving": "กำลังบันทึก...",
+  "@search__saving": {
+    "description": "Button label while saving resources"
+  },
+  "search__savedSuccess": "บันทึกลงคลังสื่อแล้ว!",
+  "@search__savedSuccess": {
+    "description": "Success message after saving resources"
+  },
+  "search__savedError": "ไม่สามารถบันทึกสื่อได้",
+  "@search__savedError": {
+    "description": "Error message when saving resources fails"
+  },
+  "search__clearSelection": "ล้างการเลือก",
+  "@search__clearSelection": {
+    "description": "Button to clear resource selection"
   },
   "search__progress__title": "กำลังประเมินเชิงลึก",
   "@search__progress__title": {
