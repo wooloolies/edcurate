@@ -301,10 +301,9 @@ export function CollectionOnboarding() {
             {/* Grade / Year Level */}
             {grades && grades.length > 0 && (
               <div className="w-full">
-                {/* biome-ignore lint/a11y/noLabelWithoutControl: label wraps a button grid */}
-                <label className="block text-xl font-bold text-[#111827] mb-4 text-left">
+                <span className="block text-xl font-bold text-[#111827] mb-4 text-left">
                   Year Level
-                </label>
+                </span>
                 <div className="grid grid-cols-3 gap-4">
                   {grades.map((g) => {
                     const isSelected = grade === g.name;

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { Locale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Header } from "@/components/layout/header";
@@ -60,13 +61,13 @@ export default async function AboutPage({ params }: AboutPageProps) {
               rel="noopener noreferrer"
               className="group flex flex-col items-center rounded-xl border border-black/5 bg-white/60 backdrop-blur-xl p-6 transition-all hover:border-black/10 hover:shadow-lg"
             >
-              {/* biome-ignore lint/performance/noImgElement: external GitHub avatar URLs */}
-              <img
+              <Image
                 src={member.avatar}
                 alt={member.name}
                 width={96}
                 height={96}
                 className="rounded-full"
+                unoptimized
               />
               <h2 className="mt-4 text-lg font-semibold">{member.name}</h2>
               <p className="mt-1 text-sm text-gray-500">@{member.github}</p>
