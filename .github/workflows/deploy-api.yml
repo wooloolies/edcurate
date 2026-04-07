@@ -1,0 +1,16 @@
+name: Deploy API
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "apps/api/**"
+      - ".github/workflows/deploy-api.yml"
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Vercel Production Deploy
+        run: curl -s -X POST "${{ secrets.VERCEL_DEPLOY_HOOK_API }}"

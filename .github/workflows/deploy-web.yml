@@ -1,0 +1,17 @@
+name: Deploy Web
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "apps/web/**"
+      - "packages/**"
+      - ".github/workflows/deploy-web.yml"
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Vercel Production Deploy
+        run: curl -s -X POST "${{ secrets.VERCEL_DEPLOY_HOOK_WEB }}"
