@@ -4,10 +4,15 @@
  * SSE endpoint /api/discovery/search/stream is exempt from Orval codegen
  * because it returns text/event-stream, not JSON. The final `complete` event
  * payload is typed using the Orval-generated JudgedSearchResponse.
+ *
+ * Stream state is stored in a Jotai atom so it persists across route
+ * navigations (e.g. search → presets → back to search).
  */
 
-import { useLatest, useMemoizedFn, useUnmount } from "ahooks";
-import { useReducer, useRef } from "react";
+import { useLatest, useMemoizedFn } from "ahooks";
+import { useAtom } from "jotai";
+import { useRef } from "react";
+
 import type {
   ResourceAgentProgress,
   SearchStageEvent,
@@ -18,16 +23,11 @@ import type {
 import { fetchSSE } from "@/features/search/utils/fetch-sse";
 import { parseSSEBuffer } from "@/features/search/utils/parse-sse";
 import type { JudgedSearchResponse } from "@/lib/api/model/judged-search-response";
+import { searchStreamAtom } from "@/stores/search-stream-atoms";
 
 // ---------------------------------------------------------------------------
-// Reducer
+// Reducer logic (pure function, used by the hook to update the atom)
 // ---------------------------------------------------------------------------
-
-type Action =
-  | { type: "START" }
-  | { type: "STAGE_EVENT"; payload: SearchStageEvent }
-  | { type: "ERROR"; payload: string }
-  | { type: "RESET" };
 
 const initialState: SearchStreamState = {
   stages: {},
@@ -39,42 +39,38 @@ const initialState: SearchStreamState = {
   error: null,
 };
 
-function streamReducer(state: SearchStreamState, action: Action): SearchStreamState {
+type Action =
+  | { type: "START" }
+  | { type: "STAGE_EVENT"; payload: SearchStageEvent }
+  | { type: "ERROR"; payload: string }
+  | { type: "RESET" };
+
+function reduce(state: SearchStreamState, action: Action): SearchStreamState {
   switch (action.type) {
-    case "START": {
-      return {
-        ...initialState,
-        // Carry over a fresh Map so React sees a new reference
-        resourceProgress: new Map(),
-        isStreaming: true,
-      };
-    }
+    case "START":
+      return { ...initialState, resourceProgress: new Map(), isStreaming: true };
 
     case "STAGE_EVENT": {
-      const event = action.payload;
-      const { stage, status, resource_url, cached, data } = event;
+      const { stage, status, resource_url, cached, data } = action.payload;
 
       const nextStages: Partial<Record<Stage, StageStatus>> = {
         ...state.stages,
         [stage]: status,
       };
 
-      // Per-resource progress tracking for evaluation/adversarial
       const nextResourceProgress = new Map(state.resourceProgress);
       if (resource_url && (stage === "evaluation" || stage === "adversarial")) {
         const existing: ResourceAgentProgress = nextResourceProgress.get(resource_url) ?? {
           evaluationStatus: null,
           adversarialStatus: null,
         };
-        const updated: ResourceAgentProgress = {
+        nextResourceProgress.set(resource_url, {
           ...existing,
           ...(stage === "evaluation" ? { evaluationStatus: status } : {}),
           ...(stage === "adversarial" ? { adversarialStatus: status } : {}),
-        };
-        nextResourceProgress.set(resource_url, updated);
+        });
       }
 
-      // On complete stage, extract result
       const isComplete = stage === "complete" && status === "done";
       const result: JudgedSearchResponse | null = isComplete
         ? ((data as unknown as JudgedSearchResponse) ?? state.result)
@@ -91,22 +87,22 @@ function streamReducer(state: SearchStreamState, action: Action): SearchStreamSt
       };
     }
 
-    case "ERROR": {
-      return {
-        ...state,
-        isStreaming: false,
-        error: action.payload,
-      };
-    }
+    case "ERROR":
+      return { ...state, isStreaming: false, error: action.payload };
 
-    case "RESET": {
+    case "RESET":
       return { ...initialState, resourceProgress: new Map() };
-    }
 
     default:
       return state;
   }
 }
+
+// ---------------------------------------------------------------------------
+// Module-level abort controller — survives component unmount
+// ---------------------------------------------------------------------------
+
+let activeAbort: AbortController | null = null;
 
 // ---------------------------------------------------------------------------
 // Hook
@@ -119,14 +115,18 @@ export interface UseSearchStreamReturn extends SearchStreamState {
 
 export function useSearchStream(
   presetId: string | null,
-  query: string | null
+  query: string | null,
 ): UseSearchStreamReturn {
-  const [state, dispatch] = useReducer(streamReducer, initialState);
-  const abortRef = useRef<AbortController | null>(null);
-
-  // useLatest prevents stale closures without adding deps to useMemoizedFn
+  const [state, setState] = useAtom(searchStreamAtom);
   const latestPresetId = useLatest(presetId);
   const latestQuery = useLatest(query);
+  // Keep a local ref to setState to avoid stale closures in the stream loop
+  const setStateRef = useRef(setState);
+  setStateRef.current = setState;
+
+  const dispatch = useMemoizedFn((action: Action) => {
+    setStateRef.current((prev) => reduce(prev, action));
+  });
 
   const startStream = useMemoizedFn(async () => {
     const pid = latestPresetId.current;
@@ -134,9 +134,9 @@ export function useSearchStream(
     if (!pid || !q) return;
 
     // Abort any in-flight stream before starting a new one
-    abortRef.current?.abort();
+    activeAbort?.abort();
     const controller = new AbortController();
-    abortRef.current = controller;
+    activeAbort = controller;
 
     dispatch({ type: "START" });
 
@@ -144,7 +144,7 @@ export function useSearchStream(
       const response = await fetchSSE(
         "/api/discovery/search/stream",
         { preset_id: pid, query: q },
-        controller.signal
+        controller.signal,
       );
 
       if (!response.ok) {
@@ -179,16 +179,11 @@ export function useSearchStream(
   });
 
   const stopStream = useMemoizedFn(() => {
-    abortRef.current?.abort();
+    activeAbort?.abort();
+    activeAbort = null;
   });
 
-  useUnmount(() => {
-    abortRef.current?.abort();
-  });
+  // No useUnmount abort — stream persists across navigations
 
-  return {
-    ...state,
-    startStream,
-    stopStream,
-  };
+  return { ...state, startStream, stopStream };
 }
