@@ -25,7 +25,7 @@ type RegisterResponse = {
 export default function RegisterPage() {
   const t = useTranslations("login");
   const router = useRouter();
-  const [redirectUrl] = useQueryState("redirect", parseAsString.withDefault("/dashboard"));
+  const [redirectUrl] = useQueryState("redirect", parseAsString.withDefault("/collections"));
   const [error, setError] = useState("");
   const [pendingEmail, setPendingEmail] = useState("");
   const [showVerify, setShowVerify] = useState(false);
