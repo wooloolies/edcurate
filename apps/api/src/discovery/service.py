@@ -53,9 +53,15 @@ _STATUS_CODE_RE = re.compile(r"(\d{3})")
 def _sanitize_error(error: Exception) -> str:
     """Return a user-friendly error message without URLs or technical details."""
     msg = str(error)
-    # Extract HTTP status code if present
-    match = _STATUS_CODE_RE.search(msg)
-    code = match.group(1) if match else None
+    logger.error(
+        "Search provider error: %s: %s",
+        type(error).__name__,
+        msg,
+        exc_info=error,
+    )
+    # Extract HTTP status code from httpx-style messages (e.g. "Client error '403 …'")
+    match = re.search(r"\b[45]\d{2}\b", msg)
+    code = match.group(0) if match else None
     if code == "403":
         return "Access denied — API quota may be exceeded. Try again later."
     if code == "429":
