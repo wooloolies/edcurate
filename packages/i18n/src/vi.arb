@@ -1071,7 +1071,7 @@
   "@contact__location": { "description": "Location section heading" },
   "contact__teamEmails": "Email nhóm",
   "@contact__teamEmails": { "description": "Team emails section heading" },
-  "search__saveCollection__title": "Lưu vào bộ sưu tập",
+  "search__saveCollection__title": "Lưu vào thư viện",
   "@search__saveCollection__title": { "description": "Dialog title for saving resources to a collection" },
   "search__saveCollection__description": "Nhóm các tài nguyên đã chọn vào bộ sưu tập có tên.",
   "@search__saveCollection__description": { "description": "Dialog description for saving resources to a collection" },

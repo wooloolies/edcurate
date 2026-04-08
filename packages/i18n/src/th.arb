@@ -1091,7 +1091,7 @@
   "@contact__location": { "description": "Location section heading" },
   "contact__teamEmails": "อีเมลทีม",
   "@contact__teamEmails": { "description": "Team emails section heading" },
-  "search__saveCollection__title": "บันทึกลงคอลเลกชัน",
+  "search__saveCollection__title": "บันทึกลงคลังสื่อ",
   "@search__saveCollection__title": { "description": "Dialog title for saving resources to a collection" },
   "search__saveCollection__description": "จัดกลุ่มทรัพยากรที่เลือกไว้ในคอลเลกชันที่มีชื่อ",
   "@search__saveCollection__description": { "description": "Dialog description for saving resources to a collection" },

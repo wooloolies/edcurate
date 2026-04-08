@@ -1382,7 +1382,7 @@
   "@search__suggestedCollections__syncSuccess": {
     "description": "Success message when syncing collection"
   },
-  "search__saveCollection__title": "Save to Collection",
+  "search__saveCollection__title": "Save to Library",
   "@search__saveCollection__title": {
     "description": "Dialog title for saving resources to a collection"
   },

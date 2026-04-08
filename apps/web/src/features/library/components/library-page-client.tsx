@@ -10,8 +10,8 @@ import {
   MoreHorizontal,
   Pencil,
   Plus,
+  ScanSearch,
   Search,
-  Sparkles,
   Trash2,
   Wand2,
   X,
@@ -233,34 +233,19 @@ export function LibraryPageClient() {
     const isEvaluatingThis = evaluatingIds.has(item.id);
     const isDeletingThis = deletingIds.has(item.id);
     return (
-      <div className="flex flex-col gap-1.5">
-        <button
-          type="button"
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            void handleEvaluateSingle(item.id);
-          }}
-          disabled={isEvaluatingThis}
-          className="inline-flex items-center justify-center rounded-full bg-brand-green px-3.5 py-1.5 text-xs font-medium text-brand-ink transition-all hover:bg-brand-ink hover:text-white disabled:opacity-50"
-        >
-          <Wand2 className="mr-1.5 h-3 w-3" />
-          {isEvaluatingThis ? "Evaluating..." : item.evaluation_data ? "Re-evaluate" : "Evaluate"}
-        </button>
-        <button
-          type="button"
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            void handleDelete(item.id);
-          }}
-          disabled={isDeletingThis}
-          className="inline-flex items-center justify-center self-end rounded-full p-1.5 text-red-400 transition-colors hover:bg-red-50 hover:text-red-600 disabled:opacity-50"
-          aria-label="Remove resource"
-        >
-          <Trash2 className="h-3.5 w-3.5" />
-        </button>
-      </div>
+      <button
+        type="button"
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          void handleEvaluateSingle(item.id);
+        }}
+        disabled={isEvaluatingThis}
+        className="inline-flex items-center justify-center rounded-full bg-brand-green px-3.5 py-1.5 text-xs font-medium text-brand-ink transition-all hover:bg-brand-ink hover:text-white disabled:opacity-50"
+      >
+        <ScanSearch className="mr-1.5 h-3 w-3" />
+        {isEvaluatingThis ? "Evaluating..." : item.evaluation_data ? "Re-evaluate" : "Evaluate"}
+      </button>
     );
   };
 
@@ -381,7 +366,7 @@ export function LibraryPageClient() {
                         onClick={() => void handleEvaluateGroup(presetId, searchQuery)}
                         disabled={isEvaluatingGroup || isBatchEvaluating}
                       >
-                        <Wand2 className="mr-1.5 h-3 w-3" />
+                        <ScanSearch className="mr-1.5 h-3 w-3" />
                         Evaluate All ({unevaluatedCount})
                       </button>
                     )}
@@ -431,7 +416,7 @@ export function LibraryPageClient() {
                       className="inline-flex items-center rounded-full border border-brand-ink/10 bg-white px-3 py-1.5 text-xs font-medium text-brand-ink/70 shadow-sm transition-all hover:border-brand-green hover:shadow-[0_0_0_1px_rgba(183,255,112,0.3)]"
                       onClick={(e) => e.stopPropagation()}
                     >
-                      <Sparkles className="mr-1 h-3.5 w-3.5 text-brand-green" /> Generate
+                      <Wand2 className="mr-1 h-3.5 w-3.5 text-brand-green" /> Generate
                     </button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="rounded-xl">
@@ -487,7 +472,7 @@ export function LibraryPageClient() {
 
           <CollapsibleContent>
             <div className="border-t border-brand-ink/5 px-5 py-5">
-              <div className="grid gap-4 sm:grid-cols-1 lg:grid-cols-2">
+              <div className="grid gap-4 grid-cols-1 xl:grid-cols-2">
                 {sortedItems.map((item: SavedResourceResponse, idx: number) => (
                   <ResourceCardRenderer
                     key={item.id}

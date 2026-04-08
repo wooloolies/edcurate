@@ -301,7 +301,7 @@
       }
     },
     "saveCollection": {
-      "title": "保存到收藏集",
+      "title": "保存到资源库",
       "description": "将选定的资源归入一个命名收藏集。",
       "nameLabel": "收藏集名称",
       "namePlaceholder": "例如：物理 101",

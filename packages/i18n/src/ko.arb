@@ -1103,7 +1103,7 @@
   "@contact__location": { "description": "Location section heading" },
   "contact__teamEmails": "팀 이메일",
   "@contact__teamEmails": { "description": "Team emails section heading" },
-  "search__saveCollection__title": "컬렉션에 저장",
+  "search__saveCollection__title": "라이브러리에 저장",
   "@search__saveCollection__title": { "description": "Dialog title for saving resources to a collection" },
   "search__saveCollection__description": "선택한 리소스를 이름이 지정된 컬렉션으로 그룹화합니다.",
   "@search__saveCollection__description": { "description": "Dialog description for saving resources to a collection" },

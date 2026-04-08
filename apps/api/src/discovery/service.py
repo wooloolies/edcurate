@@ -48,14 +48,24 @@ logger = get_logger(__name__)
 
 import re
 
-_SENSITIVE_PATTERN = re.compile(r"(key|token|secret|password|apikey)=[^&\s'\"]+", re.IGNORECASE)
+_STATUS_CODE_RE = re.compile(r"(\d{3})")
 
 
 def _sanitize_error(error: Exception) -> str:
-    """Strip API keys and secrets from error messages before sending to client."""
+    """Return a user-friendly error message without URLs or technical details."""
     msg = str(error)
-    msg = _SENSITIVE_PATTERN.sub(r"\1=***", msg)
-    return msg
+    # Extract HTTP status code if present
+    match = _STATUS_CODE_RE.search(msg)
+    code = match.group(1) if match else None
+    if code == "403":
+        return "Access denied — API quota may be exceeded. Try again later."
+    if code == "429":
+        return "Too many requests — rate limit reached. Try again later."
+    if code and code.startswith("5"):
+        return "Provider is temporarily unavailable. Try again later."
+    if "timeout" in msg.lower() or "timed out" in msg.lower():
+        return "Request timed out. Try again later."
+    return "Search failed. Try again later."
 
 
 @dataclass

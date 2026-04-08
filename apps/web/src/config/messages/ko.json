@@ -304,7 +304,7 @@
       }
     },
     "saveCollection": {
-      "title": "컬렉션에 저장",
+      "title": "라이브러리에 저장",
       "description": "선택한 리소스를 이름이 지정된 컬렉션으로 그룹화합니다.",
       "nameLabel": "컬렉션 이름",
       "namePlaceholder": "예: 물리학 101",

@@ -86,6 +86,11 @@
   border-color: var(--border);
 }
 
+button,
+[role="button"] {
+  cursor: pointer;
+}
+
 body {
   background-color: var(--background);
   color: var(--foreground);

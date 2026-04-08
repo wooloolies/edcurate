@@ -301,7 +301,7 @@
       }
     },
     "saveCollection": {
-      "title": "Lưu vào bộ sưu tập",
+      "title": "Lưu vào thư viện",
       "description": "Nhóm các tài nguyên đã chọn vào bộ sưu tập có tên.",
       "nameLabel": "Tên bộ sưu tập",
       "namePlaceholder": "Ví dụ: Vật lý 101",

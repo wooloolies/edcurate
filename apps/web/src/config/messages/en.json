@@ -322,7 +322,7 @@
       "syncSuccess": "Collection synced!"
     },
     "saveCollection": {
-      "title": "Save to Collection",
+      "title": "Save to Library",
       "description": "Group your selected resources into a named collection.",
       "nameLabel": "Collection Name",
       "namePlaceholder": "e.g., Physics 101",

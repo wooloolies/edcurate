@@ -15,8 +15,8 @@ export function ErrorBanner({ errors }: ErrorBannerProps) {
 
   const sourceLabel = (source: SourceError["source"]) => {
     if (source === "ddgs") return t("tabs.web");
-    if (source === "youtube") return "YouTube";
-    return "OpenAlex";
+    if (source === "youtube") return t("tabs.video");
+    return t("tabs.papers");
   };
 
   return (
