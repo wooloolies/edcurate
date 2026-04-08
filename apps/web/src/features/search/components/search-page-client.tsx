@@ -9,7 +9,7 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { ClassroomScene } from "@/features/search/components/classroom/classroom-scene";
+import { AgentMorphScene } from "@/features/search/components/agent-morph/agent-morph-scene";
 import { ErrorBanner } from "@/features/search/components/error-banner";
 import { EvaluationProgress } from "@/features/search/components/evaluation-progress";
 import { GeneratedQueriesPanel } from "@/features/search/components/generated-queries";
@@ -291,7 +291,7 @@ export function SearchPageClient() {
       ) : null}
 
       {stream.isStreaming ? (
-        <ClassroomScene
+        <AgentMorphScene
           stages={stream.stages}
           activeStage={stream.activeStage}
           isCached={stream.isCached}
