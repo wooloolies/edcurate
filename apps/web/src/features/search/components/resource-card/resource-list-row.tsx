@@ -29,10 +29,7 @@ export function ResourceListRow({
       <div className="flex sm:hidden flex-col gap-3 p-4 text-sm">
         <div className="flex-1 min-w-0">{contentNode}</div>
         <div className="flex items-center justify-between gap-2">
-          <div className="flex items-center gap-2">
-            <span className="text-brand-ink font-bold text-sm leading-none">#{index}</span>
-            {verdictNode}
-          </div>
+          {verdictNode}
           <div className="flex items-center gap-2">{actionsNode}</div>
         </div>
       </div>

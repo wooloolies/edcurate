@@ -22,6 +22,13 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -49,10 +56,12 @@ import {
   useListSavedResourcesEndpointApiSavedGet,
   useUpdateCollectionEndpointApiSavedCollectionsCollectionIdPatch,
 } from "@/lib/api/saved-resources/saved-resources";
+import { useIsMobile } from "@/hooks/use-is-mobile";
 import { Link } from "@/lib/i18n/routing";
 
 export function LibraryPageClient() {
   const t = useTranslations("library");
+  const isMobile = useIsMobile();
   const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useQueryState("preset");
 
@@ -347,49 +356,100 @@ export function LibraryPageClient() {
                       </button>
                     )}
 
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <button
-                          type="button"
-                          className="rounded-full p-2 text-brand-ink/40 transition-colors hover:bg-brand-ink/5 hover:text-brand-ink"
-                        >
-                          <MoreHorizontal className="h-4 w-4" />
-                        </button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="rounded-xl">
-                        <DropdownMenuItem
-                          className="sm:hidden"
-                          onClick={() => {
-                            setAddLinkOpenFor(groupKey);
-                          }}
-                        >
-                          <LinkIcon className="mr-2 h-4 w-4" /> {t("action.addLink")}
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onClick={() => {
-                            setRenamingValue(col.name);
-                            setRenamingCollectionId(groupKey);
-                          }}
-                        >
-                          <Pencil className="mr-2 h-4 w-4" /> {t("action.rename")}
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleUpdatePrivacy(col)}>
-                          {col.is_public ? (
-                            <Lock className="mr-2 h-4 w-4" />
-                          ) : (
-                            <Globe className="mr-2 h-4 w-4" />
-                          )}
-                          {col.is_public ? t("action.makePrivate") : t("action.makePublic")}
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem
-                          className="text-red-500 focus:text-red-600"
-                          onClick={() => handleDeleteCollection(groupKey)}
-                        >
-                          <Trash2 className="mr-2 h-4 w-4" /> {t("action.deleteCollection")}
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                    {isMobile ? (
+                      <Drawer>
+                        <DrawerTrigger asChild>
+                          <button
+                            type="button"
+                            className="rounded-full p-2 text-brand-ink/40 transition-colors hover:bg-brand-ink/5 hover:text-brand-ink"
+                          >
+                            <MoreHorizontal className="h-4 w-4" />
+                          </button>
+                        </DrawerTrigger>
+                        <DrawerContent>
+                          <DrawerTitle className="sr-only">{col.name}</DrawerTitle>
+                          <div className="flex flex-col gap-1 p-4 pb-8">
+                            <DrawerClose asChild>
+                              <button
+                                type="button"
+                                className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-brand-ink transition-colors hover:bg-brand-ink/5"
+                                onClick={() => setAddLinkOpenFor(groupKey)}
+                              >
+                                <LinkIcon className="h-4 w-4" /> {t("action.addLink")}
+                              </button>
+                            </DrawerClose>
+                            <DrawerClose asChild>
+                              <button
+                                type="button"
+                                className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-brand-ink transition-colors hover:bg-brand-ink/5"
+                                onClick={() => {
+                                  setRenamingValue(col.name);
+                                  setRenamingCollectionId(groupKey);
+                                }}
+                              >
+                                <Pencil className="h-4 w-4" /> {t("action.rename")}
+                              </button>
+                            </DrawerClose>
+                            <DrawerClose asChild>
+                              <button
+                                type="button"
+                                className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-brand-ink transition-colors hover:bg-brand-ink/5"
+                                onClick={() => handleUpdatePrivacy(col)}
+                              >
+                                {col.is_public ? <Lock className="h-4 w-4" /> : <Globe className="h-4 w-4" />}
+                                {col.is_public ? t("action.makePrivate") : t("action.makePublic")}
+                              </button>
+                            </DrawerClose>
+                            <div className="my-1 border-t border-brand-ink/5" />
+                            <DrawerClose asChild>
+                              <button
+                                type="button"
+                                className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-red-500 transition-colors hover:bg-red-50"
+                                onClick={() => handleDeleteCollection(groupKey)}
+                              >
+                                <Trash2 className="h-4 w-4" /> {t("action.deleteCollection")}
+                              </button>
+                            </DrawerClose>
+                          </div>
+                        </DrawerContent>
+                      </Drawer>
+                    ) : (
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <button
+                            type="button"
+                            className="rounded-full p-2 text-brand-ink/40 transition-colors hover:bg-brand-ink/5 hover:text-brand-ink"
+                          >
+                            <MoreHorizontal className="h-4 w-4" />
+                          </button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="rounded-xl">
+                          <DropdownMenuItem
+                            onClick={() => {
+                              setRenamingValue(col.name);
+                              setRenamingCollectionId(groupKey);
+                            }}
+                          >
+                            <Pencil className="mr-2 h-4 w-4" /> {t("action.rename")}
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleUpdatePrivacy(col)}>
+                            {col.is_public ? (
+                              <Lock className="mr-2 h-4 w-4" />
+                            ) : (
+                              <Globe className="mr-2 h-4 w-4" />
+                            )}
+                            {col.is_public ? t("action.makePrivate") : t("action.makePublic")}
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem
+                            className="text-red-500 focus:text-red-600"
+                            onClick={() => handleDeleteCollection(groupKey)}
+                          >
+                            <Trash2 className="mr-2 h-4 w-4" /> {t("action.deleteCollection")}
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    )}
                   </>
                 )}
 
