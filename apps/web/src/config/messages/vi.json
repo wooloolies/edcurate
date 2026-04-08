@@ -391,6 +391,11 @@
       "artifactMindmap": "Sơ đồ tư duy",
       "artifactSummary": "Tóm tắt",
       "artifactFlashcards": "Thẻ ghi nhớ"
+    },
+    "progress": {
+      "preparingResources": "Đang chuẩn bị tài nguyên...",
+      "evaluatingResources": "Đang đánh giá tài nguyên...",
+      "resourceCount": "{completed}/{total} hoàn tất"
     }
   }
 }

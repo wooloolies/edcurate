@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime
-from typing import Any
+from typing import Any, Literal
 
 import structlog
 from pydantic import BaseModel, ConfigDict, HttpUrl, model_validator
@@ -152,3 +152,12 @@ class PresetGroup(BaseModel):
 class SavedResourceListResponse(BaseModel):
     total: int
     groups: list[PresetGroup]
+
+
+class EvalStageEvent(BaseModel):
+    """SSE event for library evaluation progress."""
+
+    stage: Literal["rag_preparation", "evaluation", "complete"]
+    status: Literal["working", "done"]
+    resource_url: str | None = None
+    data: dict[str, Any] | None = None

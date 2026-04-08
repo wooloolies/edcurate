@@ -394,6 +394,11 @@
       "artifactMindmap": "แผนผังความคิด",
       "artifactSummary": "สรุป",
       "artifactFlashcards": "บัตรคำ"
+    },
+    "progress": {
+      "preparingResources": "กำลังเตรียมทรัพยากร...",
+      "evaluatingResources": "กำลังประเมินทรัพยากร...",
+      "resourceCount": "{completed}/{total} เสร็จแล้ว"
     }
   }
 }

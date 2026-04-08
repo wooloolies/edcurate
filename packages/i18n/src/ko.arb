@@ -1146,5 +1146,11 @@
   "library__generate__artifactSummary": "요약",
   "@library__generate__artifactSummary": { "description": "Artifact type label for summary" },
   "library__generate__artifactFlashcards": "플래시카드",
-  "@library__generate__artifactFlashcards": { "description": "Artifact type label for flashcards" }
+  "@library__generate__artifactFlashcards": { "description": "Artifact type label for flashcards" },
+  "library__progress__preparingResources": "리소스 준비 중...",
+  "@library__progress__preparingResources": { "description": "Progress label during RAG preparation stage" },
+  "library__progress__evaluatingResources": "리소스 평가 중...",
+  "@library__progress__evaluatingResources": { "description": "Progress label during evaluation stage" },
+  "library__progress__resourceCount": "{completed}/{total} 완료",
+  "@library__progress__resourceCount": { "description": "Progress counter showing completed vs total", "placeholders": { "completed": { "type": "int" }, "total": { "type": "int" } } }
 }

@@ -415,6 +415,11 @@
       "artifactMindmap": "Mind Map",
       "artifactSummary": "Summary",
       "artifactFlashcards": "Flashcards"
+    },
+    "progress": {
+      "preparingResources": "Preparing resources...",
+      "evaluatingResources": "Evaluating resources...",
+      "resourceCount": "{completed} of {total} evaluated"
     }
   }
 }

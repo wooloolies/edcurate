@@ -1,6 +1,7 @@
 import { useTranslations } from "next-intl";
 
 import { LanguageSwitcher } from "@/components/language-switcher";
+import { CanvasBackground } from "@/components/ui/canvas-background";
 import { UserMenu } from "@/components/user-menu";
 import { AppNav } from "@/features/app-shell/components/app-nav";
 import { Link } from "@/lib/i18n/routing";
@@ -16,7 +17,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const tRoot = useTranslations();
 
   return (
-    <div className="min-h-screen bg-brand-surface">
+    <div className="relative min-h-dvh bg-brand-surface text-brand-ink">
+      <CanvasBackground />
+
       <header className="sticky top-0 z-50 px-4 pt-4 pb-2 md:px-8 md:pt-6">
         <nav className="mx-auto flex max-w-5xl items-center gap-6 rounded-[2.5rem] bg-white/60 px-6 py-2.5 backdrop-blur-xl shadow-[0_4px_32px_rgba(0,0,0,0.04)] border border-white/60">
           <Link href="/dashboard" className="font-bold text-xl tracking-tight text-brand-ink mr-2">
@@ -34,7 +37,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           </div>
         </nav>
       </header>
-      <main className="mx-auto max-w-7xl px-4 py-6">{children}</main>
+      <main className="relative z-10 mx-auto max-w-7xl px-4 py-6">{children}</main>
     </div>
   );
 }

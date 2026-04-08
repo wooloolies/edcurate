@@ -1477,5 +1477,18 @@
   "library__generate__artifactFlashcards": "Flashcards",
   "@library__generate__artifactFlashcards": {
     "description": "Artifact type label for flashcards"
+  },
+  "library__progress__preparingResources": "Preparing resources...",
+  "@library__progress__preparingResources": {
+    "description": "Progress label during RAG preparation stage"
+  },
+  "library__progress__evaluatingResources": "Evaluating resources...",
+  "@library__progress__evaluatingResources": {
+    "description": "Progress label during evaluation stage"
+  },
+  "library__progress__resourceCount": "{completed} of {total} evaluated",
+  "@library__progress__resourceCount": {
+    "description": "Progress counter showing completed vs total",
+    "placeholders": { "completed": { "type": "int" }, "total": { "type": "int" } }
   }
 }

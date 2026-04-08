@@ -1114,5 +1114,11 @@
   "library__generate__artifactSummary": "Tóm tắt",
   "@library__generate__artifactSummary": { "description": "Artifact type label for summary" },
   "library__generate__artifactFlashcards": "Thẻ ghi nhớ",
-  "@library__generate__artifactFlashcards": { "description": "Artifact type label for flashcards" }
+  "@library__generate__artifactFlashcards": { "description": "Artifact type label for flashcards" },
+  "library__progress__preparingResources": "Đang chuẩn bị tài nguyên...",
+  "@library__progress__preparingResources": { "description": "Progress label during RAG preparation stage" },
+  "library__progress__evaluatingResources": "Đang đánh giá tài nguyên...",
+  "@library__progress__evaluatingResources": { "description": "Progress label during evaluation stage" },
+  "library__progress__resourceCount": "{completed}/{total} hoàn tất",
+  "@library__progress__resourceCount": { "description": "Progress counter showing completed vs total", "placeholders": { "completed": { "type": "int" }, "total": { "type": "int" } } }
 }

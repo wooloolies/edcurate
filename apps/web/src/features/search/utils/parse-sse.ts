@@ -13,11 +13,11 @@ const NEWLINE_RE = /\r?\n/;
  *
  * Returns parsed events and the unconsumed remainder (incomplete event at end).
  */
-export function parseSSEBuffer(buffer: string): {
-  parsed: SearchStageEvent[];
+export function parseSSEBuffer<T = SearchStageEvent>(buffer: string): {
+  parsed: T[];
   remainder: string;
 } {
-  const parsed: SearchStageEvent[] = [];
+  const parsed: T[] = [];
 
   const blocks = buffer.split(DOUBLE_NEWLINE_RE);
 
@@ -39,7 +39,7 @@ export function parseSSEBuffer(buffer: string): {
 
     if (dataLine) {
       try {
-        const event = JSON.parse(dataLine) as SearchStageEvent;
+        const event = JSON.parse(dataLine) as T;
         parsed.push(event);
       } catch {
         // Skip malformed JSON — stream continues

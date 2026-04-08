@@ -1,5 +1,7 @@
+import asyncio
 import uuid
 from collections import defaultdict
+from collections.abc import AsyncGenerator
 from typing import Any
 
 from fastapi import HTTPException, status
@@ -13,6 +15,7 @@ from src.saved_resources.model import LibraryCollection, SavedResource
 from src.saved_resources.schemas import (
     AddCustomLinkRequest,
     CollectionGroup,
+    EvalStageEvent,
     LibraryCollectionCreate,
     LibraryCollectionResponse,
     LibraryCollectionUpdate,
@@ -773,3 +776,87 @@ async def evaluate_saved_resources(
 
     await db.commit()
     return {"processed": processed}
+
+
+async def evaluate_saved_resources_stream(
+    db: DBSession,
+    user_id: uuid.UUID,
+    preset_id: uuid.UUID,
+    search_query: str,
+) -> AsyncGenerator[EvalStageEvent, None]:
+    """Stream evaluation progress for library resources via SSE."""
+    from src.discovery.service import _prepare_rag_context, _process_one
+
+    result = await db.execute(
+        select(SavedResource).where(
+            SavedResource.user_id == user_id,
+            SavedResource.preset_id == preset_id,
+            SavedResource.search_query == search_query,
+            SavedResource.evaluation_data.is_(None),
+        )
+    )
+    unevaluated = result.scalars().all()
+
+    if not unevaluated:
+        yield EvalStageEvent(stage="complete", status="done", data={"processed": 0})
+        return
+
+    preset_exec = await db.execute(
+        select(ClassroomPreset).where(
+            ClassroomPreset.id == preset_id,
+            ClassroomPreset.user_id == user_id,
+        )
+    )
+    preset = preset_exec.scalar_one()
+    cards = [ResourceCard.model_validate(r.resource_data) for r in unevaluated]
+
+    # Stage 1: RAG preparation
+    yield EvalStageEvent(stage="rag_preparation", status="working", data={"total": len(cards)})
+
+    search_id = str(uuid.uuid4())
+    ctx = await _prepare_rag_context(cards, preset, search_query, search_id)
+
+    yield EvalStageEvent(stage="rag_preparation", status="done")
+
+    if ctx is None:
+        yield EvalStageEvent(stage="complete", status="done", data={"processed": 0})
+        return
+
+    # Stage 2: Per-resource evaluation with progress
+    # Create named tasks so we can map results back to resources
+    task_map: dict[asyncio.Task, tuple[ResourceCard, SavedResource]] = {}
+    for card, saved in zip(cards, unevaluated):
+        task = asyncio.create_task(_process_one(card, ctx))
+        task_map[task] = (card, saved)
+        yield EvalStageEvent(stage="evaluation", status="working", resource_url=card.url)
+
+    processed = 0
+    for coro in asyncio.as_completed(list(task_map.keys())):
+        try:
+            judgment = await coro
+        except Exception as e:
+            logger.warning("Resource evaluation failed", error=str(e))
+            continue
+
+        if judgment is None:
+            continue
+
+        # Find which task completed and match by identity
+        for task, (card, saved) in task_map.items():
+            if task.done() and not task.cancelled():
+                try:
+                    result = task.result()
+                except Exception:
+                    continue
+                if result is judgment:
+                    saved.evaluation_data = judgment.model_dump(mode="json")
+                    processed += 1
+                    yield EvalStageEvent(
+                        stage="evaluation",
+                        status="done",
+                        resource_url=card.url,
+                    )
+                    break
+
+    await db.commit()
+    yield EvalStageEvent(stage="complete", status="done", data={"processed": processed})

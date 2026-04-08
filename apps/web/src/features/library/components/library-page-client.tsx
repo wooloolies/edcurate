@@ -29,7 +29,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { ArtifactList } from "@/features/library/components/artifact-list";
+import { EvaluationProgressBar } from "@/features/library/components/evaluation-progress-bar";
 import { GenerateArtifactDialog } from "@/features/library/components/generate-artifact-dialog";
+import { useEvaluationStream } from "@/features/library/hooks/use-evaluation-stream";
 import { ResourceCardRenderer } from "@/features/search/components/resource-card";
 import { useListArtifactsEndpointApiLocalizerGet } from "@/lib/api/localizer/localizer";
 import type {
@@ -43,7 +45,6 @@ import {
   useAddCustomLinkEndpointApiSavedLinkPost,
   useDeleteCollectionEndpointApiSavedCollectionsCollectionIdDelete,
   useDeleteSavedResourceEndpointApiSavedIdDelete,
-  useEvaluateSavedResourcesEndpointApiSavedEvaluatePost,
   useEvaluateSingleResourceEndpointApiSavedEvaluateSinglePost,
   useListSavedResourcesEndpointApiSavedGet,
   useUpdateCollectionEndpointApiSavedCollectionsCollectionIdPatch,
@@ -56,8 +57,7 @@ export function LibraryPageClient() {
 
   const { data: savedData, isFetching: isLoading } = useListSavedResourcesEndpointApiSavedGet();
   const { mutateAsync: addLink, isPending: isAdding } = useAddCustomLinkEndpointApiSavedLinkPost();
-  const { mutateAsync: batchEvaluate, isPending: isBatchEvaluating } =
-    useEvaluateSavedResourcesEndpointApiSavedEvaluatePost();
+  const { startStream, getStreamState } = useEvaluationStream();
   const { mutateAsync: evaluateSingle } =
     useEvaluateSingleResourceEndpointApiSavedEvaluateSinglePost();
   const { mutateAsync: deleteResource } = useDeleteSavedResourceEndpointApiSavedIdDelete();
@@ -67,7 +67,6 @@ export function LibraryPageClient() {
     useDeleteCollectionEndpointApiSavedCollectionsCollectionIdDelete();
 
   const [evaluatingIds, setEvaluatingIds] = useState<Set<string>>(new Set());
-  const [evaluatingQueries, setEvaluatingQueries] = useState<Set<string>>(new Set());
   const [deletingIds, setDeletingIds] = useState<Set<string>>(new Set());
   const [closedGroups, setClosedGroups] = useState<Set<string>>(new Set());
   const [addLinkOpenFor, setAddLinkOpenFor] = useState<string | null>(null);
@@ -130,25 +129,8 @@ export function LibraryPageClient() {
     }
   };
 
-  const handleEvaluateGroup = async (presetId: string, searchQuery: string) => {
-    const key = `${presetId}:${searchQuery}`;
-    setEvaluatingQueries((prev) => new Set(prev).add(key));
-    toast.info("Evaluation started in background...");
-    try {
-      const res = await batchEvaluate({
-        data: { preset_id: presetId, search_query: searchQuery },
-      });
-      toast.success(`Batch evaluation completed: ${res.processed} evaluated.`);
-      invalidateLibrary();
-    } catch {
-      toast.error("Failed to evaluate resources");
-    } finally {
-      setEvaluatingQueries((prev) => {
-        const next = new Set(prev);
-        next.delete(key);
-        return next;
-      });
-    }
+  const handleEvaluateGroup = (presetId: string, searchQuery: string) => {
+    void startStream(presetId, searchQuery);
   };
 
   const handleEvaluateSingle = async (resourceId: string) => {
@@ -252,7 +234,8 @@ export function LibraryPageClient() {
     const col = colGroup.collection;
     const groupKey = col.id;
     const searchQuery = col.search_query;
-    const isEvaluatingGroup = evaluatingQueries.has(`${presetId}:${searchQuery}`);
+    const streamState = getStreamState(presetId, searchQuery);
+    const isEvaluatingGroup = streamState?.isStreaming ?? false;
 
     const _VERDICT_ORDER: Record<string, number> = { use_it: 0, adapt_it: 1, skip_it: 2 };
     const unevaluated = colGroup.items.filter((i) => !i.evaluation_data);
@@ -363,7 +346,7 @@ export function LibraryPageClient() {
                         type="button"
                         className="inline-flex items-center rounded-full bg-brand-green px-3.5 py-1.5 text-xs font-medium text-brand-ink transition-all hover:bg-brand-ink hover:text-white disabled:opacity-50"
                         onClick={() => void handleEvaluateGroup(presetId, searchQuery)}
-                        disabled={isEvaluatingGroup || isBatchEvaluating}
+                        disabled={isEvaluatingGroup}
                       >
                         <ScanSearch className="mr-1.5 h-3 w-3" />
                         Evaluate All ({unevaluatedCount})
@@ -466,6 +449,14 @@ export function LibraryPageClient() {
                   <Plus className="mr-1 h-3.5 w-3.5" /> Add
                 </button>
               </form>
+            )}
+
+            {streamState?.isStreaming && (
+              <EvaluationProgressBar
+                stage={streamState.stage}
+                completedCount={streamState.completedCount}
+                totalCount={streamState.totalCount}
+              />
             )}
           </div>
 

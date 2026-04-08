@@ -391,6 +391,11 @@
       "artifactMindmap": "思维导图",
       "artifactSummary": "摘要",
       "artifactFlashcards": "闪卡"
+    },
+    "progress": {
+      "preparingResources": "正在准备资源...",
+      "evaluatingResources": "正在评估资源...",
+      "resourceCount": "{completed}/{total} 已完成"
     }
   }
 }

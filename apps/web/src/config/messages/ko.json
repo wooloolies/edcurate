@@ -397,6 +397,11 @@
       "artifactMindmap": "마인드맵",
       "artifactSummary": "요약",
       "artifactFlashcards": "플래시카드"
+    },
+    "progress": {
+      "preparingResources": "리소스 준비 중...",
+      "evaluatingResources": "리소스 평가 중...",
+      "resourceCount": "{completed}/{total} 완료"
     }
   }
 }
