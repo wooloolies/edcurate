@@ -117,6 +117,7 @@
   "search": {
     "title": "교육 자료 탐색",
     "placeholder": "교육 자료를 검색하세요...",
+    "placeholderNoPreset": "검색하려면 교실 프리셋을 선택하세요",
     "searchButton": "검색",
     "selectPreset": "프리셋 선택",
     "selectCollection": "컬렉션을 선택하세요",
@@ -430,8 +431,11 @@
       "rename": "이름 변경",
       "makePrivate": "비공개로 전환",
       "makePublic": "공개로 전환",
+      "statusPublic": "공개",
+      "statusPrivate": "비공개",
       "deleteCollection": "컬렉션 삭제",
-      "generate": "생성"
+      "generate": "생성",
+      "searchWithPreset": "이 교실로 검색"
     },
     "toast": {
       "linkAdded": "링크가 추가되었습니다",
@@ -442,8 +446,15 @@
       "deleteFailed": "컬렉션 삭제에 실패했습니다"
     },
     "confirm": {
-      "makePublic": "정말 공개하시겠습니까? 누구나 이 리소스를 발견할 수 있게 됩니다.",
-      "deleteCollection": "이 컬렉션과 모든 리소스를 삭제하시겠습니까?"
+      "makePublicTitle": "공개로 전환",
+      "makePublicDescription": "누구나 이 리소스를 발견하고 볼 수 있게 됩니다. 계속하시겠습니까?",
+      "makePublicButton": "공개로 전환",
+      "makePrivateTitle": "비공개로 전환",
+      "makePrivateDescription": "이 컬렉션은 더 이상 다른 사람에게 표시되지 않습니다.",
+      "makePrivateButton": "비공개로 전환",
+      "deleteTitle": "컬렉션 삭제",
+      "deleteDescription": "이 컬렉션과 모든 리소스가 영구적으로 삭제됩니다. 이 작업은 되돌릴 수 없습니다.",
+      "deleteButton": "삭제"
     }
   }
 }

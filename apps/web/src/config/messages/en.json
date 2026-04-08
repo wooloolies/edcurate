@@ -118,6 +118,7 @@
   "search": {
     "title": "Resource Discovery",
     "placeholder": "Search for educational resources...",
+    "placeholderNoPreset": "Select a classroom preset to start searching",
     "searchButton": "Search",
     "selectPreset": "Select a preset",
     "selectCollection": "Select your collection",
@@ -457,8 +458,11 @@
       "rename": "Rename",
       "makePrivate": "Make Private",
       "makePublic": "Make Public",
+      "statusPublic": "Public",
+      "statusPrivate": "Private",
       "deleteCollection": "Delete Collection",
-      "generate": "Generate"
+      "generate": "Generate",
+      "searchWithPreset": "Search with this classroom"
     },
     "toast": {
       "linkAdded": "Custom link added",
@@ -469,8 +473,15 @@
       "deleteFailed": "Failed to delete collection"
     },
     "confirm": {
-      "makePublic": "Are you sure you want to make this public? Anyone will be able to discover these resources.",
-      "deleteCollection": "Are you sure you want to delete this collection and all its resources?"
+      "makePublicTitle": "Make Public",
+      "makePublicDescription": "Anyone will be able to discover and view these resources. Are you sure?",
+      "makePublicButton": "Make Public",
+      "makePrivateTitle": "Make Private",
+      "makePrivateDescription": "This collection will no longer be visible to others.",
+      "makePrivateButton": "Make Private",
+      "deleteTitle": "Delete Collection",
+      "deleteDescription": "This will permanently delete this collection and all its resources. This action cannot be undone.",
+      "deleteButton": "Delete"
     }
   }
 }

@@ -1,18 +1,13 @@
 "use client";
 
 import { useQueryClient } from "@tanstack/react-query";
-import { Check, ChevronDown, ChevronUp, Pencil, Repeat, Search, X } from "lucide-react";
+import { Check, Pencil, Repeat, Search, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useQueryState } from "nuqs";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { CompactProgressBar } from "@/features/search/components/compact-progress-bar";
 import { ErrorBanner } from "@/features/search/components/error-banner";
@@ -43,9 +38,10 @@ export function SearchPageClient() {
   const [draft, setDraft] = useState(searchQuery ?? "");
   const searchInputRef = useRef<HTMLInputElement>(null);
 
-  const { data: presetsData } = useListPresetsApiPresetsGet();
+  const { data: presetsData, isLoading: isPresetsLoading } = useListPresetsApiPresetsGet();
   const presets = presetsData?.data ?? [];
   const activePreset = presets.find((p) => p.id === presetId);
+  const isPresetResolving = !!presetId && !activePreset && isPresetsLoading;
 
   const { data: savedData } = useListSavedResourcesEndpointApiSavedGet();
   const { mutateAsync: createCollection, isPending: isSaving } =
@@ -163,6 +159,9 @@ export function SearchPageClient() {
       queryClient.invalidateQueries({
         queryKey: getListPresetsApiPresetsGetQueryKey(),
       });
+      queryClient.invalidateQueries({
+        queryKey: getListSavedResourcesEndpointApiSavedGetQueryKey(),
+      });
       toast.success(t("presetRenamed", { fallback: "Preset renamed" }));
     } catch (_e) {
       toast.error(t("presetRenameError", { fallback: "Failed to rename preset" }));
@@ -273,9 +272,14 @@ export function SearchPageClient() {
           ) : (
             <>
               <h2 className="text-3xl font-bold text-brand-ink leading-none mb-1">
-                {activePreset?.name ?? t("selectCollection")}
+                {activePreset?.name ??
+                  (isPresetResolving ? (
+                    <span className="inline-block h-8 w-48 animate-pulse rounded-lg bg-brand-ink/10" />
+                  ) : (
+                    t("selectCollection")
+                  ))}
               </h2>
-              {activePreset ? (
+              {activePreset || isPresetResolving ? (
                 <button
                   type="button"
                   onClick={handleStartRename}
@@ -325,9 +329,13 @@ export function SearchPageClient() {
         {/* Search Input */}
         <form
           onSubmit={handleSearch}
-          className="w-full flex items-center bg-white/60 border-2 border-white/60 hover:bg-white/80 focus-within:bg-white focus-within:border-brand-green rounded-[2.5rem] p-2 transition-all shadow-md"
+          className={`w-full flex items-center border-2 rounded-[2.5rem] p-2 transition-all shadow-md ${
+            presetId
+              ? "bg-white/60 border-white/60 hover:bg-white/80 focus-within:bg-white focus-within:border-brand-green"
+              : "bg-white/40 border-white/40 opacity-60 cursor-not-allowed"
+          }`}
         >
-          <div className="pl-6 pr-4 text-brand-ink">
+          <div className={`pl-6 pr-4 ${presetId ? "text-brand-ink" : "text-brand-ink/30"}`}>
             <Search className="w-6 h-6" />
           </div>
           <input
@@ -335,8 +343,9 @@ export function SearchPageClient() {
             type="text"
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
-            placeholder={t("placeholder")}
-            className="flex-1 bg-transparent py-4 text-xl font-bold text-brand-ink placeholder:text-gray-500 outline-none w-full"
+            placeholder={presetId ? t("placeholder") : t("placeholderNoPreset")}
+            disabled={!presetId}
+            className="flex-1 bg-transparent py-4 text-xl font-bold text-brand-ink placeholder:text-gray-500 outline-none w-full disabled:cursor-not-allowed"
           />
           <div className="flex items-center gap-2 pr-2">
             {draft ? (
@@ -359,6 +368,14 @@ export function SearchPageClient() {
         </form>
 
         {/* Applied Tags */}
+        {isPresetResolving ? (
+          <div className="flex flex-wrap items-center gap-3 px-2 -mt-2">
+            {Array.from({ length: 3 }).map((_, i) => (
+              // biome-ignore lint/suspicious/noArrayIndexKey: skeleton list is static
+              <div key={i} className="h-10 w-24 animate-pulse rounded-xl bg-brand-ink/10" />
+            ))}
+          </div>
+        ) : null}
         {activePreset && (
           <div className="flex flex-wrap items-start justify-between gap-4 px-2 -mt-2">
             <div className="flex flex-wrap items-center gap-3">
@@ -390,20 +407,13 @@ export function SearchPageClient() {
       {results && results.errors.length > 0 ? <ErrorBanner errors={results.errors} /> : null}
 
       {/* Suggested Collections — shown once a search is active */}
-      {!!(presetId && searchQuery && hasContent) ? (
-        <Collapsible open={suggestedOpen} onOpenChange={setSuggestedOpen}>
-          <CollapsibleTrigger className="flex w-full items-center gap-2 rounded-md border px-4 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted/50">
-            {suggestedOpen ? (
-              <ChevronUp className="h-4 w-4 shrink-0" />
-            ) : (
-              <ChevronDown className="h-4 w-4 shrink-0" />
-            )}
-            {t("suggestedCollections.title", { fallback: "Suggested Collections" })}
-          </CollapsibleTrigger>
-          <CollapsibleContent className="mt-2">
-            <SuggestedCollectionsRail presetId={presetId} searchQuery={searchQuery} />
-          </CollapsibleContent>
-        </Collapsible>
+      {presetId && searchQuery && hasContent ? (
+        <SuggestedCollectionsRail
+          presetId={presetId}
+          searchQuery={searchQuery}
+          open={suggestedOpen}
+          onOpenChange={setSuggestedOpen}
+        />
       ) : null}
 
       {results?.generated_queries && !isFetching ? (

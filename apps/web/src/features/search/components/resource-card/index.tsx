@@ -20,7 +20,7 @@ interface ResourceCardRendererProps {
 
 import { BookmarkButton } from "./bookmark-button";
 
-function buildOverviewHref(resource: ResourceCard, evaluationId?: string) {
+export function buildOverviewHref(resource: ResourceCard, evaluationId?: string) {
   if (evaluationId) {
     return `/overview/${evaluationId}`;
   }
