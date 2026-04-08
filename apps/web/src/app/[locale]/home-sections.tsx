@@ -160,11 +160,11 @@ export function AudienceStatements() {
       {AUDIENCE_STATEMENTS.map((item, i) => (
         <ScrollReveal key={item.heading} delay={i * 100}>
           <div className="max-w-3xl mx-auto text-center">
-            {item.placeholder && (
+            {item.placeholder ? (
               <span className="inline-block mb-3 rounded-full border border-dashed border-slate-300 bg-slate-50 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-slate-400">
                 Placeholder
               </span>
-            )}
+            ) : null}
             <h3 className={`text-3xl md:text-[2.5rem] font-bold tracking-tight leading-[1.1] ${item.placeholder ? "text-slate-300" : "text-[#111827]"}`}>
               {item.heading}
             </h3>
@@ -198,7 +198,7 @@ function SubjectColumn({ category }: { category: SubjectCategory }) {
         )}
       </button>
 
-      {expanded && (
+      {expanded ? (
         <div className="mt-2 space-y-1">
           {category.topics.map((topic) => (
             <p key={topic} className="text-[13px] md:text-sm text-[#111827]/60 font-medium leading-snug">
@@ -206,7 +206,7 @@ function SubjectColumn({ category }: { category: SubjectCategory }) {
             </p>
           ))}
         </div>
-      )}
+      ) : null}
     </div>
   );
 }

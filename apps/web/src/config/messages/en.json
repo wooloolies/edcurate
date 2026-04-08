@@ -53,7 +53,8 @@
   },
   "presets": {
     "title": "My Classroom Collections",
-    "subtitle": "Manage your classroom presets and search configurations",
+    "subtitle": "Define your subject, year level, and curriculum to tailor every search.",
+    "count": "{count, plural, one {# collection} other {# collections}}",
     "newPreset": "New Collection",
     "editPreset": "Edit Collection",
     "createPreset": "Create Preset",
@@ -317,7 +318,8 @@
     "suggestedCollections": {
       "title": "Suggested Collections",
       "clone": "Clone",
-      "cloned": "Cloned",
+      "cloned": "In my Library",
+      "alreadyInLibrary": "Already in my Library",
       "clonesCount": "{count, plural, one {# clone} other {# clones}}",
       "empty": "No public collections found for similar queries.",
       "sourcesCount": "{count, plural, one {# source} other {# sources}}",
@@ -432,7 +434,7 @@
       "resourceCount": "{completed} of {total} evaluated"
     },
     "title": "My Library",
-    "subtitle": "Curated resources across my teaching collections",
+    "subtitle": "Save, evaluate, and share your curated resources with other educators.",
     "empty": {
       "title": "My library is empty",
       "description": "Save resources from search results to build a curated collection.",

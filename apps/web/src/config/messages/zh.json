@@ -53,7 +53,7 @@
   },
   "presets": {
     "title": "我的课堂收藏集",
-    "subtitle": "管理课堂预设和搜索配置",
+    "subtitle": "设定科目、年级和课程标准，让每次搜索更贴合您的学生。",
     "newPreset": "新建收藏集",
     "editPreset": "编辑收藏集",
     "createPreset": "创建预设",
@@ -401,7 +401,7 @@
       "resourceCount": "{completed}/{total} 已完成"
     },
     "title": "我的资源库",
-    "subtitle": "来自教学收藏集的精选资源",
+    "subtitle": "保存、评估精选资源，并与其他教育者分享。",
     "empty": {
       "title": "资源库为空",
       "description": "从搜索结果中保存资源以构建您的收藏集。",

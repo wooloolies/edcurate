@@ -544,13 +544,13 @@ export function LibraryPageClient() {
               </form>
             )}
 
-            {streamState?.isStreaming && (
+            {streamState?.isStreaming ? (
               <EvaluationProgressBar
                 stage={streamState.stage}
                 completedCount={streamState.completedCount}
                 totalCount={streamState.totalCount}
               />
-            )}
+            ) : null}
           </div>
 
           <CollapsibleContent>

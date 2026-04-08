@@ -53,7 +53,7 @@
   },
   "presets": {
     "title": "내 수업 컬렉션",
-    "subtitle": "수업 프리셋과 검색 설정을 관리하세요",
+    "subtitle": "과목, 학년, 교육과정을 설정하여 맞춤 검색을 시작하세요.",
     "newPreset": "새 컬렉션",
     "editPreset": "컬렉션 편집",
     "createPreset": "프리셋 만들기",
@@ -407,7 +407,7 @@
       "resourceCount": "{completed}/{total} 완료"
     },
     "title": "내 라이브러리",
-    "subtitle": "수업 컬렉션의 큐레이션된 리소스",
+    "subtitle": "저장한 리소스를 평가하고 다른 교육자와 공유하세요.",
     "empty": {
       "title": "라이브러리가 비어 있습니다",
       "description": "검색 결과에서 리소스를 저장하여 나만의 컬렉션을 만들어 보세요.",

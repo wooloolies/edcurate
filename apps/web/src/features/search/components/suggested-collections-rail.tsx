@@ -107,7 +107,7 @@ export function SuggestedCollectionsRail({
                 {isCloned ? (
                   <span className="inline-flex items-center gap-1 text-xs text-green-600 bg-green-50 px-2 py-0.5 rounded-full font-medium shrink-0">
                     <Check className="h-3 w-3" />
-                    {t("suggestedCollections.cloned", { fallback: "In my Library" })}
+                    {t("suggestedCollections.cloned")}
                   </span>
                 ) : null}
               </div>
@@ -116,8 +116,7 @@ export function SuggestedCollectionsRail({
               ) : null}
               {suggestion.publisher_name ? (
                 <span className="text-xs text-muted-foreground">
-                  Published by{" "}
-                  <span className="font-medium">{suggestion.publisher_name}</span>
+                  Published by <span className="font-medium">{suggestion.publisher_name}</span>
                 </span>
               ) : null}
               <div className="flex items-center gap-3 mt-auto text-xs text-muted-foreground">
@@ -145,8 +144,7 @@ export function SuggestedCollectionsRail({
           (() => {
             const item = selectedSuggestion.collection;
             const isCloned = clonedIds.has(item.id) || selectedSuggestion.is_cloned_by_user;
-            const needsSync =
-              isCloned && !syncedIds.has(item.id) && selectedSuggestion.needs_sync;
+            const needsSync = isCloned && !syncedIds.has(item.id) && selectedSuggestion.needs_sync;
 
             return (
               <DialogContent className="sm:max-w-4xl max-h-[90vh] overflow-y-auto">
@@ -156,7 +154,7 @@ export function SuggestedCollectionsRail({
                     {isCloned ? (
                       <span className="inline-flex items-center gap-1 text-xs text-green-600 bg-green-50 px-2.5 py-1 rounded-full font-medium">
                         <Check className="h-3 w-3" />
-                        Already in my Library
+                        {t("suggestedCollections.alreadyInLibrary")}
                       </span>
                     ) : null}
                   </div>
@@ -181,7 +179,9 @@ export function SuggestedCollectionsRail({
                               <Info className="h-3.5 w-3.5 text-muted-foreground cursor-help" />
                             </TooltipTrigger>
                             <TooltipContent side="right" className="max-w-56">
-                              <p>The original search query used when this collection was created.</p>
+                              <p>
+                                The original search query used when this collection was created.
+                              </p>
                             </TooltipContent>
                           </Tooltip>
                         </TooltipProvider>
@@ -265,10 +265,7 @@ export function SuggestedCollectionsRail({
                   </Button>
                   {isCloned ? (
                     needsSync ? (
-                      <Button
-                        onClick={() => handleSync(item.id)}
-                        disabled={isSyncing}
-                      >
+                      <Button onClick={() => handleSync(item.id)} disabled={isSyncing}>
                         <RefreshCw className="mr-1.5 h-4 w-4" />
                         {t("suggestedCollections.syncCollection", {
                           fallback: "Update my collection",

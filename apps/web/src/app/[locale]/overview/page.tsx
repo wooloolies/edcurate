@@ -56,7 +56,7 @@ export default async function OverviewPage({ searchParams }: OverviewPageProps) 
             <div className="flex items-center gap-3">
               <h1 className="text-3xl font-bold tracking-tight">Overview</h1>
               <a
-                href="#"
+                href="https://github.com/wooloolies/edcurate"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex h-8 w-8 items-center justify-center rounded-full bg-white border border-slate-200 shadow-sm hover:bg-slate-50 hover:scale-105 transition-all"
@@ -78,11 +78,11 @@ export default async function OverviewPage({ searchParams }: OverviewPageProps) 
                 {source.icon}
                 {source.label}
               </div>
-              {verdictInfo && (
+              {verdictInfo ? (
                 <div className={`flex items-center px-3 py-1 rounded-full border text-xs font-semibold ${verdictInfo.className}`}>
                   {verdictInfo.label}
                 </div>
-              )}
+              ) : null}
             </div>
           </div>
         </div>

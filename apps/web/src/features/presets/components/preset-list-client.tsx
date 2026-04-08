@@ -17,7 +17,14 @@ export function PresetListClient() {
     <div className="space-y-8">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-4xl font-bold tracking-tight text-brand-ink">{t("title")}</h1>
+          <div className="flex items-center gap-3">
+            <h1 className="text-4xl font-bold tracking-tight text-brand-ink">{t("title")}</h1>
+            {!isPending && (
+              <span className="inline-flex items-center rounded-full bg-brand-ink/8 px-3 py-1 text-sm font-medium text-brand-ink/70">
+                {t("count", { count: presets.length })}
+              </span>
+            )}
+          </div>
           <p className="mt-2 text-[15px] text-brand-ink/50">{t("subtitle")}</p>
         </div>
         <Link

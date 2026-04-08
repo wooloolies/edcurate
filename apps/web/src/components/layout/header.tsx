@@ -67,7 +67,7 @@ export function Header() {
           Edcurate
         </Link>
         <div className="flex items-center gap-2">
-          {isLoggedIn && <UserMenu />}
+          {isLoggedIn ? <UserMenu /> : null}
           <button
             type="button"
             onClick={() => setMobileOpen(true)}
@@ -80,14 +80,14 @@ export function Header() {
       </div>
 
       {/* Mobile slide-in menu */}
-      {mobileOpen && (
+      {mobileOpen ? (
         <div className="fixed inset-0 z-[100] md:hidden">
           {/* Backdrop */}
-          <div
-            className="absolute inset-0 bg-black/20 backdrop-blur-sm"
+          <button
+            type="button"
+            className="absolute inset-0 bg-black/20 backdrop-blur-sm appearance-none border-none cursor-default w-full"
             onClick={() => setMobileOpen(false)}
-            onKeyDown={() => {}}
-            role="presentation"
+            aria-label="Close menu"
           />
           {/* Slide-in panel */}
           <div className="absolute right-0 top-0 h-full w-72 bg-white/95 backdrop-blur-2xl shadow-2xl border-l border-white/60 flex flex-col animate-in slide-in-from-right duration-200">
@@ -128,7 +128,7 @@ export function Header() {
             </div>
           </div>
         </div>
-      )}
+      ) : null}
 
       {/* Right corner: Language Switcher (desktop only) */}
       <div className="flex-1 justify-end hidden md:flex">
