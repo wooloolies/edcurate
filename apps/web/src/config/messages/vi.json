@@ -149,6 +149,7 @@
     "hideUnscored": "Ẩn kết quả chưa chấm điểm",
     "resourcesSelected": "Đã chọn {count} tài nguyên",
     "saveToLibrary": "Lưu vào thư viện",
+    "save": "Lưu",
     "saving": "Đang lưu...",
     "savedSuccess": "Đã lưu vào thư viện!",
     "savedError": "Không thể lưu tài nguyên",

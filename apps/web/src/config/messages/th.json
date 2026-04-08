@@ -149,6 +149,7 @@
     "hideUnscored": "ซ่อนผลลัพธ์ที่ยังไม่ประเมิน",
     "resourcesSelected": "เลือกแล้ว {count} รายการ",
     "saveToLibrary": "บันทึกลงคลังสื่อ",
+    "save": "บันทึก",
     "saving": "กำลังบันทึก...",
     "savedSuccess": "บันทึกลงคลังสื่อแล้ว!",
     "savedError": "ไม่สามารถบันทึกสื่อได้",

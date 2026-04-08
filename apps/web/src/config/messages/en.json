@@ -149,6 +149,7 @@
     "hideUnscored": "Hide unscored results",
     "resourcesSelected": "{count, plural, one {# resource} other {# resources}} selected",
     "saveToLibrary": "Save to Library",
+    "save": "Save",
     "saving": "Saving...",
     "savedSuccess": "Resources saved to library!",
     "savedError": "Failed to save resources",

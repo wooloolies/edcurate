@@ -567,6 +567,10 @@
   "@search__saveToLibrary": {
     "description": "Button to save selected resources to library"
   },
+  "search__save": "保存",
+  "@search__save": {
+    "description": "Save button label in search dialogs"
+  },
   "search__saving": "保存中...",
   "@search__saving": {
     "description": "Button label while saving resources"

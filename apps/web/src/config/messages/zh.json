@@ -149,6 +149,7 @@
     "hideUnscored": "隐藏未评分结果",
     "resourcesSelected": "已选择 {count} 个资源",
     "saveToLibrary": "保存到资源库",
+    "save": "保存",
     "saving": "保存中...",
     "savedSuccess": "已保存到资源库！",
     "savedError": "保存资源失败",

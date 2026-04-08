@@ -149,6 +149,7 @@
     "hideUnscored": "미평가 결과 숨기기",
     "resourcesSelected": "{count}개 자료 선택됨",
     "saveToLibrary": "라이브러리에 저장",
+    "save": "저장",
     "saving": "저장 중...",
     "savedSuccess": "라이브러리에 저장되었습니다!",
     "savedError": "자료 저장에 실패했습니다",
