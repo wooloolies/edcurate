@@ -156,7 +156,7 @@
   "@presets__title": {
     "description": "Presets page heading"
   },
-  "presets__subtitle": "จัดการพรีเซ็ตห้องเรียนและการตั้งค่าการค้นหา",
+  "presets__subtitle": "ตั้งค่าวิชา ระดับชั้น และหลักสูตรเพื่อปรับแต่งการค้นหาให้ตรงจุด",
   "@presets__subtitle": {
     "description": "Subtitle on collections page"
   },
@@ -567,19 +567,19 @@
       }
     }
   },
-  "search__saveToLibrary": "บันทึกลงคลังสื่อ",
+  "search__saveToLibrary": "เพิ่มในคลังสื่อ",
   "@search__saveToLibrary": {
     "description": "Button to save selected resources to library"
   },
-  "search__save": "บันทึก",
+  "search__save": "เพิ่ม",
   "@search__save": {
     "description": "Save button label in search dialogs"
   },
-  "search__saving": "กำลังบันทึก...",
+  "search__saving": "กำลังเพิ่ม...",
   "@search__saving": {
     "description": "Button label while saving resources"
   },
-  "search__savedSuccess": "บันทึกลงคลังสื่อแล้ว!",
+  "search__savedSuccess": "เพิ่มลงคลังสื่อแล้ว!",
   "@search__savedSuccess": {
     "description": "Success message after saving resources"
   },
@@ -595,15 +595,15 @@
   "@search__changePreset": {
     "description": "Aria label for preset picker button"
   },
-  "search__bookmark__save": "บันทึก",
+  "search__bookmark__save": "เพิ่ม",
   "@search__bookmark__save": {
     "description": "Save button label on resource cards"
   },
-  "search__bookmark__saved": "บันทึกแล้ว",
+  "search__bookmark__saved": "เพิ่มแล้ว",
   "@search__bookmark__saved": {
     "description": "Saved state label on resource cards"
   },
-  "search__bookmark__saveLabel": "บันทึกไปยังไลบรารี",
+  "search__bookmark__saveLabel": "เพิ่มในคลังสื่อ",
   "@search__bookmark__saveLabel": {
     "description": "Accessible label for save button"
   },
@@ -928,67 +928,134 @@
     "description": "Evaluation dimension label for licensing and intellectual property"
   },
   "search__evaluation__verdicts__use_it": "ใช้ได้",
-  "@search__evaluation__verdicts__use_it": { "description": "Verdict badge when resource is ready to use" },
+  "@search__evaluation__verdicts__use_it": {
+    "description": "Verdict badge when resource is ready to use"
+  },
   "search__evaluation__verdicts__adapt_it": "ต้องปรับ",
-  "@search__evaluation__verdicts__adapt_it": { "description": "Verdict badge when resource needs adaptation" },
+  "@search__evaluation__verdicts__adapt_it": {
+    "description": "Verdict badge when resource needs adaptation"
+  },
   "search__evaluation__verdicts__skip_it": "ข้ามไป",
-  "@search__evaluation__verdicts__skip_it": { "description": "Verdict badge when resource should be skipped" },
+  "@search__evaluation__verdicts__skip_it": {
+    "description": "Verdict badge when resource should be skipped"
+  },
   "search__evaluation__confidence__high": "ความเชื่อมั่นสูง",
-  "@search__evaluation__confidence__high": { "description": "Confidence level label for high" },
+  "@search__evaluation__confidence__high": {
+    "description": "Confidence level label for high"
+  },
   "search__evaluation__confidence__moderate": "ความเชื่อมั่นปานกลาง",
-  "@search__evaluation__confidence__moderate": { "description": "Confidence level label for moderate" },
+  "@search__evaluation__confidence__moderate": {
+    "description": "Confidence level label for moderate"
+  },
   "search__evaluation__confidence__low": "ความเชื่อมั่นต่ำ",
-  "@search__evaluation__confidence__low": { "description": "Confidence level label for low" },
+  "@search__evaluation__confidence__low": {
+    "description": "Confidence level label for low"
+  },
   "search__evaluation__showDetails": "แสดงรายละเอียด",
-  "@search__evaluation__showDetails": { "description": "Button to expand evaluation details" },
+  "@search__evaluation__showDetails": {
+    "description": "Button to expand evaluation details"
+  },
   "search__evaluation__hideDetails": "ซ่อนรายละเอียด",
-  "@search__evaluation__hideDetails": { "description": "Button to collapse evaluation details" },
+  "@search__evaluation__hideDetails": {
+    "description": "Button to collapse evaluation details"
+  },
   "search__evaluation__flags": "{count, plural, one {{count} แฟล็ก} other {{count} แฟล็ก}}",
-  "@search__evaluation__flags": { "description": "Number of flags detected", "placeholders": { "count": { "type": "int" } } },
+  "@search__evaluation__flags": {
+    "description": "Number of flags detected",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "search__evaluation__noFlags": "ไม่พบแฟล็ก",
-  "@search__evaluation__noFlags": { "description": "Message when no risk flags are found" },
+  "@search__evaluation__noFlags": {
+    "description": "Message when no risk flags are found"
+  },
   "search__evaluation__overrideNote": "หมายเหตุพิเศษ",
-  "@search__evaluation__overrideNote": { "description": "Label for teacher override notes" },
+  "@search__evaluation__overrideNote": {
+    "description": "Label for teacher override notes"
+  },
   "search__evaluation__evidence": "หลักฐาน",
-  "@search__evaluation__evidence": { "description": "Label for evidence quote in flag details" },
+  "@search__evaluation__evidence": {
+    "description": "Label for evidence quote in flag details"
+  },
   "search__evaluation__suggested": "การดำเนินการที่แนะนำ",
-  "@search__evaluation__suggested": { "description": "Label for suggested action in flag details" },
+  "@search__evaluation__suggested": {
+    "description": "Label for suggested action in flag details"
+  },
   "search__evaluation__sections__triage": "การคัดกรอง",
-  "@search__evaluation__sections__triage": { "description": "Section heading for triage metrics" },
+  "@search__evaluation__sections__triage": {
+    "description": "Section heading for triage metrics"
+  },
   "search__evaluation__sections__adaptations": "การปรับปรุง",
-  "@search__evaluation__sections__adaptations": { "description": "Section heading for adaptation suggestions" },
+  "@search__evaluation__sections__adaptations": {
+    "description": "Section heading for adaptation suggestions"
+  },
   "search__evaluation__sections__riskScan": "สแกนความเสี่ยง",
-  "@search__evaluation__sections__riskScan": { "description": "Section heading for risk flag scan" },
+  "@search__evaluation__sections__riskScan": {
+    "description": "Section heading for risk flag scan"
+  },
   "search__evaluation__sections__reasoning": "การให้เหตุผล",
-  "@search__evaluation__sections__reasoning": { "description": "Section heading for final reasoning chain" },
+  "@search__evaluation__sections__reasoning": {
+    "description": "Section heading for final reasoning chain"
+  },
   "search__evaluation__metrics__curriculumFit": "ความเหมาะสมกับหลักสูตร",
-  "@search__evaluation__metrics__curriculumFit": { "description": "Metric label for curriculum fit rating" },
+  "@search__evaluation__metrics__curriculumFit": {
+    "description": "Metric label for curriculum fit rating"
+  },
   "search__evaluation__metrics__accessibility": "การเข้าถึง",
-  "@search__evaluation__metrics__accessibility": { "description": "Metric label for accessibility rating" },
+  "@search__evaluation__metrics__accessibility": {
+    "description": "Metric label for accessibility rating"
+  },
   "search__evaluation__metrics__trustworthiness": "ความน่าเชื่อถือ",
-  "@search__evaluation__metrics__trustworthiness": { "description": "Metric label for trustworthiness rating" },
+  "@search__evaluation__metrics__trustworthiness": {
+    "description": "Metric label for trustworthiness rating"
+  },
   "search__evaluation__ratings__strong": "ดีมาก",
-  "@search__evaluation__ratings__strong": { "description": "Rating badge for strong score" },
+  "@search__evaluation__ratings__strong": {
+    "description": "Rating badge for strong score"
+  },
   "search__evaluation__ratings__adequate": "พอใช้",
-  "@search__evaluation__ratings__adequate": { "description": "Rating badge for adequate score" },
+  "@search__evaluation__ratings__adequate": {
+    "description": "Rating badge for adequate score"
+  },
   "search__evaluation__ratings__weak": "อ่อน",
-  "@search__evaluation__ratings__weak": { "description": "Rating badge for weak score" },
+  "@search__evaluation__ratings__weak": {
+    "description": "Rating badge for weak score"
+  },
   "search__evaluation__flagCategories__bias": "อคติ",
-  "@search__evaluation__flagCategories__bias": { "description": "Flag category label for bias" },
+  "@search__evaluation__flagCategories__bias": {
+    "description": "Flag category label for bias"
+  },
   "search__evaluation__flagCategories__factual_error": "ข้อผิดพลาดเชิงข้อเท็จจริง",
-  "@search__evaluation__flagCategories__factual_error": { "description": "Flag category label for factual errors" },
+  "@search__evaluation__flagCategories__factual_error": {
+    "description": "Flag category label for factual errors"
+  },
   "search__evaluation__flagCategories__outdated": "ข้อมูลล้าสมัย",
-  "@search__evaluation__flagCategories__outdated": { "description": "Flag category label for outdated content" },
+  "@search__evaluation__flagCategories__outdated": {
+    "description": "Flag category label for outdated content"
+  },
   "search__evaluation__flagCategories__inappropriate_content": "เนื้อหาไม่เหมาะสม",
-  "@search__evaluation__flagCategories__inappropriate_content": { "description": "Flag category label for inappropriate content" },
+  "@search__evaluation__flagCategories__inappropriate_content": {
+    "description": "Flag category label for inappropriate content"
+  },
   "search__evaluation__flagCategories__licensing": "ใบอนุญาต",
-  "@search__evaluation__flagCategories__licensing": { "description": "Flag category label for licensing issues" },
+  "@search__evaluation__flagCategories__licensing": {
+    "description": "Flag category label for licensing issues"
+  },
   "search__evaluation__flagCategories__reading_level": "ระดับการอ่าน",
-  "@search__evaluation__flagCategories__reading_level": { "description": "Flag category label for reading level issues" },
+  "@search__evaluation__flagCategories__reading_level": {
+    "description": "Flag category label for reading level issues"
+  },
   "search__evaluation__flagCategories__accessibility": "การเข้าถึง",
-  "@search__evaluation__flagCategories__accessibility": { "description": "Flag category label for accessibility issues" },
+  "@search__evaluation__flagCategories__accessibility": {
+    "description": "Flag category label for accessibility issues"
+  },
   "search__evaluation__flagCategories__cultural_sensitivity": "ความอ่อนไหวทางวัฒนธรรม",
-  "@search__evaluation__flagCategories__cultural_sensitivity": { "description": "Flag category label for cultural sensitivity issues" },
+  "@search__evaluation__flagCategories__cultural_sensitivity": {
+    "description": "Flag category label for cultural sensitivity issues"
+  },
   "userMenu__profile": "โปรไฟล์",
   "@userMenu__profile": {
     "description": "User menu link to profile page"
@@ -1068,139 +1135,509 @@
     "description": "Divider text for social login options"
   },
   "contact__title": "ติดต่อเรา",
-  "@contact__title": { "description": "Contact page heading" },
+  "@contact__title": {
+    "description": "Contact page heading"
+  },
   "contact__subtitle": "มีคำถามหรือข้อเสนอแนะ? เรายินดีรับฟัง",
-  "@contact__subtitle": { "description": "Contact page subheading" },
+  "@contact__subtitle": {
+    "description": "Contact page subheading"
+  },
   "contact__nameLabel": "ชื่อ",
-  "@contact__nameLabel": { "description": "Name field label" },
+  "@contact__nameLabel": {
+    "description": "Name field label"
+  },
   "contact__namePlaceholder": "ชื่อของคุณ",
-  "@contact__namePlaceholder": { "description": "Name field placeholder" },
+  "@contact__namePlaceholder": {
+    "description": "Name field placeholder"
+  },
   "contact__emailLabel": "อีเมล",
-  "@contact__emailLabel": { "description": "Email field label" },
+  "@contact__emailLabel": {
+    "description": "Email field label"
+  },
   "contact__emailPlaceholder": "your@email.com",
-  "@contact__emailPlaceholder": { "description": "Email field placeholder" },
+  "@contact__emailPlaceholder": {
+    "description": "Email field placeholder"
+  },
   "contact__messageLabel": "ข้อความ",
-  "@contact__messageLabel": { "description": "Message field label" },
+  "@contact__messageLabel": {
+    "description": "Message field label"
+  },
   "contact__messagePlaceholder": "บอกเราว่าคุณคิดอะไรอยู่...",
-  "@contact__messagePlaceholder": { "description": "Message field placeholder" },
+  "@contact__messagePlaceholder": {
+    "description": "Message field placeholder"
+  },
   "contact__send": "ส่งความคิดเห็น",
-  "@contact__send": { "description": "Submit button text" },
+  "@contact__send": {
+    "description": "Submit button text"
+  },
   "contact__thankYou": "ส่งความคิดเห็นแล้ว!",
-  "@contact__thankYou": { "description": "Success heading after form submission" },
+  "@contact__thankYou": {
+    "description": "Success heading after form submission"
+  },
   "contact__thankYouDescription": "คุณจะถูกนำไปยัง GitHub เพื่อยืนยัน ขอบคุณสำหรับความคิดเห็น!",
-  "@contact__thankYouDescription": { "description": "Success body text after form submission" },
+  "@contact__thankYouDescription": {
+    "description": "Success body text after form submission"
+  },
   "contact__sendAnother": "ส่งความคิดเห็นเพิ่มเติม",
-  "@contact__sendAnother": { "description": "Link to reset the form" },
+  "@contact__sendAnother": {
+    "description": "Link to reset the form"
+  },
   "contact__location": "สถานที่",
-  "@contact__location": { "description": "Location section heading" },
+  "@contact__location": {
+    "description": "Location section heading"
+  },
   "contact__teamEmails": "อีเมลทีม",
-  "@contact__teamEmails": { "description": "Team emails section heading" },
-  "search__saveCollection__title": "บันทึกลงคลังสื่อ",
-  "@search__saveCollection__title": { "description": "Dialog title for saving resources to a collection" },
+  "@contact__teamEmails": {
+    "description": "Team emails section heading"
+  },
+  "search__saveCollection__title": "เพิ่มในคลังสื่อ",
+  "@search__saveCollection__title": {
+    "description": "Dialog title for saving resources to a collection"
+  },
   "search__saveCollection__description": "จัดกลุ่มทรัพยากรที่เลือกไว้ในคอลเลกชันที่มีชื่อ",
-  "@search__saveCollection__description": { "description": "Dialog description for saving resources to a collection" },
+  "@search__saveCollection__description": {
+    "description": "Dialog description for saving resources to a collection"
+  },
   "search__saveCollection__nameLabel": "ชื่อคอลเลกชัน",
-  "@search__saveCollection__nameLabel": { "description": "Label for collection name input" },
+  "@search__saveCollection__nameLabel": {
+    "description": "Label for collection name input"
+  },
   "search__saveCollection__namePlaceholder": "เช่น ฟิสิกส์ 101",
-  "@search__saveCollection__namePlaceholder": { "description": "Placeholder for collection name input" },
+  "@search__saveCollection__namePlaceholder": {
+    "description": "Placeholder for collection name input"
+  },
   "search__saveCollection__privacyLabel": "ความเป็นส่วนตัว",
-  "@search__saveCollection__privacyLabel": { "description": "Label for privacy toggle" },
+  "@search__saveCollection__privacyLabel": {
+    "description": "Label for privacy toggle"
+  },
   "search__saveCollection__private": "ส่วนตัว",
-  "@search__saveCollection__private": { "description": "Private privacy option" },
+  "@search__saveCollection__private": {
+    "description": "Private privacy option"
+  },
   "search__saveCollection__public": "สาธารณะ",
-  "@search__saveCollection__public": { "description": "Public privacy option" },
+  "@search__saveCollection__public": {
+    "description": "Public privacy option"
+  },
   "search__saveCollection__publicWarning": "คุณแน่ใจหรือไม่ว่าต้องการเผยแพร่สาธารณะ? ทุกคนจะสามารถค้นพบทรัพยากรเหล่านี้ในคอลเลกชันแนะนำ",
-  "@search__saveCollection__publicWarning": { "description": "Warning message when making collection public" },
+  "@search__saveCollection__publicWarning": {
+    "description": "Warning message when making collection public"
+  },
   "library__generate__title": "สร้าง{artifactType}",
-  "@library__generate__title": { "description": "Dialog title for generating an artifact", "placeholders": { "artifactType": { "type": "String" } } },
+  "@library__generate__title": {
+    "description": "Dialog title for generating an artifact",
+    "placeholders": {
+      "artifactType": {
+        "type": "String"
+      }
+    }
+  },
   "library__generate__description": "เลือกทรัพยากรเพื่อสร้าง{artifactType}",
-  "@library__generate__description": { "description": "Dialog description for generating an artifact", "placeholders": { "artifactType": { "type": "String" } } },
+  "@library__generate__description": {
+    "description": "Dialog description for generating an artifact",
+    "placeholders": {
+      "artifactType": {
+        "type": "String"
+      }
+    }
+  },
   "library__generate__descriptionMax": "เลือกได้สูงสุด {max} รายการ",
-  "@library__generate__descriptionMax": { "description": "Note about max resource selection", "placeholders": { "max": { "type": "int" } } },
+  "@library__generate__descriptionMax": {
+    "description": "Note about max resource selection",
+    "placeholders": {
+      "max": {
+        "type": "int"
+      }
+    }
+  },
   "library__generate__selectAtLeast": "เลือกอย่างน้อย 1 รายการ",
-  "@library__generate__selectAtLeast": { "description": "Error when no resources selected" },
+  "@library__generate__selectAtLeast": {
+    "description": "Error when no resources selected"
+  },
   "library__generate__selectUpTo": "เลือกได้สูงสุด {max} รายการ",
-  "@library__generate__selectUpTo": { "description": "Error when too many resources selected", "placeholders": { "max": { "type": "int" } } },
+  "@library__generate__selectUpTo": {
+    "description": "Error when too many resources selected",
+    "placeholders": {
+      "max": {
+        "type": "int"
+      }
+    }
+  },
   "library__generate__success": "สร้าง{artifactType}สำเร็จ",
-  "@library__generate__success": { "description": "Success toast after generation", "placeholders": { "artifactType": { "type": "String" } } },
+  "@library__generate__success": {
+    "description": "Success toast after generation",
+    "placeholders": {
+      "artifactType": {
+        "type": "String"
+      }
+    }
+  },
   "library__generate__error": "ไม่สามารถสร้าง{artifactType}ได้",
-  "@library__generate__error": { "description": "Error toast on generation failure", "placeholders": { "artifactType": { "type": "String" } } },
+  "@library__generate__error": {
+    "description": "Error toast on generation failure",
+    "placeholders": {
+      "artifactType": {
+        "type": "String"
+      }
+    }
+  },
   "library__generate__generating": "กำลังสร้างจาก {count} รายการ...",
-  "@library__generate__generating": { "description": "Button label while generating", "placeholders": { "count": { "type": "int" } } },
+  "@library__generate__generating": {
+    "description": "Button label while generating",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "library__generate__button": "สร้าง ({count})",
-  "@library__generate__button": { "description": "Button label with selected count", "placeholders": { "count": { "type": "int" } } },
+  "@library__generate__button": {
+    "description": "Button label with selected count",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "library__generate__cancel": "ยกเลิก",
-  "@library__generate__cancel": { "description": "Cancel button in generate dialog" },
+  "@library__generate__cancel": {
+    "description": "Cancel button in generate dialog"
+  },
   "library__generate__artifactQuiz": "แบบทดสอบ",
-  "@library__generate__artifactQuiz": { "description": "Artifact type label for quiz" },
+  "@library__generate__artifactQuiz": {
+    "description": "Artifact type label for quiz"
+  },
   "library__generate__artifactMindmap": "แผนผังความคิด",
-  "@library__generate__artifactMindmap": { "description": "Artifact type label for mind map" },
+  "@library__generate__artifactMindmap": {
+    "description": "Artifact type label for mind map"
+  },
   "library__generate__artifactSummary": "สรุป",
-  "@library__generate__artifactSummary": { "description": "Artifact type label for summary" },
+  "@library__generate__artifactSummary": {
+    "description": "Artifact type label for summary"
+  },
   "library__generate__artifactFlashcards": "บัตรคำ",
-  "@library__generate__artifactFlashcards": { "description": "Artifact type label for flashcards" },
+  "@library__generate__artifactFlashcards": {
+    "description": "Artifact type label for flashcards"
+  },
   "library__progress__preparingResources": "กำลังเตรียมทรัพยากร...",
-  "@library__progress__preparingResources": { "description": "Progress label during RAG preparation stage" },
+  "@library__progress__preparingResources": {
+    "description": "Progress label during RAG preparation stage"
+  },
   "library__progress__evaluatingResources": "กำลังประเมินทรัพยากร...",
-  "@library__progress__evaluatingResources": { "description": "Progress label during evaluation stage" },
+  "@library__progress__evaluatingResources": {
+    "description": "Progress label during evaluation stage"
+  },
   "library__progress__resourceCount": "{completed}/{total} เสร็จแล้ว",
-  "@library__progress__resourceCount": { "description": "Progress counter showing completed vs total", "placeholders": { "completed": { "type": "int" }, "total": { "type": "int" } } },
+  "@library__progress__resourceCount": {
+    "description": "Progress counter showing completed vs total",
+    "placeholders": {
+      "completed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
   "library__title": "คลังสื่อของฉัน",
-  "@library__title": { "description": "Library page heading" },
-  "library__subtitle": "สื่อที่คัดสรรจากคอลเลกชันการสอนของฉัน",
-  "@library__subtitle": { "description": "Library page subtitle" },
+  "@library__title": {
+    "description": "Library page heading"
+  },
+  "library__subtitle": "บันทึก ประเมิน และแชร์สื่อที่คัดสรรกับเพื่อนร่วมงาน",
+  "@library__subtitle": {
+    "description": "Library page subtitle"
+  },
   "library__empty__title": "คลังสื่อว่างเปล่า",
-  "@library__empty__title": { "description": "Empty state heading" },
+  "@library__empty__title": {
+    "description": "Empty state heading"
+  },
   "library__empty__description": "บันทึกสื่อจากผลการค้นหาเพื่อสร้างคอลเลกชัน",
-  "@library__empty__description": { "description": "Empty state description" },
+  "@library__empty__description": {
+    "description": "Empty state description"
+  },
   "library__empty__startSearching": "เริ่มค้นหา",
-  "@library__empty__startSearching": { "description": "CTA button in empty state" },
+  "@library__empty__startSearching": {
+    "description": "CTA button in empty state"
+  },
   "library__collection__resources": "{count} รายการ",
-  "@library__collection__resources": { "description": "Resource count label", "placeholders": { "count": { "type": "int" } } },
+  "@library__collection__resources": {
+    "description": "Resource count label",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "library__collection__unevaluated": "{count} ยังไม่ประเมิน",
-  "@library__collection__unevaluated": { "description": "Unevaluated count badge", "placeholders": { "count": { "type": "int" } } },
+  "@library__collection__unevaluated": {
+    "description": "Unevaluated count badge",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "library__action__addLink": "เพิ่มลิงก์",
-  "@library__action__addLink": { "description": "Add custom link button" },
+  "@library__action__addLink": {
+    "description": "Add custom link button"
+  },
   "library__action__cancel": "ยกเลิก",
-  "@library__action__cancel": { "description": "Cancel button" },
+  "@library__action__cancel": {
+    "description": "Cancel button"
+  },
   "library__action__add": "เพิ่ม",
-  "@library__action__add": { "description": "Add button for custom link form" },
+  "@library__action__add": {
+    "description": "Add button for custom link form"
+  },
   "library__action__save": "บันทึก",
-  "@library__action__save": { "description": "Save button for rename form" },
+  "@library__action__save": {
+    "description": "Save button for rename form"
+  },
   "library__action__evaluateAll": "ประเมินทั้งหมด ({count})",
-  "@library__action__evaluateAll": { "description": "Batch evaluate button", "placeholders": { "count": { "type": "int" } } },
+  "@library__action__evaluateAll": {
+    "description": "Batch evaluate button",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "library__action__evaluate": "ประเมิน",
-  "@library__action__evaluate": { "description": "Single evaluate button" },
+  "@library__action__evaluate": {
+    "description": "Single evaluate button"
+  },
   "library__action__reEvaluate": "ประเมินอีกครั้ง",
-  "@library__action__reEvaluate": { "description": "Re-evaluate button" },
+  "@library__action__reEvaluate": {
+    "description": "Re-evaluate button"
+  },
   "library__action__preparing": "กำลังเตรียม...",
-  "@library__action__preparing": { "description": "Button label during RAG preparation" },
+  "@library__action__preparing": {
+    "description": "Button label during RAG preparation"
+  },
   "library__action__evaluating": "กำลังประเมิน...",
-  "@library__action__evaluating": { "description": "Button label during evaluation" },
+  "@library__action__evaluating": {
+    "description": "Button label during evaluation"
+  },
   "library__action__rename": "เปลี่ยนชื่อ",
-  "@library__action__rename": { "description": "Rename collection menu item" },
+  "@library__action__rename": {
+    "description": "Rename collection menu item"
+  },
   "library__action__makePrivate": "ตั้งเป็นส่วนตัว",
-  "@library__action__makePrivate": { "description": "Toggle collection to private" },
+  "@library__action__makePrivate": {
+    "description": "Toggle collection to private"
+  },
   "library__action__makePublic": "ตั้งเป็นสาธารณะ",
-  "@library__action__makePublic": { "description": "Toggle collection to public" },
+  "@library__action__makePublic": {
+    "description": "Toggle collection to public"
+  },
   "library__action__deleteCollection": "ลบคอลเลกชัน",
-  "@library__action__deleteCollection": { "description": "Delete collection menu item" },
+  "@library__action__deleteCollection": {
+    "description": "Delete collection menu item"
+  },
   "library__action__generate": "สร้าง",
-  "@library__action__generate": { "description": "Generate artifact button" },
+  "@library__action__generate": {
+    "description": "Generate artifact button"
+  },
   "library__toast__linkAdded": "เพิ่มลิงก์แล้ว",
-  "@library__toast__linkAdded": { "description": "Toast on link add success" },
+  "@library__toast__linkAdded": {
+    "description": "Toast on link add success"
+  },
   "library__toast__linkFailed": "ไม่สามารถเพิ่มลิงก์ได้",
-  "@library__toast__linkFailed": { "description": "Toast on link add failure" },
+  "@library__toast__linkFailed": {
+    "description": "Toast on link add failure"
+  },
   "library__toast__removeFailed": "ไม่สามารถลบสื่อได้",
-  "@library__toast__removeFailed": { "description": "Toast on resource remove failure" },
+  "@library__toast__removeFailed": {
+    "description": "Toast on resource remove failure"
+  },
   "library__toast__updateFailed": "ไม่สามารถอัปเดตคอลเลกชันได้",
-  "@library__toast__updateFailed": { "description": "Toast on collection update failure" },
+  "@library__toast__updateFailed": {
+    "description": "Toast on collection update failure"
+  },
   "library__toast__deleted": "ลบคอลเลกชันแล้ว",
-  "@library__toast__deleted": { "description": "Toast on collection delete success" },
+  "@library__toast__deleted": {
+    "description": "Toast on collection delete success"
+  },
   "library__toast__deleteFailed": "ไม่สามารถลบคอลเลกชันได้",
-  "@library__toast__deleteFailed": { "description": "Toast on collection delete failure" },
+  "@library__toast__deleteFailed": {
+    "description": "Toast on collection delete failure"
+  },
   "library__confirm__makePublic": "คุณแน่ใจหรือไม่ว่าต้องการเผยแพร่สาธารณะ? ทุกคนจะสามารถค้นพบทรัพยากรเหล่านี้ได้",
-  "@library__confirm__makePublic": { "description": "Confirm dialog for making collection public" },
+  "@library__confirm__makePublic": {
+    "description": "Confirm dialog for making collection public"
+  },
   "library__confirm__deleteCollection": "คุณแน่ใจหรือไม่ว่าต้องการลบคอลเลกชันนี้และสื่อทั้งหมด?",
-  "@library__confirm__deleteCollection": { "description": "Confirm dialog for deleting collection" }
+  "@library__confirm__deleteCollection": {
+    "description": "Confirm dialog for deleting collection"
+  },
+  "common__loading": "กำลังโหลด...",
+  "@common__loading": {
+    "description": "Loading indicator text"
+  },
+  "common__error": "เกิดข้อผิดพลาด",
+  "@common__error": {
+    "description": "Generic error message"
+  },
+  "common__retry": "ลองใหม่",
+  "@common__retry": {
+    "description": "Retry button text"
+  },
+  "common__save": "บันทึก",
+  "@common__save": {
+    "description": "Save button text"
+  },
+  "common__cancel": "ยกเลิก",
+  "@common__cancel": {
+    "description": "Cancel button text"
+  },
+  "common__confirm": "ยืนยัน",
+  "@common__confirm": {
+    "description": "Confirm button text"
+  },
+  "common__delete": "ลบ",
+  "@common__delete": {
+    "description": "Delete button text"
+  },
+  "presets__count": "{count, plural, one {# คอลเลกชัน} other {# คอลเลกชัน}}",
+  "@presets__count": {
+    "description": "Collection count label",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "search__back": "ย้อนกลับ",
+  "@search__back": {
+    "description": "Back button label"
+  },
+  "search__renamePreset": "เปลี่ยนชื่อพรีเซ็ต",
+  "@search__renamePreset": {
+    "description": "Button to rename a preset"
+  },
+  "search__presetRenamed": "เปลี่ยนชื่อพรีเซ็ตแล้ว",
+  "@search__presetRenamed": {
+    "description": "Success message after renaming preset"
+  },
+  "search__presetRenameError": "เปลี่ยนชื่อพรีเซ็ตไม่สำเร็จ",
+  "@search__presetRenameError": {
+    "description": "Error message when renaming preset fails"
+  },
+  "search__suggestedCollections__alreadyInLibrary": "อยู่ในคลังสื่อแล้ว",
+  "@search__suggestedCollections__alreadyInLibrary": {
+    "description": "Label when collection is already in library"
+  },
+  "search__suggestedCollections__upToDate": "เป็นเวอร์ชันล่าสุด",
+  "@search__suggestedCollections__upToDate": {
+    "description": "Label when collection is already up to date"
+  },
+  "search__saveCollection__descriptionLabel": "คำอธิบาย (ไม่บังคับ)",
+  "@search__saveCollection__descriptionLabel": {
+    "description": "Label for collection description input"
+  },
+  "search__saveCollection__descriptionPlaceholder": "อธิบายคอลเลกชันนี้สั้นๆ...",
+  "@search__saveCollection__descriptionPlaceholder": {
+    "description": "Placeholder for collection description input"
+  },
+  "home__heroHighlight": "อัจฉริยะ",
+  "@home__heroHighlight": {
+    "description": "Highlighted word in hero title"
+  },
+  "home__heroTitleRest": "เครื่องมือปรับใช้สื่อ",
+  "@home__heroTitleRest": {
+    "description": "Rest of the hero title after the highlight"
+  },
+  "home__heroFor": "สำหรับ",
+  "@home__heroFor": {
+    "description": "Preposition in hero title"
+  },
+  "home__heroTeachers": "ครูผู้สอน",
+  "@home__heroTeachers": {
+    "description": "Target audience in hero title"
+  },
+  "search__suggestedCollections__cloned": "อยู่ในคลังสื่อ",
+  "@search__suggestedCollections__cloned": {
+    "description": "Button text when collection has been cloned"
+  },
+  "search__suggestedCollections__cloneCollection": "คัดลอกไปยังคลังสื่อ",
+  "@search__suggestedCollections__cloneCollection": {
+    "description": "Button to clone a suggested collection"
+  },
+  "search__suggestedCollections__syncCollection": "อัปเดตคอลเลกชัน",
+  "@search__suggestedCollections__syncCollection": {
+    "description": "Button to sync a previously cloned collection"
+  },
+  "search__suggestedCollections__syncSuccess": "อัปเดตคอลเลกชันแล้ว!",
+  "@search__suggestedCollections__syncSuccess": {
+    "description": "Success message when syncing collection"
+  },
+  "overview__confidence": "ความเชื่อมั่น",
+  "@overview__confidence": {
+    "description": "Label for evaluation confidence level"
+  },
+  "overview__evaluationNotFound": "ข้อมูลการประเมินหมดอายุแล้ว ลองค้นหาอีกครั้ง",
+  "@overview__evaluationNotFound": {
+    "description": "Message when evaluation cache has expired"
+  },
+  "overview__evaluationUnavailable": "ไม่มีข้อมูลการประเมินสำหรับสื่อนี้",
+  "@overview__evaluationUnavailable": {
+    "description": "Message when evaluation params are missing"
+  },
+  "search__cancel": "ยกเลิก",
+  "@search__cancel": {
+    "description": "Cancel button label in search dialogs"
+  },
+  "search__evaluation__flagCategories__outdated_content": "เนื้อหาล้าสมัย",
+  "@search__evaluation__flagCategories__outdated_content": {
+    "description": "Flag category for outdated content"
+  },
+  "search__evaluation__flagCategories__bias_or_framing": "อคติหรือการจัดกรอบ",
+  "@search__evaluation__flagCategories__bias_or_framing": {
+    "description": "Flag category for bias or framing"
+  },
+  "search__evaluation__flagCategories__factual_concern": "ข้อกังวลด้านข้อเท็จจริง",
+  "@search__evaluation__flagCategories__factual_concern": {
+    "description": "Flag category for factual concerns"
+  },
+  "search__evaluation__flagCategories__safety_concern": "ข้อกังวลด้านความปลอดภัย",
+  "@search__evaluation__flagCategories__safety_concern": {
+    "description": "Flag category for safety concerns"
+  },
+  "search__evaluation__flagCategories__misleading_match": "ผลลัพธ์ที่อาจทำให้เข้าใจผิด",
+  "@search__evaluation__flagCategories__misleading_match": {
+    "description": "Flag category for misleading matches"
+  },
+  "search__suggestedCollections__title": "คอลเลกชันแนะนำ",
+  "@search__suggestedCollections__title": {
+    "description": "Title for suggested collections"
+  },
+  "search__suggestedCollections__clone": "คัดลอก",
+  "@search__suggestedCollections__clone": {
+    "description": "Button to clone collection"
+  },
+  "search__suggestedCollections__clonesCount": "{count, plural, one {# สำเนา} other {# สำเนา}}",
+  "@search__suggestedCollections__clonesCount": {
+    "description": "Clone count label",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "search__suggestedCollections__empty": "ไม่พบคอลเลกชันสาธารณะสำหรับคำค้นใกล้เคียง",
+  "@search__suggestedCollections__empty": {
+    "description": "Empty state for suggested collections"
+  },
+  "search__suggestedCollections__sourcesCount": "{count, plural, one {# แหล่งที่มา} other {# แหล่งที่มา}}",
+  "@search__suggestedCollections__sourcesCount": {
+    "description": "Source count label",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "search__suggestedCollections__previewDescription": "ตรวจสอบคอลเลกชันนี้ก่อนคัดลอกไปยังคลังสื่อ",
+  "@search__suggestedCollections__previewDescription": {
+    "description": "Dialog description for previewing a collection"
+  }
 }
