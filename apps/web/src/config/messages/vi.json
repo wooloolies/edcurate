@@ -437,6 +437,10 @@
     },
     "title": "Thư viện của tôi",
     "subtitle": "Lưu, đánh giá và chia sẻ tài nguyên đã tuyển chọn với các giáo viên khác.",
+    "removeResourceDialogTitle": "Gỡ tài nguyên",
+    "removeResourceDialogDescription": "Gỡ \"{title}\" khỏi bộ sưu tập này? Chỉ gỡ khỏi bộ sưu tập; bạn có thể thêm lại từ tìm kiếm.",
+    "removeResourceDialogButton": "Gỡ",
+    "removeResourceDialogUntitled": "Tài nguyên không có tiêu đề",
     "empty": {
       "title": "Thư viện trống",
       "description": "Lưu tài nguyên từ kết quả tìm kiếm để xây dựng bộ sưu tập.",
@@ -460,6 +464,7 @@
       "makePrivate": "Đặt riêng tư",
       "makePublic": "Đặt công khai",
       "deleteCollection": "Xóa bộ sưu tập",
+      "removeResource": "Gỡ khỏi bộ sưu tập",
       "generate": "Tạo",
       "searchWithPreset": "Tìm kiếm với lớp học này",
       "statusPublic": "Công khai",
@@ -469,6 +474,7 @@
       "linkAdded": "Đã thêm liên kết",
       "linkFailed": "Không thể thêm liên kết",
       "removeFailed": "Không thể xóa tài nguyên",
+      "resourceRemoved": "Đã gỡ tài nguyên khỏi bộ sưu tập",
       "updateFailed": "Không thể cập nhật bộ sưu tập",
       "deleted": "Đã xóa bộ sưu tập",
       "deleteFailed": "Không thể xóa bộ sưu tập"

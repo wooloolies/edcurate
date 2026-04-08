@@ -437,6 +437,10 @@
     },
     "title": "คลังสื่อของฉัน",
     "subtitle": "บันทึก ประเมิน และแชร์สื่อที่คัดสรรกับเพื่อนร่วมงาน",
+    "removeResourceDialogTitle": "นำทรัพยากรออก",
+    "removeResourceDialogDescription": "นำ “{title}” ออกจากคอลเลกชันนี้หรือไม่? จะออกจากคอลเลกชันเท่านั้น คุณสามารถเพิ่มกลับจากการค้นหาได้",
+    "removeResourceDialogButton": "นำออก",
+    "removeResourceDialogUntitled": "ทรัพยากรไม่มีชื่อ",
     "empty": {
       "title": "คลังสื่อว่างเปล่า",
       "description": "บันทึกสื่อจากผลการค้นหาเพื่อสร้างคอลเลกชัน",
@@ -460,6 +464,7 @@
       "makePrivate": "ตั้งเป็นส่วนตัว",
       "makePublic": "ตั้งเป็นสาธารณะ",
       "deleteCollection": "ลบคอลเลกชัน",
+      "removeResource": "นำออกจากคอลเลกชัน",
       "generate": "สร้าง",
       "searchWithPreset": "ค้นหาด้วยห้องเรียนนี้",
       "statusPublic": "สาธารณะ",
@@ -469,6 +474,7 @@
       "linkAdded": "เพิ่มลิงก์แล้ว",
       "linkFailed": "ไม่สามารถเพิ่มลิงก์ได้",
       "removeFailed": "ไม่สามารถลบสื่อได้",
+      "resourceRemoved": "นำสื่อออกจากคอลเลกชันแล้ว",
       "updateFailed": "ไม่สามารถอัปเดตคอลเลกชันได้",
       "deleted": "ลบคอลเลกชันแล้ว",
       "deleteFailed": "ไม่สามารถลบคอลเลกชันได้"

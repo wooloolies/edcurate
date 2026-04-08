@@ -449,6 +449,10 @@
     },
     "title": "My Library",
     "subtitle": "Save, evaluate, and share your curated resources with other educators.",
+    "removeResourceDialogTitle": "Remove resource",
+    "removeResourceDialogDescription": "Remove \"{title}\" from this collection? This only removes it from the collection; you can add it again from search.",
+    "removeResourceDialogButton": "Remove",
+    "removeResourceDialogUntitled": "Untitled resource",
     "empty": {
       "title": "My library is empty",
       "description": "Save resources from search results to build a curated collection.",
@@ -472,6 +476,7 @@
       "makePrivate": "Make Private",
       "makePublic": "Make Public",
       "deleteCollection": "Delete Collection",
+      "removeResource": "Remove from collection",
       "generate": "Generate",
       "searchWithPreset": "Search with this classroom",
       "statusPublic": "Public",
@@ -481,6 +486,7 @@
       "linkAdded": "Custom link added",
       "linkFailed": "Failed to add link",
       "removeFailed": "Failed to remove resource",
+      "resourceRemoved": "Resource removed from collection",
       "updateFailed": "Failed to update collection",
       "deleted": "Collection deleted",
       "deleteFailed": "Failed to delete collection"
