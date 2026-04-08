@@ -262,7 +262,7 @@ export function LibraryPageClient() {
             handleEvaluateSingle(item.id);
           }}
           disabled={isEvaluatingThis}
-          className="inline-flex items-center justify-center rounded-full bg-brand-green px-3.5 py-1.5 text-xs font-medium text-brand-ink transition-all hover:bg-brand-ink hover:text-white disabled:opacity-50"
+          className="inline-flex items-center justify-center rounded-full bg-brand-green px-5 py-2 text-sm font-bold text-brand-ink shadow-sm transition-all hover:bg-brand-ink hover:text-white disabled:opacity-50"
         >
           <ScanSearch className="mr-1.5 h-3 w-3" />
           {singleLabel}
