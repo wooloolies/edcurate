@@ -460,7 +460,10 @@
       "makePrivate": "Đặt riêng tư",
       "makePublic": "Đặt công khai",
       "deleteCollection": "Xóa bộ sưu tập",
-      "generate": "Tạo"
+      "generate": "Tạo",
+      "searchWithPreset": "Tìm kiếm với lớp học này",
+      "statusPublic": "Công khai",
+      "statusPrivate": "Riêng tư"
     },
     "toast": {
       "linkAdded": "Đã thêm liên kết",
@@ -471,8 +474,15 @@
       "deleteFailed": "Không thể xóa bộ sưu tập"
     },
     "confirm": {
-      "makePublic": "Bạn có chắc muốn công khai? Mọi người sẽ có thể tìm thấy tài nguyên này.",
-      "deleteCollection": "Bạn có chắc muốn xóa bộ sưu tập này và tất cả tài nguyên?"
+      "makePublicTitle": "Công khai",
+      "makePublicDescription": "Mọi người sẽ có thể tìm thấy và xem các tài nguyên này. Bạn có chắc không?",
+      "makePublicButton": "Công khai",
+      "makePrivateTitle": "Chuyển sang riêng tư",
+      "makePrivateDescription": "Bộ sưu tập này sẽ không còn hiển thị với người khác.",
+      "makePrivateButton": "Chuyển sang riêng tư",
+      "deleteTitle": "Xóa bộ sưu tập",
+      "deleteDescription": "Bộ sưu tập này và tất cả tài nguyên sẽ bị xóa vĩnh viễn. Không thể hoàn tác.",
+      "deleteButton": "Xóa"
     }
   }
 }

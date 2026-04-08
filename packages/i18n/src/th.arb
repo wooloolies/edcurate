@@ -1437,6 +1437,12 @@
   "@library__action__generate": {
     "description": "Generate artifact button"
   },
+  "library__action__searchWithPreset": "ค้นหาด้วยห้องเรียนนี้",
+  "@library__action__searchWithPreset": { "description": "Aria label for search with preset button" },
+  "library__action__statusPublic": "สาธารณะ",
+  "@library__action__statusPublic": { "description": "Public status badge" },
+  "library__action__statusPrivate": "ส่วนตัว",
+  "@library__action__statusPrivate": { "description": "Private status badge" },
   "library__toast__linkAdded": "เพิ่มลิงก์แล้ว",
   "@library__toast__linkAdded": {
     "description": "Toast on link add success"
@@ -1461,14 +1467,24 @@
   "@library__toast__deleteFailed": {
     "description": "Toast on collection delete failure"
   },
-  "library__confirm__makePublic": "คุณแน่ใจหรือไม่ว่าต้องการเผยแพร่สาธารณะ? ทุกคนจะสามารถค้นพบทรัพยากรเหล่านี้ได้",
-  "@library__confirm__makePublic": {
-    "description": "Confirm dialog for making collection public"
-  },
-  "library__confirm__deleteCollection": "คุณแน่ใจหรือไม่ว่าต้องการลบคอลเลกชันนี้และสื่อทั้งหมด?",
-  "@library__confirm__deleteCollection": {
-    "description": "Confirm dialog for deleting collection"
-  },
+  "library__confirm__makePublicTitle": "เผยแพร่สาธารณะ",
+  "@library__confirm__makePublicTitle": { "description": "Confirm dialog title for making collection public" },
+  "library__confirm__makePublicDescription": "ทุกคนจะสามารถค้นพบและดูทรัพยากรเหล่านี้ได้ คุณแน่ใจหรือไม่?",
+  "@library__confirm__makePublicDescription": { "description": "Confirm dialog description for making collection public" },
+  "library__confirm__makePublicButton": "เผยแพร่สาธารณะ",
+  "@library__confirm__makePublicButton": { "description": "Confirm button for making collection public" },
+  "library__confirm__makePrivateTitle": "ตั้งเป็นส่วนตัว",
+  "@library__confirm__makePrivateTitle": { "description": "Confirm dialog title for making collection private" },
+  "library__confirm__makePrivateDescription": "คอลเลกชันนี้จะไม่ปรากฏให้ผู้อื่นเห็นอีกต่อไป",
+  "@library__confirm__makePrivateDescription": { "description": "Confirm dialog description for making collection private" },
+  "library__confirm__makePrivateButton": "ตั้งเป็นส่วนตัว",
+  "@library__confirm__makePrivateButton": { "description": "Confirm button for making collection private" },
+  "library__confirm__deleteTitle": "ลบคอลเลกชัน",
+  "@library__confirm__deleteTitle": { "description": "Confirm dialog title for deleting collection" },
+  "library__confirm__deleteDescription": "คอลเลกชันนี้และสื่อทั้งหมดจะถูกลบอย่างถาวร ไม่สามารถย้อนกลับได้",
+  "@library__confirm__deleteDescription": { "description": "Confirm dialog description for deleting collection" },
+  "library__confirm__deleteButton": "ลบ",
+  "@library__confirm__deleteButton": { "description": "Confirm button for deleting collection" },
   "common__loading": "กำลังโหลด...",
   "@common__loading": {
     "description": "Loading indicator text"

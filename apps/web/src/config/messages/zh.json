@@ -460,7 +460,10 @@
       "makePrivate": "设为私密",
       "makePublic": "设为公开",
       "deleteCollection": "删除收藏集",
-      "generate": "生成"
+      "generate": "生成",
+      "searchWithPreset": "使用此课堂搜索",
+      "statusPublic": "公开",
+      "statusPrivate": "私密"
     },
     "toast": {
       "linkAdded": "链接已添加",
@@ -471,8 +474,15 @@
       "deleteFailed": "删除收藏集失败"
     },
     "confirm": {
-      "makePublic": "确定要公开吗？所有人都可以发现这些资源。",
-      "deleteCollection": "确定要删除此收藏集及其所有资源吗？"
+      "makePublicTitle": "公开",
+      "makePublicDescription": "所有人都可以发现并查看这些资源。确定吗？",
+      "makePublicButton": "公开",
+      "makePrivateTitle": "设为私密",
+      "makePrivateDescription": "此收藏集将不再对其他人可见。",
+      "makePrivateButton": "设为私密",
+      "deleteTitle": "删除收藏集",
+      "deleteDescription": "此收藏集及其所有资源将被永久删除，此操作不可撤销。",
+      "deleteButton": "删除"
     }
   }
 }

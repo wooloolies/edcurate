@@ -1417,6 +1417,12 @@
   "@library__action__generate": {
     "description": "Generate artifact button"
   },
+  "library__action__searchWithPreset": "使用此课堂搜索",
+  "@library__action__searchWithPreset": { "description": "Aria label for search with preset button" },
+  "library__action__statusPublic": "公开",
+  "@library__action__statusPublic": { "description": "Public status badge" },
+  "library__action__statusPrivate": "私密",
+  "@library__action__statusPrivate": { "description": "Private status badge" },
   "library__toast__linkAdded": "链接已添加",
   "@library__toast__linkAdded": {
     "description": "Toast on link add success"
@@ -1441,14 +1447,24 @@
   "@library__toast__deleteFailed": {
     "description": "Toast on collection delete failure"
   },
-  "library__confirm__makePublic": "确定要公开吗？所有人都可以发现这些资源。",
-  "@library__confirm__makePublic": {
-    "description": "Confirm dialog for making collection public"
-  },
-  "library__confirm__deleteCollection": "确定要删除此收藏集及其所有资源吗？",
-  "@library__confirm__deleteCollection": {
-    "description": "Confirm dialog for deleting collection"
-  },
+  "library__confirm__makePublicTitle": "公开",
+  "@library__confirm__makePublicTitle": { "description": "Confirm dialog title for making collection public" },
+  "library__confirm__makePublicDescription": "所有人都可以发现并查看这些资源。确定吗？",
+  "@library__confirm__makePublicDescription": { "description": "Confirm dialog description for making collection public" },
+  "library__confirm__makePublicButton": "公开",
+  "@library__confirm__makePublicButton": { "description": "Confirm button for making collection public" },
+  "library__confirm__makePrivateTitle": "设为私密",
+  "@library__confirm__makePrivateTitle": { "description": "Confirm dialog title for making collection private" },
+  "library__confirm__makePrivateDescription": "此收藏集将不再对其他人可见。",
+  "@library__confirm__makePrivateDescription": { "description": "Confirm dialog description for making collection private" },
+  "library__confirm__makePrivateButton": "设为私密",
+  "@library__confirm__makePrivateButton": { "description": "Confirm button for making collection private" },
+  "library__confirm__deleteTitle": "删除收藏集",
+  "@library__confirm__deleteTitle": { "description": "Confirm dialog title for deleting collection" },
+  "library__confirm__deleteDescription": "此收藏集及其所有资源将被永久删除，此操作不可撤销。",
+  "@library__confirm__deleteDescription": { "description": "Confirm dialog description for deleting collection" },
+  "library__confirm__deleteButton": "删除",
+  "@library__confirm__deleteButton": { "description": "Confirm button for deleting collection" },
   "common__loading": "加载中...",
   "@common__loading": {
     "description": "Loading indicator text"

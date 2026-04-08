@@ -1449,6 +1449,12 @@
   "@library__action__generate": {
     "description": "Generate artifact button"
   },
+  "library__action__searchWithPreset": "이 수업으로 검색",
+  "@library__action__searchWithPreset": { "description": "Aria label for search with preset button" },
+  "library__action__statusPublic": "공개",
+  "@library__action__statusPublic": { "description": "Public status badge" },
+  "library__action__statusPrivate": "비공개",
+  "@library__action__statusPrivate": { "description": "Private status badge" },
   "library__toast__linkAdded": "링크가 추가되었습니다",
   "@library__toast__linkAdded": {
     "description": "Toast on link add success"
@@ -1473,14 +1479,24 @@
   "@library__toast__deleteFailed": {
     "description": "Toast on collection delete failure"
   },
-  "library__confirm__makePublic": "정말 공개하시겠습니까? 누구나 이 리소스를 발견할 수 있게 됩니다.",
-  "@library__confirm__makePublic": {
-    "description": "Confirm dialog for making collection public"
-  },
-  "library__confirm__deleteCollection": "이 컬렉션과 모든 리소스를 삭제하시겠습니까?",
-  "@library__confirm__deleteCollection": {
-    "description": "Confirm dialog for deleting collection"
-  },
+  "library__confirm__makePublicTitle": "공개로 전환",
+  "@library__confirm__makePublicTitle": { "description": "Confirm dialog title for making collection public" },
+  "library__confirm__makePublicDescription": "누구나 이 리소스를 발견하고 볼 수 있게 됩니다. 계속하시겠습니까?",
+  "@library__confirm__makePublicDescription": { "description": "Confirm dialog description for making collection public" },
+  "library__confirm__makePublicButton": "공개로 전환",
+  "@library__confirm__makePublicButton": { "description": "Confirm button for making collection public" },
+  "library__confirm__makePrivateTitle": "비공개로 전환",
+  "@library__confirm__makePrivateTitle": { "description": "Confirm dialog title for making collection private" },
+  "library__confirm__makePrivateDescription": "이 컬렉션은 더 이상 다른 사람에게 보이지 않습니다.",
+  "@library__confirm__makePrivateDescription": { "description": "Confirm dialog description for making collection private" },
+  "library__confirm__makePrivateButton": "비공개로 전환",
+  "@library__confirm__makePrivateButton": { "description": "Confirm button for making collection private" },
+  "library__confirm__deleteTitle": "컬렉션 삭제",
+  "@library__confirm__deleteTitle": { "description": "Confirm dialog title for deleting collection" },
+  "library__confirm__deleteDescription": "이 컬렉션과 모든 리소스가 영구적으로 삭제됩니다. 이 작업은 되돌릴 수 없습니다.",
+  "@library__confirm__deleteDescription": { "description": "Confirm dialog description for deleting collection" },
+  "library__confirm__deleteButton": "삭제",
+  "@library__confirm__deleteButton": { "description": "Confirm button for deleting collection" },
   "common__loading": "로딩 중...",
   "@common__loading": {
     "description": "Loading indicator text"

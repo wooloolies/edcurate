@@ -460,7 +460,10 @@
       "makePrivate": "ตั้งเป็นส่วนตัว",
       "makePublic": "ตั้งเป็นสาธารณะ",
       "deleteCollection": "ลบคอลเลกชัน",
-      "generate": "สร้าง"
+      "generate": "สร้าง",
+      "searchWithPreset": "ค้นหาด้วยห้องเรียนนี้",
+      "statusPublic": "สาธารณะ",
+      "statusPrivate": "ส่วนตัว"
     },
     "toast": {
       "linkAdded": "เพิ่มลิงก์แล้ว",
@@ -471,8 +474,15 @@
       "deleteFailed": "ไม่สามารถลบคอลเลกชันได้"
     },
     "confirm": {
-      "makePublic": "คุณแน่ใจหรือไม่ว่าต้องการเผยแพร่สาธารณะ? ทุกคนจะสามารถค้นพบทรัพยากรเหล่านี้ได้",
-      "deleteCollection": "คุณแน่ใจหรือไม่ว่าต้องการลบคอลเลกชันนี้และสื่อทั้งหมด?"
+      "makePublicTitle": "เผยแพร่สาธารณะ",
+      "makePublicDescription": "ทุกคนจะสามารถค้นพบและดูทรัพยากรเหล่านี้ได้ คุณแน่ใจหรือไม่?",
+      "makePublicButton": "เผยแพร่สาธารณะ",
+      "makePrivateTitle": "ตั้งเป็นส่วนตัว",
+      "makePrivateDescription": "คอลเลกชันนี้จะไม่ปรากฏให้ผู้อื่นเห็นอีกต่อไป",
+      "makePrivateButton": "ตั้งเป็นส่วนตัว",
+      "deleteTitle": "ลบคอลเลกชัน",
+      "deleteDescription": "คอลเลกชันนี้และสื่อทั้งหมดจะถูกลบอย่างถาวร ไม่สามารถย้อนกลับได้",
+      "deleteButton": "ลบ"
     }
   }
 }
