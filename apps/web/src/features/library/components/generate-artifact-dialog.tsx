@@ -2,7 +2,7 @@
 
 import { Loader2 } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -86,6 +86,13 @@ export function GenerateArtifactDialog({
     useGenerateArtifactEndpointApiLocalizerGeneratePost();
 
   const artifactLabel = t(ARTIFACT_LABEL_KEYS[artifactType]);
+
+  useEffect(() => {
+    if (!open) return;
+
+    setSelectedIds(new Set(resources.slice(0, MAX_SELECTED_RESOURCES).map((r) => r.id)));
+    setOptions({});
+  }, [artifactType, open, resources]);
 
   const toggleResource = (id: string) => {
     setSelectedIds((prev) => {

@@ -34,4 +34,12 @@ def upgrade() -> None:
 
 
 def downgrade() -> None:
-    op.drop_column("users", "password_hash")
+    conn = op.get_bind()
+    result = conn.execute(
+        sa.text(
+            "SELECT 1 FROM information_schema.columns "
+            "WHERE table_name='users' AND column_name='password_hash'"
+        )
+    )
+    if result.fetchone():
+        op.drop_column("users", "password_hash")
