@@ -528,7 +528,6 @@ export function LibraryPageClient() {
                 {sortedItems.map((item: SavedResourceResponse, idx: number) => (
                   <ResourceCardRenderer
                     key={item.id}
-                    index={idx}
                     resource={item.resource_data}
                     presetId={presetId}
                     customAction={renderCardAction(item)}

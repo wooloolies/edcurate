@@ -5,7 +5,7 @@ import { ResourceListRow } from "@/features/search/components/resource-card/reso
 import type { ResourceCard } from "@/lib/api/model";
 
 interface OpenAlexCardProps {
-  index: number;
+  index?: number;
   resource: ResourceCard;
   action?: React.ReactNode;
   isEvaluating?: boolean;

@@ -7,7 +7,7 @@ import type { ResourceCard } from "@/lib/api/model";
 import { Link } from "@/lib/i18n/routing";
 
 interface ResourceCardRendererProps {
-  index: number;
+  index?: number;
   resource: ResourceCard;
   presetId?: string;
   searchQuery?: string;
