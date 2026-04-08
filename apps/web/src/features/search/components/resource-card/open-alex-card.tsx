@@ -1,16 +1,17 @@
 import { BookOpen, ExternalLink } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { ResourceListRow } from "@/features/search/components/resource-card/resource-list-row";
 import { VerdictBadge } from "@/features/search/components/resource-card/relevance-indicator";
+import { ResourceListRow } from "@/features/search/components/resource-card/resource-list-row";
 import type { ResourceCard } from "@/lib/api/model";
 
 interface OpenAlexCardProps {
-  index: number;
+  index?: number;
   resource: ResourceCard;
   action?: React.ReactNode;
+  isEvaluating?: boolean;
 }
 
-export function OpenAlexCard({ index, resource, action }: OpenAlexCardProps) {
+export function OpenAlexCard({ index, resource, action, isEvaluating }: OpenAlexCardProps) {
   const t = useTranslations("search");
 
   const meta = resource.metadata as {
@@ -63,7 +64,7 @@ export function OpenAlexCard({ index, resource, action }: OpenAlexCardProps) {
   return (
     <ResourceListRow
       index={index}
-      verdictNode={<VerdictBadge verdict={resource.verdict} />}
+      verdictNode={<VerdictBadge verdict={resource.verdict} isEvaluating={isEvaluating} />}
       contentNode={contentNode}
       actionsNode={action}
     />

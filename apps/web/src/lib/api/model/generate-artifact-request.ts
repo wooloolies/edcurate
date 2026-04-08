@@ -5,6 +5,7 @@
  * OpenAPI spec version: 0.1.0
  */
 import type { GenerateArtifactRequestArtifactType } from './generate-artifact-request-artifact-type';
+import type { GenerationOptions } from './generation-options';
 
 export interface GenerateArtifactRequest {
   preset_id: string;
@@ -14,4 +15,5 @@ export interface GenerateArtifactRequest {
      */
   saved_resource_ids: string[];
   artifact_type: GenerateArtifactRequestArtifactType;
+  options?: GenerationOptions | null;
 }

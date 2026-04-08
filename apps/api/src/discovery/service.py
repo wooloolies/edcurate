@@ -2,8 +2,10 @@
 
 import asyncio
 import hashlib
+import re
 import uuid
 from collections.abc import AsyncGenerator
+from dataclasses import dataclass
 from itertools import zip_longest
 from typing import Literal
 
@@ -44,6 +46,41 @@ from src.rag.weaviate_store import (
 )
 
 logger = get_logger(__name__)
+
+_STATUS_CODE_RE = re.compile(r"(\d{3})")
+
+
+def _sanitize_error(error: Exception) -> str:
+    """Return a user-friendly error message without URLs or technical details."""
+    msg = str(error)
+    logger.error(
+        "Search provider error: %s: %s",
+        type(error).__name__,
+        msg,
+        exc_info=error,
+    )
+    # Extract HTTP status code from httpx-style messages (e.g. "Client error '403 …'")
+    match = re.search(r"\b[45]\d{2}\b", msg)
+    code = match.group(0) if match else None
+    if code == "403":
+        return "Access denied — API quota may be exceeded. Try again later."
+    if code == "429":
+        return "Too many requests — rate limit reached. Try again later."
+    if code and code.startswith("5"):
+        return "Provider is temporarily unavailable. Try again later."
+    if "timeout" in msg.lower() or "timed out" in msg.lower():
+        return "Request timed out. Try again later."
+    return f"Search failed: [{type(error).__name__}] {msg[:200]}"
+
+
+@dataclass
+class _RagContext:
+    eval_vector: list[float]
+    adv_vector: list[float]
+    readability_map: dict[str, dict[str, float]]
+    search_id: str
+    preset: ClassroomPreset
+
 
 _CACHE_TTL = 3600  # 1 hour
 _TOTAL_RESULTS = 15
@@ -180,20 +217,16 @@ def _select_candidates(
     return all_cards, all_cards[:top_k]
 
 
-async def _run_rag_pipeline(
+async def _prepare_rag_context(
     cards: list[ResourceCard],
     preset: ClassroomPreset,
     query: str,
     search_id: str,
     eval_vector: list[float] | None = None,
-) -> list[JudgmentResult]:
-    """Run the full RAG pipeline with 3-call evaluation.
+) -> _RagContext | None:
+    """Shared RAG setup: Weaviate, fetch, chunk, embed, query vectors.
 
-    1. Fetch content + compute readability
-    2. Chunk + embed + store in Weaviate
-    3. Embed query vectors
-    4. For each resource: Call 1 (Triage) + Call 2 (Risk Scanner) in PARALLEL
-    5. Call 3 (Final Judge) sequentially with both outputs
+    Returns None if setup fails (e.g. query embedding failure).
     """
     from src.rag.readability import compute_readability
 
@@ -202,7 +235,7 @@ async def _run_rag_pipeline(
         await asyncio.to_thread(ensure_collection)
     except Exception as e:
         logger.error("Weaviate collection setup failed", error=str(e))
-        return []
+        return None
 
     # Step 2: Fetch content for all resources in parallel
     fetch_tasks = [fetch_content(card) for card in cards]
@@ -252,107 +285,135 @@ async def _run_rag_pipeline(
             adv_vector = await embed_single(hybrid_text)
     except Exception as e:
         logger.error("Query embedding failed", error=str(e))
-        return []
+        return None
 
     # eval_vector is guaranteed non-None here (either passed in or just computed above)
     assert eval_vector is not None
 
-    # Step 5: For each resource — 3-call evaluation
-    async def _process_one(card: ResourceCard) -> JudgmentResult | None:
-        """Call 1 + Call 2 in parallel, then Call 3 sequentially."""
-        # Retrieve both chunk sets in parallel
-        try:
-            eval_retrieved, adv_retrieved = await asyncio.gather(
-                asyncio.to_thread(
-                    query_chunks,
-                    query_vector=eval_vector,
-                    search_id=search_id,
-                    resource_url=card.url,
-                    limit=5,
-                ),
-                asyncio.to_thread(
-                    query_chunks,
-                    query_vector=adv_vector,
-                    search_id=search_id,
-                    resource_url=card.url,
-                    limit=ADV_RETRIEVAL_LIMIT,
-                ),
-            )
-        except Exception as e:
-            logger.warning("Chunk retrieval failed", url=card.url, error=str(e))
-            eval_retrieved = []
-            adv_retrieved = []
+    return _RagContext(
+        eval_vector=eval_vector,
+        adv_vector=adv_vector,
+        readability_map=readability_map,
+        search_id=search_id,
+        preset=preset,
+    )
 
-        # Build triage text (Call 1)
-        if not eval_retrieved:
-            eval_chunks_text = card.snippet
-        else:
-            eval_chunks_text = "\n\n---\n\n".join(
-                str(r.get("chunk_text", "")) for r in eval_retrieved
-            )
 
-        # Build risk scanner texts (Call 2) — claim vs framing buckets
-        claim_text, framing_text = bucket_chunks_for_adversarial(
-            adv_retrieved if isinstance(adv_retrieved, list) else [],
-            card.snippet,
+async def _process_one(card: ResourceCard, ctx: _RagContext) -> JudgmentResult | None:
+    """Triage + Risk Scanner in parallel, then Final Judge."""
+    # Retrieve both chunk sets in parallel
+    try:
+        eval_retrieved, adv_retrieved = await asyncio.gather(
+            asyncio.to_thread(
+                query_chunks,
+                query_vector=ctx.eval_vector,
+                search_id=ctx.search_id,
+                resource_url=card.url,
+                limit=5,
+            ),
+            asyncio.to_thread(
+                query_chunks,
+                query_vector=ctx.adv_vector,
+                search_id=ctx.search_id,
+                resource_url=card.url,
+                limit=ADV_RETRIEVAL_LIMIT,
+            ),
+        )
+    except Exception as e:
+        logger.warning("Chunk retrieval failed", url=card.url, error=str(e))
+        eval_retrieved = []
+        adv_retrieved = []
+
+    # Build triage text (Call 1)
+    if not eval_retrieved:
+        eval_chunks_text = card.snippet
+    else:
+        eval_chunks_text = "\n\n---\n\n".join(
+            str(r.get("chunk_text", "")) for r in eval_retrieved
         )
 
-        # Run Call 1 (Triage) + Call 2 (Risk Scanner) in PARALLEL — blind
-        triage_result, risk_result = await asyncio.gather(
-            triage_resource(
-                title=card.title,
-                url=card.url,
-                source=card.source,
-                chunks_text=eval_chunks_text,
-                preset=preset,
-                readability_metrics=readability_map.get(card.url),
-            ),
-            scan_resource_risks(
-                claim_chunks_text=claim_text,
-                framing_chunks_text=framing_text,
-                title=card.title,
-                url=card.url,
-                source=card.source,
-                preset=preset,
-            ),
-            return_exceptions=True,
-        )
+    # Build risk scanner texts (Call 2) — claim vs framing buckets
+    claim_text, framing_text = bucket_chunks_for_adversarial(
+        adv_retrieved if isinstance(adv_retrieved, list) else [],
+        card.snippet,
+    )
 
-        # Handle Call 1 failure — cannot proceed without triage
-        if isinstance(triage_result, Exception):
-            logger.warning(
-                "Call 1 triage failed", url=card.url, error=str(triage_result)
-            )
-            return None
-        if not isinstance(triage_result, TriageResult):
-            return None
-
-        # Handle Call 2 failure — use empty risk scan
-        if isinstance(risk_result, Exception):
-            logger.warning(
-                "Call 2 risk scan failed — proceeding with empty risks",
-                url=card.url,
-                error=str(risk_result),
-            )
-            risk_result = RiskScanResult(flags=[], summary="Risk scan unavailable.")
-        elif not isinstance(risk_result, RiskScanResult):
-            risk_result = RiskScanResult(flags=[], summary="Risk scan unavailable.")
-
-        # Call 3 — Final Judge (sequential, sees both outputs)
-        judgment = await judge_resource(
-            triage=triage_result,
-            risk=risk_result,
+    # Run Call 1 (Triage) + Call 2 (Risk Scanner) in PARALLEL — blind
+    triage_result, risk_result = await asyncio.gather(
+        triage_resource(
             title=card.title,
             url=card.url,
-            preset=preset,
+            source=card.source,
+            chunks_text=eval_chunks_text,
+            preset=ctx.preset,
+            readability_metrics=ctx.readability_map.get(card.url),
+        ),
+        scan_resource_risks(
+            claim_chunks_text=claim_text,
+            framing_chunks_text=framing_text,
+            title=card.title,
+            url=card.url,
+            source=card.source,
+            preset=ctx.preset,
+        ),
+        return_exceptions=True,
+    )
+
+    # Handle Call 1 failure — cannot proceed without triage
+    if isinstance(triage_result, Exception):
+        logger.warning(
+            "Call 1 triage failed", url=card.url, error=str(triage_result)
         )
-        return judgment
+        return None
+    if not isinstance(triage_result, TriageResult):
+        return None
+
+    # Handle Call 2 failure — use empty risk scan
+    if isinstance(risk_result, Exception):
+        logger.warning(
+            "Call 2 risk scan failed — proceeding with empty risks",
+            url=card.url,
+            error=str(risk_result),
+        )
+        risk_result = RiskScanResult(flags=[], summary="Risk scan unavailable.")
+    elif not isinstance(risk_result, RiskScanResult):
+        risk_result = RiskScanResult(flags=[], summary="Risk scan unavailable.")
+
+    # Call 3 — Final Judge (sequential, sees both outputs)
+    judgment = await judge_resource(
+        triage=triage_result,
+        risk=risk_result,
+        title=card.title,
+        url=card.url,
+        preset=ctx.preset,
+    )
+    return judgment
+
+
+async def _run_rag_pipeline(
+    cards: list[ResourceCard],
+    preset: ClassroomPreset,
+    query: str,
+    search_id: str,
+    eval_vector: list[float] | None = None,
+) -> list[JudgmentResult]:
+    """Run the full RAG pipeline with 3-call evaluation.
+
+    1. Fetch content + compute readability
+    2. Chunk + embed + store in Weaviate
+    3. Embed query vectors
+    4. For each resource: Call 1 (Triage) + Call 2 (Risk Scanner) in PARALLEL
+    5. Call 3 (Final Judge) sequentially with both outputs
+    """
+    ctx = await _prepare_rag_context(cards, preset, query, search_id, eval_vector)
+    if ctx is None:
+        return []
 
     # Run all resources in parallel with timeout
     try:
         results = await asyncio.wait_for(
             asyncio.gather(
-                *[_process_one(card) for card in cards],
+                *[_process_one(card, ctx) for card in cards],
                 return_exceptions=True,
             ),
             timeout=180.0,
@@ -413,6 +474,7 @@ async def _set_cached(key: str, response: JudgedSearchResponse) -> None:
             await r.aclose()
     except Exception as e:
         logger.debug("Cache write failed", key=key, error=str(e))
+
 
 
 async def search_resources(
@@ -488,7 +550,7 @@ async def search_resources(
 
     for source, result in zip(_SOURCE_KEYS, raw_results, strict=True):
         if isinstance(result, Exception):
-            errors.append(SourceError(source=source, message=str(result)))
+            errors.append(SourceError(source=source, message=_sanitize_error(result)))
             results_by_source[source] = []
         elif isinstance(result, list):
             results_by_source[source] = result
@@ -669,7 +731,7 @@ async def search_resources_stream(
 
     for source, result in zip(_SOURCE_KEYS, raw_results, strict=True):
         if isinstance(result, Exception):
-            errors.append(SourceError(source=source, message=str(result)))
+            errors.append(SourceError(source=source, message=_sanitize_error(result)))
             results_by_source[source] = []
         elif isinstance(result, list):
             results_by_source[source] = result
@@ -714,55 +776,83 @@ async def search_resources_stream(
     yield SearchStageEvent(
         stage="federated_search",
         status="done",
-        data={"counts": counts_by_source},
+        data={
+            "counts": counts_by_source,
+            "results": [card.model_dump() for card in all_results],
+        },
     )
 
     yield SearchStageEvent(stage="rag_preparation", status="done")
 
-    # Stage 4 & 5: Evaluation + Adversarial — emit working events per resource
-    for card in top_cards:
-        yield SearchStageEvent(
-            stage="evaluation", status="working", resource_url=card.url
-        )
-        yield SearchStageEvent(
-            stage="adversarial", status="working", resource_url=card.url
-        )
-
-    # Run the full RAG pipeline (fetch → chunk → embed → triage + risk scan → judge)
+    # Stage 4 & 5: Shared RAG context preparation
     _VERDICT_SCORE: dict[str, float] = {"use_it": 1.0, "adapt_it": 0.5, "skip_it": 0.0}
     judgments: list[JudgmentResult] = []
-    try:
-        judgments = await asyncio.wait_for(
-            _run_rag_pipeline(
-                top_cards, preset, query, search_id, eval_vector=eval_vector
-            ),
-            timeout=120.0,
-        )
-    except Exception as e:
+
+    ctx = await _prepare_rag_context(
+        top_cards, preset, query, search_id, eval_vector=eval_vector
+    )
+
+    if ctx is not None:
+        # Emit working events per resource
+        for card in top_cards:
+            yield SearchStageEvent(
+                stage="evaluation", status="working", resource_url=card.url
+            )
+            yield SearchStageEvent(
+                stage="adversarial", status="working", resource_url=card.url
+            )
+
+        # Per-resource evaluation with FIRST_COMPLETED
+        pending: set[asyncio.Task[JudgmentResult | None]] = set()
+        task_to_card: dict[asyncio.Task[JudgmentResult | None], ResourceCard] = {}
+        for card in top_cards:
+            task = asyncio.create_task(_process_one(card, ctx))
+            pending.add(task)
+            task_to_card[task] = card
+
+        while pending:
+            done, pending = await asyncio.wait(
+                pending, return_when=asyncio.FIRST_COMPLETED, timeout=180.0
+            )
+            if not done:
+                # Timeout — cancel remaining tasks
+                for t in pending:
+                    t.cancel()
+                logger.warning("RAG evaluation timed out, cancelling remaining tasks")
+                break
+            for task in done:
+                card = task_to_card[task]
+                try:
+                    result = task.result()
+                    if isinstance(result, JudgmentResult):
+                        judgments.append(result)
+                        card.verdict = result.verdict
+                        card.relevance_score = _VERDICT_SCORE.get(
+                            result.verdict, 0.5
+                        )
+                        card.relevance_reason = result.reasoning_chain
+                        yield SearchStageEvent(
+                            stage="evaluation",
+                            status="done",
+                            resource_url=card.url,
+                            data={"judgment": result.model_dump()},
+                        )
+                        yield SearchStageEvent(
+                            stage="adversarial",
+                            status="done",
+                            resource_url=card.url,
+                        )
+                except Exception as e:
+                    logger.warning(
+                        "Resource processing failed",
+                        url=card.url,
+                        error=str(e),
+                    )
+    else:
         logger.error(
-            "RAG pipeline failed (stream) — returning results without evaluations",
-            error=str(e),
+            "RAG context preparation failed (stream)"
+            " - returning results without evaluations"
         )
-
-    # Emit done events per resource that was judged
-    judged_urls = {j.resource_url for j in judgments}
-    for card in top_cards:
-        if card.url in judged_urls:
-            yield SearchStageEvent(
-                stage="evaluation", status="done", resource_url=card.url
-            )
-            yield SearchStageEvent(
-                stage="adversarial", status="done", resource_url=card.url
-            )
-
-    # Attach verdict, relevance score proxy, and reasoning to each card
-    judgment_map = {j.resource_url: j for j in judgments}
-    for card in all_results:
-        if card.url in judgment_map:
-            j = judgment_map[card.url]
-            card.verdict = j.verdict
-            card.relevance_score = _VERDICT_SCORE.get(j.verdict, 0.5)
-            card.relevance_reason = j.reasoning_chain
 
     # Sort: judged resources first (by verdict proxy), unevaluated at end
     all_results.sort(

@@ -1,9 +1,13 @@
+import logging
 import uuid
 from typing import Any
 
-from fastapi import APIRouter, status
+from fastapi import APIRouter, Query, Request, status
+from sse_starlette.sse import EventSourceResponse
 
+from src.lib.auth import decode_token
 from src.lib.dependencies import CurrentUser, DBSession
+from src.lib.rate_limit import rate_limit
 from src.saved_resources import service
 from src.saved_resources.schemas import (
     AddCustomLinkRequest,
@@ -20,6 +24,18 @@ from src.saved_resources.schemas import (
 )
 
 router = APIRouter()
+
+
+def _saved_rate_limit_key(request: Request) -> str:
+    """Rate limit key scoped to authenticated user id."""
+    auth = request.headers.get("Authorization", "")
+    if auth.startswith("Bearer "):
+        try:
+            payload = decode_token(auth.removeprefix("Bearer ").strip())
+            return f"saved:evaluate:{payload.user_id}"
+        except Exception:
+            logging.debug("Token decode failed for rate-limit key")
+    return f"saved:evaluate:{request.client.host if request.client else 'unknown'}"
 
 
 @router.get("")
@@ -146,6 +162,51 @@ async def add_custom_link_endpoint(
     """Add and scrape a custom link."""
     user_id = uuid.UUID(current_user.id)
     return await service.add_custom_link(db, user_id, request)
+
+
+@router.get("/evaluate-single/stream")
+@rate_limit(requests=10, window=60, key_func=_saved_rate_limit_key)
+async def evaluate_single_stream_endpoint(
+    request: Request,
+    db: DBSession,
+    current_user: CurrentUser,
+    saved_resource_id: uuid.UUID = Query(...),
+) -> EventSourceResponse:
+    """Stream single resource evaluation progress as SSE events."""
+    user_id = uuid.UUID(current_user.id)
+
+    async def _event_generator():
+        async for event in service.evaluate_single_resource_stream(
+            db, user_id, saved_resource_id
+        ):
+            if await request.is_disconnected():
+                break
+            yield {"event": "stage", "data": event.model_dump_json()}
+
+    return EventSourceResponse(_event_generator())
+
+
+@router.get("/evaluate/stream")
+@rate_limit(requests=5, window=60, key_func=_saved_rate_limit_key)
+async def evaluate_stream_endpoint(
+    request: Request,
+    db: DBSession,
+    current_user: CurrentUser,
+    preset_id: uuid.UUID = Query(...),
+    search_query: str = Query(...),
+) -> EventSourceResponse:
+    """Stream evaluation progress as SSE events."""
+    user_id = uuid.UUID(current_user.id)
+
+    async def _event_generator():
+        async for event in service.evaluate_saved_resources_stream(
+            db, user_id, preset_id, search_query
+        ):
+            if await request.is_disconnected():
+                break
+            yield {"event": "stage", "data": event.model_dump_json()}
+
+    return EventSourceResponse(_event_generator())
 
 
 @router.post("/evaluate")

@@ -93,7 +93,7 @@ export function QuizViewer({ data }: QuizViewerProps) {
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
   onload="renderMathInElement(document.body,{delimiters:[{left:'\\\\[',right:'\\\\]',display:true},{left:'\\\\(',right:'\\\\)',display:false}]})"></script>
 <style>
-  body { font-family: 'Segoe UI', system-ui, sans-serif; max-width: 750px; margin: 40px auto; padding: 0 24px; color: #1a1a1a; font-size: 14px; line-height: 1.6; }
+  body { font-family: 'Inter', ui-sans-serif, system-ui, sans-serif; max-width: 750px; margin: 40px auto; padding: 0 24px; color: #111827; font-size: 14px; line-height: 1.6; }
   h1 { font-size: 22px; margin-bottom: 24px; border-bottom: 2px solid #e5e7eb; padding-bottom: 12px; }
   .question { margin-bottom: 24px; page-break-inside: avoid; }
   .q-title { font-weight: 600; margin-bottom: 8px; }
@@ -135,17 +135,17 @@ export function QuizViewer({ data }: QuizViewerProps) {
     <div className="space-y-5">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-bold text-[#111827]">{data.title}</h3>
+        <h3 className="text-lg font-bold text-brand-ink">{data.title}</h3>
         <div className="flex items-center gap-2">
           {answeredCount > 0 && (
-            <span className="rounded-full bg-[#B7FF70]/30 px-3 py-1 text-xs font-medium text-[#111827]/70">
+            <span className="rounded-full bg-brand-green/30 px-3 py-1 text-xs font-medium text-brand-ink/70">
               {correctCount}/{answeredCount} correct
             </span>
           )}
           <button
             type="button"
             onClick={() => setShowAllAnswers((p) => !p)}
-            className="inline-flex items-center rounded-full px-3.5 py-1.5 text-xs font-medium text-[#111827]/60 transition-colors hover:bg-[#111827]/5 hover:text-[#111827]"
+            className="inline-flex items-center rounded-full px-3.5 py-1.5 text-xs font-medium text-brand-ink/60 transition-colors hover:bg-brand-ink/5 hover:text-brand-ink"
           >
             {showAllAnswers ? (
               <>
@@ -160,7 +160,7 @@ export function QuizViewer({ data }: QuizViewerProps) {
           <button
             type="button"
             onClick={downloadPdf}
-            className="inline-flex items-center rounded-full bg-[#B7FF70] px-3.5 py-1.5 text-xs font-medium text-[#111827] transition-all hover:bg-[#111827] hover:text-white"
+            className="inline-flex items-center rounded-full bg-brand-green px-3.5 py-1.5 text-xs font-medium text-brand-ink transition-all hover:bg-brand-ink hover:text-white"
           >
             <Download className="mr-1.5 h-3.5 w-3.5" /> PDF
           </button>
@@ -180,15 +180,15 @@ export function QuizViewer({ data }: QuizViewerProps) {
             >
               {/* Question text */}
               <div className="px-5 pt-4 pb-3">
-                <p className="text-sm font-medium leading-relaxed text-[#111827]">
-                  <span className="mr-2 text-[#111827]/35">Q{qIdx + 1}.</span>
+                <p className="text-sm font-medium leading-relaxed text-brand-ink">
+                  <span className="mr-2 text-brand-ink/35">Q{qIdx + 1}.</span>
                   <MathMarkdown inline>{q.question}</MathMarkdown>
                 </p>
                 {q.hint ? (
                   <button
                     type="button"
                     onClick={() => toggleHint(qIdx)}
-                    className="mt-2 flex items-center gap-1.5 text-xs text-[#111827]/40 transition-colors hover:text-[#111827]/70"
+                    className="mt-2 flex items-center gap-1.5 text-xs text-brand-ink/40 transition-colors hover:text-brand-ink/70"
                   >
                     <HelpCircle className="h-3 w-3" />
                     {visibleHints.has(qIdx) ? (
@@ -207,12 +207,12 @@ export function QuizViewer({ data }: QuizViewerProps) {
                   const isCorrect = opt.isCorrect;
                   const showResult = revealed;
 
-                  let bgClass = "bg-[#F8F9FA] border-transparent hover:bg-[#111827]/5";
-                  let indicatorClass = "border-[#111827]/15 bg-white text-[#111827]/50";
+                  let bgClass = "bg-brand-surface border-transparent hover:bg-brand-ink/5";
+                  let indicatorClass = "border-brand-ink/15 bg-white text-brand-ink/50";
 
                   if (showResult && isCorrect) {
-                    bgClass = "bg-[#B7FF70]/15 border-[#B7FF70]/40";
-                    indicatorClass = "border-[#B7FF70] bg-[#B7FF70] text-[#111827]";
+                    bgClass = "bg-brand-green/15 border-brand-green/40";
+                    indicatorClass = "border-brand-green bg-brand-green text-brand-ink";
                   } else if (showResult && isSelected && !isCorrect) {
                     bgClass = "bg-red-50 border-red-200/60";
                     indicatorClass = "border-red-400 bg-red-400 text-white";
@@ -240,11 +240,11 @@ export function QuizViewer({ data }: QuizViewerProps) {
                         )}
                       </span>
                       <div className="min-w-0 flex-1">
-                        <span className="text-[#111827]">
+                        <span className="text-brand-ink">
                           <MathMarkdown inline>{opt.text}</MathMarkdown>
                         </span>
                         {showResult ? (
-                          <p className="mt-1 text-xs text-[#111827]/45">
+                          <p className="mt-1 text-xs text-brand-ink/45">
                             <MathMarkdown inline>{opt.rationale}</MathMarkdown>
                           </p>
                         ) : null}

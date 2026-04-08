@@ -32,6 +32,7 @@ import {
 } from 'react';
 
 import type {
+  GetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGet200,
   HTTPValidationError,
   JudgedSearchResponse,
   SearchApiDiscoverySearchGetParams,
@@ -480,6 +481,223 @@ export function useSearchStreamApiDiscoverySearchStreamGetSuspense<TData = Await
  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
   const queryOptions = useSearchStreamApiDiscoverySearchStreamGetSuspenseQueryOptions(params,options)
+
+  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+/**
+ * Fetch evaluation data by ID.
+ * @summary Get Evaluation Endpoint
+ */
+export const useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetHook = () => {
+        const getEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGet = useCustomInstance<GetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGet200>();
+
+        return useCallback((
+    evaluationId: string,
+ signal?: AbortSignal
+) => {
+        return getEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGet(
+          {url: `/api/discovery/evaluation/${evaluationId}`, method: 'GET', signal
+    },
+          );
+        }, [getEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGet])
+      }
+
+
+
+
+export const getGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetInfiniteQueryKey = (evaluationId: string,) => {
+    return [
+    'infinite', `/api/discovery/evaluation/${evaluationId}`
+    ] as const;
+    }
+
+export const getGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetQueryKey = (evaluationId: string,) => {
+    return [
+    `/api/discovery/evaluation/${evaluationId}`
+    ] as const;
+    }
+
+
+export const useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<ReturnType<typeof useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetHook>>>>, TError = HTTPValidationError>(evaluationId: string, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<ReturnType<typeof useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetHook>>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetInfiniteQueryKey(evaluationId);
+
+  const getEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGet =  useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetHook();
+
+    const queryFn: QueryFunction<Awaited<ReturnType<ReturnType<typeof useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetHook>>>> = ({ signal }) => getEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGet(evaluationId, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: !!(evaluationId), ...queryOptions} as UseInfiniteQueryOptions<Awaited<ReturnType<ReturnType<typeof useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetHook>>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetInfiniteQueryResult = NonNullable<Awaited<ReturnType<ReturnType<typeof useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetHook>>>>
+export type GetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetInfiniteQueryError = HTTPValidationError
+
+
+export function useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetInfinite<TData = InfiniteData<Awaited<ReturnType<ReturnType<typeof useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetHook>>>>, TError = HTTPValidationError>(
+ evaluationId: string, options: { query:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<ReturnType<typeof useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetHook>>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<ReturnType<typeof useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetHook>>>,
+          TError,
+          Awaited<ReturnType<ReturnType<typeof useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetHook>>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetInfinite<TData = InfiniteData<Awaited<ReturnType<ReturnType<typeof useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetHook>>>>, TError = HTTPValidationError>(
+ evaluationId: string, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<ReturnType<typeof useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetHook>>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<ReturnType<typeof useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetHook>>>,
+          TError,
+          Awaited<ReturnType<ReturnType<typeof useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetHook>>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetInfinite<TData = InfiniteData<Awaited<ReturnType<ReturnType<typeof useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetHook>>>>, TError = HTTPValidationError>(
+ evaluationId: string, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<ReturnType<typeof useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetHook>>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get Evaluation Endpoint
+ */
+
+export function useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetInfinite<TData = InfiniteData<Awaited<ReturnType<ReturnType<typeof useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetHook>>>>, TError = HTTPValidationError>(
+ evaluationId: string, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<ReturnType<typeof useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetHook>>>, TError, TData>>, }
+ , queryClient?: QueryClient
+ ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetInfiniteQueryOptions(evaluationId,options)
+
+  const query = useInfiniteQuery(queryOptions, queryClient) as  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+export const useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetQueryOptions = <TData = Awaited<ReturnType<ReturnType<typeof useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetHook>>>, TError = HTTPValidationError>(evaluationId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<ReturnType<typeof useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetHook>>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetQueryKey(evaluationId);
+
+  const getEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGet =  useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetHook();
+
+    const queryFn: QueryFunction<Awaited<ReturnType<ReturnType<typeof useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetHook>>>> = ({ signal }) => getEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGet(evaluationId, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: !!(evaluationId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<ReturnType<typeof useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetHook>>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetQueryResult = NonNullable<Awaited<ReturnType<ReturnType<typeof useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetHook>>>>
+export type GetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetQueryError = HTTPValidationError
+
+
+export function useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGet<TData = Awaited<ReturnType<ReturnType<typeof useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetHook>>>, TError = HTTPValidationError>(
+ evaluationId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<ReturnType<typeof useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetHook>>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<ReturnType<typeof useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetHook>>>,
+          TError,
+          Awaited<ReturnType<ReturnType<typeof useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetHook>>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGet<TData = Awaited<ReturnType<ReturnType<typeof useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetHook>>>, TError = HTTPValidationError>(
+ evaluationId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<ReturnType<typeof useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetHook>>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<ReturnType<typeof useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetHook>>>,
+          TError,
+          Awaited<ReturnType<ReturnType<typeof useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetHook>>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGet<TData = Awaited<ReturnType<ReturnType<typeof useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetHook>>>, TError = HTTPValidationError>(
+ evaluationId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<ReturnType<typeof useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetHook>>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get Evaluation Endpoint
+ */
+
+export function useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGet<TData = Awaited<ReturnType<ReturnType<typeof useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetHook>>>, TError = HTTPValidationError>(
+ evaluationId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<ReturnType<typeof useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetHook>>>, TError, TData>>, }
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetQueryOptions(evaluationId,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+export const useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetSuspenseQueryOptions = <TData = Awaited<ReturnType<ReturnType<typeof useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetHook>>>, TError = HTTPValidationError>(evaluationId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<ReturnType<typeof useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetHook>>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetQueryKey(evaluationId);
+
+  const getEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGet =  useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetHook();
+
+    const queryFn: QueryFunction<Awaited<ReturnType<ReturnType<typeof useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetHook>>>> = ({ signal }) => getEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGet(evaluationId, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<ReturnType<typeof useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetHook>>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetSuspenseQueryResult = NonNullable<Awaited<ReturnType<ReturnType<typeof useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetHook>>>>
+export type GetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetSuspenseQueryError = HTTPValidationError
+
+
+export function useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetSuspense<TData = Awaited<ReturnType<ReturnType<typeof useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetHook>>>, TError = HTTPValidationError>(
+ evaluationId: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<ReturnType<typeof useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetHook>>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetSuspense<TData = Awaited<ReturnType<ReturnType<typeof useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetHook>>>, TError = HTTPValidationError>(
+ evaluationId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<ReturnType<typeof useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetHook>>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetSuspense<TData = Awaited<ReturnType<ReturnType<typeof useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetHook>>>, TError = HTTPValidationError>(
+ evaluationId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<ReturnType<typeof useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetHook>>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get Evaluation Endpoint
+ */
+
+export function useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetSuspense<TData = Awaited<ReturnType<ReturnType<typeof useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetHook>>>, TError = HTTPValidationError>(
+ evaluationId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<ReturnType<typeof useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetHook>>>, TError, TData>>, }
+ , queryClient?: QueryClient
+ ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = useGetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetSuspenseQueryOptions(evaluationId,options)
 
   const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 

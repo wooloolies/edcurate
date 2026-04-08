@@ -52,9 +52,10 @@
     "backToHome": "กลับหน้าหลัก"
   },
   "presets": {
-    "title": "พรีเซ็ตห้องเรียนของฉัน",
-    "newPreset": "พรีเซ็ตใหม่",
-    "editPreset": "แก้ไขพรีเซ็ต",
+    "title": "คอลเลกชันห้องเรียนของฉัน",
+    "subtitle": "ตั้งค่าวิชา ระดับชั้น และหลักสูตรเพื่อปรับแต่งการค้นหาให้ตรงจุด",
+    "newPreset": "คอลเลกชันใหม่",
+    "editPreset": "แก้ไขคอลเลกชัน",
     "createPreset": "สร้างพรีเซ็ต",
     "savePreset": "บันทึกพรีเซ็ต",
     "deletePreset": "ลบพรีเซ็ต",
@@ -92,9 +93,9 @@
       "additionalNotes": "บันทึกเพิ่มเติม"
     },
     "sources": {
-      "ddgs": "DuckDuckGo",
-      "youtube": "YouTube",
-      "openalex": "OpenAlex"
+      "ddgs": "เว็บ",
+      "youtube": "วิดีโอ",
+      "openalex": "บทความ"
     },
     "placeholders": {
       "name": "เช่น ภูมิศาสตร์ ม.3 - แคนส์",
@@ -111,7 +112,8 @@
       "additionalNotes": "เพิ่มบริบทเกี่ยวกับห้องเรียนของคุณ..."
     },
     "moreActions": "การทำงานเพิ่มเติม",
-    "saving": "กำลังบันทึก..."
+    "saving": "กำลังบันทึก...",
+    "count": "{count, plural, one {# คอลเลกชัน} other {# คอลเลกชัน}}"
   },
   "search": {
     "title": "ค้นหาสื่อการเรียนรู้",
@@ -148,16 +150,17 @@
     "showUnscored": "แสดงผลลัพธ์ที่ยังไม่ประเมินอีก {count} รายการ",
     "hideUnscored": "ซ่อนผลลัพธ์ที่ยังไม่ประเมิน",
     "resourcesSelected": "เลือกแล้ว {count} รายการ",
-    "saveToLibrary": "บันทึกลงคลังสื่อ",
-    "saving": "กำลังบันทึก...",
-    "savedSuccess": "บันทึกลงคลังสื่อแล้ว!",
+    "saveToLibrary": "เพิ่มในคลังสื่อ",
+    "save": "เพิ่ม",
+    "saving": "กำลังเพิ่ม...",
+    "savedSuccess": "เพิ่มลงคลังสื่อแล้ว!",
     "savedError": "ไม่สามารถบันทึกสื่อได้",
     "overview": "ภาพรวม",
     "changePreset": "เปลี่ยนพรีเซ็ต",
     "bookmark": {
-      "save": "บันทึก",
-      "saved": "บันทึกแล้ว",
-      "saveLabel": "บันทึกไปยังไลบรารี",
+      "save": "เพิ่ม",
+      "saved": "เพิ่มแล้ว",
+      "saveLabel": "เพิ่มในคลังสื่อ",
       "removeLabel": "ลบออกจากไลบรารี"
     },
     "clearSelection": "ล้างการเลือก",
@@ -176,7 +179,14 @@
       "step6": "กำลังดึงช่วงข้อความที่เกี่ยวข้องที่สุด",
       "step7": "กำลังให้คะแนนความสอดคล้องกับหลักสูตรและคุณภาพเชิงการสอน",
       "step8": "กำลังประเมินระดับการอ่านและการนำเสนออคติ",
-      "step9": "กำลังสรุปคะแนนและจัดอันดับผลลัพธ์"
+      "compactCount": "{count}/{total} complete",
+      "compactTitle": "Evaluating resources",
+      "step9": "กำลังสรุปคะแนนและจัดอันดับผลลัพธ์",
+      "stageQueryGeneration": "กำลังสร้างคำค้นหา",
+      "stageFederatedSearch": "กำลังค้นหาจากแหล่งข้อมูล",
+      "stageRagPreparation": "กำลังเตรียมผลลัพธ์",
+      "stageEvaluation": "กำลังประเมินทรัพยากร",
+      "stageSearching": "กำลังค้นหา"
     },
     "classroom": {
       "chalkboard": {
@@ -229,6 +239,7 @@
       }
     },
     "evaluation": {
+      "evaluating": "Evaluating...",
       "unevaluated": "ยังไม่ประเมิน",
       "score": "คะแนน: {score}/10",
       "agent": "เอเจนต์ประเมินเชิงลึก",
@@ -291,9 +302,45 @@
         "licensing": "ใบอนุญาต",
         "reading_level": "ระดับการอ่าน",
         "accessibility": "การเข้าถึง",
-        "cultural_sensitivity": "ความอ่อนไหวทางวัฒนธรรม"
+        "cultural_sensitivity": "ความอ่อนไหวทางวัฒนธรรม",
+        "outdated_content": "เนื้อหาล้าสมัย",
+        "bias_or_framing": "อคติหรือการจัดกรอบ",
+        "factual_concern": "ข้อกังวลด้านข้อเท็จจริง",
+        "safety_concern": "ข้อกังวลด้านความปลอดภัย",
+        "misleading_match": "ผลลัพธ์ที่อาจทำให้เข้าใจผิด"
       }
-    }
+    },
+    "saveCollection": {
+      "title": "เพิ่มในคลังสื่อ",
+      "description": "จัดกลุ่มทรัพยากรที่เลือกไว้ในคอลเลกชันที่มีชื่อ",
+      "nameLabel": "ชื่อคอลเลกชัน",
+      "namePlaceholder": "เช่น ฟิสิกส์ 101",
+      "privacyLabel": "ความเป็นส่วนตัว",
+      "private": "ส่วนตัว",
+      "public": "สาธารณะ",
+      "publicWarning": "คุณแน่ใจหรือไม่ว่าต้องการเผยแพร่สาธารณะ? ทุกคนจะสามารถค้นพบทรัพยากรเหล่านี้ในคอลเลกชันแนะนำ",
+      "descriptionLabel": "คำอธิบาย (ไม่บังคับ)",
+      "descriptionPlaceholder": "อธิบายคอลเลกชันนี้สั้นๆ..."
+    },
+    "back": "ย้อนกลับ",
+    "renamePreset": "เปลี่ยนชื่อพรีเซ็ต",
+    "presetRenamed": "เปลี่ยนชื่อพรีเซ็ตแล้ว",
+    "presetRenameError": "เปลี่ยนชื่อพรีเซ็ตไม่สำเร็จ",
+    "suggestedCollections": {
+      "alreadyInLibrary": "อยู่ในคลังสื่อแล้ว",
+      "upToDate": "เป็นเวอร์ชันล่าสุด",
+      "cloned": "อยู่ในคลังสื่อ",
+      "cloneCollection": "คัดลอกไปยังคลังสื่อ",
+      "syncCollection": "อัปเดตคอลเลกชัน",
+      "syncSuccess": "อัปเดตคอลเลกชันแล้ว!",
+      "title": "คอลเลกชันแนะนำ",
+      "clone": "คัดลอก",
+      "clonesCount": "{count, plural, one {# สำเนา} other {# สำเนา}}",
+      "empty": "ไม่พบคอลเลกชันสาธารณะสำหรับคำค้นใกล้เคียง",
+      "sourcesCount": "{count, plural, one {# แหล่งที่มา} other {# แหล่งที่มา}}",
+      "previewDescription": "ตรวจสอบคอลเลกชันนี้ก่อนคัดลอกไปยังคลังสื่อ"
+    },
+    "cancel": "ยกเลิก"
   },
   "nav": {
     "presets": "พรีเซ็ต",
@@ -313,13 +360,20 @@
     "startResearch": "เริ่มการวิจัยของคุณ",
     "featureTagYear": "ปี 7 ถึง 12",
     "featureTagDesigner": "นักออกแบบหลักสูตร",
-    "featureTagGlobal": "ทั่วโลก"
+    "featureTagGlobal": "ทั่วโลก",
+    "heroHighlight": "อัจฉริยะ",
+    "heroTitleRest": "เครื่องมือปรับใช้สื่อ",
+    "heroFor": "สำหรับ",
+    "heroTeachers": "ครูผู้สอน"
   },
   "overview": {
     "defaultTitle": "ภาพรวมทรัพยากร",
     "defaultType": "เอกสาร",
     "comingSoonTitle": "การวิเคราะห์โดยละเอียดเร็ว ๆ นี้",
-    "comingSoonDescription": "หน้านี้จะแสดงการวิเคราะห์ที่สร้างโดย AI ของทรัพยากร รวมถึงความสอดคล้องกับหลักสูตร เหตุผลทางการสอน และการสกัดหลักฐาน"
+    "comingSoonDescription": "หน้านี้จะแสดงการวิเคราะห์ที่สร้างโดย AI ของทรัพยากร รวมถึงความสอดคล้องกับหลักสูตร เหตุผลทางการสอน และการสกัดหลักฐาน",
+    "confidence": "ความเชื่อมั่น",
+    "evaluationNotFound": "ข้อมูลการประเมินหมดอายุแล้ว ลองค้นหาอีกครั้ง",
+    "evaluationUnavailable": "ไม่มีข้อมูลการประเมินสำหรับสื่อนี้"
   },
   "errors": {
     "title": "ข้อผิดพลาด",
@@ -360,5 +414,77 @@
     "sendAnother": "ส่งความคิดเห็นเพิ่มเติม",
     "location": "สถานที่",
     "teamEmails": "อีเมลทีม"
+  },
+  "library": {
+    "generate": {
+      "title": "สร้าง{artifactType}",
+      "description": "เลือกทรัพยากรเพื่อสร้าง{artifactType}",
+      "descriptionMax": "เลือกได้สูงสุด {max} รายการ",
+      "selectAtLeast": "เลือกอย่างน้อย 1 รายการ",
+      "selectUpTo": "เลือกได้สูงสุด {max} รายการ",
+      "success": "สร้าง{artifactType}สำเร็จ",
+      "error": "ไม่สามารถสร้าง{artifactType}ได้",
+      "generating": "กำลังสร้างจาก {count} รายการ...",
+      "button": "สร้าง ({count})",
+      "cancel": "ยกเลิก",
+      "artifactQuiz": "แบบทดสอบ",
+      "artifactMindmap": "แผนผังความคิด",
+      "artifactSummary": "สรุป",
+      "artifactFlashcards": "บัตรคำ"
+    },
+    "progress": {
+      "preparingResources": "กำลังเตรียมทรัพยากร...",
+      "evaluatingResources": "กำลังประเมินทรัพยากร...",
+      "resourceCount": "{completed}/{total} เสร็จแล้ว"
+    },
+    "title": "คลังสื่อของฉัน",
+    "subtitle": "บันทึก ประเมิน และแชร์สื่อที่คัดสรรกับเพื่อนร่วมงาน",
+    "empty": {
+      "title": "คลังสื่อว่างเปล่า",
+      "description": "บันทึกสื่อจากผลการค้นหาเพื่อสร้างคอลเลกชัน",
+      "startSearching": "เริ่มค้นหา"
+    },
+    "collection": {
+      "resources": "{count} รายการ",
+      "unevaluated": "{count} ยังไม่ประเมิน"
+    },
+    "action": {
+      "addLink": "เพิ่มลิงก์",
+      "cancel": "ยกเลิก",
+      "add": "เพิ่ม",
+      "save": "บันทึก",
+      "evaluateAll": "ประเมินทั้งหมด ({count})",
+      "evaluate": "ประเมิน",
+      "reEvaluate": "ประเมินอีกครั้ง",
+      "preparing": "กำลังเตรียม...",
+      "evaluating": "กำลังประเมิน...",
+      "rename": "เปลี่ยนชื่อ",
+      "makePrivate": "ตั้งเป็นส่วนตัว",
+      "makePublic": "ตั้งเป็นสาธารณะ",
+      "deleteCollection": "ลบคอลเลกชัน",
+      "generate": "สร้าง",
+      "searchWithPreset": "ค้นหาด้วยห้องเรียนนี้",
+      "statusPublic": "สาธารณะ",
+      "statusPrivate": "ส่วนตัว"
+    },
+    "toast": {
+      "linkAdded": "เพิ่มลิงก์แล้ว",
+      "linkFailed": "ไม่สามารถเพิ่มลิงก์ได้",
+      "removeFailed": "ไม่สามารถลบสื่อได้",
+      "updateFailed": "ไม่สามารถอัปเดตคอลเลกชันได้",
+      "deleted": "ลบคอลเลกชันแล้ว",
+      "deleteFailed": "ไม่สามารถลบคอลเลกชันได้"
+    },
+    "confirm": {
+      "makePublicTitle": "เผยแพร่สาธารณะ",
+      "makePublicDescription": "ทุกคนจะสามารถค้นพบและดูทรัพยากรเหล่านี้ได้ คุณแน่ใจหรือไม่?",
+      "makePublicButton": "เผยแพร่สาธารณะ",
+      "makePrivateTitle": "ตั้งเป็นส่วนตัว",
+      "makePrivateDescription": "คอลเลกชันนี้จะไม่ปรากฏให้ผู้อื่นเห็นอีกต่อไป",
+      "makePrivateButton": "ตั้งเป็นส่วนตัว",
+      "deleteTitle": "ลบคอลเลกชัน",
+      "deleteDescription": "คอลเลกชันนี้และสื่อทั้งหมดจะถูกลบอย่างถาวร ไม่สามารถย้อนกลับได้",
+      "deleteButton": "ลบ"
+    }
   }
 }

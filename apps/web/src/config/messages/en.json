@@ -52,9 +52,11 @@
     "backToHome": "Back to home"
   },
   "presets": {
-    "title": "My Classroom Presets",
-    "newPreset": "New Preset",
-    "editPreset": "Edit Preset",
+    "title": "My Classroom Collections",
+    "subtitle": "Define your subject, year level, and curriculum to tailor every search.",
+    "count": "{count, plural, one {# collection} other {# collections}}",
+    "newPreset": "New Collection",
+    "editPreset": "Edit Collection",
     "createPreset": "Create Preset",
     "savePreset": "Save Preset",
     "deletePreset": "Delete Preset",
@@ -92,9 +94,9 @@
       "additionalNotes": "Additional Notes"
     },
     "sources": {
-      "ddgs": "DuckDuckGo",
-      "youtube": "YouTube",
-      "openalex": "OpenAlex"
+      "ddgs": "Web",
+      "youtube": "Video",
+      "openalex": "Paper"
     },
     "placeholders": {
       "name": "e.g., Year 9 Geography - Cairns",
@@ -148,17 +150,22 @@
     "showUnscored": "Show {count} more unscored results",
     "hideUnscored": "Hide unscored results",
     "resourcesSelected": "{count, plural, one {# resource} other {# resources}} selected",
-    "saveToLibrary": "Save to Library",
-    "saving": "Saving...",
-    "savedSuccess": "Resources saved to library!",
+    "saveToLibrary": "Add to my Library",
+    "save": "Add",
+    "saving": "Adding...",
+    "savedSuccess": "Resources added to library!",
     "savedError": "Failed to save resources",
     "cancel": "Cancel",
+    "back": "Back",
+    "renamePreset": "Rename preset",
+    "presetRenamed": "Preset renamed",
+    "presetRenameError": "Failed to rename preset",
     "overview": "Overview",
     "changePreset": "Change preset",
     "bookmark": {
-      "save": "Save",
-      "saved": "Saved",
-      "saveLabel": "Save to Library",
+      "save": "Add",
+      "saved": "Added",
+      "saveLabel": "Add to Library",
       "removeLabel": "Remove from Library"
     },
     "clearSelection": "Clear selection",
@@ -177,7 +184,14 @@
       "step6": "Retrieving the most relevant chunks",
       "step7": "Scoring curriculum alignment and pedagogical quality",
       "step8": "Evaluating reading level and bias representation",
-      "step9": "Finalising scores and ranking results"
+      "compactCount": "{count}/{total} complete",
+      "compactTitle": "Evaluating resources",
+      "step9": "Finalising scores and ranking results",
+      "stageQueryGeneration": "Generating search queries",
+      "stageFederatedSearch": "Searching across sources",
+      "stageRagPreparation": "Preparing results",
+      "stageEvaluation": "Evaluating resources",
+      "stageSearching": "Searching"
     },
     "classroom": {
       "chalkboard": {
@@ -230,6 +244,7 @@
       }
     },
     "evaluation": {
+      "evaluating": "Evaluating...",
       "unevaluated": "Unevaluated",
       "score": "Score: {score}/10",
       "agent": "Deep Evaluation Agent",
@@ -303,14 +318,28 @@
     "suggestedCollections": {
       "title": "Suggested Collections",
       "clone": "Clone",
-      "cloned": "Cloned",
+      "cloned": "In my Library",
+      "alreadyInLibrary": "Already in my Library",
       "clonesCount": "{count, plural, one {# clone} other {# clones}}",
       "empty": "No public collections found for similar queries.",
       "sourcesCount": "{count, plural, one {# source} other {# sources}}",
-      "cloneCollection": "Clone Collection",
+      "cloneCollection": "Copy to my Library",
       "previewDescription": "Review this collection before cloning it to your library.",
-      "syncCollection": "Sync Collection",
-      "syncSuccess": "Collection synced!"
+      "syncCollection": "Update my collection",
+      "syncSuccess": "Collection updated!",
+      "upToDate": "Up to date"
+    },
+    "saveCollection": {
+      "title": "Add to my Library",
+      "description": "Group your selected resources into a named collection.",
+      "nameLabel": "Collection Name",
+      "namePlaceholder": "e.g., Physics 101",
+      "privacyLabel": "Privacy",
+      "private": "Private",
+      "public": "Public",
+      "descriptionLabel": "Description (optional)",
+      "descriptionPlaceholder": "Briefly describe what this collection is about...",
+      "publicWarning": "Are you sure you want to make this public? Anyone will be able to discover these resources in suggested collections."
     }
   },
   "nav": {
@@ -328,6 +357,8 @@
     "heroTitleRest": "adaption engine",
     "heroFor": "for",
     "heroTeachers": "teachers",
+    "heroTitlePart1": "Intelligent adaption engine",
+    "heroTitlePart2": "for teachers",
     "startResearch": "Start your research",
     "featureTagYear": "Year 7 to 12",
     "featureTagDesigner": "Curriculum Designer",
@@ -337,7 +368,10 @@
     "defaultTitle": "Resource Overview",
     "defaultType": "Document",
     "comingSoonTitle": "Detailed Analysis Coming Soon",
-    "comingSoonDescription": "This page will display AI-generated analysis of the resource, including curriculum alignment, pedagogical reasoning, and evidence extraction."
+    "comingSoonDescription": "This page will display AI-generated analysis of the resource, including curriculum alignment, pedagogical reasoning, and evidence extraction.",
+    "confidence": "Confidence",
+    "evaluationNotFound": "Evaluation data is no longer available. Try searching again.",
+    "evaluationUnavailable": "No evaluation data available for this resource."
   },
   "errors": {
     "title": "Error",
@@ -378,5 +412,89 @@
     "sendAnother": "Send more feedback",
     "location": "Location",
     "teamEmails": "Team Emails"
+  },
+  "library": {
+    "generate": {
+      "title": "Generate {artifactType}",
+      "description": "Select resources to generate a {artifactType} from.",
+      "descriptionMax": "Up to {max} resources can be selected.",
+      "selectAtLeast": "Select at least one resource",
+      "selectUpTo": "Select up to {max} resources",
+      "success": "{artifactType} generated successfully",
+      "error": "Failed to generate {artifactType}",
+      "generating": "Generating from {count} resource...",
+      "button": "Generate ({count})",
+      "cancel": "Cancel",
+      "artifactQuiz": "Quiz",
+      "artifactMindmap": "Mind Map",
+      "artifactSummary": "Summary",
+      "artifactFlashcards": "Flashcards",
+      "artifactStudyGuide": "Study Guide",
+      "artifactBriefingDoc": "Briefing Doc",
+      "optionsHeading": "Options",
+      "quantity": "Quantity",
+      "quantityFewer": "Fewer",
+      "quantityStandard": "Standard",
+      "difficulty": "Difficulty",
+      "difficultyEasy": "Easy",
+      "difficultyMedium": "Medium",
+      "difficultyHard": "Hard",
+      "instructions": "Instructions",
+      "instructionsPlaceholder": "Add custom instructions for generation..."
+    },
+    "progress": {
+      "preparingResources": "Preparing resources...",
+      "evaluatingResources": "Evaluating resources...",
+      "resourceCount": "{completed} of {total} evaluated"
+    },
+    "title": "My Library",
+    "subtitle": "Save, evaluate, and share your curated resources with other educators.",
+    "empty": {
+      "title": "My library is empty",
+      "description": "Save resources from search results to build a curated collection.",
+      "startSearching": "Start Searching"
+    },
+    "collection": {
+      "resources": "{count, plural, one {# resource} other {# resources}}",
+      "unevaluated": "{count} unevaluated"
+    },
+    "action": {
+      "addLink": "Add Link",
+      "cancel": "Cancel",
+      "add": "Add",
+      "save": "Save",
+      "evaluateAll": "Evaluate All ({count})",
+      "evaluate": "Evaluate",
+      "reEvaluate": "Re-evaluate",
+      "preparing": "Preparing...",
+      "evaluating": "Evaluating...",
+      "rename": "Rename",
+      "makePrivate": "Make Private",
+      "makePublic": "Make Public",
+      "deleteCollection": "Delete Collection",
+      "generate": "Generate",
+      "searchWithPreset": "Search with this classroom",
+      "statusPublic": "Public",
+      "statusPrivate": "Private"
+    },
+    "toast": {
+      "linkAdded": "Custom link added",
+      "linkFailed": "Failed to add link",
+      "removeFailed": "Failed to remove resource",
+      "updateFailed": "Failed to update collection",
+      "deleted": "Collection deleted",
+      "deleteFailed": "Failed to delete collection"
+    },
+    "confirm": {
+      "makePublicTitle": "Make Public",
+      "makePublicDescription": "Anyone will be able to discover and view these resources. Are you sure?",
+      "makePublicButton": "Make Public",
+      "makePrivateTitle": "Make Private",
+      "makePrivateDescription": "This collection will no longer be visible to others.",
+      "makePrivateButton": "Make Private",
+      "deleteTitle": "Delete Collection",
+      "deleteDescription": "This will permanently delete this collection and all its resources. This action cannot be undone.",
+      "deleteButton": "Delete"
+    }
   }
 }

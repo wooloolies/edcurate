@@ -52,9 +52,10 @@
     "backToHome": "Quay lại trang chủ"
   },
   "presets": {
-    "title": "Thiết lập lớp học của tôi",
-    "newPreset": "Thiết lập mới",
-    "editPreset": "Chỉnh sửa thiết lập",
+    "title": "Bộ sưu tập lớp học của tôi",
+    "subtitle": "Thiết lập môn học, khối lớp và chương trình để tùy chỉnh mọi tìm kiếm.",
+    "newPreset": "Bộ sưu tập mới",
+    "editPreset": "Chỉnh sửa bộ sưu tập",
     "createPreset": "Tạo thiết lập",
     "savePreset": "Lưu thiết lập",
     "deletePreset": "Xóa thiết lập",
@@ -92,9 +93,9 @@
       "additionalNotes": "Ghi chú bổ sung"
     },
     "sources": {
-      "ddgs": "DuckDuckGo",
-      "youtube": "YouTube",
-      "openalex": "OpenAlex"
+      "ddgs": "Web",
+      "youtube": "Video",
+      "openalex": "Bài báo"
     },
     "placeholders": {
       "name": "ví dụ: Địa lý lớp 9 - Cairns",
@@ -111,7 +112,8 @@
       "additionalNotes": "Thêm bối cảnh về lớp học của bạn..."
     },
     "moreActions": "Thao tác khác",
-    "saving": "Đang lưu..."
+    "saving": "Đang lưu...",
+    "count": "{count, plural, one {# bộ sưu tập} other {# bộ sưu tập}}"
   },
   "search": {
     "title": "Khám phá tài nguyên",
@@ -148,16 +150,17 @@
     "showUnscored": "Hiện thêm {count} kết quả chưa được chấm điểm",
     "hideUnscored": "Ẩn kết quả chưa chấm điểm",
     "resourcesSelected": "Đã chọn {count} tài nguyên",
-    "saveToLibrary": "Lưu vào thư viện",
-    "saving": "Đang lưu...",
-    "savedSuccess": "Đã lưu vào thư viện!",
+    "saveToLibrary": "Thêm vào thư viện",
+    "save": "Thêm",
+    "saving": "Đang thêm...",
+    "savedSuccess": "Đã thêm vào thư viện!",
     "savedError": "Không thể lưu tài nguyên",
     "overview": "Tổng quan",
     "changePreset": "Thay đổi preset",
     "bookmark": {
-      "save": "Lưu",
-      "saved": "Đã lưu",
-      "saveLabel": "Lưu vào thư viện",
+      "save": "Thêm",
+      "saved": "Đã thêm",
+      "saveLabel": "Thêm vào thư viện",
       "removeLabel": "Xóa khỏi thư viện"
     },
     "clearSelection": "Bỏ chọn",
@@ -176,7 +179,14 @@
       "step6": "Đang truy xuất các đoạn liên quan nhất",
       "step7": "Đang chấm mức độ phù hợp với chương trình và chất lượng sư phạm",
       "step8": "Đang đánh giá mức độ đọc và cách thể hiện thiên lệch",
-      "step9": "Đang hoàn tất điểm số và xếp hạng kết quả"
+      "step9": "Đang hoàn tất điểm số và xếp hạng kết quả",
+      "stageQueryGeneration": "Đang tạo truy vấn tìm kiếm",
+      "stageFederatedSearch": "Đang tìm kiếm từ các nguồn",
+      "stageRagPreparation": "Đang chuẩn bị kết quả",
+      "stageEvaluation": "Đang đánh giá tài nguyên",
+      "stageSearching": "Đang tìm kiếm",
+      "compactCount": "{count}/{total} hoàn tất",
+      "compactTitle": "Đang đánh giá tài nguyên"
     },
     "classroom": {
       "chalkboard": {
@@ -291,9 +301,46 @@
         "licensing": "Giấy phép",
         "reading_level": "Trình độ đọc",
         "accessibility": "Khả năng tiếp cận",
-        "cultural_sensitivity": "Nhạy cảm văn hóa"
-      }
-    }
+        "cultural_sensitivity": "Nhạy cảm văn hóa",
+        "outdated_content": "Nội dung lỗi thời",
+        "bias_or_framing": "Thiên lệch hoặc định hướng",
+        "factual_concern": "Vấn đề về tính chính xác",
+        "safety_concern": "Vấn đề về an toàn",
+        "misleading_match": "Kết quả gây hiểu nhầm"
+      },
+      "evaluating": "Đang đánh giá..."
+    },
+    "saveCollection": {
+      "title": "Thêm vào thư viện",
+      "description": "Nhóm các tài nguyên đã chọn vào bộ sưu tập có tên.",
+      "nameLabel": "Tên bộ sưu tập",
+      "namePlaceholder": "Ví dụ: Vật lý 101",
+      "privacyLabel": "Quyền riêng tư",
+      "private": "Riêng tư",
+      "public": "Công khai",
+      "publicWarning": "Bạn có chắc muốn công khai? Mọi người sẽ có thể tìm thấy các tài nguyên này trong bộ sưu tập gợi ý.",
+      "descriptionLabel": "Mô tả (không bắt buộc)",
+      "descriptionPlaceholder": "Mô tả ngắn gọn về bộ sưu tập này..."
+    },
+    "back": "Quay lại",
+    "renamePreset": "Đổi tên thiết lập",
+    "presetRenamed": "Đã đổi tên thiết lập",
+    "presetRenameError": "Đổi tên thiết lập thất bại",
+    "suggestedCollections": {
+      "alreadyInLibrary": "Đã có trong thư viện",
+      "upToDate": "Đã cập nhật",
+      "cloned": "Đã có trong thư viện",
+      "cloneCollection": "Sao chép vào thư viện",
+      "syncCollection": "Cập nhật bộ sưu tập",
+      "syncSuccess": "Đã cập nhật bộ sưu tập!",
+      "title": "Bộ sưu tập gợi ý",
+      "clone": "Sao chép",
+      "clonesCount": "{count, plural, one {# bản sao} other {# bản sao}}",
+      "empty": "Không tìm thấy bộ sưu tập công khai cho tìm kiếm tương tự.",
+      "sourcesCount": "{count, plural, one {# nguồn} other {# nguồn}}",
+      "previewDescription": "Xem trước bộ sưu tập này trước khi sao chép vào thư viện."
+    },
+    "cancel": "Hủy"
   },
   "nav": {
     "presets": "Thiết lập",
@@ -313,13 +360,20 @@
     "startResearch": "Bắt đầu nghiên cứu",
     "featureTagYear": "Lớp 7 đến 12",
     "featureTagDesigner": "Nhà thiết kế chương trình",
-    "featureTagGlobal": "Toàn cầu"
+    "featureTagGlobal": "Toàn cầu",
+    "heroHighlight": "Thông minh",
+    "heroTitleRest": "công cụ thích ứng",
+    "heroFor": "cho",
+    "heroTeachers": "giáo viên"
   },
   "overview": {
     "defaultTitle": "Tổng quan tài liệu",
     "defaultType": "Tài liệu",
     "comingSoonTitle": "Phân tích chi tiết sắp ra mắt",
-    "comingSoonDescription": "Trang này sẽ hiển thị phân tích do AI tạo ra về tài liệu, bao gồm sự phù hợp với chương trình giảng dạy, lý luận sư phạm và trích xuất bằng chứng."
+    "comingSoonDescription": "Trang này sẽ hiển thị phân tích do AI tạo ra về tài liệu, bao gồm sự phù hợp với chương trình giảng dạy, lý luận sư phạm và trích xuất bằng chứng.",
+    "confidence": "Độ tin cậy",
+    "evaluationNotFound": "Dữ liệu đánh giá đã hết hạn. Hãy tìm kiếm lại.",
+    "evaluationUnavailable": "Không có dữ liệu đánh giá cho tài nguyên này."
   },
   "errors": {
     "title": "Lỗi",
@@ -360,5 +414,77 @@
     "sendAnother": "Gửi thêm phản hồi",
     "location": "Địa điểm",
     "teamEmails": "Email nhóm"
+  },
+  "library": {
+    "generate": {
+      "title": "Tạo {artifactType}",
+      "description": "Chọn tài nguyên để tạo {artifactType}.",
+      "descriptionMax": "Có thể chọn tối đa {max} tài nguyên.",
+      "selectAtLeast": "Chọn ít nhất một tài nguyên",
+      "selectUpTo": "Chọn tối đa {max} tài nguyên",
+      "success": "Đã tạo {artifactType} thành công",
+      "error": "Không thể tạo {artifactType}",
+      "generating": "Đang tạo từ {count} tài nguyên...",
+      "button": "Tạo ({count})",
+      "cancel": "Hủy",
+      "artifactQuiz": "Bài kiểm tra",
+      "artifactMindmap": "Sơ đồ tư duy",
+      "artifactSummary": "Tóm tắt",
+      "artifactFlashcards": "Thẻ ghi nhớ"
+    },
+    "progress": {
+      "preparingResources": "Đang chuẩn bị tài nguyên...",
+      "evaluatingResources": "Đang đánh giá tài nguyên...",
+      "resourceCount": "{completed}/{total} hoàn tất"
+    },
+    "title": "Thư viện của tôi",
+    "subtitle": "Lưu, đánh giá và chia sẻ tài nguyên đã tuyển chọn với các giáo viên khác.",
+    "empty": {
+      "title": "Thư viện trống",
+      "description": "Lưu tài nguyên từ kết quả tìm kiếm để xây dựng bộ sưu tập.",
+      "startSearching": "Bắt đầu tìm kiếm"
+    },
+    "collection": {
+      "resources": "{count} tài nguyên",
+      "unevaluated": "{count} chưa đánh giá"
+    },
+    "action": {
+      "addLink": "Thêm liên kết",
+      "cancel": "Hủy",
+      "add": "Thêm",
+      "save": "Lưu",
+      "evaluateAll": "Đánh giá tất cả ({count})",
+      "evaluate": "Đánh giá",
+      "reEvaluate": "Đánh giá lại",
+      "preparing": "Đang chuẩn bị...",
+      "evaluating": "Đang đánh giá...",
+      "rename": "Đổi tên",
+      "makePrivate": "Đặt riêng tư",
+      "makePublic": "Đặt công khai",
+      "deleteCollection": "Xóa bộ sưu tập",
+      "generate": "Tạo",
+      "searchWithPreset": "Tìm kiếm với lớp học này",
+      "statusPublic": "Công khai",
+      "statusPrivate": "Riêng tư"
+    },
+    "toast": {
+      "linkAdded": "Đã thêm liên kết",
+      "linkFailed": "Không thể thêm liên kết",
+      "removeFailed": "Không thể xóa tài nguyên",
+      "updateFailed": "Không thể cập nhật bộ sưu tập",
+      "deleted": "Đã xóa bộ sưu tập",
+      "deleteFailed": "Không thể xóa bộ sưu tập"
+    },
+    "confirm": {
+      "makePublicTitle": "Công khai",
+      "makePublicDescription": "Mọi người sẽ có thể tìm thấy và xem các tài nguyên này. Bạn có chắc không?",
+      "makePublicButton": "Công khai",
+      "makePrivateTitle": "Chuyển sang riêng tư",
+      "makePrivateDescription": "Bộ sưu tập này sẽ không còn hiển thị với người khác.",
+      "makePrivateButton": "Chuyển sang riêng tư",
+      "deleteTitle": "Xóa bộ sưu tập",
+      "deleteDescription": "Bộ sưu tập này và tất cả tài nguyên sẽ bị xóa vĩnh viễn. Không thể hoàn tác.",
+      "deleteButton": "Xóa"
+    }
   }
 }

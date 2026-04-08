@@ -32,6 +32,34 @@
   "@delete": {
     "description": "Delete button text"
   },
+  "common__loading": "Loading...",
+  "@common__loading": {
+    "description": "Loading indicator text"
+  },
+  "common__error": "An error occurred",
+  "@common__error": {
+    "description": "Generic error message"
+  },
+  "common__retry": "Retry",
+  "@common__retry": {
+    "description": "Retry button text"
+  },
+  "common__save": "Save",
+  "@common__save": {
+    "description": "Save button text"
+  },
+  "common__cancel": "Cancel",
+  "@common__cancel": {
+    "description": "Cancel button text"
+  },
+  "common__confirm": "Confirm",
+  "@common__confirm": {
+    "description": "Confirm button text"
+  },
+  "common__delete": "Delete",
+  "@common__delete": {
+    "description": "Delete button text"
+  },
   "login__signIn": "Sign in",
   "@login__signIn": {
     "description": "Sign in tab label"
@@ -176,15 +204,28 @@
   "@team__backToHome": {
     "description": "Link to go back to home page"
   },
-  "presets__title": "My Classroom Presets",
+  "presets__title": "My Classroom Collections",
   "@presets__title": {
     "description": "Presets page heading"
   },
-  "presets__newPreset": "New Preset",
+  "presets__subtitle": "Define your subject, year level, and curriculum to tailor every search.",
+  "@presets__subtitle": {
+    "description": "Subtitle on collections page"
+  },
+  "presets__count": "{count, plural, one {# collection} other {# collections}}",
+  "@presets__count": {
+    "description": "Collection count label",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "presets__newPreset": "New Collection",
   "@presets__newPreset": {
     "description": "Button to create a new preset"
   },
-  "presets__editPreset": "Edit Preset",
+  "presets__editPreset": "Edit Collection",
   "@presets__editPreset": {
     "description": "Button to edit a preset"
   },
@@ -316,17 +357,17 @@
   "@presets__fields__additionalNotes": {
     "description": "Field label for additional notes"
   },
-  "presets__sources__ddgs": "DuckDuckGo",
+  "presets__sources__ddgs": "Web",
   "@presets__sources__ddgs": {
-    "description": "Source label for DuckDuckGo"
+    "description": "Source label for web search (DuckDuckGo)"
   },
-  "presets__sources__youtube": "YouTube",
+  "presets__sources__youtube": "Video",
   "@presets__sources__youtube": {
-    "description": "Source label for YouTube"
+    "description": "Source label for video search (YouTube)"
   },
-  "presets__sources__openalex": "OpenAlex",
+  "presets__sources__openalex": "Paper",
   "@presets__sources__openalex": {
-    "description": "Source label for OpenAlex"
+    "description": "Source label for academic papers (OpenAlex)"
   },
   "search__title": "Resource Discovery",
   "@search__title": {
@@ -457,6 +498,22 @@
   "@home__tagline": {
     "description": "Homepage tagline"
   },
+  "home__heroHighlight": "Intelligent",
+  "@home__heroHighlight": {
+    "description": "Highlighted word in the hero title"
+  },
+  "home__heroTitleRest": "adaption engine",
+  "@home__heroTitleRest": {
+    "description": "Rest of the hero title after the highlight"
+  },
+  "home__heroFor": "for",
+  "@home__heroFor": {
+    "description": "Preposition in the hero title"
+  },
+  "home__heroTeachers": "teachers",
+  "@home__heroTeachers": {
+    "description": "Target audience in the hero title"
+  },
   "home__heroTitlePart1": "Intelligent adaption engine",
   "@home__heroTitlePart1": {
     "description": "First part of the homepage hero title"
@@ -496,6 +553,18 @@
   "overview__comingSoonDescription": "This page will display AI-generated analysis of the resource, including curriculum alignment, pedagogical reasoning, and evidence extraction.",
   "@overview__comingSoonDescription": {
     "description": "Coming soon description on overview page"
+  },
+  "overview__confidence": "Confidence",
+  "@overview__confidence": {
+    "description": "Label for evaluation confidence level"
+  },
+  "overview__evaluationNotFound": "Evaluation data is no longer available. Try searching again.",
+  "@overview__evaluationNotFound": {
+    "description": "Message when evaluation cache has expired"
+  },
+  "overview__evaluationUnavailable": "No evaluation data available for this resource.",
+  "@overview__evaluationUnavailable": {
+    "description": "Message when evaluation params are missing"
   },
   "errors__title": "Error",
   "@errors__title": {
@@ -601,15 +670,19 @@
       }
     }
   },
-  "search__saveToLibrary": "Save to Library",
+  "search__saveToLibrary": "Add to my Library",
   "@search__saveToLibrary": {
     "description": "Button to save selected resources to library"
   },
-  "search__saving": "Saving...",
+  "search__save": "Add",
+  "@search__save": {
+    "description": "Save button label in search dialogs"
+  },
+  "search__saving": "Adding...",
   "@search__saving": {
     "description": "Button label while saving resources"
   },
-  "search__savedSuccess": "Resources saved to library!",
+  "search__savedSuccess": "Resources added to library!",
   "@search__savedSuccess": {
     "description": "Success message after saving resources"
   },
@@ -621,6 +694,22 @@
   "@search__cancel": {
     "description": "Cancel button label in search dialogs"
   },
+  "search__back": "Back",
+  "@search__back": {
+    "description": "Back button label"
+  },
+  "search__renamePreset": "Rename preset",
+  "@search__renamePreset": {
+    "description": "Button to rename a preset"
+  },
+  "search__presetRenamed": "Preset renamed",
+  "@search__presetRenamed": {
+    "description": "Success message after renaming preset"
+  },
+  "search__presetRenameError": "Failed to rename preset",
+  "@search__presetRenameError": {
+    "description": "Error message when renaming preset fails"
+  },
   "search__overview": "Overview",
   "@search__overview": {
     "description": "Overview button label on resource cards"
@@ -629,15 +718,15 @@
   "@search__changePreset": {
     "description": "Aria label for preset picker button"
   },
-  "search__bookmark__save": "Save",
+  "search__bookmark__save": "Add",
   "@search__bookmark__save": {
     "description": "Save button label on resource cards"
   },
-  "search__bookmark__saved": "Saved",
+  "search__bookmark__saved": "Added",
   "@search__bookmark__saved": {
     "description": "Saved state label on resource cards"
   },
-  "search__bookmark__saveLabel": "Save to Library",
+  "search__bookmark__saveLabel": "Add to Library",
   "@search__bookmark__saveLabel": {
     "description": "Accessible label for save button"
   },
@@ -715,9 +804,45 @@
   "@search__progress__step8": {
     "description": "Evaluation progress step 8"
   },
+  "search__progress__compactCount": "{count}/{total} complete",
+  "@search__progress__compactCount": {
+    "description": "Compact progress count shown during evaluation (e.g. 3/10 complete)",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "search__progress__compactTitle": "Evaluating resources",
+  "@search__progress__compactTitle": {
+    "description": "Compact title shown in the progress indicator during evaluation"
+  },
   "search__progress__step9": "Finalising scores and ranking results",
   "@search__progress__step9": {
     "description": "Evaluation progress step 9"
+  },
+  "search__progress__stageQueryGeneration": "Generating search queries",
+  "@search__progress__stageQueryGeneration": {
+    "description": "Progress bar label during query generation stage"
+  },
+  "search__progress__stageFederatedSearch": "Searching across sources",
+  "@search__progress__stageFederatedSearch": {
+    "description": "Progress bar label during federated search stage"
+  },
+  "search__progress__stageRagPreparation": "Preparing results",
+  "@search__progress__stageRagPreparation": {
+    "description": "Progress bar label during RAG preparation stage"
+  },
+  "search__progress__stageEvaluation": "Evaluating resources",
+  "@search__progress__stageEvaluation": {
+    "description": "Progress bar label during evaluation stage"
+  },
+  "search__progress__stageSearching": "Searching",
+  "@search__progress__stageSearching": {
+    "description": "Fallback progress bar label during search"
   },
   "search__classroom__chalkboard__queryGeneration": "Generating search queries...",
   "@search__classroom__chalkboard__queryGeneration": {
@@ -846,6 +971,10 @@
   "search__classroom__bubbles__rabbit__working5": "Looking for red flags...",
   "@search__classroom__bubbles__rabbit__working5": {
     "description": "Rabbit agent cycling hint 4 while evaluating"
+  },
+  "search__evaluation__evaluating": "Evaluating...",
+  "@search__evaluation__evaluating": {
+    "description": "Badge shown when a resource is currently being evaluated"
   },
   "search__evaluation__unevaluated": "Unevaluated",
   "@search__evaluation__unevaluated": {
@@ -1282,9 +1411,13 @@
   "@search__suggestedCollections__clone": {
     "description": "Button to clone a suggested collection"
   },
-  "search__suggestedCollections__cloned": "Cloned",
+  "search__suggestedCollections__cloned": "In my Library",
   "@search__suggestedCollections__cloned": {
     "description": "Button text when a suggested collection has been cloned"
+  },
+  "search__suggestedCollections__alreadyInLibrary": "Already in my Library",
+  "@search__suggestedCollections__alreadyInLibrary": {
+    "description": "Label when collection is already in user's library"
   },
   "search__suggestedCollections__clonesCount": "{count, plural, one {# clone} other {# clones}}",
   "@search__suggestedCollections__clonesCount": {
@@ -1310,7 +1443,7 @@
       }
     }
   },
-  "search__suggestedCollections__cloneCollection": "Clone Collection",
+  "search__suggestedCollections__cloneCollection": "Copy to my Library",
   "@search__suggestedCollections__cloneCollection": {
     "description": "Button to clone a suggested collection"
   },
@@ -1318,12 +1451,259 @@
   "@search__suggestedCollections__previewDescription": {
     "description": "Dialog description for previewing a suggested collection before cloning"
   },
-  "search__suggestedCollections__syncCollection": "Sync Collection",
+  "search__suggestedCollections__syncCollection": "Update my collection",
   "@search__suggestedCollections__syncCollection": {
     "description": "Button to sync a previously cloned collection"
   },
-  "search__suggestedCollections__syncSuccess": "Collection synced!",
+  "search__suggestedCollections__syncSuccess": "Collection updated!",
   "@search__suggestedCollections__syncSuccess": {
     "description": "Success message when syncing collection"
-  }
+  },
+  "search__suggestedCollections__upToDate": "Up to date",
+  "@search__suggestedCollections__upToDate": {
+    "description": "Label when collection is already up to date"
+  },
+  "search__saveCollection__title": "Add to my Library",
+  "@search__saveCollection__title": {
+    "description": "Dialog title for saving resources to a collection"
+  },
+  "search__saveCollection__description": "Group your selected resources into a named collection.",
+  "@search__saveCollection__description": {
+    "description": "Dialog description for saving resources to a collection"
+  },
+  "search__saveCollection__nameLabel": "Collection Name",
+  "@search__saveCollection__nameLabel": {
+    "description": "Label for collection name input"
+  },
+  "search__saveCollection__namePlaceholder": "e.g., Physics 101",
+  "@search__saveCollection__namePlaceholder": {
+    "description": "Placeholder for collection name input"
+  },
+  "search__saveCollection__privacyLabel": "Privacy",
+  "@search__saveCollection__privacyLabel": {
+    "description": "Label for privacy toggle"
+  },
+  "search__saveCollection__private": "Private",
+  "@search__saveCollection__private": {
+    "description": "Private privacy option"
+  },
+  "search__saveCollection__public": "Public",
+  "@search__saveCollection__public": {
+    "description": "Public privacy option"
+  },
+  "search__saveCollection__descriptionLabel": "Description (optional)",
+  "@search__saveCollection__descriptionLabel": {
+    "description": "Label for collection description input"
+  },
+  "search__saveCollection__descriptionPlaceholder": "Briefly describe what this collection is about...",
+  "@search__saveCollection__descriptionPlaceholder": {
+    "description": "Placeholder for collection description input"
+  },
+  "search__saveCollection__publicWarning": "Are you sure you want to make this public? Anyone will be able to discover these resources in suggested collections.",
+  "@search__saveCollection__publicWarning": {
+    "description": "Warning message when making collection public"
+  },
+  "library__generate__title": "Generate {artifactType}",
+  "@library__generate__title": {
+    "description": "Dialog title for generating an artifact",
+    "placeholders": { "artifactType": { "type": "String" } }
+  },
+  "library__generate__description": "Select resources to generate a {artifactType} from.",
+  "@library__generate__description": {
+    "description": "Dialog description for generating an artifact",
+    "placeholders": { "artifactType": { "type": "String" } }
+  },
+  "library__generate__descriptionMax": "Up to {max} resources can be selected.",
+  "@library__generate__descriptionMax": {
+    "description": "Note about max resource selection",
+    "placeholders": { "max": { "type": "int" } }
+  },
+  "library__generate__selectAtLeast": "Select at least one resource",
+  "@library__generate__selectAtLeast": {
+    "description": "Error when no resources selected"
+  },
+  "library__generate__selectUpTo": "Select up to {max} resources",
+  "@library__generate__selectUpTo": {
+    "description": "Error when too many resources selected",
+    "placeholders": { "max": { "type": "int" } }
+  },
+  "library__generate__success": "{artifactType} generated successfully",
+  "@library__generate__success": {
+    "description": "Success toast after generation",
+    "placeholders": { "artifactType": { "type": "String" } }
+  },
+  "library__generate__error": "Failed to generate {artifactType}",
+  "@library__generate__error": {
+    "description": "Error toast on generation failure",
+    "placeholders": { "artifactType": { "type": "String" } }
+  },
+  "library__generate__generating": "Generating from {count} resource...",
+  "@library__generate__generating": {
+    "description": "Button label while generating",
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "library__generate__button": "Generate ({count})",
+  "@library__generate__button": {
+    "description": "Button label with selected count",
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "library__generate__cancel": "Cancel",
+  "@library__generate__cancel": {
+    "description": "Cancel button in generate dialog"
+  },
+  "library__generate__artifactQuiz": "Quiz",
+  "@library__generate__artifactQuiz": {
+    "description": "Artifact type label for quiz"
+  },
+  "library__generate__artifactMindmap": "Mind Map",
+  "@library__generate__artifactMindmap": {
+    "description": "Artifact type label for mind map"
+  },
+  "library__generate__artifactSummary": "Summary",
+  "@library__generate__artifactSummary": {
+    "description": "Artifact type label for summary"
+  },
+  "library__generate__artifactFlashcards": "Flashcards",
+  "@library__generate__artifactFlashcards": {
+    "description": "Artifact type label for flashcards"
+  },
+  "library__generate__artifactStudyGuide": "Study Guide",
+  "@library__generate__artifactStudyGuide": {
+    "description": "Artifact type label for study guide"
+  },
+  "library__generate__artifactBriefingDoc": "Briefing Doc",
+  "@library__generate__artifactBriefingDoc": {
+    "description": "Artifact type label for briefing document"
+  },
+  "library__generate__optionsHeading": "Options",
+  "@library__generate__optionsHeading": {
+    "description": "Heading for generation options section"
+  },
+  "library__generate__quantity": "Quantity",
+  "@library__generate__quantity": {
+    "description": "Label for quantity option"
+  },
+  "library__generate__quantityFewer": "Fewer",
+  "@library__generate__quantityFewer": {
+    "description": "Fewer quantity option"
+  },
+  "library__generate__quantityStandard": "Standard",
+  "@library__generate__quantityStandard": {
+    "description": "Standard quantity option"
+  },
+  "library__generate__difficulty": "Difficulty",
+  "@library__generate__difficulty": {
+    "description": "Label for difficulty option"
+  },
+  "library__generate__difficultyEasy": "Easy",
+  "@library__generate__difficultyEasy": {
+    "description": "Easy difficulty option"
+  },
+  "library__generate__difficultyMedium": "Medium",
+  "@library__generate__difficultyMedium": {
+    "description": "Medium difficulty option"
+  },
+  "library__generate__difficultyHard": "Hard",
+  "@library__generate__difficultyHard": {
+    "description": "Hard difficulty option"
+  },
+  "library__generate__instructions": "Instructions",
+  "@library__generate__instructions": {
+    "description": "Label for instructions textarea"
+  },
+  "library__generate__instructionsPlaceholder": "Add custom instructions for generation...",
+  "@library__generate__instructionsPlaceholder": {
+    "description": "Placeholder for instructions textarea"
+  },
+  "library__progress__preparingResources": "Preparing resources...",
+  "@library__progress__preparingResources": {
+    "description": "Progress label during RAG preparation stage"
+  },
+  "library__progress__evaluatingResources": "Evaluating resources...",
+  "@library__progress__evaluatingResources": {
+    "description": "Progress label during evaluation stage"
+  },
+  "library__progress__resourceCount": "{completed} of {total} evaluated",
+  "@library__progress__resourceCount": {
+    "description": "Progress counter showing completed vs total",
+    "placeholders": { "completed": { "type": "int" }, "total": { "type": "int" } }
+  },
+  "library__title": "My Library",
+  "@library__title": { "description": "Library page heading" },
+  "library__subtitle": "Save, evaluate, and share your curated resources with other educators.",
+  "@library__subtitle": { "description": "Library page subtitle" },
+  "library__empty__title": "My library is empty",
+  "@library__empty__title": { "description": "Empty state heading" },
+  "library__empty__description": "Save resources from search results to build a curated collection.",
+  "@library__empty__description": { "description": "Empty state description" },
+  "library__empty__startSearching": "Start Searching",
+  "@library__empty__startSearching": { "description": "CTA button in empty state" },
+  "library__collection__resources": "{count, plural, one {# resource} other {# resources}}",
+  "@library__collection__resources": { "description": "Resource count label", "placeholders": { "count": { "type": "int" } } },
+  "library__collection__unevaluated": "{count} unevaluated",
+  "@library__collection__unevaluated": { "description": "Unevaluated count badge", "placeholders": { "count": { "type": "int" } } },
+  "library__action__addLink": "Add Link",
+  "@library__action__addLink": { "description": "Add custom link button" },
+  "library__action__cancel": "Cancel",
+  "@library__action__cancel": { "description": "Cancel button" },
+  "library__action__add": "Add",
+  "@library__action__add": { "description": "Add button for custom link form" },
+  "library__action__save": "Save",
+  "@library__action__save": { "description": "Save button for rename form" },
+  "library__action__evaluateAll": "Evaluate All ({count})",
+  "@library__action__evaluateAll": { "description": "Batch evaluate button", "placeholders": { "count": { "type": "int" } } },
+  "library__action__evaluate": "Evaluate",
+  "@library__action__evaluate": { "description": "Single evaluate button" },
+  "library__action__reEvaluate": "Re-evaluate",
+  "@library__action__reEvaluate": { "description": "Re-evaluate button" },
+  "library__action__preparing": "Preparing...",
+  "@library__action__preparing": { "description": "Button label during RAG preparation" },
+  "library__action__evaluating": "Evaluating...",
+  "@library__action__evaluating": { "description": "Button label during evaluation" },
+  "library__action__rename": "Rename",
+  "@library__action__rename": { "description": "Rename collection menu item" },
+  "library__action__makePrivate": "Make Private",
+  "@library__action__makePrivate": { "description": "Toggle collection to private" },
+  "library__action__makePublic": "Make Public",
+  "@library__action__makePublic": { "description": "Toggle collection to public" },
+  "library__action__deleteCollection": "Delete Collection",
+  "@library__action__deleteCollection": { "description": "Delete collection menu item" },
+  "library__action__generate": "Generate",
+  "@library__action__generate": { "description": "Generate artifact button" },
+  "library__action__searchWithPreset": "Search with this classroom",
+  "@library__action__searchWithPreset": { "description": "Aria label for search with preset button" },
+  "library__action__statusPublic": "Public",
+  "@library__action__statusPublic": { "description": "Public status badge" },
+  "library__action__statusPrivate": "Private",
+  "@library__action__statusPrivate": { "description": "Private status badge" },
+  "library__toast__linkAdded": "Custom link added",
+  "@library__toast__linkAdded": { "description": "Toast on link add success" },
+  "library__toast__linkFailed": "Failed to add link",
+  "@library__toast__linkFailed": { "description": "Toast on link add failure" },
+  "library__toast__removeFailed": "Failed to remove resource",
+  "@library__toast__removeFailed": { "description": "Toast on resource remove failure" },
+  "library__toast__updateFailed": "Failed to update collection",
+  "@library__toast__updateFailed": { "description": "Toast on collection update failure" },
+  "library__toast__deleted": "Collection deleted",
+  "@library__toast__deleted": { "description": "Toast on collection delete success" },
+  "library__toast__deleteFailed": "Failed to delete collection",
+  "@library__toast__deleteFailed": { "description": "Toast on collection delete failure" },
+  "library__confirm__makePublicTitle": "Make Public",
+  "@library__confirm__makePublicTitle": { "description": "Confirm dialog title for making collection public" },
+  "library__confirm__makePublicDescription": "Anyone will be able to discover and view these resources. Are you sure?",
+  "@library__confirm__makePublicDescription": { "description": "Confirm dialog description for making collection public" },
+  "library__confirm__makePublicButton": "Make Public",
+  "@library__confirm__makePublicButton": { "description": "Confirm button for making collection public" },
+  "library__confirm__makePrivateTitle": "Make Private",
+  "@library__confirm__makePrivateTitle": { "description": "Confirm dialog title for making collection private" },
+  "library__confirm__makePrivateDescription": "This collection will no longer be visible to others.",
+  "@library__confirm__makePrivateDescription": { "description": "Confirm dialog description for making collection private" },
+  "library__confirm__makePrivateButton": "Make Private",
+  "@library__confirm__makePrivateButton": { "description": "Confirm button for making collection private" },
+  "library__confirm__deleteTitle": "Delete Collection",
+  "@library__confirm__deleteTitle": { "description": "Confirm dialog title for deleting collection" },
+  "library__confirm__deleteDescription": "This will permanently delete this collection and all its resources. This action cannot be undone.",
+  "@library__confirm__deleteDescription": { "description": "Confirm dialog description for deleting collection" },
+  "library__confirm__deleteButton": "Delete",
+  "@library__confirm__deleteButton": { "description": "Confirm button for deleting collection" }
 }

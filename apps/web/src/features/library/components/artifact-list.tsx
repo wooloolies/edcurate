@@ -8,31 +8,43 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { useDeleteArtifactEndpointApiLocalizerArtifactIdDelete } from "@/lib/api/localizer/localizer";
 import type { GeneratedArtifactResponse } from "@/lib/api/model";
 
+import { BriefingDocViewer } from "./briefing-doc-viewer";
 import { FlashcardsViewer } from "./flashcards-viewer";
 import { MindmapViewer } from "./mindmap-viewer";
 import { QuizViewer } from "./quiz-viewer";
+import { StudyGuideViewer } from "./study-guide-viewer";
 import { SummaryViewer } from "./summary-viewer";
 
-const TYPE_META: Record<string, { label: string; icon: React.ReactNode; gradient: string }> = {
+const TYPE_META: Record<string, { label: string; icon: React.ReactNode; surface: string }> = {
   quiz: {
     label: "Quiz",
     icon: <BookOpen className="h-4 w-4" />,
-    gradient: "from-[#B7FF70]/20 to-[#B7FF70]/5",
+    surface: "bg-brand-green/10",
   },
   mindmap: {
     label: "Mind Map",
     icon: <BrainCircuit className="h-4 w-4" />,
-    gradient: "from-[#111827]/8 to-[#111827]/2",
+    surface: "bg-brand-ink/5",
   },
   summary: {
     label: "Summary",
     icon: <FileText className="h-4 w-4" />,
-    gradient: "from-[#B7FF70]/15 to-transparent",
+    surface: "bg-brand-green/8",
   },
   flashcards: {
     label: "Flashcards",
     icon: <Layers className="h-4 w-4" />,
-    gradient: "from-[#111827]/6 to-transparent",
+    surface: "bg-brand-ink/[0.03]",
+  },
+  study_guide: {
+    label: "Study Guide",
+    icon: <FileText className="h-4 w-4" />,
+    surface: "bg-brand-green/8",
+  },
+  briefing_doc: {
+    label: "Briefing Doc",
+    icon: <FileText className="h-4 w-4" />,
+    surface: "bg-brand-ink/5",
   },
 };
 
@@ -64,34 +76,34 @@ export function ArtifactList({ artifacts, collectionName }: ArtifactListProps) {
 
   return (
     <>
-      <div className="mt-4 border-t border-[#111827]/5 pt-4">
+      <div className="mt-4 border-t border-brand-ink/5 pt-4">
         <div className="grid gap-2.5 sm:grid-cols-2 lg:grid-cols-3">
           {artifacts.map((artifact) => {
             const meta = TYPE_META[artifact.artifact_type] ?? {
               label: artifact.artifact_type,
               icon: <FileText className="h-4 w-4" />,
-              gradient: "from-[#111827]/5 to-transparent",
+              surface: "bg-brand-ink/[0.03]",
             };
             return (
               <button
                 type="button"
                 key={artifact.id}
-                className="group w-full cursor-pointer overflow-hidden rounded-xl border border-[#111827]/5 bg-[#F8F9FA]/80 text-left transition-all hover:border-[#111827]/10 hover:shadow-[0_2px_12px_rgba(0,0,0,0.04)]"
+                className="group w-full cursor-pointer overflow-hidden rounded-xl border border-brand-ink/5 bg-brand-surface/80 text-left transition-all hover:border-brand-ink/10 hover:shadow-[0_2px_12px_rgba(0,0,0,0.04)]"
                 onClick={() => setViewingArtifact(artifact)}
                 aria-label={`View ${meta.label}`}
               >
                 <div className="flex items-center justify-between px-3.5 py-2.5">
                   <div className="flex items-center gap-2">
-                    <span className="text-[#111827]/50">{meta.icon}</span>
-                    <span className="text-[13px] font-semibold text-[#111827]">{meta.label}</span>
+                    <span className="text-brand-ink/50">{meta.icon}</span>
+                    <span className="text-[13px] font-semibold text-brand-ink">{meta.label}</span>
                   </div>
                   <div className="flex items-center gap-1.5">
-                    <span className="text-[10px] text-[#111827]/30">
+                    <span className="text-[10px] text-brand-ink/30">
                       {new Date(artifact.created_at).toLocaleDateString()}
                     </span>
                     <button
                       type="button"
-                      className="rounded-full p-1 text-[#111827]/15 opacity-0 transition-all hover:bg-red-50 hover:text-red-500 group-hover:opacity-100"
+                      className="rounded-full p-1 text-brand-ink/15 opacity-0 transition-all hover:bg-red-50 hover:text-red-500 group-hover:opacity-100"
                       onClick={(e) => handleDelete(e, artifact.id)}
                       disabled={deletingId === artifact.id}
                       aria-label={`Delete ${meta.label}`}
@@ -124,7 +136,7 @@ export function ArtifactList({ artifacts, collectionName }: ArtifactListProps) {
                 ? (TYPE_META[viewingArtifact.artifact_type]?.label ?? "Artifact")
                 : null}
               {!!collectionName && !!viewingArtifact && (
-                <span className="text-sm font-normal text-[#111827]/40">from {collectionName}</span>
+                <span className="text-sm font-normal text-brand-ink/40">from {collectionName}</span>
               )}
             </DialogTitle>
           </DialogHeader>
@@ -153,9 +165,15 @@ function ArtifactContentViewer({ artifact }: { artifact: GeneratedArtifactRespon
       return <SummaryViewer data={content as Parameters<typeof SummaryViewer>[0]["data"]} />;
     case "flashcards":
       return <FlashcardsViewer data={content as Parameters<typeof FlashcardsViewer>[0]["data"]} />;
+    case "study_guide":
+      return <StudyGuideViewer data={content as Parameters<typeof StudyGuideViewer>[0]["data"]} />;
+    case "briefing_doc":
+      return (
+        <BriefingDocViewer data={content as Parameters<typeof BriefingDocViewer>[0]["data"]} />
+      );
     default:
       return (
-        <pre className="rounded-xl bg-[#F8F9FA] p-4 text-xs overflow-auto max-h-96">
+        <pre className="rounded-xl bg-brand-surface p-4 text-xs overflow-auto max-h-96">
           {JSON.stringify(content, null, 2)}
         </pre>
       );

@@ -23,6 +23,8 @@ import type {
 import { fetchSSE } from "@/features/search/utils/fetch-sse";
 import { parseSSEBuffer } from "@/features/search/utils/parse-sse";
 import type { JudgedSearchResponse } from "@/lib/api/model/judged-search-response";
+import type { JudgmentResult } from "@/lib/api/model/judgment-result";
+import type { ResourceCard } from "@/lib/api/model/resource-card";
 import { INITIAL_STREAM_STATE, searchStreamAtom } from "@/stores/search-stream-atoms";
 
 // ---------------------------------------------------------------------------
@@ -38,7 +40,13 @@ type Action =
 function reduce(state: SearchStreamState, action: Action): SearchStreamState {
   switch (action.type) {
     case "START":
-      return { ...INITIAL_STREAM_STATE, resourceProgress: new Map(), isStreaming: true };
+      return {
+        ...INITIAL_STREAM_STATE,
+        resourceProgress: new Map(),
+        partialJudgments: new Map(),
+        evaluationIds: new Map(),
+        isStreaming: true,
+      };
 
     case "STAGE_EVENT": {
       const { stage, status, resource_url, cached, data } = action.payload;
@@ -66,12 +74,45 @@ function reduce(state: SearchStreamState, action: Action): SearchStreamState {
         ? ((data as unknown as JudgedSearchResponse) ?? state.result)
         : state.result;
 
+      // 1) federated_search/done → set partialResults
+      let nextPartialResults = state.partialResults;
+      if (stage === "federated_search" && status === "done" && data && "results" in data) {
+        nextPartialResults = data.results as ResourceCard[];
+      }
+
+      // 2) evaluation/done with judgment → accumulate partialJudgments + evaluationIds
+      const nextPartialJudgments = new Map(state.partialJudgments);
+      const nextEvaluationIds = new Map(state.evaluationIds);
+      if (
+        stage === "evaluation" &&
+        status === "done" &&
+        resource_url &&
+        data &&
+        "judgment" in data
+      ) {
+        nextPartialJudgments.set(resource_url, data.judgment as JudgmentResult);
+        if ("evaluation_id" in data && typeof data.evaluation_id === "string") {
+          nextEvaluationIds.set(resource_url, data.evaluation_id);
+        }
+      }
+
+      // 3) complete event may carry evaluation_ids map (cache hits + fresh results)
+      if (isComplete && data && "evaluation_ids" in data) {
+        const ids = data.evaluation_ids as Record<string, string>;
+        for (const [url, id] of Object.entries(ids)) {
+          nextEvaluationIds.set(url, id);
+        }
+      }
+
       return {
         ...state,
         stages: nextStages,
         activeStage: stage,
         resourceProgress: nextResourceProgress,
         result,
+        partialResults: nextPartialResults,
+        partialJudgments: nextPartialJudgments,
+        evaluationIds: nextEvaluationIds,
         isCached: cached === true ? true : state.isCached,
         isStreaming: !isComplete,
       };
@@ -81,7 +122,7 @@ function reduce(state: SearchStreamState, action: Action): SearchStreamState {
       return { ...state, isStreaming: false, error: action.payload };
 
     case "RESET":
-      return { ...INITIAL_STREAM_STATE, resourceProgress: new Map() };
+      return { ...INITIAL_STREAM_STATE, resourceProgress: new Map(), partialJudgments: new Map() };
 
     default:
       return state;

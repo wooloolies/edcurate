@@ -1,7 +1,7 @@
 "use client";
 
 import { useQueryClient } from "@tanstack/react-query";
-import { BookOpen, ChevronDown, Globe, Inbox, Layers, Play, Repeat, Search, X } from "lucide-react";
+import { Check, Pencil, Repeat, Search, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useQueryState } from "nuqs";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -11,15 +11,18 @@ import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { AgentMorphScene } from "@/features/search/components/agent-morph/agent-morph-scene";
 import { ErrorBanner } from "@/features/search/components/error-banner";
-import { EvaluationProgress } from "@/features/search/components/evaluation-progress";
 import { GeneratedQueriesPanel } from "@/features/search/components/generated-queries";
-import { ResourceCardRenderer } from "@/features/search/components/resource-card";
+import { SearchResultsGrid } from "@/features/search/components/search-results-grid";
 import { ResourceCardSkeleton } from "@/features/search/components/skeleton/resource-card-skeleton";
 import { SuggestedCollectionsRail } from "@/features/search/components/suggested-collections-rail";
 import { useSearchStream } from "@/features/search/hooks/use-search-stream";
 import { useSearchApiDiscoverySearchGet } from "@/lib/api/discovery/discovery";
 import type { JudgmentResult, ResourceCard } from "@/lib/api/model";
-import { useListPresetsApiPresetsGet } from "@/lib/api/presets/presets";
+import {
+  getListPresetsApiPresetsGetQueryKey,
+  useListPresetsApiPresetsGet,
+  useUpdatePresetApiPresetsPresetIdPut,
+} from "@/lib/api/presets/presets";
 import {
   getListSavedResourcesEndpointApiSavedGetQueryKey,
   useCreateCollectionEndpointApiSavedCollectionsPost,
@@ -34,23 +37,23 @@ export function SearchPageClient() {
   const [searchQuery, setSearchQuery] = useQueryState("q");
   const [draft, setDraft] = useState(searchQuery ?? "");
   const searchInputRef = useRef<HTMLInputElement>(null);
-  const [activeCategory, setActiveCategory] = useState<string>("all");
-  const [visibleCount, setVisibleCount] = useState<number>(4);
 
-  // Reset pagination when query or category changes
-  useEffect(() => {
-    setVisibleCount(4);
-  }, []);
-
-  const { data: presetsData } = useListPresetsApiPresetsGet();
+  const { data: presetsData, isLoading: isPresetsLoading } = useListPresetsApiPresetsGet();
   const presets = presetsData?.data ?? [];
   const activePreset = presets.find((p) => p.id === presetId);
+  const isPresetResolving = !!presetId && !activePreset && isPresetsLoading;
 
   const { data: savedData } = useListSavedResourcesEndpointApiSavedGet();
   const { mutateAsync: createCollection, isPending: isSaving } =
     useCreateCollectionEndpointApiSavedCollectionsPost();
   const [selectedResources, setSelectedResources] = useState<Map<string, ResourceCard>>(new Map());
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
+  const [suggestedOpen, setSuggestedOpen] = useState(true);
+
+  const [isRenaming, setIsRenaming] = useState(false);
+  const [renameDraft, setRenameDraft] = useState("");
+  const renameInputRef = useRef<HTMLInputElement>(null);
+  const { mutateAsync: updatePreset } = useUpdatePresetApiPresetsPresetIdPut();
 
   // Build a set of already-saved URLs for the active preset
   const savedUrls = useMemo(() => {
@@ -69,8 +72,6 @@ export function SearchPageClient() {
     return urls;
   }, [presetId, savedData]);
 
-  const isChecked = (url: string) => selectedResources.has(url) || savedUrls.has(url);
-
   const handleToggleChecked = (resource: ResourceCard, checked: boolean) => {
     setSelectedResources((prev) => {
       const next = new Map(prev);
@@ -83,18 +84,19 @@ export function SearchPageClient() {
     });
   };
 
-  const handleSaveSelected = async (name: string, isPublic: boolean) => {
+  const handleSaveSelected = async (name: string, isPublic: boolean, description?: string) => {
     if (!presetId || selectedResources.size === 0) return;
     try {
       const resourcesList = Array.from(selectedResources.values());
       const evaluationDataList = resourcesList.map(
-        (resource) => judgmentByUrl.get(resource.url) ?? null
+        (resource) => displayJudgments.get(resource.url) ?? null
       );
       await createCollection({
         data: {
           preset_id: presetId,
           search_query: searchQuery || "custom",
           name: name,
+          description: description,
           is_public: isPublic,
           resources: resourcesList,
           evaluation_data_list: evaluationDataList,
@@ -113,6 +115,58 @@ export function SearchPageClient() {
 
   const handleClearSelection = () => {
     setSelectedResources(new Map());
+  };
+
+  const handleStartRename = () => {
+    setRenameDraft(activePreset?.name ?? "");
+    setIsRenaming(true);
+    requestAnimationFrame(() => renameInputRef.current?.select());
+  };
+
+  const handleConfirmRename = async () => {
+    const trimmed = renameDraft.trim();
+    if (!trimmed || !activePreset || !presetId) {
+      setIsRenaming(false);
+      return;
+    }
+    if (trimmed === activePreset.name) {
+      setIsRenaming(false);
+      return;
+    }
+    try {
+      await updatePreset({
+        presetId,
+        data: {
+          name: trimmed,
+          subject: activePreset.subject,
+          year_level: activePreset.year_level,
+          country: activePreset.country,
+          is_default: activePreset.is_default,
+          curriculum_framework: activePreset.curriculum_framework,
+          state_region: activePreset.state_region,
+          city: activePreset.city,
+          teaching_language: activePreset.teaching_language,
+          class_size: activePreset.class_size,
+          eal_d_students: activePreset.eal_d_students,
+          reading_support_students: activePreset.reading_support_students,
+          extension_students: activePreset.extension_students,
+          student_interests: activePreset.student_interests as string[],
+          language_backgrounds: activePreset.language_backgrounds as string[],
+          average_reading_level: activePreset.average_reading_level,
+          additional_notes: activePreset.additional_notes,
+        },
+      });
+      queryClient.invalidateQueries({
+        queryKey: getListPresetsApiPresetsGetQueryKey(),
+      });
+      queryClient.invalidateQueries({
+        queryKey: getListSavedResourcesEndpointApiSavedGetQueryKey(),
+      });
+      toast.success(t("presetRenamed", { fallback: "Preset renamed" }));
+    } catch (_e) {
+      toast.error(t("presetRenameError", { fallback: "Failed to rename preset" }));
+    }
+    setIsRenaming(false);
   };
 
   const stream = useSearchStream(presetId, searchQuery);
@@ -157,10 +211,6 @@ export function SearchPageClient() {
     searchInputRef.current?.focus();
   }, []);
 
-  const counts = results?.counts_by_source ?? { ddgs: 0, youtube: 0, openalex: 0 };
-  const totalCount = results?.total_results ?? 0;
-  const allResults = results?.results ?? [];
-
   const judgmentByUrl = useMemo(() => {
     const m = new Map<string, JudgmentResult>();
     for (const j of results?.judgments ?? []) {
@@ -169,21 +219,78 @@ export function SearchPageClient() {
     return m;
   }, [results?.judgments]);
 
-  const [_showUnscored, _setShowUnscored] = useState(false);
+  // Unified data source: complete results take priority, then partial (streaming)
+  const displayResults = results?.results ?? stream.partialResults;
+  const displayJudgments = results ? judgmentByUrl : stream.partialJudgments;
+  const isEvaluationPhase = stream.isStreaming && !!stream.partialResults;
 
-  const filterBySource = (source?: string) =>
-    source ? allResults.filter((r) => r.source === source) : allResults;
+  const displayCounts = useMemo(() => {
+    if (results) return results.counts_by_source ?? { ddgs: 0, youtube: 0, openalex: 0 };
+    const c: Record<string, number> = { ddgs: 0, youtube: 0, openalex: 0 };
+    for (const card of stream.partialResults ?? []) {
+      c[card.source] = (c[card.source] ?? 0) + 1;
+    }
+    return c;
+  }, [results, stream.partialResults]);
 
-  const hasContent = results || stream.isStreaming || isFetching;
+  const displayTotalCount = results?.total_results ?? stream.partialResults?.length ?? 0;
+
+  const hasContent = results || stream.isStreaming || isFetching || !!stream.partialResults;
 
   return (
-    <div className={`w-full max-w-4xl space-y-6 ${!hasContent ? "my-auto" : ""}`}>
+    <div className={`w-full max-w-6xl space-y-6 ${!hasContent ? "my-auto" : ""}`}>
       {/* Preset Header */}
       <div className="flex flex-col mb-2 pl-2">
         <div className="flex items-center gap-3">
-          <h2 className="text-3xl font-bold text-[#111827] leading-none mb-1">
-            {activePreset?.name ?? t("selectCollection")}
-          </h2>
+          {isRenaming ? (
+            <form
+              className="flex items-center gap-2"
+              onSubmit={(e) => {
+                e.preventDefault();
+                void handleConfirmRename();
+              }}
+            >
+              <input
+                ref={renameInputRef}
+                type="text"
+                value={renameDraft}
+                onChange={(e) => setRenameDraft(e.target.value)}
+                onBlur={() => void handleConfirmRename()}
+                onKeyDown={(e) => {
+                  if (e.key === "Escape") setIsRenaming(false);
+                }}
+                className="text-3xl font-bold text-brand-ink leading-none bg-transparent border-b-2 border-brand-green outline-none w-auto min-w-48"
+              />
+              <button
+                type="submit"
+                aria-label="Confirm rename"
+                className="p-2 rounded-xl hover:bg-green-50 transition-colors cursor-pointer"
+              >
+                <Check className="w-5 h-5 text-green-600" />
+              </button>
+            </form>
+          ) : (
+            <>
+              <h2 className="text-3xl font-bold text-brand-ink leading-none mb-1">
+                {activePreset?.name ??
+                  (isPresetResolving ? (
+                    <span className="inline-block h-8 w-48 animate-pulse rounded-lg bg-brand-ink/10" />
+                  ) : (
+                    t("selectCollection")
+                  ))}
+              </h2>
+              {activePreset || isPresetResolving ? (
+                <button
+                  type="button"
+                  onClick={handleStartRename}
+                  aria-label={t("renamePreset", { fallback: "Rename preset" })}
+                  className="p-2 border-2 border-white/40 rounded-xl bg-white/30 backdrop-blur-md shadow-sm flex items-center justify-center shrink-0 hover:bg-white transition-all transform hover:scale-105 cursor-pointer"
+                >
+                  <Pencil className="w-4 h-4 text-brand-ink" aria-hidden="true" />
+                </button>
+              ) : null}
+            </>
+          )}
           <Popover>
             <PopoverTrigger asChild>
               <button
@@ -191,7 +298,7 @@ export function SearchPageClient() {
                 aria-label={t("changePreset")}
                 className="p-2 border-2 border-white/40 rounded-xl bg-white/30 backdrop-blur-md shadow-sm flex items-center justify-center shrink-0 hover:bg-white transition-all transform hover:scale-105 cursor-pointer"
               >
-                <Repeat className="w-5 h-5 text-[#111827] stroke-[2.5]" aria-hidden="true" />
+                <Repeat className="w-5 h-5 text-brand-ink stroke-[2.5]" aria-hidden="true" />
               </button>
             </PopoverTrigger>
             <PopoverContent align="start" className="w-56 p-2">
@@ -203,7 +310,7 @@ export function SearchPageClient() {
                     onClick={() => setPresetId(p.id)}
                     className={`w-full text-left px-3 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer ${
                       p.id === presetId
-                        ? "bg-[#B7FF70] text-[#111827]"
+                        ? "bg-brand-green text-brand-ink"
                         : "hover:bg-gray-100 text-gray-700"
                     }`}
                   >
@@ -214,7 +321,7 @@ export function SearchPageClient() {
             </PopoverContent>
           </Popover>
         </div>
-        <p className="text-lg font-medium text-[#111827]/60 mt-1 pl-1">{t("subtitle")}</p>
+        <p className="text-lg font-medium text-brand-ink/60 mt-1 pl-1">{t("subtitle")}</p>
       </div>
 
       {/* Glassy Search Box */}
@@ -222,9 +329,13 @@ export function SearchPageClient() {
         {/* Search Input */}
         <form
           onSubmit={handleSearch}
-          className="w-full flex items-center bg-white/60 border-2 border-white/60 hover:bg-white/80 focus-within:bg-white focus-within:border-[#B7FF70] rounded-[2.5rem] p-2 transition-all shadow-md"
+          className={`w-full flex items-center border-2 rounded-[2.5rem] p-2 transition-all shadow-md ${
+            presetId
+              ? "bg-white/60 border-white/60 hover:bg-white/80 focus-within:bg-white focus-within:border-brand-green"
+              : "bg-white/40 border-white/40 opacity-60 cursor-not-allowed"
+          }`}
         >
-          <div className="pl-6 pr-4 text-[#111827]">
+          <div className={`pl-6 pr-4 ${presetId ? "text-brand-ink" : "text-brand-ink/30"}`}>
             <Search className="w-6 h-6" />
           </div>
           <input
@@ -232,8 +343,9 @@ export function SearchPageClient() {
             type="text"
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
-            placeholder={t("placeholder")}
-            className="flex-1 bg-transparent py-4 text-xl font-bold text-[#111827] placeholder:text-gray-500 outline-none w-full"
+            placeholder={presetId ? t("placeholder") : t("placeholderNoPreset")}
+            disabled={!presetId}
+            className="flex-1 bg-transparent py-4 text-xl font-bold text-brand-ink placeholder:text-gray-500 outline-none w-full disabled:cursor-not-allowed"
           />
           <div className="flex items-center gap-2 pr-2">
             {draft ? (
@@ -248,7 +360,7 @@ export function SearchPageClient() {
             <button
               type="submit"
               disabled={!presetId || !draft.trim() || stream.isStreaming || isFetching}
-              className="px-8 py-4 bg-[#111827] text-[#B7FF70] hover:scale-105 active:scale-95 transition-all rounded-[2rem] font-bold text-lg shadow-md whitespace-nowrap cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-8 py-4 bg-brand-ink text-brand-green hover:scale-105 active:scale-95 transition-all rounded-[2rem] font-bold text-lg shadow-md whitespace-nowrap cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {stream.isStreaming || isFetching ? t("searchingButton") : t("searchButton")}
             </button>
@@ -256,26 +368,34 @@ export function SearchPageClient() {
         </form>
 
         {/* Applied Tags */}
+        {isPresetResolving ? (
+          <div className="flex flex-wrap items-center gap-3 px-2 -mt-2">
+            {Array.from({ length: 3 }).map((_, i) => (
+              // biome-ignore lint/suspicious/noArrayIndexKey: skeleton list is static
+              <div key={i} className="h-10 w-24 animate-pulse rounded-xl bg-brand-ink/10" />
+            ))}
+          </div>
+        ) : null}
         {activePreset && (
           <div className="flex flex-wrap items-start justify-between gap-4 px-2 -mt-2">
             <div className="flex flex-wrap items-center gap-3">
-              {activePreset.subject && (
-                <div className="px-5 py-2.5 bg-white border border-[#111827]/10 rounded-xl text-sm font-bold text-[#111827] shadow-sm cursor-pointer">
+              {!!activePreset.subject && (
+                <div className="px-5 py-2.5 bg-white border border-brand-ink/10 rounded-xl text-sm font-bold text-brand-ink shadow-sm cursor-pointer">
                   {activePreset.subject}
                 </div>
               )}
-              {activePreset.year_level && (
-                <div className="px-5 py-2.5 bg-white border border-[#111827]/10 rounded-xl text-sm font-bold text-[#111827] shadow-sm cursor-pointer">
+              {!!activePreset.year_level && (
+                <div className="px-5 py-2.5 bg-white border border-brand-ink/10 rounded-xl text-sm font-bold text-brand-ink shadow-sm cursor-pointer">
                   {activePreset.year_level}
                 </div>
               )}
-              {activePreset.class_size && (
-                <div className="px-5 py-2.5 bg-white border border-[#111827]/10 rounded-xl text-sm font-bold text-[#111827] shadow-sm cursor-pointer">
+              {!!activePreset.class_size && (
+                <div className="px-5 py-2.5 bg-white border border-brand-ink/10 rounded-xl text-sm font-bold text-brand-ink shadow-sm cursor-pointer">
                   {t("classSizePeople", { classSize: activePreset.class_size })}
                 </div>
               )}
-              {activePreset.country && (
-                <div className="px-5 py-2.5 bg-white border border-[#111827]/10 rounded-xl text-sm font-bold text-[#111827] shadow-sm cursor-pointer">
+              {!!activePreset.country && (
+                <div className="px-5 py-2.5 bg-white border border-brand-ink/10 rounded-xl text-sm font-bold text-brand-ink shadow-sm cursor-pointer">
                   {activePreset.country}
                 </div>
               )}
@@ -286,136 +406,67 @@ export function SearchPageClient() {
 
       {results && results.errors.length > 0 ? <ErrorBanner errors={results.errors} /> : null}
 
+      {/* Suggested Collections — shown once a search is active */}
+      {presetId && searchQuery && hasContent ? (
+        <SuggestedCollectionsRail
+          presetId={presetId}
+          searchQuery={searchQuery}
+          open={suggestedOpen}
+          onOpenChange={setSuggestedOpen}
+        />
+      ) : null}
+
       {results?.generated_queries && !isFetching ? (
         <GeneratedQueriesPanel queries={results.generated_queries} />
       ) : null}
 
+      {/* Progress bar — shown during all streaming phases */}
       {stream.isStreaming ? (
         <AgentMorphScene
           stages={stream.stages}
           activeStage={stream.activeStage}
-          isCached={stream.isCached}
+          completedEvaluations={stream.partialJudgments.size}
+          totalEvaluations={4}
         />
-      ) : isFetching ? (
-        <div className="space-y-4">
-          <EvaluationProgress />
-          <div className="space-y-3">
-            {Array.from({ length: 5 }).map((_, i) => (
-              // biome-ignore lint/suspicious/noArrayIndexKey: skeleton list is static
-              <ResourceCardSkeleton key={i} />
-            ))}
-          </div>
+      ) : null}
+
+      {/* Skeleton cards — before federated_search results arrive */}
+      {stream.isStreaming && !stream.partialResults ? (
+        <div className="space-y-3">
+          {Array.from({ length: 4 }).map((_, i) => (
+            // biome-ignore lint/suspicious/noArrayIndexKey: skeleton list is static
+            <ResourceCardSkeleton key={i} />
+          ))}
         </div>
       ) : null}
 
-      {results && !isFetching && !stream.isStreaming ? (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          {/* Left Sidebar: Categories Overview */}
-          <aside className="lg:col-span-2 space-y-1 bg-slate-50/50 p-2 rounded-xl border border-slate-100">
-            <button
-              type="button"
-              onClick={() => setActiveCategory("all")}
-              className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors cursor-pointer ${activeCategory === "all" ? "bg-white shadow-sm border border-slate-200 text-slate-900" : "text-slate-600 hover:bg-slate-100/60"}`}
-            >
-              <div className="flex items-center gap-2">
-                <Layers className="h-4 w-4" />
-                <span>{t("tabs.all")}</span>
-              </div>
-              <span className="text-xs text-slate-400">({totalCount})</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setActiveCategory("youtube")}
-              className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors cursor-pointer ${activeCategory === "youtube" ? "bg-white shadow-sm border border-slate-200 text-slate-900" : "text-slate-600 hover:bg-slate-100/60"}`}
-            >
-              <div className="flex items-center gap-2">
-                <Play className="h-4 w-4" />
-                <span>{t("tabs.video")}</span>
-              </div>
-              <span className="text-xs text-slate-400">({counts.youtube ?? 0})</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setActiveCategory("ddgs")}
-              className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors cursor-pointer ${activeCategory === "ddgs" ? "bg-white shadow-sm border border-slate-200 text-slate-900" : "text-slate-600 hover:bg-slate-100/60"}`}
-            >
-              <div className="flex items-center gap-2">
-                <Globe className="h-4 w-4" />
-                <span>{t("tabs.web")}</span>
-              </div>
-              <span className="text-xs text-slate-400">({counts.ddgs ?? 0})</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setActiveCategory("openalex")}
-              className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors cursor-pointer ${activeCategory === "openalex" ? "bg-white shadow-sm border border-slate-200 text-slate-900" : "text-slate-600 hover:bg-slate-100/60"}`}
-            >
-              <div className="flex items-center gap-2">
-                <BookOpen className="h-4 w-4" />
-                <span>{t("tabs.papers")}</span>
-              </div>
-              <span className="text-xs text-slate-400">({counts.openalex ?? 0})</span>
-            </button>
-          </aside>
-
-          {/* Right Content: Results List */}
-          <section className="lg:col-span-7 min-h-[400px]">
-            {(() => {
-              const items = filterBySource(activeCategory === "all" ? undefined : activeCategory);
-              const visibleItems = items.slice(0, visibleCount);
-              const remainingCount = items.length - visibleCount;
-
-              if (items.length === 0) {
-                return (
-                  <div className="flex flex-col items-center justify-center p-12 text-center text-slate-500">
-                    <Inbox className="h-10 w-10 text-slate-300 mb-4" />
-                    <p>{t("noResults")}</p>
-                  </div>
-                );
-              }
-
-              return (
-                <div className="flex flex-col gap-6">
-                  <div className="flex flex-col gap-6">
-                    {visibleItems.map((resource, i) => (
-                      <ResourceCardRenderer
-                        key={resource.url}
-                        index={i + 1}
-                        resource={resource}
-                        presetId={presetId ?? undefined}
-                        checked={isChecked(resource.url)}
-                        onToggleChecked={(_, c) => handleToggleChecked(resource, c)}
-                      />
-                    ))}
-                  </div>
-
-                  {remainingCount > 0 && (
-                    <div className="bg-slate-50 border-t border-slate-100 p-6 flex flex-col items-center justify-center gap-4 text-center">
-                      <p className="text-sm font-medium text-slate-500">
-                        {t("remainingResources", { count: remainingCount })}
-                      </p>
-                      <Button
-                        variant="secondary"
-                        onClick={() => setVisibleCount((v) => v + 4)}
-                        className="rounded-full px-8 shadow-sm"
-                      >
-                        {t("evaluateNext", { count: 4 })}
-                        <ChevronDown className="ml-2 h-4 w-4" />
-                      </Button>
-                    </div>
-                  )}
-                </div>
-              );
-            })()}
-          </section>
-
-          {/* Suggested Collections Rail */}
-          <section className="lg:col-span-3 space-y-4">
-            {!!(presetId && searchQuery) && (
-              <SuggestedCollectionsRail presetId={presetId} searchQuery={searchQuery} />
-            )}
-          </section>
+      {/* REST fallback loading (only when SSE failed) */}
+      {!stream.isStreaming && isFetching ? (
+        <div className="space-y-3">
+          {Array.from({ length: 5 }).map((_, i) => (
+            // biome-ignore lint/suspicious/noArrayIndexKey: skeleton list is static
+            <ResourceCardSkeleton key={i} />
+          ))}
         </div>
+      ) : null}
+
+      {/* Results grid: shown during evaluation phase AND after complete */}
+      {displayResults && !isFetching && (!stream.isStreaming || isEvaluationPhase) ? (
+        <SearchResultsGrid
+          results={displayResults}
+          judgments={displayJudgments}
+          counts={displayCounts}
+          totalCount={displayTotalCount}
+          presetId={presetId ?? undefined}
+          searchQuery={searchQuery ?? undefined}
+          savedUrls={savedUrls}
+          selectedResources={selectedResources}
+          onToggleChecked={handleToggleChecked}
+          isEvaluationPhase={isEvaluationPhase}
+          resourceProgress={stream.resourceProgress}
+          evaluationIds={stream.evaluationIds}
+          isNewResults={!results}
+        />
       ) : null}
 
       {selectedResources.size > 0 && (
@@ -443,7 +494,7 @@ export function SearchPageClient() {
             onOpenChange={setIsSaveModalOpen}
             onSave={handleSaveSelected}
             isSaving={isSaving}
-            defaultName={searchQuery ? `Search: ${searchQuery}` : "New Collection"}
+            defaultName={searchQuery || ""}
           />
         </>
       )}

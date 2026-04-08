@@ -19,11 +19,27 @@ depends_on: str | Sequence[str] | None = None
 
 
 def upgrade() -> None:
-    op.add_column(
-        "users",
-        sa.Column("password_hash", sa.String(length=255), nullable=True),
+    conn = op.get_bind()
+    result = conn.execute(
+        sa.text(
+            "SELECT 1 FROM information_schema.columns "
+            "WHERE table_name='users' AND column_name='password_hash'"
+        )
     )
+    if not result.fetchone():
+        op.add_column(
+            "users",
+            sa.Column("password_hash", sa.String(length=255), nullable=True),
+        )
 
 
 def downgrade() -> None:
-    op.drop_column("users", "password_hash")
+    conn = op.get_bind()
+    result = conn.execute(
+        sa.text(
+            "SELECT 1 FROM information_schema.columns "
+            "WHERE table_name='users' AND column_name='password_hash'"
+        )
+    )
+    if result.fetchone():
+        op.drop_column("users", "password_hash")

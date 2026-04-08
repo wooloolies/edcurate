@@ -135,3 +135,13 @@ export const SearchStreamApiDiscoverySearchStreamGetQueryParams = zod.object({
 
 export const SearchStreamApiDiscoverySearchStreamGetResponse = zod.unknown()
 
+/**
+ * Fetch evaluation data by ID.
+ * @summary Get Evaluation Endpoint
+ */
+export const GetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetParams = zod.object({
+  "evaluation_id": zod.uuid()
+})
+
+export const GetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGetResponse = zod.union([zod.record(zod.string(), zod.unknown()),zod.null()])
+

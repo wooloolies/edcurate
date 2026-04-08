@@ -25,6 +25,11 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+
+  /* Edcurate brand palette */
+  --color-brand-green: var(--brand-green);
+  --color-brand-ink: var(--brand-ink);
+  --color-brand-surface: var(--brand-surface);
 }
 
 :root {
@@ -48,6 +53,11 @@
   --input: hsl(0 0% 89.8%);
   --ring: hsl(0 0% 3.9%);
   --radius: 0.5rem;
+
+  /* Edcurate brand semantic tokens */
+  --brand-green: #b7ff70;
+  --brand-ink: #111827;
+  --brand-surface: #f8f9fa;
 }
 
 .dark {
@@ -76,24 +86,14 @@
   border-color: var(--border);
 }
 
+button,
+[role="button"] {
+  cursor: pointer;
+}
+
 body {
   background-color: var(--background);
   color: var(--foreground);
-}
-
-.digital-grid-bg {
-  background-image: radial-gradient(circle, #cbd5e1 1.5px, transparent 1.5px);
-  background-size: 32px 32px;
-  animation: pan-right 20s linear infinite;
-}
-
-@keyframes pan-right {
-  0% {
-    background-position: 0 0;
-  }
-  100% {
-    background-position: 32px 0;
-  }
 }
 
 @keyframes shimmer-spin {
@@ -155,13 +155,7 @@ body {
 }
 
 .text-gradient-animate {
-  background: linear-gradient(
-    90deg,
-    #2563eb,
-    #7c3aed,
-    #06b6d4,
-    #2563eb
-  );
+  background: linear-gradient(90deg, #2563eb, #7c3aed, #06b6d4, #2563eb);
   background-size: 300% 100%;
   -webkit-background-clip: text;
   background-clip: text;
@@ -175,7 +169,13 @@ body {
 }
 
 @keyframes gradient-text-shift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }

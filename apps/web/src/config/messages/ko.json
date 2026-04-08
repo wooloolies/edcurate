@@ -52,9 +52,10 @@
     "backToHome": "홈으로 돌아가기"
   },
   "presets": {
-    "title": "내 수업 프리셋",
-    "newPreset": "새 프리셋",
-    "editPreset": "프리셋 편집",
+    "title": "내 수업 컬렉션",
+    "subtitle": "과목, 학년, 교육과정을 설정하여 검색을 맞춤화하세요.",
+    "newPreset": "새 컬렉션",
+    "editPreset": "컬렉션 편집",
     "createPreset": "프리셋 만들기",
     "savePreset": "프리셋 저장",
     "deletePreset": "프리셋 삭제",
@@ -92,9 +93,9 @@
       "additionalNotes": "추가 메모"
     },
     "sources": {
-      "ddgs": "DuckDuckGo",
-      "youtube": "YouTube",
-      "openalex": "OpenAlex"
+      "ddgs": "웹",
+      "youtube": "동영상",
+      "openalex": "논문"
     },
     "placeholders": {
       "name": "예: 9학년 지리 - 케언스",
@@ -111,7 +112,8 @@
       "additionalNotes": "학급에 대한 추가 맥락을 입력하세요..."
     },
     "moreActions": "추가 작업",
-    "saving": "저장 중..."
+    "saving": "저장 중...",
+    "count": "{count, plural, one {# 컬렉션} other {# 컬렉션}}"
   },
   "search": {
     "title": "교육 자료 탐색",
@@ -148,16 +150,17 @@
     "showUnscored": "{count}개의 미평가 결과 더 보기",
     "hideUnscored": "미평가 결과 숨기기",
     "resourcesSelected": "{count}개 자료 선택됨",
-    "saveToLibrary": "라이브러리에 저장",
-    "saving": "저장 중...",
-    "savedSuccess": "라이브러리에 저장되었습니다!",
+    "saveToLibrary": "내 라이브러리에 추가",
+    "save": "추가",
+    "saving": "추가 중...",
+    "savedSuccess": "라이브러리에 추가되었습니다!",
     "savedError": "자료 저장에 실패했습니다",
     "overview": "개요",
     "changePreset": "프리셋 변경",
     "bookmark": {
-      "save": "저장",
-      "saved": "저장됨",
-      "saveLabel": "라이브러리에 저장",
+      "save": "추가",
+      "saved": "추가됨",
+      "saveLabel": "라이브러리에 추가",
       "removeLabel": "라이브러리에서 제거"
     },
     "clearSelection": "선택 해제",
@@ -176,7 +179,14 @@
       "step6": "가장 관련성 높은 조각을 찾는 중",
       "step7": "교육과정 정합성과 교수학적 품질을 평가하는 중",
       "step8": "읽기 수준과 편향 표현을 평가하는 중",
-      "step9": "점수를 마무리하고 결과 순위를 정하는 중"
+      "compactCount": "{count}/{total} 완료",
+      "compactTitle": "리소스 평가 중",
+      "step9": "점수를 마무리하고 결과 순위를 정하는 중",
+      "stageQueryGeneration": "검색 쿼리 생성 중",
+      "stageFederatedSearch": "소스에서 검색 중",
+      "stageRagPreparation": "결과 준비 중",
+      "stageEvaluation": "리소스 평가 중",
+      "stageSearching": "검색 중"
     },
     "classroom": {
       "chalkboard": {
@@ -229,6 +239,7 @@
       }
     },
     "evaluation": {
+      "evaluating": "평가 중...",
       "unevaluated": "미평가",
       "score": "점수: {score}/10",
       "agent": "심층 평가 에이전트",
@@ -291,9 +302,45 @@
         "licensing": "라이선스",
         "reading_level": "읽기 수준",
         "accessibility": "접근성",
-        "cultural_sensitivity": "문화적 민감성"
+        "cultural_sensitivity": "문화적 민감성",
+        "outdated_content": "오래된 콘텐츠",
+        "bias_or_framing": "편향 또는 프레이밍",
+        "factual_concern": "사실 관계 우려",
+        "safety_concern": "안전 우려",
+        "misleading_match": "오해 소지가 있는 매칭"
       }
-    }
+    },
+    "saveCollection": {
+      "title": "내 라이브러리에 추가",
+      "description": "선택한 리소스를 이름이 지정된 컬렉션으로 그룹화합니다.",
+      "nameLabel": "컬렉션 이름",
+      "namePlaceholder": "예: 물리학 101",
+      "privacyLabel": "공개 설정",
+      "private": "비공개",
+      "public": "공개",
+      "publicWarning": "정말 공개하시겠습니까? 누구나 추천 컬렉션에서 이 리소스를 발견할 수 있게 됩니다.",
+      "descriptionLabel": "설명 (선택)",
+      "descriptionPlaceholder": "이 컬렉션에 대해 간단히 설명해 주세요..."
+    },
+    "back": "뒤로",
+    "renamePreset": "프리셋 이름 변경",
+    "presetRenamed": "프리셋 이름이 변경되었습니다",
+    "presetRenameError": "프리셋 이름 변경에 실패했습니다",
+    "suggestedCollections": {
+      "alreadyInLibrary": "이미 내 라이브러리에 있음",
+      "upToDate": "최신 상태",
+      "cloned": "내 라이브러리에 있음",
+      "cloneCollection": "내 라이브러리에 복사",
+      "syncCollection": "내 컬렉션 업데이트",
+      "syncSuccess": "컬렉션이 업데이트되었습니다!",
+      "title": "추천 컬렉션",
+      "clone": "복제",
+      "clonesCount": "{count, plural, one {# 복제} other {# 복제}}",
+      "empty": "유사한 검색에 대한 공개 컬렉션이 없습니다.",
+      "sourcesCount": "{count, plural, one {# 소스} other {# 소스}}",
+      "previewDescription": "라이브러리에 복사하기 전에 이 컬렉션을 확인하세요."
+    },
+    "cancel": "취소"
   },
   "nav": {
     "presets": "프리셋",
@@ -313,13 +360,20 @@
     "startResearch": "리서치 시작하기",
     "featureTagYear": "7~12학년",
     "featureTagDesigner": "커리큘럼 디자이너",
-    "featureTagGlobal": "전 세계"
+    "featureTagGlobal": "전 세계",
+    "heroHighlight": "지능형",
+    "heroTitleRest": "어댑션 엔진",
+    "heroFor": "",
+    "heroTeachers": "교사를 위한"
   },
   "overview": {
     "defaultTitle": "자료 개요",
     "defaultType": "문서",
     "comingSoonTitle": "상세 분석 준비 중",
-    "comingSoonDescription": "이 페이지에서 AI 기반 분석 결과를 확인할 수 있습니다. 교육과정 정합성, 교수법적 근거, 근거 추출 등을 포함합니다."
+    "comingSoonDescription": "이 페이지에서 AI 기반 분석 결과를 확인할 수 있습니다. 교육과정 정합성, 교수법적 근거, 근거 추출 등을 포함합니다.",
+    "confidence": "신뢰도",
+    "evaluationNotFound": "평가 데이터가 만료되었습니다. 다시 검색해주세요.",
+    "evaluationUnavailable": "이 리소스의 평가 데이터가 없습니다."
   },
   "errors": {
     "title": "오류",
@@ -360,5 +414,77 @@
     "sendAnother": "추가 피드백 보내기",
     "location": "위치",
     "teamEmails": "팀 이메일"
+  },
+  "library": {
+    "generate": {
+      "title": "{artifactType} 생성",
+      "description": "생성할 리소스를 선택하세요.",
+      "descriptionMax": "최대 {max}개의 리소스를 선택할 수 있습니다.",
+      "selectAtLeast": "최소 하나의 리소스를 선택하세요",
+      "selectUpTo": "최대 {max}개까지 선택 가능합니다",
+      "success": "{artifactType} 생성 완료",
+      "error": "{artifactType} 생성 실패",
+      "generating": "{count}개 리소스로 생성 중...",
+      "button": "생성 ({count})",
+      "cancel": "취소",
+      "artifactQuiz": "퀴즈",
+      "artifactMindmap": "마인드맵",
+      "artifactSummary": "요약",
+      "artifactFlashcards": "플래시카드"
+    },
+    "progress": {
+      "preparingResources": "리소스 준비 중...",
+      "evaluatingResources": "리소스 평가 중...",
+      "resourceCount": "{completed}/{total} 완료"
+    },
+    "title": "내 라이브러리",
+    "subtitle": "큐레이션된 리소스를 저장, 평가하고 다른 교육자와 공유하세요.",
+    "empty": {
+      "title": "라이브러리가 비어 있습니다",
+      "description": "검색 결과에서 리소스를 저장하여 나만의 컬렉션을 만들어 보세요.",
+      "startSearching": "검색 시작"
+    },
+    "collection": {
+      "resources": "{count}개 리소스",
+      "unevaluated": "{count}개 미평가"
+    },
+    "action": {
+      "addLink": "링크 추가",
+      "cancel": "취소",
+      "add": "추가",
+      "save": "저장",
+      "evaluateAll": "전체 평가 ({count})",
+      "evaluate": "평가",
+      "reEvaluate": "재평가",
+      "preparing": "준비 중...",
+      "evaluating": "평가 중...",
+      "rename": "이름 변경",
+      "makePrivate": "비공개로 전환",
+      "makePublic": "공개로 전환",
+      "deleteCollection": "컬렉션 삭제",
+      "generate": "생성",
+      "searchWithPreset": "이 수업으로 검색",
+      "statusPublic": "공개",
+      "statusPrivate": "비공개"
+    },
+    "toast": {
+      "linkAdded": "링크가 추가되었습니다",
+      "linkFailed": "링크 추가에 실패했습니다",
+      "removeFailed": "리소스 제거에 실패했습니다",
+      "updateFailed": "컬렉션 업데이트에 실패했습니다",
+      "deleted": "컬렉션이 삭제되었습니다",
+      "deleteFailed": "컬렉션 삭제에 실패했습니다"
+    },
+    "confirm": {
+      "makePublicTitle": "공개로 전환",
+      "makePublicDescription": "누구나 이 리소스를 발견하고 볼 수 있게 됩니다. 계속하시겠습니까?",
+      "makePublicButton": "공개로 전환",
+      "makePrivateTitle": "비공개로 전환",
+      "makePrivateDescription": "이 컬렉션은 더 이상 다른 사람에게 보이지 않습니다.",
+      "makePrivateButton": "비공개로 전환",
+      "deleteTitle": "컬렉션 삭제",
+      "deleteDescription": "이 컬렉션과 모든 리소스가 영구적으로 삭제됩니다. 이 작업은 되돌릴 수 없습니다.",
+      "deleteButton": "삭제"
+    }
   }
 }

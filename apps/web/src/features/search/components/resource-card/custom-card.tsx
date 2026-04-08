@@ -1,16 +1,17 @@
 import { ExternalLink, Link as LinkIcon } from "lucide-react";
 import Image from "next/image";
-import { ResourceListRow } from "@/features/search/components/resource-card/resource-list-row";
 import { VerdictBadge } from "@/features/search/components/resource-card/relevance-indicator";
+import { ResourceListRow } from "@/features/search/components/resource-card/resource-list-row";
 import type { ResourceCard } from "@/lib/api/model";
 
 interface CustomCardProps {
-  index: number;
+  index?: number;
   resource: ResourceCard;
   action?: React.ReactNode;
+  isEvaluating?: boolean;
 }
 
-export function CustomCard({ index, resource, action }: CustomCardProps) {
+export function CustomCard({ index, resource, action, isEvaluating }: CustomCardProps) {
   const meta = resource.metadata as { domain?: string };
 
   const contentNode = (
@@ -47,7 +48,7 @@ export function CustomCard({ index, resource, action }: CustomCardProps) {
   return (
     <ResourceListRow
       index={index}
-      verdictNode={<VerdictBadge verdict={resource.verdict} />}
+      verdictNode={<VerdictBadge verdict={resource.verdict} isEvaluating={isEvaluating} />}
       contentNode={contentNode}
       actionsNode={action}
     />

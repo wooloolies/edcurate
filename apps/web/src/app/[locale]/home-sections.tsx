@@ -22,7 +22,6 @@ const ALL_ENGINES: SourceEngine[] = [
   { id: "ddgs", label: "DuckDuckGo", color: "bg-orange-100 text-orange-700 border-orange-200" },
   { id: "youtube", label: "YouTube", color: "bg-red-100 text-red-700 border-red-200" },
   { id: "openalex", label: "OpenAlex", color: "bg-blue-100 text-blue-700 border-blue-200" },
-  { id: "google", label: "Google", color: "bg-emerald-100 text-emerald-700 border-emerald-200" },
 ];
 
 const DEFAULT_ACTIVE = ["ddgs", "youtube", "openalex"];
@@ -160,15 +159,19 @@ export function AudienceStatements() {
       {AUDIENCE_STATEMENTS.map((item, i) => (
         <ScrollReveal key={item.heading} delay={i * 100}>
           <div className="max-w-3xl mx-auto text-center">
-            {item.placeholder && (
+            {item.placeholder ? (
               <span className="inline-block mb-3 rounded-full border border-dashed border-slate-300 bg-slate-50 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-slate-400">
                 Placeholder
               </span>
-            )}
-            <h3 className={`text-3xl md:text-[2.5rem] font-bold tracking-tight leading-[1.1] ${item.placeholder ? "text-slate-300" : "text-[#111827]"}`}>
+            ) : null}
+            <h3
+              className={`text-3xl md:text-[2.5rem] font-bold tracking-tight leading-[1.1] ${item.placeholder ? "text-slate-300" : "text-[#111827]"}`}
+            >
               {item.heading}
             </h3>
-            <p className={`mt-5 text-base md:text-lg leading-relaxed max-w-xl mx-auto ${item.placeholder ? "text-slate-300" : "text-slate-500"}`}>
+            <p
+              className={`mt-5 text-base md:text-lg leading-relaxed max-w-xl mx-auto ${item.placeholder ? "text-slate-300" : "text-slate-500"}`}
+            >
               {item.body}
             </p>
           </div>
@@ -198,15 +201,18 @@ function SubjectColumn({ category }: { category: SubjectCategory }) {
         )}
       </button>
 
-      {expanded && (
+      {expanded ? (
         <div className="mt-2 space-y-1">
           {category.topics.map((topic) => (
-            <p key={topic} className="text-[13px] md:text-sm text-[#111827]/60 font-medium leading-snug">
+            <p
+              key={topic}
+              className="text-[13px] md:text-sm text-[#111827]/60 font-medium leading-snug"
+            >
               {topic}
             </p>
           ))}
         </div>
-      )}
+      ) : null}
     </div>
   );
 }
@@ -222,9 +228,7 @@ export function SubjectBanner() {
         <span className="text-xl md:text-2xl font-bold tracking-tight text-[#111827]">
           <span className="text-blue-600">Ed</span>curate
         </span>
-        <span className="text-base md:text-lg font-bold text-[#111827]">
-          {country}
-        </span>
+        <span className="text-base md:text-lg font-bold text-[#111827]">{country}</span>
       </div>
 
       {/* Subject categories — horizontal row */}
@@ -237,7 +241,7 @@ export function SubjectBanner() {
       {/* Copyright footer */}
       <div className="mt-10 flex items-center justify-center gap-2 text-sm font-semibold text-[#111827]">
         <Copyright className="size-4" />
-        <span>Copyright . 2026</span>
+        <span>Copyright Wooloolies 2026</span>
       </div>
     </section>
   );

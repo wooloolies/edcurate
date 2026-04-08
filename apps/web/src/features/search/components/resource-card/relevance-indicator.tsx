@@ -1,9 +1,4 @@
-import {
-  CheckCircle2,
-  ChevronDown,
-  ShieldAlert,
-  ClipboardCheck,
-} from "lucide-react";
+import { CheckCircle2, ChevronDown, ClipboardCheck, ShieldAlert } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
@@ -15,10 +10,7 @@ import type {
   ResourceFlag,
 } from "@/lib/api/model";
 
-const VERDICT_CONFIG: Record<
-  JudgmentResultVerdict,
-  { badgeClass: string; labelKey: string }
-> = {
+const VERDICT_CONFIG: Record<JudgmentResultVerdict, { badgeClass: string; labelKey: string }> = {
   use_it: {
     badgeClass: "text-emerald-800 bg-emerald-50 border-emerald-200",
     labelKey: "verdicts.use_it",
@@ -100,21 +92,47 @@ function FlagCard({ flag, t }: { flag: ResourceFlag; t: ReturnType<typeof useTra
   );
 }
 
-export function VerdictBadge({ verdict }: { verdict?: string | null }) {
+export function VerdictBadge({
+  verdict,
+  isEvaluating,
+}: {
+  verdict?: string | null;
+  isEvaluating?: boolean;
+}) {
   const t = useTranslations("search.evaluation");
 
+  // State 1: Evaluating — blue pulse
+  if (isEvaluating) {
+    return (
+      <Badge
+        variant="outline"
+        className="w-fit animate-pulse text-blue-600 bg-blue-50 border-blue-200 px-3 py-1 text-sm font-semibold"
+      >
+        {t("evaluating")}
+      </Badge>
+    );
+  }
+
+  // State 2: No verdict — unevaluated
   if (!verdict) {
     return (
-      <Badge variant="outline" className="w-fit text-slate-500 bg-slate-100 border-slate-200 px-3 py-1 text-sm font-semibold">
+      <Badge
+        variant="outline"
+        className="w-fit text-slate-500 bg-slate-100 border-slate-200 px-3 py-1 text-sm font-semibold"
+      >
         {t("unevaluated")}
       </Badge>
     );
   }
 
+  // State 3: Has verdict
   const config = VERDICT_CONFIG[verdict as JudgmentResultVerdict] ?? VERDICT_CONFIG.adapt_it;
 
   return (
-    <Badge variant="outline" className={`shrink-0 ${config.badgeClass} flex items-center w-fit px-3 py-1 text-sm font-semibold`}>
+    <Badge
+      variant="outline"
+      className={`shrink-0 ${config.badgeClass} flex items-center w-fit px-3 py-1 text-sm font-semibold`}
+    >
       {t(config.labelKey)}
     </Badge>
   );

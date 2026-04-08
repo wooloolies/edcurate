@@ -2,8 +2,6 @@
 
 import { useTranslations } from "next-intl";
 
-import { Button } from "@/components/ui/button";
-
 import type { SourceWeights } from "@/features/presets/utils/normalize-weights";
 
 const SOURCE_KEYS: (keyof SourceWeights)[] = ["ddgs", "youtube", "openalex"];
@@ -23,18 +21,14 @@ export function SourceToggles({ value, onChange }: SourceTogglesProps) {
     const next = { ...value };
 
     if (wasActive) {
-      // Deactivate: set to minimum
       next[key] = MIN_WEIGHT;
     } else {
-      // Activate: will be recalculated below
       next[key] = 1;
     }
 
-    // Separate active (above min) and inactive
     const activeKeys = SOURCE_KEYS.filter((k) => next[k] > MIN_WEIGHT);
     const inactiveKeys = SOURCE_KEYS.filter((k) => next[k] <= MIN_WEIGHT);
 
-    // If none active, keep at least the toggled one
     if (activeKeys.length === 0) {
       activeKeys.push(key);
       inactiveKeys.splice(inactiveKeys.indexOf(key), 1);
@@ -47,7 +41,6 @@ export function SourceToggles({ value, onChange }: SourceTogglesProps) {
     for (const k of inactiveKeys) result[k] = MIN_WEIGHT;
     for (const k of activeKeys) result[k] = activeShare;
 
-    // Fix rounding
     const total = SOURCE_KEYS.reduce((s, k) => s + result[k], 0);
     if (Math.abs(total - 1) > 0.001) {
       result[activeKeys[0]] += Math.round((1 - total) * 100) / 100;
@@ -57,19 +50,22 @@ export function SourceToggles({ value, onChange }: SourceTogglesProps) {
   };
 
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="flex flex-wrap gap-3">
       {SOURCE_KEYS.map((key) => {
         const isActive = value[key] > MIN_WEIGHT;
         return (
-          <Button
+          <button
             key={key}
             type="button"
-            variant={isActive ? "default" : "outline"}
-            size="sm"
             onClick={() => handleToggle(key)}
+            className={`px-6 py-3 rounded-[2rem] font-semibold text-sm transition-all border-2 cursor-pointer ${
+              isActive
+                ? "border-brand-green bg-brand-green text-brand-ink shadow-md"
+                : "border-gray-200 text-gray-600 hover:border-gray-300 hover:bg-gray-50 bg-white"
+            }`}
           >
             {t(key)} ({Math.round(value[key] * 100)}%)
-          </Button>
+          </button>
         );
       })}
     </div>

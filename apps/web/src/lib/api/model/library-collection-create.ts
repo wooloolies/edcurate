@@ -11,6 +11,7 @@ export interface LibraryCollectionCreate {
   preset_id: string;
   search_query: string;
   name: string;
+  description?: string | null;
   is_public?: boolean;
   resources: ResourceCard[];
   evaluation_data_list?: (JudgmentResult | null)[] | null;

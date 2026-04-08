@@ -52,9 +52,10 @@
     "backToHome": "返回首页"
   },
   "presets": {
-    "title": "我的课堂预设",
-    "newPreset": "新建预设",
-    "editPreset": "编辑预设",
+    "title": "我的课堂收藏集",
+    "subtitle": "设置学科、年级和课程标准，定制每一次搜索。",
+    "newPreset": "新建收藏集",
+    "editPreset": "编辑收藏集",
     "createPreset": "创建预设",
     "savePreset": "保存预设",
     "deletePreset": "删除预设",
@@ -92,9 +93,9 @@
       "additionalNotes": "补充说明"
     },
     "sources": {
-      "ddgs": "DuckDuckGo",
-      "youtube": "YouTube",
-      "openalex": "OpenAlex"
+      "ddgs": "网页",
+      "youtube": "视频",
+      "openalex": "论文"
     },
     "placeholders": {
       "name": "例如：九年级地理 - 凯恩斯",
@@ -111,7 +112,8 @@
       "additionalNotes": "补充一些关于班级的背景信息..."
     },
     "moreActions": "更多操作",
-    "saving": "保存中..."
+    "saving": "保存中...",
+    "count": "{count, plural, one {# 个合集} other {# 个合集}}"
   },
   "search": {
     "title": "教育资源探索",
@@ -148,16 +150,17 @@
     "showUnscored": "显示另外 {count} 条未评分结果",
     "hideUnscored": "隐藏未评分结果",
     "resourcesSelected": "已选择 {count} 个资源",
-    "saveToLibrary": "保存到资源库",
-    "saving": "保存中...",
-    "savedSuccess": "已保存到资源库！",
+    "saveToLibrary": "添加到我的资源库",
+    "save": "添加",
+    "saving": "添加中...",
+    "savedSuccess": "已添加到资源库！",
     "savedError": "保存资源失败",
     "overview": "概览",
     "changePreset": "切换预设",
     "bookmark": {
-      "save": "收藏",
-      "saved": "已收藏",
-      "saveLabel": "保存到资料库",
+      "save": "添加",
+      "saved": "已添加",
+      "saveLabel": "添加到资源库",
       "removeLabel": "从资料库移除"
     },
     "clearSelection": "取消选择",
@@ -176,7 +179,14 @@
       "step6": "正在检索最相关的文本片段",
       "step7": "正在评估课程契合度与教学质量",
       "step8": "正在评估阅读难度与偏见呈现",
-      "step9": "正在完成评分并排序结果"
+      "step9": "正在完成评分并排序结果",
+      "stageQueryGeneration": "正在生成搜索查询",
+      "stageFederatedSearch": "正在搜索各来源",
+      "stageRagPreparation": "正在准备结果",
+      "stageEvaluation": "正在评估资源",
+      "stageSearching": "搜索中",
+      "compactCount": "{count}/{total} 已完成",
+      "compactTitle": "正在评估资源"
     },
     "classroom": {
       "chalkboard": {
@@ -291,9 +301,46 @@
         "licensing": "许可",
         "reading_level": "阅读水平",
         "accessibility": "可及性",
-        "cultural_sensitivity": "文化敏感性"
-      }
-    }
+        "cultural_sensitivity": "文化敏感性",
+        "outdated_content": "内容过时",
+        "bias_or_framing": "偏见或框架问题",
+        "factual_concern": "事实性问题",
+        "safety_concern": "安全问题",
+        "misleading_match": "误导性匹配"
+      },
+      "evaluating": "评估中..."
+    },
+    "saveCollection": {
+      "title": "添加到我的资源库",
+      "description": "将选定的资源归入一个命名收藏集。",
+      "nameLabel": "收藏集名称",
+      "namePlaceholder": "例如：物理 101",
+      "privacyLabel": "隐私设置",
+      "private": "私密",
+      "public": "公开",
+      "publicWarning": "确定要公开吗？所有人都可以在推荐收藏集中发现这些资源。",
+      "descriptionLabel": "描述（选填）",
+      "descriptionPlaceholder": "简要描述这个合集..."
+    },
+    "back": "返回",
+    "renamePreset": "重命名预设",
+    "presetRenamed": "预设已重命名",
+    "presetRenameError": "重命名预设失败",
+    "suggestedCollections": {
+      "alreadyInLibrary": "已在我的资源库中",
+      "upToDate": "已是最新",
+      "cloned": "已在我的资源库",
+      "cloneCollection": "复制到我的资源库",
+      "syncCollection": "更新我的合集",
+      "syncSuccess": "合集已更新！",
+      "title": "推荐合集",
+      "clone": "复制",
+      "clonesCount": "{count, plural, one {# 次复制} other {# 次复制}}",
+      "empty": "未找到相似搜索的公开合集。",
+      "sourcesCount": "{count, plural, one {# 个来源} other {# 个来源}}",
+      "previewDescription": "复制到资源库前先预览此合集。"
+    },
+    "cancel": "取消"
   },
   "nav": {
     "presets": "预设",
@@ -313,13 +360,20 @@
     "startResearch": "开始您的研究",
     "featureTagYear": "7至12年级",
     "featureTagDesigner": "课程设计师",
-    "featureTagGlobal": "面向全球"
+    "featureTagGlobal": "面向全球",
+    "heroHighlight": "智能",
+    "heroTitleRest": "适配引擎",
+    "heroFor": "为",
+    "heroTeachers": "教师"
   },
   "overview": {
     "defaultTitle": "资源概览",
     "defaultType": "文档",
     "comingSoonTitle": "详细分析即将推出",
-    "comingSoonDescription": "此页面将展示 AI 生成的资源分析，包括课程匹配度、教学法论证和证据提取。"
+    "comingSoonDescription": "此页面将展示 AI 生成的资源分析，包括课程匹配度、教学法论证和证据提取。",
+    "confidence": "置信度",
+    "evaluationNotFound": "评估数据已过期，请重新搜索。",
+    "evaluationUnavailable": "暂无该资源的评估数据。"
   },
   "errors": {
     "title": "错误",
@@ -360,5 +414,77 @@
     "sendAnother": "发送更多反馈",
     "location": "位置",
     "teamEmails": "团队邮箱"
+  },
+  "library": {
+    "generate": {
+      "title": "生成{artifactType}",
+      "description": "选择要生成{artifactType}的资源。",
+      "descriptionMax": "最多可选择 {max} 个资源。",
+      "selectAtLeast": "请至少选择一个资源",
+      "selectUpTo": "最多可选择 {max} 个资源",
+      "success": "{artifactType}生成成功",
+      "error": "生成{artifactType}失败",
+      "generating": "正在从 {count} 个资源生成...",
+      "button": "生成 ({count})",
+      "cancel": "取消",
+      "artifactQuiz": "测验",
+      "artifactMindmap": "思维导图",
+      "artifactSummary": "摘要",
+      "artifactFlashcards": "闪卡"
+    },
+    "progress": {
+      "preparingResources": "正在准备资源...",
+      "evaluatingResources": "正在评估资源...",
+      "resourceCount": "{completed}/{total} 已完成"
+    },
+    "title": "我的资源库",
+    "subtitle": "保存、评估精选资源，并与其他教育者分享。",
+    "empty": {
+      "title": "资源库为空",
+      "description": "从搜索结果中保存资源以构建您的收藏集。",
+      "startSearching": "开始搜索"
+    },
+    "collection": {
+      "resources": "{count} 个资源",
+      "unevaluated": "{count} 个未评估"
+    },
+    "action": {
+      "addLink": "添加链接",
+      "cancel": "取消",
+      "add": "添加",
+      "save": "保存",
+      "evaluateAll": "全部评估 ({count})",
+      "evaluate": "评估",
+      "reEvaluate": "重新评估",
+      "preparing": "准备中...",
+      "evaluating": "评估中...",
+      "rename": "重命名",
+      "makePrivate": "设为私密",
+      "makePublic": "设为公开",
+      "deleteCollection": "删除收藏集",
+      "generate": "生成",
+      "searchWithPreset": "使用此课堂搜索",
+      "statusPublic": "公开",
+      "statusPrivate": "私密"
+    },
+    "toast": {
+      "linkAdded": "链接已添加",
+      "linkFailed": "添加链接失败",
+      "removeFailed": "移除资源失败",
+      "updateFailed": "更新收藏集失败",
+      "deleted": "收藏集已删除",
+      "deleteFailed": "删除收藏集失败"
+    },
+    "confirm": {
+      "makePublicTitle": "公开",
+      "makePublicDescription": "所有人都可以发现并查看这些资源。确定吗？",
+      "makePublicButton": "公开",
+      "makePrivateTitle": "设为私密",
+      "makePrivateDescription": "此收藏集将不再对其他人可见。",
+      "makePrivateButton": "设为私密",
+      "deleteTitle": "删除收藏集",
+      "deleteDescription": "此收藏集及其所有资源将被永久删除，此操作不可撤销。",
+      "deleteButton": "删除"
+    }
   }
 }

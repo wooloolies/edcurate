@@ -1,16 +1,17 @@
 import { ExternalLink, Play } from "lucide-react";
 import Image from "next/image";
-import { ResourceListRow } from "@/features/search/components/resource-card/resource-list-row";
 import { VerdictBadge } from "@/features/search/components/resource-card/relevance-indicator";
+import { ResourceListRow } from "@/features/search/components/resource-card/resource-list-row";
 import type { ResourceCard } from "@/lib/api/model";
 
 interface YoutubeCardProps {
-  index: number;
+  index?: number;
   resource: ResourceCard;
   action?: React.ReactNode;
+  isEvaluating?: boolean;
 }
 
-export function YoutubeCard({ index, resource, action }: YoutubeCardProps) {
+export function YoutubeCard({ index, resource, action, isEvaluating }: YoutubeCardProps) {
   const meta = resource.metadata as {
     channel?: string;
     duration?: string;
@@ -52,7 +53,7 @@ export function YoutubeCard({ index, resource, action }: YoutubeCardProps) {
   return (
     <ResourceListRow
       index={index}
-      verdictNode={<VerdictBadge verdict={resource.verdict} />}
+      verdictNode={<VerdictBadge verdict={resource.verdict} isEvaluating={isEvaluating} />}
       contentNode={contentNode}
       actionsNode={action}
     />

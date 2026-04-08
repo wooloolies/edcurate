@@ -152,15 +152,19 @@
   "@team__backToHome": {
     "description": "Link to go back to home page"
   },
-  "presets__title": "내 수업 프리셋",
+  "presets__title": "내 수업 컬렉션",
   "@presets__title": {
     "description": "Presets page heading"
   },
-  "presets__newPreset": "새 프리셋",
+  "presets__subtitle": "과목, 학년, 교육과정을 설정하여 검색을 맞춤화하세요.",
+  "@presets__subtitle": {
+    "description": "Subtitle on collections page"
+  },
+  "presets__newPreset": "새 컬렉션",
   "@presets__newPreset": {
     "description": "Button to create a new preset"
   },
-  "presets__editPreset": "프리셋 편집",
+  "presets__editPreset": "컬렉션 편집",
   "@presets__editPreset": {
     "description": "Button to edit a preset"
   },
@@ -292,17 +296,17 @@
   "@presets__fields__additionalNotes": {
     "description": "Field label for additional notes"
   },
-  "presets__sources__ddgs": "DuckDuckGo",
+  "presets__sources__ddgs": "웹",
   "@presets__sources__ddgs": {
-    "description": "Source label for DuckDuckGo"
+    "description": "Source label for web search (DuckDuckGo)"
   },
-  "presets__sources__youtube": "YouTube",
+  "presets__sources__youtube": "동영상",
   "@presets__sources__youtube": {
-    "description": "Source label for YouTube"
+    "description": "Source label for video search (YouTube)"
   },
-  "presets__sources__openalex": "OpenAlex",
+  "presets__sources__openalex": "논문",
   "@presets__sources__openalex": {
-    "description": "Source label for OpenAlex"
+    "description": "Source label for academic papers (OpenAlex)"
   },
   "search__title": "교육 자료 탐색",
   "@search__title": {
@@ -459,6 +463,18 @@
   "@overview__comingSoonDescription": {
     "description": "Coming soon description on overview page"
   },
+  "overview__confidence": "신뢰도",
+  "@overview__confidence": {
+    "description": "Label for evaluation confidence level"
+  },
+  "overview__evaluationNotFound": "평가 데이터가 만료되었습니다. 다시 검색해주세요.",
+  "@overview__evaluationNotFound": {
+    "description": "Message when evaluation cache has expired"
+  },
+  "overview__evaluationUnavailable": "이 리소스의 평가 데이터가 없습니다.",
+  "@overview__evaluationUnavailable": {
+    "description": "Message when evaluation params are missing"
+  },
   "errors__title": "오류",
   "@errors__title": {
     "description": "Generic error page title"
@@ -563,15 +579,19 @@
       }
     }
   },
-  "search__saveToLibrary": "라이브러리에 저장",
+  "search__saveToLibrary": "내 라이브러리에 추가",
   "@search__saveToLibrary": {
     "description": "Button to save selected resources to library"
   },
-  "search__saving": "저장 중...",
+  "search__save": "추가",
+  "@search__save": {
+    "description": "Save button label in search dialogs"
+  },
+  "search__saving": "추가 중...",
   "@search__saving": {
     "description": "Button label while saving resources"
   },
-  "search__savedSuccess": "라이브러리에 저장되었습니다!",
+  "search__savedSuccess": "라이브러리에 추가되었습니다!",
   "@search__savedSuccess": {
     "description": "Success message after saving resources"
   },
@@ -587,15 +607,15 @@
   "@search__changePreset": {
     "description": "Aria label for preset picker button"
   },
-  "search__bookmark__save": "저장",
+  "search__bookmark__save": "추가",
   "@search__bookmark__save": {
     "description": "Save button label on resource cards"
   },
-  "search__bookmark__saved": "저장됨",
+  "search__bookmark__saved": "추가됨",
   "@search__bookmark__saved": {
     "description": "Saved state label on resource cards"
   },
-  "search__bookmark__saveLabel": "라이브러리에 저장",
+  "search__bookmark__saveLabel": "라이브러리에 추가",
   "@search__bookmark__saveLabel": {
     "description": "Accessible label for save button"
   },
@@ -673,9 +693,45 @@
   "@search__progress__step8": {
     "description": "Evaluation progress step 8"
   },
+  "search__progress__compactCount": "{count}/{total} 완료",
+  "@search__progress__compactCount": {
+    "description": "Compact progress count shown during evaluation (e.g. 3/10 complete)",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "search__progress__compactTitle": "리소스 평가 중",
+  "@search__progress__compactTitle": {
+    "description": "Compact title shown in the progress indicator during evaluation"
+  },
   "search__progress__step9": "점수를 마무리하고 결과 순위를 정하는 중",
   "@search__progress__step9": {
     "description": "Evaluation progress step 9"
+  },
+  "search__progress__stageQueryGeneration": "검색 쿼리 생성 중",
+  "@search__progress__stageQueryGeneration": {
+    "description": "Progress bar label during query generation stage"
+  },
+  "search__progress__stageFederatedSearch": "소스에서 검색 중",
+  "@search__progress__stageFederatedSearch": {
+    "description": "Progress bar label during federated search stage"
+  },
+  "search__progress__stageRagPreparation": "결과 준비 중",
+  "@search__progress__stageRagPreparation": {
+    "description": "Progress bar label during RAG preparation stage"
+  },
+  "search__progress__stageEvaluation": "리소스 평가 중",
+  "@search__progress__stageEvaluation": {
+    "description": "Progress bar label during evaluation stage"
+  },
+  "search__progress__stageSearching": "검색 중",
+  "@search__progress__stageSearching": {
+    "description": "Fallback progress bar label during search"
   },
   "search__classroom__chalkboard__queryGeneration": "검색 쿼리 생성 중...",
   "@search__classroom__chalkboard__queryGeneration": {
@@ -805,6 +861,10 @@
   "@search__classroom__bubbles__rabbit__working5": {
     "description": "Rabbit agent cycling hint 4 while evaluating"
   },
+  "search__evaluation__evaluating": "평가 중...",
+  "@search__evaluation__evaluating": {
+    "description": "Badge shown when a resource is currently being evaluated"
+  },
   "search__evaluation__unevaluated": "미평가",
   "@search__evaluation__unevaluated": {
     "description": "Badge shown when a resource has not been evaluated yet"
@@ -880,67 +940,134 @@
     "description": "Evaluation dimension label for licensing and intellectual property"
   },
   "search__evaluation__verdicts__use_it": "사용 가능",
-  "@search__evaluation__verdicts__use_it": { "description": "Verdict badge when resource is ready to use" },
+  "@search__evaluation__verdicts__use_it": {
+    "description": "Verdict badge when resource is ready to use"
+  },
   "search__evaluation__verdicts__adapt_it": "수정 필요",
-  "@search__evaluation__verdicts__adapt_it": { "description": "Verdict badge when resource needs adaptation" },
+  "@search__evaluation__verdicts__adapt_it": {
+    "description": "Verdict badge when resource needs adaptation"
+  },
   "search__evaluation__verdicts__skip_it": "건너뛰기",
-  "@search__evaluation__verdicts__skip_it": { "description": "Verdict badge when resource should be skipped" },
+  "@search__evaluation__verdicts__skip_it": {
+    "description": "Verdict badge when resource should be skipped"
+  },
   "search__evaluation__confidence__high": "높은 신뢰도",
-  "@search__evaluation__confidence__high": { "description": "Confidence level label for high" },
+  "@search__evaluation__confidence__high": {
+    "description": "Confidence level label for high"
+  },
   "search__evaluation__confidence__moderate": "보통 신뢰도",
-  "@search__evaluation__confidence__moderate": { "description": "Confidence level label for moderate" },
+  "@search__evaluation__confidence__moderate": {
+    "description": "Confidence level label for moderate"
+  },
   "search__evaluation__confidence__low": "낮은 신뢰도",
-  "@search__evaluation__confidence__low": { "description": "Confidence level label for low" },
+  "@search__evaluation__confidence__low": {
+    "description": "Confidence level label for low"
+  },
   "search__evaluation__showDetails": "상세 보기",
-  "@search__evaluation__showDetails": { "description": "Button to expand evaluation details" },
+  "@search__evaluation__showDetails": {
+    "description": "Button to expand evaluation details"
+  },
   "search__evaluation__hideDetails": "상세 접기",
-  "@search__evaluation__hideDetails": { "description": "Button to collapse evaluation details" },
+  "@search__evaluation__hideDetails": {
+    "description": "Button to collapse evaluation details"
+  },
   "search__evaluation__flags": "{count, plural, one {{count}개 플래그} other {{count}개 플래그}}",
-  "@search__evaluation__flags": { "description": "Number of flags detected", "placeholders": { "count": { "type": "int" } } },
+  "@search__evaluation__flags": {
+    "description": "Number of flags detected",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "search__evaluation__noFlags": "감지된 플래그 없음",
-  "@search__evaluation__noFlags": { "description": "Message when no risk flags are found" },
+  "@search__evaluation__noFlags": {
+    "description": "Message when no risk flags are found"
+  },
   "search__evaluation__overrideNote": "재정의 메모",
-  "@search__evaluation__overrideNote": { "description": "Label for teacher override notes" },
+  "@search__evaluation__overrideNote": {
+    "description": "Label for teacher override notes"
+  },
   "search__evaluation__evidence": "근거",
-  "@search__evaluation__evidence": { "description": "Label for evidence quote in flag details" },
+  "@search__evaluation__evidence": {
+    "description": "Label for evidence quote in flag details"
+  },
   "search__evaluation__suggested": "권장 조치",
-  "@search__evaluation__suggested": { "description": "Label for suggested action in flag details" },
+  "@search__evaluation__suggested": {
+    "description": "Label for suggested action in flag details"
+  },
   "search__evaluation__sections__triage": "분류",
-  "@search__evaluation__sections__triage": { "description": "Section heading for triage metrics" },
+  "@search__evaluation__sections__triage": {
+    "description": "Section heading for triage metrics"
+  },
   "search__evaluation__sections__adaptations": "수정 사항",
-  "@search__evaluation__sections__adaptations": { "description": "Section heading for adaptation suggestions" },
+  "@search__evaluation__sections__adaptations": {
+    "description": "Section heading for adaptation suggestions"
+  },
   "search__evaluation__sections__riskScan": "위험 검사",
-  "@search__evaluation__sections__riskScan": { "description": "Section heading for risk flag scan" },
+  "@search__evaluation__sections__riskScan": {
+    "description": "Section heading for risk flag scan"
+  },
   "search__evaluation__sections__reasoning": "추론",
-  "@search__evaluation__sections__reasoning": { "description": "Section heading for final reasoning chain" },
+  "@search__evaluation__sections__reasoning": {
+    "description": "Section heading for final reasoning chain"
+  },
   "search__evaluation__metrics__curriculumFit": "교육과정 적합도",
-  "@search__evaluation__metrics__curriculumFit": { "description": "Metric label for curriculum fit rating" },
+  "@search__evaluation__metrics__curriculumFit": {
+    "description": "Metric label for curriculum fit rating"
+  },
   "search__evaluation__metrics__accessibility": "접근성",
-  "@search__evaluation__metrics__accessibility": { "description": "Metric label for accessibility rating" },
+  "@search__evaluation__metrics__accessibility": {
+    "description": "Metric label for accessibility rating"
+  },
   "search__evaluation__metrics__trustworthiness": "신뢰도",
-  "@search__evaluation__metrics__trustworthiness": { "description": "Metric label for trustworthiness rating" },
+  "@search__evaluation__metrics__trustworthiness": {
+    "description": "Metric label for trustworthiness rating"
+  },
   "search__evaluation__ratings__strong": "우수",
-  "@search__evaluation__ratings__strong": { "description": "Rating badge for strong score" },
+  "@search__evaluation__ratings__strong": {
+    "description": "Rating badge for strong score"
+  },
   "search__evaluation__ratings__adequate": "적절",
-  "@search__evaluation__ratings__adequate": { "description": "Rating badge for adequate score" },
+  "@search__evaluation__ratings__adequate": {
+    "description": "Rating badge for adequate score"
+  },
   "search__evaluation__ratings__weak": "미흡",
-  "@search__evaluation__ratings__weak": { "description": "Rating badge for weak score" },
+  "@search__evaluation__ratings__weak": {
+    "description": "Rating badge for weak score"
+  },
   "search__evaluation__flagCategories__bias": "편향",
-  "@search__evaluation__flagCategories__bias": { "description": "Flag category label for bias" },
+  "@search__evaluation__flagCategories__bias": {
+    "description": "Flag category label for bias"
+  },
   "search__evaluation__flagCategories__factual_error": "사실 오류",
-  "@search__evaluation__flagCategories__factual_error": { "description": "Flag category label for factual errors" },
+  "@search__evaluation__flagCategories__factual_error": {
+    "description": "Flag category label for factual errors"
+  },
   "search__evaluation__flagCategories__outdated": "구식 자료",
-  "@search__evaluation__flagCategories__outdated": { "description": "Flag category label for outdated content" },
+  "@search__evaluation__flagCategories__outdated": {
+    "description": "Flag category label for outdated content"
+  },
   "search__evaluation__flagCategories__inappropriate_content": "부적절한 콘텐츠",
-  "@search__evaluation__flagCategories__inappropriate_content": { "description": "Flag category label for inappropriate content" },
+  "@search__evaluation__flagCategories__inappropriate_content": {
+    "description": "Flag category label for inappropriate content"
+  },
   "search__evaluation__flagCategories__licensing": "라이선스",
-  "@search__evaluation__flagCategories__licensing": { "description": "Flag category label for licensing issues" },
+  "@search__evaluation__flagCategories__licensing": {
+    "description": "Flag category label for licensing issues"
+  },
   "search__evaluation__flagCategories__reading_level": "읽기 수준",
-  "@search__evaluation__flagCategories__reading_level": { "description": "Flag category label for reading level issues" },
+  "@search__evaluation__flagCategories__reading_level": {
+    "description": "Flag category label for reading level issues"
+  },
   "search__evaluation__flagCategories__accessibility": "접근성",
-  "@search__evaluation__flagCategories__accessibility": { "description": "Flag category label for accessibility issues" },
+  "@search__evaluation__flagCategories__accessibility": {
+    "description": "Flag category label for accessibility issues"
+  },
   "search__evaluation__flagCategories__cultural_sensitivity": "문화적 민감성",
-  "@search__evaluation__flagCategories__cultural_sensitivity": { "description": "Flag category label for cultural sensitivity issues" },
+  "@search__evaluation__flagCategories__cultural_sensitivity": {
+    "description": "Flag category label for cultural sensitivity issues"
+  },
   "userMenu__profile": "프로필",
   "@userMenu__profile": {
     "description": "User menu link to profile page"
@@ -1020,31 +1147,513 @@
     "description": "Divider text for social login options"
   },
   "contact__title": "문의하기",
-  "@contact__title": { "description": "Contact page heading" },
+  "@contact__title": {
+    "description": "Contact page heading"
+  },
   "contact__subtitle": "질문이나 피드백이 있으신가요? 언제든 연락해 주세요.",
-  "@contact__subtitle": { "description": "Contact page subheading" },
+  "@contact__subtitle": {
+    "description": "Contact page subheading"
+  },
   "contact__nameLabel": "이름",
-  "@contact__nameLabel": { "description": "Name field label" },
+  "@contact__nameLabel": {
+    "description": "Name field label"
+  },
   "contact__namePlaceholder": "이름을 입력하세요",
-  "@contact__namePlaceholder": { "description": "Name field placeholder" },
+  "@contact__namePlaceholder": {
+    "description": "Name field placeholder"
+  },
   "contact__emailLabel": "이메일",
-  "@contact__emailLabel": { "description": "Email field label" },
+  "@contact__emailLabel": {
+    "description": "Email field label"
+  },
   "contact__emailPlaceholder": "your@email.com",
-  "@contact__emailPlaceholder": { "description": "Email field placeholder" },
+  "@contact__emailPlaceholder": {
+    "description": "Email field placeholder"
+  },
   "contact__messageLabel": "메시지",
-  "@contact__messageLabel": { "description": "Message field label" },
+  "@contact__messageLabel": {
+    "description": "Message field label"
+  },
   "contact__messagePlaceholder": "궁금한 점을 알려주세요...",
-  "@contact__messagePlaceholder": { "description": "Message field placeholder" },
+  "@contact__messagePlaceholder": {
+    "description": "Message field placeholder"
+  },
   "contact__send": "피드백 보내기",
-  "@contact__send": { "description": "Submit button text" },
+  "@contact__send": {
+    "description": "Submit button text"
+  },
   "contact__thankYou": "피드백이 전송되었습니다!",
-  "@contact__thankYou": { "description": "Success heading after form submission" },
+  "@contact__thankYou": {
+    "description": "Success heading after form submission"
+  },
   "contact__thankYouDescription": "GitHub에서 피드백을 확인하고 제출해 주세요. 감사합니다!",
-  "@contact__thankYouDescription": { "description": "Success body text after form submission" },
+  "@contact__thankYouDescription": {
+    "description": "Success body text after form submission"
+  },
   "contact__sendAnother": "추가 피드백 보내기",
-  "@contact__sendAnother": { "description": "Link to reset the form" },
+  "@contact__sendAnother": {
+    "description": "Link to reset the form"
+  },
   "contact__location": "위치",
-  "@contact__location": { "description": "Location section heading" },
+  "@contact__location": {
+    "description": "Location section heading"
+  },
   "contact__teamEmails": "팀 이메일",
-  "@contact__teamEmails": { "description": "Team emails section heading" }
+  "@contact__teamEmails": {
+    "description": "Team emails section heading"
+  },
+  "search__saveCollection__title": "내 라이브러리에 추가",
+  "@search__saveCollection__title": {
+    "description": "Dialog title for saving resources to a collection"
+  },
+  "search__saveCollection__description": "선택한 리소스를 이름이 지정된 컬렉션으로 그룹화합니다.",
+  "@search__saveCollection__description": {
+    "description": "Dialog description for saving resources to a collection"
+  },
+  "search__saveCollection__nameLabel": "컬렉션 이름",
+  "@search__saveCollection__nameLabel": {
+    "description": "Label for collection name input"
+  },
+  "search__saveCollection__namePlaceholder": "예: 물리학 101",
+  "@search__saveCollection__namePlaceholder": {
+    "description": "Placeholder for collection name input"
+  },
+  "search__saveCollection__privacyLabel": "공개 설정",
+  "@search__saveCollection__privacyLabel": {
+    "description": "Label for privacy toggle"
+  },
+  "search__saveCollection__private": "비공개",
+  "@search__saveCollection__private": {
+    "description": "Private privacy option"
+  },
+  "search__saveCollection__public": "공개",
+  "@search__saveCollection__public": {
+    "description": "Public privacy option"
+  },
+  "search__saveCollection__publicWarning": "정말 공개하시겠습니까? 누구나 추천 컬렉션에서 이 리소스를 발견할 수 있게 됩니다.",
+  "@search__saveCollection__publicWarning": {
+    "description": "Warning message when making collection public"
+  },
+  "library__generate__title": "{artifactType} 생성",
+  "@library__generate__title": {
+    "description": "Dialog title for generating an artifact",
+    "placeholders": {
+      "artifactType": {
+        "type": "String"
+      }
+    }
+  },
+  "library__generate__description": "생성할 리소스를 선택하세요.",
+  "@library__generate__description": {
+    "description": "Dialog description for generating an artifact",
+    "placeholders": {
+      "artifactType": {
+        "type": "String"
+      }
+    }
+  },
+  "library__generate__descriptionMax": "최대 {max}개의 리소스를 선택할 수 있습니다.",
+  "@library__generate__descriptionMax": {
+    "description": "Note about max resource selection",
+    "placeholders": {
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "library__generate__selectAtLeast": "최소 하나의 리소스를 선택하세요",
+  "@library__generate__selectAtLeast": {
+    "description": "Error when no resources selected"
+  },
+  "library__generate__selectUpTo": "최대 {max}개까지 선택 가능합니다",
+  "@library__generate__selectUpTo": {
+    "description": "Error when too many resources selected",
+    "placeholders": {
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "library__generate__success": "{artifactType} 생성 완료",
+  "@library__generate__success": {
+    "description": "Success toast after generation",
+    "placeholders": {
+      "artifactType": {
+        "type": "String"
+      }
+    }
+  },
+  "library__generate__error": "{artifactType} 생성 실패",
+  "@library__generate__error": {
+    "description": "Error toast on generation failure",
+    "placeholders": {
+      "artifactType": {
+        "type": "String"
+      }
+    }
+  },
+  "library__generate__generating": "{count}개 리소스로 생성 중...",
+  "@library__generate__generating": {
+    "description": "Button label while generating",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "library__generate__button": "생성 ({count})",
+  "@library__generate__button": {
+    "description": "Button label with selected count",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "library__generate__cancel": "취소",
+  "@library__generate__cancel": {
+    "description": "Cancel button in generate dialog"
+  },
+  "library__generate__artifactQuiz": "퀴즈",
+  "@library__generate__artifactQuiz": {
+    "description": "Artifact type label for quiz"
+  },
+  "library__generate__artifactMindmap": "마인드맵",
+  "@library__generate__artifactMindmap": {
+    "description": "Artifact type label for mind map"
+  },
+  "library__generate__artifactSummary": "요약",
+  "@library__generate__artifactSummary": {
+    "description": "Artifact type label for summary"
+  },
+  "library__generate__artifactFlashcards": "플래시카드",
+  "@library__generate__artifactFlashcards": {
+    "description": "Artifact type label for flashcards"
+  },
+  "library__progress__preparingResources": "리소스 준비 중...",
+  "@library__progress__preparingResources": {
+    "description": "Progress label during RAG preparation stage"
+  },
+  "library__progress__evaluatingResources": "리소스 평가 중...",
+  "@library__progress__evaluatingResources": {
+    "description": "Progress label during evaluation stage"
+  },
+  "library__progress__resourceCount": "{completed}/{total} 완료",
+  "@library__progress__resourceCount": {
+    "description": "Progress counter showing completed vs total",
+    "placeholders": {
+      "completed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "library__title": "내 라이브러리",
+  "@library__title": {
+    "description": "Library page heading"
+  },
+  "library__subtitle": "큐레이션된 리소스를 저장, 평가하고 다른 교육자와 공유하세요.",
+  "@library__subtitle": {
+    "description": "Library page subtitle"
+  },
+  "library__empty__title": "라이브러리가 비어 있습니다",
+  "@library__empty__title": {
+    "description": "Empty state heading"
+  },
+  "library__empty__description": "검색 결과에서 리소스를 저장하여 나만의 컬렉션을 만들어 보세요.",
+  "@library__empty__description": {
+    "description": "Empty state description"
+  },
+  "library__empty__startSearching": "검색 시작",
+  "@library__empty__startSearching": {
+    "description": "CTA button in empty state"
+  },
+  "library__collection__resources": "{count}개 리소스",
+  "@library__collection__resources": {
+    "description": "Resource count label",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "library__collection__unevaluated": "{count}개 미평가",
+  "@library__collection__unevaluated": {
+    "description": "Unevaluated count badge",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "library__action__addLink": "링크 추가",
+  "@library__action__addLink": {
+    "description": "Add custom link button"
+  },
+  "library__action__cancel": "취소",
+  "@library__action__cancel": {
+    "description": "Cancel button"
+  },
+  "library__action__add": "추가",
+  "@library__action__add": {
+    "description": "Add button for custom link form"
+  },
+  "library__action__save": "저장",
+  "@library__action__save": {
+    "description": "Save button for rename form"
+  },
+  "library__action__evaluateAll": "전체 평가 ({count})",
+  "@library__action__evaluateAll": {
+    "description": "Batch evaluate button",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "library__action__evaluate": "평가",
+  "@library__action__evaluate": {
+    "description": "Single evaluate button"
+  },
+  "library__action__reEvaluate": "재평가",
+  "@library__action__reEvaluate": {
+    "description": "Re-evaluate button"
+  },
+  "library__action__preparing": "준비 중...",
+  "@library__action__preparing": {
+    "description": "Button label during RAG preparation"
+  },
+  "library__action__evaluating": "평가 중...",
+  "@library__action__evaluating": {
+    "description": "Button label during evaluation"
+  },
+  "library__action__rename": "이름 변경",
+  "@library__action__rename": {
+    "description": "Rename collection menu item"
+  },
+  "library__action__makePrivate": "비공개로 전환",
+  "@library__action__makePrivate": {
+    "description": "Toggle collection to private"
+  },
+  "library__action__makePublic": "공개로 전환",
+  "@library__action__makePublic": {
+    "description": "Toggle collection to public"
+  },
+  "library__action__deleteCollection": "컬렉션 삭제",
+  "@library__action__deleteCollection": {
+    "description": "Delete collection menu item"
+  },
+  "library__action__generate": "생성",
+  "@library__action__generate": {
+    "description": "Generate artifact button"
+  },
+  "library__action__searchWithPreset": "이 수업으로 검색",
+  "@library__action__searchWithPreset": { "description": "Aria label for search with preset button" },
+  "library__action__statusPublic": "공개",
+  "@library__action__statusPublic": { "description": "Public status badge" },
+  "library__action__statusPrivate": "비공개",
+  "@library__action__statusPrivate": { "description": "Private status badge" },
+  "library__toast__linkAdded": "링크가 추가되었습니다",
+  "@library__toast__linkAdded": {
+    "description": "Toast on link add success"
+  },
+  "library__toast__linkFailed": "링크 추가에 실패했습니다",
+  "@library__toast__linkFailed": {
+    "description": "Toast on link add failure"
+  },
+  "library__toast__removeFailed": "리소스 제거에 실패했습니다",
+  "@library__toast__removeFailed": {
+    "description": "Toast on resource remove failure"
+  },
+  "library__toast__updateFailed": "컬렉션 업데이트에 실패했습니다",
+  "@library__toast__updateFailed": {
+    "description": "Toast on collection update failure"
+  },
+  "library__toast__deleted": "컬렉션이 삭제되었습니다",
+  "@library__toast__deleted": {
+    "description": "Toast on collection delete success"
+  },
+  "library__toast__deleteFailed": "컬렉션 삭제에 실패했습니다",
+  "@library__toast__deleteFailed": {
+    "description": "Toast on collection delete failure"
+  },
+  "library__confirm__makePublicTitle": "공개로 전환",
+  "@library__confirm__makePublicTitle": { "description": "Confirm dialog title for making collection public" },
+  "library__confirm__makePublicDescription": "누구나 이 리소스를 발견하고 볼 수 있게 됩니다. 계속하시겠습니까?",
+  "@library__confirm__makePublicDescription": { "description": "Confirm dialog description for making collection public" },
+  "library__confirm__makePublicButton": "공개로 전환",
+  "@library__confirm__makePublicButton": { "description": "Confirm button for making collection public" },
+  "library__confirm__makePrivateTitle": "비공개로 전환",
+  "@library__confirm__makePrivateTitle": { "description": "Confirm dialog title for making collection private" },
+  "library__confirm__makePrivateDescription": "이 컬렉션은 더 이상 다른 사람에게 보이지 않습니다.",
+  "@library__confirm__makePrivateDescription": { "description": "Confirm dialog description for making collection private" },
+  "library__confirm__makePrivateButton": "비공개로 전환",
+  "@library__confirm__makePrivateButton": { "description": "Confirm button for making collection private" },
+  "library__confirm__deleteTitle": "컬렉션 삭제",
+  "@library__confirm__deleteTitle": { "description": "Confirm dialog title for deleting collection" },
+  "library__confirm__deleteDescription": "이 컬렉션과 모든 리소스가 영구적으로 삭제됩니다. 이 작업은 되돌릴 수 없습니다.",
+  "@library__confirm__deleteDescription": { "description": "Confirm dialog description for deleting collection" },
+  "library__confirm__deleteButton": "삭제",
+  "@library__confirm__deleteButton": { "description": "Confirm button for deleting collection" },
+  "common__loading": "로딩 중...",
+  "@common__loading": {
+    "description": "Loading indicator text"
+  },
+  "common__error": "오류가 발생했습니다",
+  "@common__error": {
+    "description": "Generic error message"
+  },
+  "common__retry": "재시도",
+  "@common__retry": {
+    "description": "Retry button text"
+  },
+  "common__save": "저장",
+  "@common__save": {
+    "description": "Save button text"
+  },
+  "common__cancel": "취소",
+  "@common__cancel": {
+    "description": "Cancel button text"
+  },
+  "common__confirm": "확인",
+  "@common__confirm": {
+    "description": "Confirm button text"
+  },
+  "common__delete": "삭제",
+  "@common__delete": {
+    "description": "Delete button text"
+  },
+  "presets__count": "{count, plural, one {# 컬렉션} other {# 컬렉션}}",
+  "@presets__count": {
+    "description": "Collection count label",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "search__back": "뒤로",
+  "@search__back": {
+    "description": "Back button label"
+  },
+  "search__renamePreset": "프리셋 이름 변경",
+  "@search__renamePreset": {
+    "description": "Button to rename a preset"
+  },
+  "search__presetRenamed": "프리셋 이름이 변경되었습니다",
+  "@search__presetRenamed": {
+    "description": "Success message after renaming preset"
+  },
+  "search__presetRenameError": "프리셋 이름 변경에 실패했습니다",
+  "@search__presetRenameError": {
+    "description": "Error message when renaming preset fails"
+  },
+  "search__suggestedCollections__alreadyInLibrary": "이미 내 라이브러리에 있음",
+  "@search__suggestedCollections__alreadyInLibrary": {
+    "description": "Label when collection is already in library"
+  },
+  "search__suggestedCollections__upToDate": "최신 상태",
+  "@search__suggestedCollections__upToDate": {
+    "description": "Label when collection is already up to date"
+  },
+  "search__saveCollection__descriptionLabel": "설명 (선택)",
+  "@search__saveCollection__descriptionLabel": {
+    "description": "Label for collection description input"
+  },
+  "search__saveCollection__descriptionPlaceholder": "이 컬렉션에 대해 간단히 설명해 주세요...",
+  "@search__saveCollection__descriptionPlaceholder": {
+    "description": "Placeholder for collection description input"
+  },
+  "home__heroHighlight": "지능형",
+  "@home__heroHighlight": {
+    "description": "Highlighted word in hero title"
+  },
+  "home__heroTitleRest": "어댑션 엔진",
+  "@home__heroTitleRest": {
+    "description": "Rest of the hero title after the highlight"
+  },
+  "home__heroFor": "",
+  "@home__heroFor": {
+    "description": "Preposition in hero title"
+  },
+  "home__heroTeachers": "교사를 위한",
+  "@home__heroTeachers": {
+    "description": "Target audience in hero title"
+  },
+  "search__suggestedCollections__cloned": "내 라이브러리에 있음",
+  "@search__suggestedCollections__cloned": {
+    "description": "Button text when collection has been cloned"
+  },
+  "search__suggestedCollections__cloneCollection": "내 라이브러리에 복사",
+  "@search__suggestedCollections__cloneCollection": {
+    "description": "Button to clone a suggested collection"
+  },
+  "search__suggestedCollections__syncCollection": "내 컬렉션 업데이트",
+  "@search__suggestedCollections__syncCollection": {
+    "description": "Button to sync a previously cloned collection"
+  },
+  "search__suggestedCollections__syncSuccess": "컬렉션이 업데이트되었습니다!",
+  "@search__suggestedCollections__syncSuccess": {
+    "description": "Success message when syncing collection"
+  },
+  "search__cancel": "취소",
+  "@search__cancel": {
+    "description": "Cancel button label in search dialogs"
+  },
+  "search__evaluation__flagCategories__outdated_content": "오래된 콘텐츠",
+  "@search__evaluation__flagCategories__outdated_content": {
+    "description": "Flag category for outdated content"
+  },
+  "search__evaluation__flagCategories__bias_or_framing": "편향 또는 프레이밍",
+  "@search__evaluation__flagCategories__bias_or_framing": {
+    "description": "Flag category for bias or framing"
+  },
+  "search__evaluation__flagCategories__factual_concern": "사실 관계 우려",
+  "@search__evaluation__flagCategories__factual_concern": {
+    "description": "Flag category for factual concerns"
+  },
+  "search__evaluation__flagCategories__safety_concern": "안전 우려",
+  "@search__evaluation__flagCategories__safety_concern": {
+    "description": "Flag category for safety concerns"
+  },
+  "search__evaluation__flagCategories__misleading_match": "오해 소지가 있는 매칭",
+  "@search__evaluation__flagCategories__misleading_match": {
+    "description": "Flag category for misleading matches"
+  },
+  "search__suggestedCollections__title": "추천 컬렉션",
+  "@search__suggestedCollections__title": {
+    "description": "Title for suggested collections"
+  },
+  "search__suggestedCollections__clone": "복제",
+  "@search__suggestedCollections__clone": {
+    "description": "Button to clone collection"
+  },
+  "search__suggestedCollections__clonesCount": "{count, plural, one {# 복제} other {# 복제}}",
+  "@search__suggestedCollections__clonesCount": {
+    "description": "Clone count label",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "search__suggestedCollections__empty": "유사한 검색에 대한 공개 컬렉션이 없습니다.",
+  "@search__suggestedCollections__empty": {
+    "description": "Empty state for suggested collections"
+  },
+  "search__suggestedCollections__sourcesCount": "{count, plural, one {# 소스} other {# 소스}}",
+  "@search__suggestedCollections__sourcesCount": {
+    "description": "Source count label",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "search__suggestedCollections__previewDescription": "라이브러리에 복사하기 전에 이 컬렉션을 확인하세요.",
+  "@search__suggestedCollections__previewDescription": {
+    "description": "Dialog description for previewing a collection"
+  }
 }

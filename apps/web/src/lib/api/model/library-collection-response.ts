@@ -11,6 +11,7 @@ export interface LibraryCollectionResponse {
   preset_id: string;
   search_query: string;
   name: string;
+  description?: string | null;
   is_public: boolean;
   clone_count: number;
   created_at: string;

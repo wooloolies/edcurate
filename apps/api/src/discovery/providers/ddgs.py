@@ -1,6 +1,7 @@
 """DuckDuckGo search provider using the ddgs library."""
 
 import asyncio
+import re
 from functools import partial
 from urllib.parse import urlparse
 
@@ -34,6 +35,15 @@ _COUNTRY_REGION_MAP: dict[str, str] = {
 def _country_to_region(country: str) -> str:
     """Map a country name to a DDGS region code."""
     return _COUNTRY_REGION_MAP.get(country, "wt-wt")
+
+
+# Matches localized rating prefixes injected by search engines (e.g. "평점5.0(24)")
+_RATING_PREFIX_RE = re.compile(r"^[^\d\s]+\d+\.\d+\(\d+\)")
+
+
+def _clean_snippet(text: str) -> str:
+    """Strip search-engine rating metadata prefixes from a snippet."""
+    return _RATING_PREFIX_RE.sub("", text)
 
 
 def _sync_ddgs_search(query: str, region: str, limit: int) -> list[dict]:
@@ -90,7 +100,7 @@ class DdgsProvider(SearchProvider):
                         url=url,
                         source="ddgs",
                         type="webpage",
-                        snippet=item.get("body", ""),
+                        snippet=_clean_snippet(item.get("body", "")),
                         thumbnail_url=None,
                         metadata=DdgsMetadata(
                             domain=domain,

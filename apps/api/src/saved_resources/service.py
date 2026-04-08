@@ -1,5 +1,7 @@
+import asyncio
 import uuid
 from collections import defaultdict
+from collections.abc import AsyncGenerator
 from typing import Any
 
 from fastapi import HTTPException, status
@@ -8,11 +10,13 @@ from sqlalchemy.dialects.postgresql import insert
 
 from src.discovery.schemas import ResourceCard
 from src.lib.dependencies import DBSession
+from src.lib.logging import get_logger
 from src.presets.model import ClassroomPreset
 from src.saved_resources.model import LibraryCollection, SavedResource
 from src.saved_resources.schemas import (
     AddCustomLinkRequest,
     CollectionGroup,
+    EvalStageEvent,
     LibraryCollectionCreate,
     LibraryCollectionResponse,
     LibraryCollectionUpdate,
@@ -24,6 +28,8 @@ from src.saved_resources.schemas import (
     SuggestedCollectionResponse,
 )
 from src.users.model import User
+
+logger = get_logger(__name__)
 
 
 def _dump_eval_data(evaluation_data: Any) -> dict[str, Any] | None:
@@ -114,6 +120,7 @@ async def create_collection(
         preset_id=request.preset_id,
         search_query=request.search_query,
         name=request.name,
+        description=request.description,
         is_public=request.is_public,
     )
     db.add(collection)
@@ -167,6 +174,8 @@ async def update_collection(
 
     if request.name is not None:
         col.name = request.name
+    if request.description is not None:
+        col.description = request.description
     if request.is_public is not None:
         col.is_public = request.is_public
 
@@ -405,17 +414,48 @@ async def get_suggested_collections(
 
     # Check which ones the user has already cloned
     cloned_result = await db.execute(
-        select(LibraryCollection.cloned_from_id).where(
+        select(LibraryCollection.id, LibraryCollection.cloned_from_id).where(
             LibraryCollection.user_id == user_id,
             LibraryCollection.cloned_from_id.in_(collection_ids),
         )
     )
-    cloned_by_user_ids = {row[0] for row in cloned_result.all() if row[0]}
+    cloned_rows = cloned_result.all()
+    cloned_by_user_ids = {row[1] for row in cloned_rows if row[1]}
+    clone_id_by_original: dict[uuid.UUID, uuid.UUID] = {
+        row[1]: row[0] for row in cloned_rows if row[1]
+    }
+
+    # For cloned collections, fetch clone resource URLs to detect drift
+    clone_urls_by_original: dict[uuid.UUID, set[str]] = {}
+    clone_col_ids = list(clone_id_by_original.values())
+    if clone_col_ids:
+        clone_res_result = await db.execute(
+            select(SavedResource.collection_id, SavedResource.resource_url).where(
+                SavedResource.collection_id.in_(clone_col_ids)
+            )
+        )
+        clone_id_to_original = {v: k for k, v in clone_id_by_original.items()}
+        for clone_col_id, url in clone_res_result.all():
+            orig_id = clone_id_to_original.get(clone_col_id)
+            if orig_id:
+                clone_urls_by_original.setdefault(orig_id, set()).add(url)
 
     # Group resources by collection_id
     resources_by_col: dict[uuid.UUID, list[SavedResource]] = defaultdict(list)
     for r in all_resources:
         resources_by_col[r.collection_id].append(r)
+
+    # Build original URL sets for needs_sync comparison
+    original_urls_by_col: dict[uuid.UUID, set[str]] = {}
+    for col_id, resources in resources_by_col.items():
+        original_urls_by_col[col_id] = {r.resource_url for r in resources}
+
+    def _needs_sync(col_id: uuid.UUID) -> bool:
+        if col_id not in cloned_by_user_ids:
+            return False
+        orig_urls = original_urls_by_col.get(col_id, set())
+        clone_urls = clone_urls_by_original.get(col_id, set())
+        return not orig_urls.issubset(clone_urls)
 
     return [
         SuggestedCollectionResponse(
@@ -424,6 +464,7 @@ async def get_suggested_collections(
             resources_count=count or 0,
             publisher_name=name,
             is_cloned_by_user=c.id in cloned_by_user_ids,
+            needs_sync=_needs_sync(c.id),
             resources=[
                 SavedResourceResponse.model_validate(r)
                 for r in resources_by_col.get(c.id, [])
@@ -728,6 +769,65 @@ async def evaluate_single_resource(
     return SavedResourceResponse.model_validate(saved)
 
 
+async def evaluate_single_resource_stream(
+    db: DBSession, user_id: uuid.UUID, saved_resource_id: uuid.UUID
+) -> AsyncGenerator[EvalStageEvent, None]:
+    """Stream single resource evaluation progress via SSE."""
+    from src.discovery.service import _prepare_rag_context, _process_one
+
+    result = await db.execute(
+        select(SavedResource, ClassroomPreset)
+        .join(ClassroomPreset, SavedResource.preset_id == ClassroomPreset.id)
+        .where(
+            SavedResource.id == saved_resource_id,
+            SavedResource.user_id == user_id,
+        )
+    )
+    row = result.one_or_none()
+    if row is None:
+        yield EvalStageEvent(stage="complete", status="done", data={"processed": 0})
+        return
+
+    saved, preset = row
+    card = ResourceCard.model_validate(saved.resource_data)
+
+    yield EvalStageEvent(stage="rag_preparation", status="working", data={"total": 1})
+
+    search_id = str(uuid.uuid4())
+    ctx = await _prepare_rag_context(
+        [card], preset, saved.search_query or "Evaluate resource", search_id
+    )
+
+    yield EvalStageEvent(stage="rag_preparation", status="done")
+
+    if ctx is None:
+        yield EvalStageEvent(stage="complete", status="done", data={"processed": 0})
+        return
+
+    yield EvalStageEvent(stage="evaluation", status="working", resource_url=card.url)
+
+    try:
+        judgment = await asyncio.wait_for(_process_one(card, ctx), timeout=120)
+    except (TimeoutError, Exception) as e:
+        logger.warning(
+            "Single resource evaluation failed",
+            url=card.url,
+            error=str(e),
+        )
+        yield EvalStageEvent(stage="complete", status="done", data={"processed": 0})
+        return
+
+    if judgment:
+        saved.evaluation_data = judgment.model_dump(mode="json")
+        await db.commit()
+        yield EvalStageEvent(stage="evaluation", status="done", resource_url=card.url)
+
+    count = 1 if judgment else 0
+    yield EvalStageEvent(
+        stage="complete", status="done", data={"processed": count}
+    )
+
+
 async def evaluate_saved_resources(
     db: DBSession,
     user_id: uuid.UUID,
@@ -773,3 +873,98 @@ async def evaluate_saved_resources(
 
     await db.commit()
     return {"processed": processed}
+
+
+async def evaluate_saved_resources_stream(
+    db: DBSession,
+    user_id: uuid.UUID,
+    preset_id: uuid.UUID,
+    search_query: str,
+) -> AsyncGenerator[EvalStageEvent, None]:
+    """Stream evaluation progress for library resources via SSE."""
+    from src.discovery.service import _prepare_rag_context, _process_one
+
+    result = await db.execute(
+        select(SavedResource).where(
+            SavedResource.user_id == user_id,
+            SavedResource.preset_id == preset_id,
+            SavedResource.search_query == search_query,
+            SavedResource.evaluation_data.is_(None),
+        )
+    )
+    unevaluated = result.scalars().all()
+
+    if not unevaluated:
+        yield EvalStageEvent(stage="complete", status="done", data={"processed": 0})
+        return
+
+    preset_exec = await db.execute(
+        select(ClassroomPreset).where(
+            ClassroomPreset.id == preset_id,
+            ClassroomPreset.user_id == user_id,
+        )
+    )
+    preset = preset_exec.scalar_one_or_none()
+    if preset is None:
+        yield EvalStageEvent(stage="complete", status="done", data={"processed": 0})
+        return
+    cards = [ResourceCard.model_validate(r.resource_data) for r in unevaluated]
+
+    # Stage 1: RAG preparation
+    yield EvalStageEvent(
+        stage="rag_preparation",
+        status="working",
+        data={"total": len(cards)},
+    )
+
+    search_id = str(uuid.uuid4())
+    ctx = await _prepare_rag_context(cards, preset, search_query, search_id)
+
+    yield EvalStageEvent(stage="rag_preparation", status="done")
+
+    if ctx is None:
+        yield EvalStageEvent(stage="complete", status="done", data={"processed": 0})
+        return
+
+    # Stage 2: Per-resource evaluation with progress
+    task_to_resource: dict[asyncio.Task, tuple[ResourceCard, SavedResource]] = {}
+    for card, saved in zip(cards, unevaluated, strict=False):
+        task = asyncio.create_task(_process_one(card, ctx))
+        task_to_resource[task] = (card, saved)
+        yield EvalStageEvent(
+            stage="evaluation",
+            status="working",
+            resource_url=card.url,
+        )
+
+    processed = 0
+    for task in asyncio.as_completed(list(task_to_resource.keys())):
+        card, saved = task_to_resource[task]
+        try:
+            judgment = await asyncio.wait_for(task, timeout=120)
+        except TimeoutError:
+            logger.warning(
+                "Resource evaluation timed out", url=card.url
+            )
+            continue
+        except Exception as e:
+            logger.warning(
+                "Resource evaluation failed",
+                url=card.url,
+                error=str(e),
+            )
+            continue
+
+        if judgment is None:
+            continue
+
+        saved.evaluation_data = judgment.model_dump(mode="json")
+        processed += 1
+        yield EvalStageEvent(
+            stage="evaluation",
+            status="done",
+            resource_url=card.url,
+        )
+
+    await db.commit()
+    yield EvalStageEvent(stage="complete", status="done", data={"processed": processed})

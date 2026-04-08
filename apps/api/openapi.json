@@ -952,6 +952,59 @@
         }
       }
     },
+    "/api/discovery/evaluation/{evaluation_id}": {
+      "get": {
+        "tags": [
+          "discovery"
+        ],
+        "summary": "Get Evaluation Endpoint",
+        "description": "Fetch evaluation data by ID.",
+        "operationId": "get_evaluation_endpoint_api_discovery_evaluation__evaluation_id__get",
+        "parameters": [
+          {
+            "name": "evaluation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Evaluation Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "type": "object",
+                      "additionalProperties": true
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Response Get Evaluation Endpoint Api Discovery Evaluation  Evaluation Id  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/saved": {
       "get": {
         "tags": [
@@ -1441,6 +1494,99 @@
                 "schema": {
                   "$ref": "#/components/schemas/SavedResourceResponse"
                 }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/saved/evaluate-single/stream": {
+      "get": {
+        "tags": [
+          "saved_resources"
+        ],
+        "summary": "Evaluate Single Stream Endpoint",
+        "description": "Stream single resource evaluation progress as SSE events.",
+        "operationId": "evaluate_single_stream_endpoint_api_saved_evaluate_single_stream_get",
+        "parameters": [
+          {
+            "name": "saved_resource_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Saved Resource Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/saved/evaluate/stream": {
+      "get": {
+        "tags": [
+          "saved_resources"
+        ],
+        "summary": "Evaluate Stream Endpoint",
+        "description": "Stream evaluation progress as SSE events.",
+        "operationId": "evaluate_stream_endpoint_api_saved_evaluate_stream_get",
+        "parameters": [
+          {
+            "name": "preset_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Preset Id"
+            }
+          },
+          {
+            "name": "search_query",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Search Query"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
               }
             }
           },
@@ -1998,9 +2144,21 @@
               "quiz",
               "mindmap",
               "summary",
-              "flashcards"
+              "flashcards",
+              "study_guide",
+              "briefing_doc"
             ],
             "title": "Artifact Type"
+          },
+          "options": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/GenerationOptions"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "type": "object",
@@ -2089,6 +2247,68 @@
         ],
         "title": "GeneratedSearchQueries",
         "description": "Agent-generated queries sent to each provider."
+      },
+      "GenerationOptions": {
+        "properties": {
+          "quantity": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "fewer",
+                  "standard"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Quantity"
+          },
+          "difficulty": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "easy",
+                  "medium",
+                  "hard"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Difficulty"
+          },
+          "instructions": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 2000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Instructions"
+          },
+          "language": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[a-z]{2}(-[A-Z]{2})?$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Language"
+          }
+        },
+        "type": "object",
+        "title": "GenerationOptions",
+        "description": "Optional parameters for artifact generation."
       },
       "GradeOption": {
         "properties": {
@@ -2310,6 +2530,17 @@
             "type": "string",
             "title": "Name"
           },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
           "is_public": {
             "type": "boolean",
             "title": "Is Public",
@@ -2378,6 +2609,17 @@
             "type": "string",
             "title": "Name"
           },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
           "is_public": {
             "type": "boolean",
             "title": "Is Public"
@@ -2417,6 +2659,17 @@
               }
             ],
             "title": "Name"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
           },
           "is_public": {
             "anyOf": [
@@ -3744,6 +3997,11 @@
           "is_cloned_by_user": {
             "type": "boolean",
             "title": "Is Cloned By User",
+            "default": false
+          },
+          "needs_sync": {
+            "type": "boolean",
+            "title": "Needs Sync",
             "default": false
           },
           "resources": {

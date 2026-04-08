@@ -1,7 +1,8 @@
 "use client";
 
-import { Loader2, Sparkles } from "lucide-react";
-import { useState } from "react";
+import { Loader2 } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -13,17 +14,45 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { useGenerateArtifactEndpointApiLocalizerGeneratePost } from "@/lib/api/localizer/localizer";
-import type { GenerateArtifactRequestArtifactType, SavedResourceResponse } from "@/lib/api/model";
+import type {
+  GenerateArtifactRequestArtifactType,
+  GenerationOptions,
+  SavedResourceResponse,
+} from "@/lib/api/model";
 
-const ARTIFACT_LABELS: Record<GenerateArtifactRequestArtifactType, string> = {
-  quiz: "Quiz",
-  mindmap: "Mind Map",
-  summary: "Summary",
-  flashcards: "Flashcards",
+const ARTIFACT_LABEL_KEYS: Record<GenerateArtifactRequestArtifactType, string> = {
+  quiz: "artifactQuiz",
+  mindmap: "artifactMindmap",
+  summary: "artifactSummary",
+  flashcards: "artifactFlashcards",
+  study_guide: "artifactStudyGuide",
+  briefing_doc: "artifactBriefingDoc",
 };
 
 const MAX_SELECTED_RESOURCES = 10;
+
+/** Which generation options each artifact type supports. */
+const ARTIFACT_OPTIONS: Record<
+  GenerateArtifactRequestArtifactType,
+  { quantity?: boolean; difficulty?: boolean; instructions?: boolean }
+> = {
+  quiz: { quantity: true, difficulty: true, instructions: true },
+  flashcards: { quantity: true, difficulty: true, instructions: true },
+  mindmap: {},
+  summary: {},
+  study_guide: { instructions: true },
+  briefing_doc: { instructions: true },
+};
 
 interface GenerateArtifactDialogProps {
   open: boolean;
@@ -46,12 +75,24 @@ export function GenerateArtifactDialog({
   resources,
   onSuccess,
 }: GenerateArtifactDialogProps) {
+  const t = useTranslations("library.generate");
   const [selectedIds, setSelectedIds] = useState<Set<string>>(
     () => new Set(resources.slice(0, MAX_SELECTED_RESOURCES).map((r) => r.id))
   );
+  const [options, setOptions] = useState<GenerationOptions>({});
+  const supported = ARTIFACT_OPTIONS[artifactType];
 
   const { mutateAsync: generate, isPending } =
     useGenerateArtifactEndpointApiLocalizerGeneratePost();
+
+  const artifactLabel = t(ARTIFACT_LABEL_KEYS[artifactType]);
+
+  useEffect(() => {
+    if (!open) return;
+
+    setSelectedIds(new Set(resources.slice(0, MAX_SELECTED_RESOURCES).map((r) => r.id)));
+    setOptions({});
+  }, [artifactType, open, resources]);
 
   const toggleResource = (id: string) => {
     setSelectedIds((prev) => {
@@ -60,7 +101,7 @@ export function GenerateArtifactDialog({
         next.delete(id);
       } else {
         if (next.size >= MAX_SELECTED_RESOURCES) {
-          toast.error(`Select up to ${MAX_SELECTED_RESOURCES} resources`);
+          toast.error(t("selectUpTo", { max: MAX_SELECTED_RESOURCES }));
           return next;
         }
         next.add(id);
@@ -72,22 +113,24 @@ export function GenerateArtifactDialog({
   const handleGenerate = async () => {
     const ids = Array.from(selectedIds);
     if (ids.length === 0) {
-      toast.error("Select at least one resource");
+      toast.error(t("selectAtLeast"));
       return;
     }
     try {
+      const hasOptions = Object.values(options).some((v) => v != null && v !== "");
       const result = await generate({
         data: {
           preset_id: presetId,
           saved_resource_ids: ids,
           artifact_type: artifactType,
+          ...(hasOptions ? { options } : {}),
         },
       });
-      toast.success(`${ARTIFACT_LABELS[artifactType]} generated successfully`);
+      toast.success(t("success", { artifactType: artifactLabel }));
       onSuccess(result);
       onOpenChange(false);
     } catch {
-      toast.error(`Failed to generate ${ARTIFACT_LABELS[artifactType].toLowerCase()}`);
+      toast.error(t("error", { artifactType: artifactLabel }));
     }
   };
 
@@ -95,14 +138,11 @@ export function GenerateArtifactDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            <Sparkles className="h-5 w-5" />
-            Generate {ARTIFACT_LABELS[artifactType]}
-          </DialogTitle>
+          <DialogTitle>{t("title", { artifactType: artifactLabel })}</DialogTitle>
           <DialogDescription>
-            Select resources to generate a {ARTIFACT_LABELS[artifactType].toLowerCase()} from.
+            {t("description", { artifactType: artifactLabel })}
             {resources.length > MAX_SELECTED_RESOURCES
-              ? ` Up to ${MAX_SELECTED_RESOURCES} resources can be selected.`
+              ? ` ${t("descriptionMax", { max: MAX_SELECTED_RESOURCES })}`
               : ""}
           </DialogDescription>
         </DialogHeader>
@@ -127,21 +167,93 @@ export function GenerateArtifactDialog({
           })}
         </div>
 
+        {supported.quantity || supported.difficulty || supported.instructions ? (
+          <div className="space-y-3 border-t border-brand-ink/5 pt-3">
+            <p className="text-xs font-medium text-brand-ink/50">{t("optionsHeading")}</p>
+
+            {supported.quantity || supported.difficulty ? (
+              <div className="grid grid-cols-2 gap-3">
+                {supported.quantity ? (
+                  <div className="space-y-1.5">
+                    <Label className="text-xs">{t("quantity")}</Label>
+                    <Select
+                      value={options.quantity ?? ""}
+                      onValueChange={(v) =>
+                        setOptions((prev) => ({
+                          ...prev,
+                          quantity: v as GenerationOptions["quantity"],
+                        }))
+                      }
+                    >
+                      <SelectTrigger className="h-8 text-xs">
+                        <SelectValue placeholder="—" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="fewer">{t("quantityFewer")}</SelectItem>
+                        <SelectItem value="standard">{t("quantityStandard")}</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                ) : null}
+
+                {supported.difficulty ? (
+                  <div className="space-y-1.5">
+                    <Label className="text-xs">{t("difficulty")}</Label>
+                    <Select
+                      value={options.difficulty ?? ""}
+                      onValueChange={(v) =>
+                        setOptions((prev) => ({
+                          ...prev,
+                          difficulty: v as GenerationOptions["difficulty"],
+                        }))
+                      }
+                    >
+                      <SelectTrigger className="h-8 text-xs">
+                        <SelectValue placeholder="—" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="easy">{t("difficultyEasy")}</SelectItem>
+                        <SelectItem value="medium">{t("difficultyMedium")}</SelectItem>
+                        <SelectItem value="hard">{t("difficultyHard")}</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                ) : null}
+              </div>
+            ) : null}
+
+            {supported.instructions ? (
+              <div className="space-y-1.5">
+                <Label className="text-xs">{t("instructions")}</Label>
+                <Textarea
+                  className="min-h-[60px] resize-none text-xs"
+                  placeholder={t("instructionsPlaceholder")}
+                  maxLength={2000}
+                  value={options.instructions ?? ""}
+                  onChange={(e) =>
+                    setOptions((prev) => ({
+                      ...prev,
+                      instructions: e.target.value || undefined,
+                    }))
+                  }
+                />
+              </div>
+            ) : null}
+          </div>
+        ) : null}
+
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)} disabled={isPending}>
-            Cancel
+            {t("cancel")}
           </Button>
           <Button onClick={handleGenerate} disabled={isPending || selectedIds.size === 0}>
             {isPending ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Generating from {selectedIds.size} resource{selectedIds.size !== 1 ? "s" : ""}...
+                {t("generating", { count: selectedIds.size })}
               </>
             ) : (
-              <>
-                <Sparkles className="mr-2 h-4 w-4" />
-                Generate ({selectedIds.size})
-              </>
+              t("button", { count: selectedIds.size })
             )}
           </Button>
         </DialogFooter>

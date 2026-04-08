@@ -40,6 +40,8 @@ import type {
   BatchEvaluateRequest,
   EvaluateSavedResourcesEndpointApiSavedEvaluatePost200,
   EvaluateSingleRequest,
+  EvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetParams,
+  EvaluateStreamEndpointApiSavedEvaluateStreamGetParams,
   GetSuggestedCollectionsEndpointApiSavedSuggestedGetParams,
   HTTPValidationError,
   LibraryCollectionCreate,
@@ -1082,6 +1084,442 @@ export const useAddCustomLinkEndpointApiSavedLinkPost = <TError = HTTPValidation
       return useMutation(useAddCustomLinkEndpointApiSavedLinkPostMutationOptions(options), queryClient);
     }
     /**
+ * Stream single resource evaluation progress as SSE events.
+ * @summary Evaluate Single Stream Endpoint
+ */
+export const useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetHook = () => {
+        const evaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGet = useCustomInstance<unknown>();
+
+        return useCallback((
+    params: EvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetParams,
+ signal?: AbortSignal
+) => {
+        return evaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGet(
+          {url: `/api/saved/evaluate-single/stream`, method: 'GET',
+        params, signal
+    },
+          );
+        }, [evaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGet])
+      }
+
+
+
+
+export const getEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetInfiniteQueryKey = (params?: EvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetParams,) => {
+    return [
+    'infinite', `/api/saved/evaluate-single/stream`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+export const getEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetQueryKey = (params?: EvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetParams,) => {
+    return [
+    `/api/saved/evaluate-single/stream`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+
+export const useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<ReturnType<typeof useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetHook>>>>, TError = HTTPValidationError>(params: EvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetParams, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<ReturnType<typeof useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetHook>>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetInfiniteQueryKey(params);
+
+  const evaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGet =  useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetHook();
+
+    const queryFn: QueryFunction<Awaited<ReturnType<ReturnType<typeof useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetHook>>>> = ({ signal }) => evaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGet(params, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseInfiniteQueryOptions<Awaited<ReturnType<ReturnType<typeof useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetHook>>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type EvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetInfiniteQueryResult = NonNullable<Awaited<ReturnType<ReturnType<typeof useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetHook>>>>
+export type EvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetInfiniteQueryError = HTTPValidationError
+
+
+export function useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetInfinite<TData = InfiniteData<Awaited<ReturnType<ReturnType<typeof useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetHook>>>>, TError = HTTPValidationError>(
+ params: EvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetParams, options: { query:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<ReturnType<typeof useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetHook>>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<ReturnType<typeof useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetHook>>>,
+          TError,
+          Awaited<ReturnType<ReturnType<typeof useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetHook>>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetInfinite<TData = InfiniteData<Awaited<ReturnType<ReturnType<typeof useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetHook>>>>, TError = HTTPValidationError>(
+ params: EvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetParams, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<ReturnType<typeof useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetHook>>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<ReturnType<typeof useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetHook>>>,
+          TError,
+          Awaited<ReturnType<ReturnType<typeof useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetHook>>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetInfinite<TData = InfiniteData<Awaited<ReturnType<ReturnType<typeof useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetHook>>>>, TError = HTTPValidationError>(
+ params: EvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetParams, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<ReturnType<typeof useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetHook>>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Evaluate Single Stream Endpoint
+ */
+
+export function useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetInfinite<TData = InfiniteData<Awaited<ReturnType<ReturnType<typeof useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetHook>>>>, TError = HTTPValidationError>(
+ params: EvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetParams, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<ReturnType<typeof useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetHook>>>, TError, TData>>, }
+ , queryClient?: QueryClient
+ ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetInfiniteQueryOptions(params,options)
+
+  const query = useInfiniteQuery(queryOptions, queryClient) as  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+export const useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetQueryOptions = <TData = Awaited<ReturnType<ReturnType<typeof useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetHook>>>, TError = HTTPValidationError>(params: EvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<ReturnType<typeof useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetHook>>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetQueryKey(params);
+
+  const evaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGet =  useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetHook();
+
+    const queryFn: QueryFunction<Awaited<ReturnType<ReturnType<typeof useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetHook>>>> = ({ signal }) => evaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGet(params, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<ReturnType<typeof useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetHook>>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type EvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetQueryResult = NonNullable<Awaited<ReturnType<ReturnType<typeof useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetHook>>>>
+export type EvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetQueryError = HTTPValidationError
+
+
+export function useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGet<TData = Awaited<ReturnType<ReturnType<typeof useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetHook>>>, TError = HTTPValidationError>(
+ params: EvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<ReturnType<typeof useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetHook>>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<ReturnType<typeof useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetHook>>>,
+          TError,
+          Awaited<ReturnType<ReturnType<typeof useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetHook>>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGet<TData = Awaited<ReturnType<ReturnType<typeof useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetHook>>>, TError = HTTPValidationError>(
+ params: EvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<ReturnType<typeof useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetHook>>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<ReturnType<typeof useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetHook>>>,
+          TError,
+          Awaited<ReturnType<ReturnType<typeof useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetHook>>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGet<TData = Awaited<ReturnType<ReturnType<typeof useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetHook>>>, TError = HTTPValidationError>(
+ params: EvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<ReturnType<typeof useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetHook>>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Evaluate Single Stream Endpoint
+ */
+
+export function useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGet<TData = Awaited<ReturnType<ReturnType<typeof useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetHook>>>, TError = HTTPValidationError>(
+ params: EvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<ReturnType<typeof useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetHook>>>, TError, TData>>, }
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetQueryOptions(params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+export const useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetSuspenseQueryOptions = <TData = Awaited<ReturnType<ReturnType<typeof useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetHook>>>, TError = HTTPValidationError>(params: EvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<ReturnType<typeof useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetHook>>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetQueryKey(params);
+
+  const evaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGet =  useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetHook();
+
+    const queryFn: QueryFunction<Awaited<ReturnType<ReturnType<typeof useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetHook>>>> = ({ signal }) => evaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGet(params, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<ReturnType<typeof useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetHook>>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type EvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetSuspenseQueryResult = NonNullable<Awaited<ReturnType<ReturnType<typeof useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetHook>>>>
+export type EvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetSuspenseQueryError = HTTPValidationError
+
+
+export function useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetSuspense<TData = Awaited<ReturnType<ReturnType<typeof useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetHook>>>, TError = HTTPValidationError>(
+ params: EvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<ReturnType<typeof useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetHook>>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetSuspense<TData = Awaited<ReturnType<ReturnType<typeof useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetHook>>>, TError = HTTPValidationError>(
+ params: EvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<ReturnType<typeof useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetHook>>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetSuspense<TData = Awaited<ReturnType<ReturnType<typeof useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetHook>>>, TError = HTTPValidationError>(
+ params: EvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<ReturnType<typeof useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetHook>>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Evaluate Single Stream Endpoint
+ */
+
+export function useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetSuspense<TData = Awaited<ReturnType<ReturnType<typeof useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetHook>>>, TError = HTTPValidationError>(
+ params: EvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<ReturnType<typeof useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetHook>>>, TError, TData>>, }
+ , queryClient?: QueryClient
+ ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = useEvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetSuspenseQueryOptions(params,options)
+
+  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+/**
+ * Stream evaluation progress as SSE events.
+ * @summary Evaluate Stream Endpoint
+ */
+export const useEvaluateStreamEndpointApiSavedEvaluateStreamGetHook = () => {
+        const evaluateStreamEndpointApiSavedEvaluateStreamGet = useCustomInstance<unknown>();
+
+        return useCallback((
+    params: EvaluateStreamEndpointApiSavedEvaluateStreamGetParams,
+ signal?: AbortSignal
+) => {
+        return evaluateStreamEndpointApiSavedEvaluateStreamGet(
+          {url: `/api/saved/evaluate/stream`, method: 'GET',
+        params, signal
+    },
+          );
+        }, [evaluateStreamEndpointApiSavedEvaluateStreamGet])
+      }
+
+
+
+
+export const getEvaluateStreamEndpointApiSavedEvaluateStreamGetInfiniteQueryKey = (params?: EvaluateStreamEndpointApiSavedEvaluateStreamGetParams,) => {
+    return [
+    'infinite', `/api/saved/evaluate/stream`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+export const getEvaluateStreamEndpointApiSavedEvaluateStreamGetQueryKey = (params?: EvaluateStreamEndpointApiSavedEvaluateStreamGetParams,) => {
+    return [
+    `/api/saved/evaluate/stream`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+
+export const useEvaluateStreamEndpointApiSavedEvaluateStreamGetInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<ReturnType<typeof useEvaluateStreamEndpointApiSavedEvaluateStreamGetHook>>>>, TError = HTTPValidationError>(params: EvaluateStreamEndpointApiSavedEvaluateStreamGetParams, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<ReturnType<typeof useEvaluateStreamEndpointApiSavedEvaluateStreamGetHook>>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getEvaluateStreamEndpointApiSavedEvaluateStreamGetInfiniteQueryKey(params);
+
+  const evaluateStreamEndpointApiSavedEvaluateStreamGet =  useEvaluateStreamEndpointApiSavedEvaluateStreamGetHook();
+
+    const queryFn: QueryFunction<Awaited<ReturnType<ReturnType<typeof useEvaluateStreamEndpointApiSavedEvaluateStreamGetHook>>>> = ({ signal }) => evaluateStreamEndpointApiSavedEvaluateStreamGet(params, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseInfiniteQueryOptions<Awaited<ReturnType<ReturnType<typeof useEvaluateStreamEndpointApiSavedEvaluateStreamGetHook>>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type EvaluateStreamEndpointApiSavedEvaluateStreamGetInfiniteQueryResult = NonNullable<Awaited<ReturnType<ReturnType<typeof useEvaluateStreamEndpointApiSavedEvaluateStreamGetHook>>>>
+export type EvaluateStreamEndpointApiSavedEvaluateStreamGetInfiniteQueryError = HTTPValidationError
+
+
+export function useEvaluateStreamEndpointApiSavedEvaluateStreamGetInfinite<TData = InfiniteData<Awaited<ReturnType<ReturnType<typeof useEvaluateStreamEndpointApiSavedEvaluateStreamGetHook>>>>, TError = HTTPValidationError>(
+ params: EvaluateStreamEndpointApiSavedEvaluateStreamGetParams, options: { query:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<ReturnType<typeof useEvaluateStreamEndpointApiSavedEvaluateStreamGetHook>>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<ReturnType<typeof useEvaluateStreamEndpointApiSavedEvaluateStreamGetHook>>>,
+          TError,
+          Awaited<ReturnType<ReturnType<typeof useEvaluateStreamEndpointApiSavedEvaluateStreamGetHook>>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useEvaluateStreamEndpointApiSavedEvaluateStreamGetInfinite<TData = InfiniteData<Awaited<ReturnType<ReturnType<typeof useEvaluateStreamEndpointApiSavedEvaluateStreamGetHook>>>>, TError = HTTPValidationError>(
+ params: EvaluateStreamEndpointApiSavedEvaluateStreamGetParams, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<ReturnType<typeof useEvaluateStreamEndpointApiSavedEvaluateStreamGetHook>>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<ReturnType<typeof useEvaluateStreamEndpointApiSavedEvaluateStreamGetHook>>>,
+          TError,
+          Awaited<ReturnType<ReturnType<typeof useEvaluateStreamEndpointApiSavedEvaluateStreamGetHook>>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useEvaluateStreamEndpointApiSavedEvaluateStreamGetInfinite<TData = InfiniteData<Awaited<ReturnType<ReturnType<typeof useEvaluateStreamEndpointApiSavedEvaluateStreamGetHook>>>>, TError = HTTPValidationError>(
+ params: EvaluateStreamEndpointApiSavedEvaluateStreamGetParams, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<ReturnType<typeof useEvaluateStreamEndpointApiSavedEvaluateStreamGetHook>>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Evaluate Stream Endpoint
+ */
+
+export function useEvaluateStreamEndpointApiSavedEvaluateStreamGetInfinite<TData = InfiniteData<Awaited<ReturnType<ReturnType<typeof useEvaluateStreamEndpointApiSavedEvaluateStreamGetHook>>>>, TError = HTTPValidationError>(
+ params: EvaluateStreamEndpointApiSavedEvaluateStreamGetParams, options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<ReturnType<typeof useEvaluateStreamEndpointApiSavedEvaluateStreamGetHook>>>, TError, TData>>, }
+ , queryClient?: QueryClient
+ ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = useEvaluateStreamEndpointApiSavedEvaluateStreamGetInfiniteQueryOptions(params,options)
+
+  const query = useInfiniteQuery(queryOptions, queryClient) as  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+export const useEvaluateStreamEndpointApiSavedEvaluateStreamGetQueryOptions = <TData = Awaited<ReturnType<ReturnType<typeof useEvaluateStreamEndpointApiSavedEvaluateStreamGetHook>>>, TError = HTTPValidationError>(params: EvaluateStreamEndpointApiSavedEvaluateStreamGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<ReturnType<typeof useEvaluateStreamEndpointApiSavedEvaluateStreamGetHook>>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getEvaluateStreamEndpointApiSavedEvaluateStreamGetQueryKey(params);
+
+  const evaluateStreamEndpointApiSavedEvaluateStreamGet =  useEvaluateStreamEndpointApiSavedEvaluateStreamGetHook();
+
+    const queryFn: QueryFunction<Awaited<ReturnType<ReturnType<typeof useEvaluateStreamEndpointApiSavedEvaluateStreamGetHook>>>> = ({ signal }) => evaluateStreamEndpointApiSavedEvaluateStreamGet(params, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<ReturnType<typeof useEvaluateStreamEndpointApiSavedEvaluateStreamGetHook>>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type EvaluateStreamEndpointApiSavedEvaluateStreamGetQueryResult = NonNullable<Awaited<ReturnType<ReturnType<typeof useEvaluateStreamEndpointApiSavedEvaluateStreamGetHook>>>>
+export type EvaluateStreamEndpointApiSavedEvaluateStreamGetQueryError = HTTPValidationError
+
+
+export function useEvaluateStreamEndpointApiSavedEvaluateStreamGet<TData = Awaited<ReturnType<ReturnType<typeof useEvaluateStreamEndpointApiSavedEvaluateStreamGetHook>>>, TError = HTTPValidationError>(
+ params: EvaluateStreamEndpointApiSavedEvaluateStreamGetParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<ReturnType<typeof useEvaluateStreamEndpointApiSavedEvaluateStreamGetHook>>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<ReturnType<typeof useEvaluateStreamEndpointApiSavedEvaluateStreamGetHook>>>,
+          TError,
+          Awaited<ReturnType<ReturnType<typeof useEvaluateStreamEndpointApiSavedEvaluateStreamGetHook>>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useEvaluateStreamEndpointApiSavedEvaluateStreamGet<TData = Awaited<ReturnType<ReturnType<typeof useEvaluateStreamEndpointApiSavedEvaluateStreamGetHook>>>, TError = HTTPValidationError>(
+ params: EvaluateStreamEndpointApiSavedEvaluateStreamGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<ReturnType<typeof useEvaluateStreamEndpointApiSavedEvaluateStreamGetHook>>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<ReturnType<typeof useEvaluateStreamEndpointApiSavedEvaluateStreamGetHook>>>,
+          TError,
+          Awaited<ReturnType<ReturnType<typeof useEvaluateStreamEndpointApiSavedEvaluateStreamGetHook>>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useEvaluateStreamEndpointApiSavedEvaluateStreamGet<TData = Awaited<ReturnType<ReturnType<typeof useEvaluateStreamEndpointApiSavedEvaluateStreamGetHook>>>, TError = HTTPValidationError>(
+ params: EvaluateStreamEndpointApiSavedEvaluateStreamGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<ReturnType<typeof useEvaluateStreamEndpointApiSavedEvaluateStreamGetHook>>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Evaluate Stream Endpoint
+ */
+
+export function useEvaluateStreamEndpointApiSavedEvaluateStreamGet<TData = Awaited<ReturnType<ReturnType<typeof useEvaluateStreamEndpointApiSavedEvaluateStreamGetHook>>>, TError = HTTPValidationError>(
+ params: EvaluateStreamEndpointApiSavedEvaluateStreamGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<ReturnType<typeof useEvaluateStreamEndpointApiSavedEvaluateStreamGetHook>>>, TError, TData>>, }
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = useEvaluateStreamEndpointApiSavedEvaluateStreamGetQueryOptions(params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+export const useEvaluateStreamEndpointApiSavedEvaluateStreamGetSuspenseQueryOptions = <TData = Awaited<ReturnType<ReturnType<typeof useEvaluateStreamEndpointApiSavedEvaluateStreamGetHook>>>, TError = HTTPValidationError>(params: EvaluateStreamEndpointApiSavedEvaluateStreamGetParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<ReturnType<typeof useEvaluateStreamEndpointApiSavedEvaluateStreamGetHook>>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getEvaluateStreamEndpointApiSavedEvaluateStreamGetQueryKey(params);
+
+  const evaluateStreamEndpointApiSavedEvaluateStreamGet =  useEvaluateStreamEndpointApiSavedEvaluateStreamGetHook();
+
+    const queryFn: QueryFunction<Awaited<ReturnType<ReturnType<typeof useEvaluateStreamEndpointApiSavedEvaluateStreamGetHook>>>> = ({ signal }) => evaluateStreamEndpointApiSavedEvaluateStreamGet(params, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<ReturnType<typeof useEvaluateStreamEndpointApiSavedEvaluateStreamGetHook>>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type EvaluateStreamEndpointApiSavedEvaluateStreamGetSuspenseQueryResult = NonNullable<Awaited<ReturnType<ReturnType<typeof useEvaluateStreamEndpointApiSavedEvaluateStreamGetHook>>>>
+export type EvaluateStreamEndpointApiSavedEvaluateStreamGetSuspenseQueryError = HTTPValidationError
+
+
+export function useEvaluateStreamEndpointApiSavedEvaluateStreamGetSuspense<TData = Awaited<ReturnType<ReturnType<typeof useEvaluateStreamEndpointApiSavedEvaluateStreamGetHook>>>, TError = HTTPValidationError>(
+ params: EvaluateStreamEndpointApiSavedEvaluateStreamGetParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<ReturnType<typeof useEvaluateStreamEndpointApiSavedEvaluateStreamGetHook>>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useEvaluateStreamEndpointApiSavedEvaluateStreamGetSuspense<TData = Awaited<ReturnType<ReturnType<typeof useEvaluateStreamEndpointApiSavedEvaluateStreamGetHook>>>, TError = HTTPValidationError>(
+ params: EvaluateStreamEndpointApiSavedEvaluateStreamGetParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<ReturnType<typeof useEvaluateStreamEndpointApiSavedEvaluateStreamGetHook>>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useEvaluateStreamEndpointApiSavedEvaluateStreamGetSuspense<TData = Awaited<ReturnType<ReturnType<typeof useEvaluateStreamEndpointApiSavedEvaluateStreamGetHook>>>, TError = HTTPValidationError>(
+ params: EvaluateStreamEndpointApiSavedEvaluateStreamGetParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<ReturnType<typeof useEvaluateStreamEndpointApiSavedEvaluateStreamGetHook>>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Evaluate Stream Endpoint
+ */
+
+export function useEvaluateStreamEndpointApiSavedEvaluateStreamGetSuspense<TData = Awaited<ReturnType<ReturnType<typeof useEvaluateStreamEndpointApiSavedEvaluateStreamGetHook>>>, TError = HTTPValidationError>(
+ params: EvaluateStreamEndpointApiSavedEvaluateStreamGetParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<ReturnType<typeof useEvaluateStreamEndpointApiSavedEvaluateStreamGetHook>>>, TError, TData>>, }
+ , queryClient?: QueryClient
+ ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = useEvaluateStreamEndpointApiSavedEvaluateStreamGetSuspenseQueryOptions(params,options)
+
+  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+/**
  * Batch evaluate unevaluated library resources within a preset+query group.
  * @summary Evaluate Saved Resources Endpoint
  */

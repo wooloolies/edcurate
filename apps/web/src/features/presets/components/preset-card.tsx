@@ -5,8 +5,6 @@ import { MoreHorizontal, Pencil, Search, Star } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -34,82 +32,74 @@ export function PresetCard({ preset }: PresetCardProps) {
     queryClient.invalidateQueries({ queryKey: ["listPresetsApiPresetsGet"] });
   };
 
-  const weights = preset.source_weights as Record<string, number>;
-
   return (
-    <Card>
-      <CardHeader className="pb-3">
+    <div className="overflow-hidden rounded-2xl border border-white/80 bg-white/70 shadow-[0_2px_20px_rgba(0,0,0,0.04)] backdrop-blur-sm transition-shadow hover:shadow-[0_4px_28px_rgba(0,0,0,0.06)]">
+      <div className="px-5 pt-5 pb-3">
         <div className="flex items-start justify-between">
           <div className="space-y-1">
-            <CardTitle className="text-base">{preset.name}</CardTitle>
-            <CardDescription>
+            <h3 className="text-[15px] font-semibold text-brand-ink">{preset.name}</h3>
+            <p className="text-xs text-brand-ink/45">
               {preset.subject} &middot; {preset.year_level} &middot; {preset.country}
-            </CardDescription>
+            </p>
           </div>
-          {!!preset.is_default && (
-            <Badge variant="secondary">
-              <Star className="mr-1 h-3 w-3" />
-              {t("default")}
-            </Badge>
-          )}
-        </div>
-      </CardHeader>
-      <CardContent>
-        <div className="mb-3 text-xs text-muted-foreground">
-          {weights.ddgs != null && `${t("sources.ddgs")} ${Math.round(weights.ddgs * 100)}%`}{" "}
-          &middot;{" "}
-          {weights.youtube != null &&
-            `${t("sources.youtube")} ${Math.round(weights.youtube * 100)}%`}{" "}
-          &middot;{" "}
-          {weights.openalex != null &&
-            `${t("sources.openalex")} ${Math.round(weights.openalex * 100)}%`}
-        </div>
-        <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" asChild>
-            <Link href={`/collections/${preset.id}/edit`}>
-              <Pencil className="mr-1 h-3 w-3" />
-              {t("editPreset")}
-            </Link>
-          </Button>
-          <Button variant="outline" size="sm" asChild>
-            <Link href={`/search?preset_id=${preset.id}`}>
-              <Search className="mr-1 h-3 w-3" />
-              {t("searchWithPreset")}
-            </Link>
-          </Button>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="ml-auto h-8 w-8 p-0"
-                aria-label={t("moreActions")}
-              >
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              {!preset.is_default && (
+          <div className="flex items-center gap-1.5">
+            {!!preset.is_default && (
+              <Badge variant="secondary">
+                <Star className="mr-1 h-3 w-3" />
+                {t("default")}
+              </Badge>
+            )}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button
+                  type="button"
+                  className="rounded-full p-1.5 text-brand-ink/40 transition-colors hover:bg-brand-ink/5 hover:text-brand-ink"
+                  aria-label={t("moreActions")}
+                >
+                  <MoreHorizontal className="h-4 w-4" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="rounded-xl">
+                {!preset.is_default && (
+                  <DropdownMenuItem
+                    onClick={() =>
+                      setDefaultMutation.mutate({ presetId: preset.id }, { onSuccess: invalidate })
+                    }
+                  >
+                    {t("setDefault")}
+                  </DropdownMenuItem>
+                )}
                 <DropdownMenuItem
+                  className="text-destructive"
                   onClick={() =>
-                    setDefaultMutation.mutate({ presetId: preset.id }, { onSuccess: invalidate })
+                    deleteMutation.mutate({ presetId: preset.id }, { onSuccess: invalidate })
                   }
                 >
-                  {t("setDefault")}
+                  {t("deletePreset")}
                 </DropdownMenuItem>
-              )}
-              <DropdownMenuItem
-                className="text-destructive"
-                onClick={() =>
-                  deleteMutation.mutate({ presetId: preset.id }, { onSuccess: invalidate })
-                }
-              >
-                {t("deletePreset")}
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+      <div className="px-5 pb-5">
+        <div className="flex items-center gap-2">
+          <Link
+            href={`/collections/${preset.id}/edit`}
+            className="inline-flex items-center rounded-full px-3.5 py-1.5 text-xs font-medium text-brand-ink/60 transition-colors hover:bg-brand-ink/5 hover:text-brand-ink"
+          >
+            <Pencil className="mr-1.5 h-3 w-3" />
+            {t("editPreset")}
+          </Link>
+          <Link
+            href={`/search?preset_id=${preset.id}`}
+            className="inline-flex items-center rounded-full bg-brand-green px-3.5 py-1.5 text-xs font-medium text-brand-ink transition-all hover:bg-brand-ink hover:text-white"
+          >
+            <Search className="mr-1.5 h-3 w-3" />
+            {t("searchWithPreset")}
+          </Link>
+        </div>
+      </div>
+    </div>
   );
 }

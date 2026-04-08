@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime
-from typing import Any
+from typing import Any, Literal
 
 import structlog
 from pydantic import BaseModel, ConfigDict, HttpUrl, model_validator
@@ -22,6 +22,7 @@ class LibraryCollectionCreate(BaseModel):
     preset_id: uuid.UUID
     search_query: str
     name: str
+    description: str | None = None
     is_public: bool = False
     resources: list[ResourceCard]
     evaluation_data_list: list[JudgmentResult | None] | None = None
@@ -29,6 +30,7 @@ class LibraryCollectionCreate(BaseModel):
 
 class LibraryCollectionUpdate(BaseModel):
     name: str | None = None
+    description: str | None = None
     is_public: bool | None = None
 
 
@@ -39,6 +41,7 @@ class LibraryCollectionResponse(BaseModel):
     preset_id: uuid.UUID
     search_query: str
     name: str
+    description: str | None = None
     is_public: bool
     clone_count: int
     created_at: datetime
@@ -131,6 +134,7 @@ class SuggestedCollectionResponse(BaseModel):
     resources_count: int = 0
     publisher_name: str | None = None
     is_cloned_by_user: bool = False
+    needs_sync: bool = False
     resources: list[SavedResourceResponse] = []
 
 
@@ -152,3 +156,12 @@ class PresetGroup(BaseModel):
 class SavedResourceListResponse(BaseModel):
     total: int
     groups: list[PresetGroup]
+
+
+class EvalStageEvent(BaseModel):
+    """SSE event for library evaluation progress."""
+
+    stage: Literal["rag_preparation", "evaluation", "complete"]
+    status: Literal["working", "done"]
+    resource_url: str | None = None
+    data: dict[str, Any] | None = None

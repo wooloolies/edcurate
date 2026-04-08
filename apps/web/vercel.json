@@ -1,3 +1,4 @@
 {
+  "installCommand": "bun install",
   "ignoreCommand": "[ \"$VERCEL_ENV\" = \"preview\" ]"
 }
