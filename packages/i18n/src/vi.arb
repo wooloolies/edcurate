@@ -1417,6 +1417,12 @@
   "@library__action__generate": {
     "description": "Generate artifact button"
   },
+  "library__action__searchWithPreset": "Tìm kiếm với lớp học này",
+  "@library__action__searchWithPreset": { "description": "Aria label for search with preset button" },
+  "library__action__statusPublic": "Công khai",
+  "@library__action__statusPublic": { "description": "Public status badge" },
+  "library__action__statusPrivate": "Riêng tư",
+  "@library__action__statusPrivate": { "description": "Private status badge" },
   "library__toast__linkAdded": "Đã thêm liên kết",
   "@library__toast__linkAdded": {
     "description": "Toast on link add success"
@@ -1441,14 +1447,24 @@
   "@library__toast__deleteFailed": {
     "description": "Toast on collection delete failure"
   },
-  "library__confirm__makePublic": "Bạn có chắc muốn công khai? Mọi người sẽ có thể tìm thấy tài nguyên này.",
-  "@library__confirm__makePublic": {
-    "description": "Confirm dialog for making collection public"
-  },
-  "library__confirm__deleteCollection": "Bạn có chắc muốn xóa bộ sưu tập này và tất cả tài nguyên?",
-  "@library__confirm__deleteCollection": {
-    "description": "Confirm dialog for deleting collection"
-  },
+  "library__confirm__makePublicTitle": "Công khai",
+  "@library__confirm__makePublicTitle": { "description": "Confirm dialog title for making collection public" },
+  "library__confirm__makePublicDescription": "Mọi người sẽ có thể tìm thấy và xem các tài nguyên này. Bạn có chắc không?",
+  "@library__confirm__makePublicDescription": { "description": "Confirm dialog description for making collection public" },
+  "library__confirm__makePublicButton": "Công khai",
+  "@library__confirm__makePublicButton": { "description": "Confirm button for making collection public" },
+  "library__confirm__makePrivateTitle": "Chuyển sang riêng tư",
+  "@library__confirm__makePrivateTitle": { "description": "Confirm dialog title for making collection private" },
+  "library__confirm__makePrivateDescription": "Bộ sưu tập này sẽ không còn hiển thị với người khác.",
+  "@library__confirm__makePrivateDescription": { "description": "Confirm dialog description for making collection private" },
+  "library__confirm__makePrivateButton": "Chuyển sang riêng tư",
+  "@library__confirm__makePrivateButton": { "description": "Confirm button for making collection private" },
+  "library__confirm__deleteTitle": "Xóa bộ sưu tập",
+  "@library__confirm__deleteTitle": { "description": "Confirm dialog title for deleting collection" },
+  "library__confirm__deleteDescription": "Bộ sưu tập này và tất cả tài nguyên sẽ bị xóa vĩnh viễn. Không thể hoàn tác.",
+  "@library__confirm__deleteDescription": { "description": "Confirm dialog description for deleting collection" },
+  "library__confirm__deleteButton": "Xóa",
+  "@library__confirm__deleteButton": { "description": "Confirm button for deleting collection" },
   "common__loading": "Đang tải...",
   "@common__loading": {
     "description": "Loading indicator text"
