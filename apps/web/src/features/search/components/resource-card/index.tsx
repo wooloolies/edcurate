@@ -9,11 +9,8 @@ import { Link } from "@/lib/i18n/routing";
 interface ResourceCardRendererProps {
   index?: number;
   resource: ResourceCard;
-  presetId?: string;
-  searchQuery?: string;
   hideAction?: boolean;
   checked?: boolean;
-  onToggleChecked?: (e: React.MouseEvent, checked: boolean) => void;
   isEvaluating?: boolean;
   evaluationId?: string;
 }
@@ -35,23 +32,19 @@ export function buildOverviewHref(resource: ResourceCard, evaluationId?: string)
 export function ResourceCardRenderer({
   index,
   resource,
-  presetId,
-  searchQuery: _searchQuery,
   hideAction,
   checked,
-  onToggleChecked,
   isEvaluating,
   evaluationId,
   customAction,
 }: ResourceCardRendererProps & { customAction?: React.ReactNode }) {
   const t = useTranslations("search");
-  const isSearchPageMode = checked !== undefined && onToggleChecked !== undefined;
 
   let action: React.ReactNode;
 
   if (customAction) {
     action = customAction;
-  } else if ((presetId && !hideAction) || isSearchPageMode) {
+  } else if (!hideAction) {
     action = (
       <div className="flex items-center gap-3">
         <Link
@@ -60,12 +53,7 @@ export function ResourceCardRenderer({
         >
           {t("overview")}
         </Link>
-        <BookmarkButton
-          presetId={presetId}
-          resource={resource}
-          checked={checked}
-          onToggleChecked={onToggleChecked}
-        />
+        <BookmarkButton resource={resource} checked={checked} />
       </div>
     );
   }

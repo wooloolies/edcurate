@@ -844,6 +844,74 @@
   "@search__progress__stageSearching": {
     "description": "Fallback progress bar label during search"
   },
+  "search__progress__stageAdversarial": "Checking for risks",
+  "@search__progress__stageAdversarial": {
+    "description": "Progress bar label during adversarial checking stage"
+  },
+  "search__progress__stageComplete": "Done",
+  "@search__progress__stageComplete": {
+    "description": "Progress bar label when search is complete"
+  },
+  "search__progress__agentMorph__starting": "Starting...",
+  "@search__progress__agentMorph__starting": {
+    "description": "Label shown when agent morph scene is initializing"
+  },
+  "search__progress__agentMorph__cached": "Cached result",
+  "@search__progress__agentMorph__cached": {
+    "description": "Label shown when results are served from cache"
+  },
+  "search__progress__agentMorph__loadingHint": "This may take 1–2 minutes to load",
+  "@search__progress__agentMorph__loadingHint": {
+    "description": "Hint text shown below the agent animation during search"
+  },
+  "search__progress__agentMorph__nameSearchQuery": "SearchQueryAgent",
+  "@search__progress__agentMorph__nameSearchQuery": {
+    "description": "Display name for the search query agent"
+  },
+  "search__progress__agentMorph__nameTriage": "TriageAgent",
+  "@search__progress__agentMorph__nameTriage": {
+    "description": "Display name for the triage agent"
+  },
+  "search__progress__agentMorph__nameJudge": "JudgeAgent",
+  "@search__progress__agentMorph__nameJudge": {
+    "description": "Display name for the judge agent"
+  },
+  "search__progress__agentMorph__nameRiskScanner": "RiskScanner",
+  "@search__progress__agentMorph__nameRiskScanner": {
+    "description": "Display name for the risk scanner agent"
+  },
+  "search__progress__agentMorph__titleSearchQuery": "SearchQueryAgent is active",
+  "@search__progress__agentMorph__titleSearchQuery": {
+    "description": "Title shown when search query agent is working"
+  },
+  "search__progress__agentMorph__titleTriage": "Triggering TriageAgent",
+  "@search__progress__agentMorph__titleTriage": {
+    "description": "Title shown when triage agent is working"
+  },
+  "search__progress__agentMorph__titleJudge": "Triggering JudgeAgent",
+  "@search__progress__agentMorph__titleJudge": {
+    "description": "Title shown when judge agent is working"
+  },
+  "search__progress__agentMorph__titleRiskScanner": "Triggering RiskScanner",
+  "@search__progress__agentMorph__titleRiskScanner": {
+    "description": "Title shown when risk scanner agent is working"
+  },
+  "search__progress__agentMorph__descSearchQuery": "Analyzing complex parameters and mapping the research trajectory for deep-dive discovery.",
+  "@search__progress__agentMorph__descSearchQuery": {
+    "description": "Description shown when search query agent is working"
+  },
+  "search__progress__agentMorph__descTriage": "Filtering high-intent results and classifying data priority.",
+  "@search__progress__agentMorph__descTriage": {
+    "description": "Description shown when triage agent is working"
+  },
+  "search__progress__agentMorph__descJudge": "Synthesizing final results and preparing the editorial report.",
+  "@search__progress__agentMorph__descJudge": {
+    "description": "Description shown when judge agent is working"
+  },
+  "search__progress__agentMorph__descRiskScanner": "Scanning high-intent results for potential risks and anomalies.",
+  "@search__progress__agentMorph__descRiskScanner": {
+    "description": "Description shown when risk scanner agent is working"
+  },
   "search__classroom__chalkboard__queryGeneration": "Generating search queries...",
   "@search__classroom__chalkboard__queryGeneration": {
     "description": "Chalkboard text during query generation stage"

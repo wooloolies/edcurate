@@ -1,6 +1,7 @@
 "use client";
 
 import { useQueryClient } from "@tanstack/react-query";
+import { useAtomValue, useSetAtom } from "jotai";
 import { useTranslations } from "next-intl";
 import { useQueryState } from "nuqs";
 import { toast } from "sonner";
@@ -12,28 +13,24 @@ import {
   useListSavedResourcesEndpointApiSavedGet,
   useSaveResourceEndpointApiSavedPost,
 } from "@/lib/api/saved-resources/saved-resources";
+import { searchPresetIdAtom, toggleResourceAtom } from "@/stores/search-context-atoms";
 
 interface BookmarkButtonProps {
-  presetId?: string;
   resource: ResourceCard;
   checked?: boolean;
-  onToggleChecked?: (e: React.MouseEvent, checked: boolean) => void;
 }
 
-export function BookmarkButton({
-  presetId,
-  resource,
-  checked,
-  onToggleChecked,
-}: BookmarkButtonProps) {
+export function BookmarkButton({ resource, checked }: BookmarkButtonProps) {
   const t = useTranslations("search");
   const queryClient = useQueryClient();
+  const presetId = useAtomValue(searchPresetIdAtom);
+  const toggleResource = useSetAtom(toggleResourceAtom);
   const { data: savedData, isFetching: isLoadingList } = useListSavedResourcesEndpointApiSavedGet();
   const { mutateAsync: saveResource, isPending: isSaving } = useSaveResourceEndpointApiSavedPost();
   const { mutateAsync: deleteResource, isPending: isDeleting } =
     useDeleteSavedResourceEndpointApiSavedIdDelete();
 
-  const isControlled = checked !== undefined && onToggleChecked !== undefined;
+  const isControlled = checked !== undefined;
 
   // Find if it's saved — iterate collections inside preset groups
   let savedId: string | undefined;
@@ -60,8 +57,8 @@ export function BookmarkButton({
     e.preventDefault();
     e.stopPropagation();
 
-    if (isControlled && onToggleChecked) {
-      onToggleChecked(e, !isSaved);
+    if (isControlled) {
+      toggleResource({ resource, checked: !isSaved });
       return;
     }
 

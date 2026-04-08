@@ -1,16 +1,11 @@
 export interface AgentFrameSet {
-  name: string;
-  title: string;
-  description: string;
+  key: string;
   frames: string[];
   frameInterval: number;
 }
 
 const searchQueryAgent: AgentFrameSet = {
-  name: "SearchQueryAgent",
-  title: "SearchQueryAgent is active",
-  description:
-    "Analyzing complex parameters and mapping the research trajectory for deep-dive discovery.",
+  key: "SearchQuery",
   frames: [
     "/agents/search-1.png",
     "/agents/search-2.png",
@@ -21,28 +16,19 @@ const searchQueryAgent: AgentFrameSet = {
 };
 
 const triageAgent: AgentFrameSet = {
-  name: "TriageAgent",
-  title: "Triggering TriageAgent",
-  description:
-    "Filtering high-intent results and classifying data priority.",
+  key: "Triage",
   frames: ["/agents/triage-1.png", "/agents/triage-2.png"],
   frameInterval: 500,
 };
 
 const judgeAgent: AgentFrameSet = {
-  name: "JudgeAgent",
-  title: "Triggering JudgeAgent",
-  description:
-    "Synthesizing final results and preparing the editorial report.",
+  key: "Judge",
   frames: ["/agents/judge-1.png", "/agents/judge-2.png"],
   frameInterval: 350,
 };
 
 const riskScanner: AgentFrameSet = {
-  name: "RiskScanner",
-  title: "Triggering RiskScanner",
-  description:
-    "Scanning high-intent results for potential risks and anomalies.",
+  key: "RiskScanner",
   frames: ["/agents/risk-1.png", "/agents/risk-2.png"],
   frameInterval: 750,
 };
@@ -63,13 +49,13 @@ export const STAGE_TO_AGENT_INDEX: Record<string, number> = {
   complete: 2,
 };
 
-export const STAGE_LABELS: Record<string, string> = {
-  query_generation: "Generating search queries",
-  federated_search: "Searching across engines",
-  rag_preparation: "Preparing resources",
-  evaluation: "Evaluating resources",
-  adversarial: "Checking for risks",
-  complete: "Done",
+export const STAGE_KEY: Record<string, string> = {
+  query_generation: "stageQueryGeneration",
+  federated_search: "stageFederatedSearch",
+  rag_preparation: "stageRagPreparation",
+  evaluation: "stageEvaluation",
+  adversarial: "stageAdversarial",
+  complete: "stageComplete",
 };
 
 export const STAGE_ORDER = [

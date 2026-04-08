@@ -639,7 +639,6 @@ export function LibraryPageClient() {
                   <ResourceCardRenderer
                     key={item.id}
                     resource={item.resource_data}
-                    presetId={presetId}
                     customAction={renderCardAction(item, presetId)}
                   />
                 ))}

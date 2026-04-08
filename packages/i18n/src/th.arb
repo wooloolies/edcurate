@@ -721,6 +721,74 @@
   "@search__progress__stageSearching": {
     "description": "Fallback progress bar label during search"
   },
+  "search__progress__stageAdversarial": "กำลังตรวจสอบความเสี่ยง",
+  "@search__progress__stageAdversarial": {
+    "description": "Progress bar label during adversarial checking stage"
+  },
+  "search__progress__stageComplete": "เสร็จสิ้น",
+  "@search__progress__stageComplete": {
+    "description": "Progress bar label when search is complete"
+  },
+  "search__progress__agentMorph__starting": "กำลังเริ่มต้น...",
+  "@search__progress__agentMorph__starting": {
+    "description": "Label shown when agent morph scene is initializing"
+  },
+  "search__progress__agentMorph__cached": "ผลลัพธ์จากแคช",
+  "@search__progress__agentMorph__cached": {
+    "description": "Label shown when results are served from cache"
+  },
+  "search__progress__agentMorph__loadingHint": "อาจใช้เวลา 1–2 นาทีในการโหลด",
+  "@search__progress__agentMorph__loadingHint": {
+    "description": "Hint text shown below the agent animation during search"
+  },
+  "search__progress__agentMorph__nameSearchQuery": "SearchQueryAgent",
+  "@search__progress__agentMorph__nameSearchQuery": {
+    "description": "Display name for the search query agent"
+  },
+  "search__progress__agentMorph__nameTriage": "TriageAgent",
+  "@search__progress__agentMorph__nameTriage": {
+    "description": "Display name for the triage agent"
+  },
+  "search__progress__agentMorph__nameJudge": "JudgeAgent",
+  "@search__progress__agentMorph__nameJudge": {
+    "description": "Display name for the judge agent"
+  },
+  "search__progress__agentMorph__nameRiskScanner": "RiskScanner",
+  "@search__progress__agentMorph__nameRiskScanner": {
+    "description": "Display name for the risk scanner agent"
+  },
+  "search__progress__agentMorph__titleSearchQuery": "SearchQueryAgent กำลังทำงาน",
+  "@search__progress__agentMorph__titleSearchQuery": {
+    "description": "Title shown when search query agent is working"
+  },
+  "search__progress__agentMorph__titleTriage": "กำลังเรียกใช้ TriageAgent",
+  "@search__progress__agentMorph__titleTriage": {
+    "description": "Title shown when triage agent is working"
+  },
+  "search__progress__agentMorph__titleJudge": "กำลังเรียกใช้ JudgeAgent",
+  "@search__progress__agentMorph__titleJudge": {
+    "description": "Title shown when judge agent is working"
+  },
+  "search__progress__agentMorph__titleRiskScanner": "กำลังเรียกใช้ RiskScanner",
+  "@search__progress__agentMorph__titleRiskScanner": {
+    "description": "Title shown when risk scanner agent is working"
+  },
+  "search__progress__agentMorph__descSearchQuery": "วิเคราะห์พารามิเตอร์ที่ซับซ้อนและวางแผนเส้นทางการวิจัยสำหรับการค้นหาเชิงลึก",
+  "@search__progress__agentMorph__descSearchQuery": {
+    "description": "Description shown when search query agent is working"
+  },
+  "search__progress__agentMorph__descTriage": "กรองผลลัพธ์ที่เกี่ยวข้องสูงและจัดลำดับความสำคัญของข้อมูล",
+  "@search__progress__agentMorph__descTriage": {
+    "description": "Description shown when triage agent is working"
+  },
+  "search__progress__agentMorph__descJudge": "สังเคราะห์ผลลัพธ์สุดท้ายและจัดทำรายงานวิเคราะห์",
+  "@search__progress__agentMorph__descJudge": {
+    "description": "Description shown when judge agent is working"
+  },
+  "search__progress__agentMorph__descRiskScanner": "สแกนผลลัพธ์ที่เกี่ยวข้องสูงเพื่อตรวจหาความเสี่ยงและความผิดปกติ",
+  "@search__progress__agentMorph__descRiskScanner": {
+    "description": "Description shown when risk scanner agent is working"
+  },
   "search__classroom__chalkboard__queryGeneration": "กำลังสร้างคำค้นหา...",
   "@search__classroom__chalkboard__queryGeneration": {
     "description": "Chalkboard text during query generation stage"

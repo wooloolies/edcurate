@@ -191,7 +191,26 @@
       "stageFederatedSearch": "Searching across sources",
       "stageRagPreparation": "Preparing results",
       "stageEvaluation": "Evaluating resources",
-      "stageSearching": "Searching"
+      "stageSearching": "Searching",
+      "stageAdversarial": "Checking for risks",
+      "stageComplete": "Done",
+      "agentMorph": {
+        "starting": "Starting...",
+        "cached": "Cached result",
+        "loadingHint": "This may take 1–2 minutes to load",
+        "nameSearchQuery": "SearchQueryAgent",
+        "nameTriage": "TriageAgent",
+        "nameJudge": "JudgeAgent",
+        "nameRiskScanner": "RiskScanner",
+        "titleSearchQuery": "SearchQueryAgent is active",
+        "titleTriage": "Triggering TriageAgent",
+        "titleJudge": "Triggering JudgeAgent",
+        "titleRiskScanner": "Triggering RiskScanner",
+        "descSearchQuery": "Analyzing complex parameters and mapping the research trajectory for deep-dive discovery.",
+        "descTriage": "Filtering high-intent results and classifying data priority.",
+        "descJudge": "Synthesizing final results and preparing the editorial report.",
+        "descRiskScanner": "Scanning high-intent results for potential risks and anomalies."
+      }
     },
     "classroom": {
       "chalkboard": {

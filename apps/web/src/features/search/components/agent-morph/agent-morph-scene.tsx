@@ -1,12 +1,13 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
+import { useTranslations } from "next-intl";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import type { Stage, StageStatus } from "@/features/search/types/search-stream";
 import {
   AGENT_FRAME_SETS,
-  STAGE_LABELS,
+  STAGE_KEY,
   STAGE_ORDER,
   STAGE_TO_AGENT_INDEX,
 } from "./agent-frames";
@@ -36,6 +37,9 @@ function useFrameLoop(frameCount: number, interval: number) {
 }
 
 export function AgentMorphScene({ stages, activeStage, isCached }: AgentMorphSceneProps) {
+  const t = useTranslations("search.progress.agentMorph");
+  const tStage = useTranslations("search.progress");
+
   const agentIndex = useMemo(() => {
     if (isCached) return 2;
     if (!activeStage) return 0;
@@ -47,11 +51,15 @@ export function AgentMorphScene({ stages, activeStage, isCached }: AgentMorphSce
 
   const isComplete = activeStage === "complete" || isCached;
 
+  const agentName = t(`name${agent.key}`);
+  const agentTitle = t(`title${agent.key}`);
+  const agentDesc = t(`desc${agent.key}`);
+
   const agentLabel = isCached
-    ? "Cached result"
+    ? t("cached")
     : activeStage
-      ? STAGE_LABELS[activeStage] ?? ""
-      : "Starting...";
+      ? tStage(STAGE_KEY[activeStage] ?? "stageSearching")
+      : t("starting");
 
   return (
     <div className="flex flex-col items-center gap-8 py-10">
@@ -83,7 +91,7 @@ export function AgentMorphScene({ stages, activeStage, isCached }: AgentMorphSce
                 <img
                   key={src}
                   src={src}
-                  alt={`${agent.name} frame ${i + 1}`}
+                  alt={`${agentName} frame ${i + 1}`}
                   className="absolute inset-0 w-full h-full object-contain transition-opacity duration-150"
                   style={{ opacity: i === currentFrame ? 1 : 0 }}
                 />
@@ -97,14 +105,14 @@ export function AgentMorphScene({ stages, activeStage, isCached }: AgentMorphSce
       <div className="flex flex-col items-center gap-2">
         <AnimatePresence mode="wait">
           <motion.span
-            key={agent.name}
+            key={agentName}
             initial={{ opacity: 0, y: 4 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -4 }}
             transition={{ duration: 0.25 }}
             className="text-[10px] font-bold tracking-[0.2em] uppercase text-[#737c7f]"
           >
-            {agent.name}
+            {agentName}
           </motion.span>
         </AnimatePresence>
         {!isComplete && (
@@ -120,14 +128,14 @@ export function AgentMorphScene({ stages, activeStage, isCached }: AgentMorphSce
       <div className="text-center space-y-3 max-w-md">
         <AnimatePresence mode="wait">
           <motion.h2
-            key={agent.title}
+            key={agentTitle}
             initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -6 }}
             transition={{ duration: 0.3 }}
             className="text-2xl font-bold tracking-tight text-[#2b3437]"
           >
-            {agent.title}
+            {agentTitle}
             {!isComplete && (
               <motion.span
                 className="inline-block ml-0.5"
@@ -141,18 +149,18 @@ export function AgentMorphScene({ stages, activeStage, isCached }: AgentMorphSce
         </AnimatePresence>
         <AnimatePresence mode="wait">
           <motion.p
-            key={agent.description}
+            key={agentDesc}
             initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -6 }}
             transition={{ duration: 0.3, delay: 0.05 }}
             className="text-sm text-[#586064] leading-relaxed"
           >
-            {agent.description}
+            {agentDesc}
           </motion.p>
         </AnimatePresence>
         {!isComplete && (
-          <p className="text-xs text-[#abb3b7] mt-1">This may take 1–2 minutes to load</p>
+          <p className="text-xs text-[#abb3b7] mt-1">{t("loadingHint")}</p>
         )}
       </div>
 

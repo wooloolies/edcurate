@@ -186,7 +186,26 @@
       "stageFederatedSearch": "소스에서 검색 중",
       "stageRagPreparation": "결과 준비 중",
       "stageEvaluation": "리소스 평가 중",
-      "stageSearching": "검색 중"
+      "stageSearching": "검색 중",
+      "stageAdversarial": "위험 요소 확인 중",
+      "stageComplete": "완료",
+      "agentMorph": {
+        "starting": "시작 중...",
+        "cached": "캐시된 결과",
+        "loadingHint": "1~2분 정도 소요될 수 있습니다",
+        "nameSearchQuery": "SearchQueryAgent",
+        "nameTriage": "TriageAgent",
+        "nameJudge": "JudgeAgent",
+        "nameRiskScanner": "RiskScanner",
+        "titleSearchQuery": "SearchQueryAgent 활성화됨",
+        "titleTriage": "TriageAgent 실행 중",
+        "titleJudge": "JudgeAgent 실행 중",
+        "titleRiskScanner": "RiskScanner 실행 중",
+        "descSearchQuery": "복잡한 매개변수를 분석하고 심층 탐색을 위한 연구 경로를 설계합니다.",
+        "descTriage": "관련성 높은 결과를 필터링하고 데이터 우선순위를 분류합니다.",
+        "descJudge": "최종 결과를 종합하고 분석 보고서를 작성합니다.",
+        "descRiskScanner": "관련성 높은 결과에서 잠재적 위험 요소와 이상 징후를 스캔합니다."
+      }
     },
     "classroom": {
       "chalkboard": {

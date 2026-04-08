@@ -1,5 +1,6 @@
 "use client";
 
+import { useAtomValue } from "jotai";
 import { BookOpen, ChevronDown, Globe, Inbox, Layers, Play } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useTranslations } from "next-intl";
@@ -7,26 +8,16 @@ import { useEffect, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { ResourceCardRenderer } from "@/features/search/components/resource-card";
-import type { ResourceAgentProgress } from "@/features/search/types/search-stream";
 import type { JudgmentResult, ResourceCard } from "@/lib/api/model";
+import { selectedResourcesAtom } from "@/stores/search-context-atoms";
 
 interface SearchResultsGridProps {
   results: ResourceCard[];
   judgments: Map<string, JudgmentResult>;
   counts: Record<string, number>;
   totalCount: number;
-  presetId?: string;
-  searchQuery?: string;
   savedUrls: Set<string>;
-  selectedResources: Map<string, ResourceCard>;
-  onToggleChecked: (resource: ResourceCard, checked: boolean) => void;
-  /** True when evaluation is in progress (streaming phase) */
-  isEvaluationPhase?: boolean;
-  /** Per-resource agent progress (only during streaming) */
-  resourceProgress?: Map<string, ResourceAgentProgress>;
-  /** evaluation_id per resource_url (for Overview link) */
   evaluationIds?: Map<string, string>;
-  /** True when results just arrived from streaming (enables stagger animation) */
   isNewResults?: boolean;
 }
 
@@ -35,13 +26,7 @@ export function SearchResultsGrid({
   judgments,
   counts,
   totalCount,
-  presetId,
-  searchQuery,
   savedUrls,
-  selectedResources,
-  onToggleChecked,
-  isEvaluationPhase,
-  resourceProgress,
   evaluationIds,
   isNewResults,
 }: SearchResultsGridProps) {
@@ -49,9 +34,10 @@ export function SearchResultsGrid({
   const [activeCategory, setActiveCategory] = useState<string>("all");
   const [visibleCount, setVisibleCount] = useState<number>(4);
 
+  const selectedResources = useAtomValue(selectedResourcesAtom);
+
   // Track which URLs have already been animated so re-renders don't re-stagger
   const animatedUrlsRef = useRef<Set<string>>(new Set());
-  // Reset animated set when results array identity changes (new search)
   const prevResultsRef = useRef(results);
   useEffect(() => {
     if (results !== prevResultsRef.current) {
@@ -146,7 +132,6 @@ export function SearchResultsGrid({
                     ? { ...resource, verdict: judgment.verdict }
                     : resource;
 
-                  // Only stagger on first appearance
                   const isFirstAppearance = !animatedUrlsRef.current.has(resource.url);
                   if (isFirstAppearance) {
                     animatedUrlsRef.current.add(resource.url);
@@ -168,16 +153,8 @@ export function SearchResultsGrid({
                       <ResourceCardRenderer
                         index={i + 1}
                         resource={displayResource}
-                        presetId={presetId}
-                        searchQuery={searchQuery}
                         evaluationId={evaluationIds?.get(resource.url)}
                         checked={isChecked(resource.url)}
-                        onToggleChecked={(_, c) => onToggleChecked(resource, c)}
-                        isEvaluating={
-                          isEvaluationPhase &&
-                          !!resourceProgress?.has(resource.url) &&
-                          !judgments.has(resource.url)
-                        }
                       />
                     </motion.div>
                   );

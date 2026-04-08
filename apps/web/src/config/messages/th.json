@@ -186,7 +186,26 @@
       "stageFederatedSearch": "กำลังค้นหาจากแหล่งข้อมูล",
       "stageRagPreparation": "กำลังเตรียมผลลัพธ์",
       "stageEvaluation": "กำลังประเมินทรัพยากร",
-      "stageSearching": "กำลังค้นหา"
+      "stageSearching": "กำลังค้นหา",
+      "stageAdversarial": "กำลังตรวจสอบความเสี่ยง",
+      "stageComplete": "เสร็จสิ้น",
+      "agentMorph": {
+        "starting": "กำลังเริ่มต้น...",
+        "cached": "ผลลัพธ์จากแคช",
+        "loadingHint": "อาจใช้เวลา 1–2 นาทีในการโหลด",
+        "nameSearchQuery": "SearchQueryAgent",
+        "nameTriage": "TriageAgent",
+        "nameJudge": "JudgeAgent",
+        "nameRiskScanner": "RiskScanner",
+        "titleSearchQuery": "SearchQueryAgent กำลังทำงาน",
+        "titleTriage": "กำลังเรียกใช้ TriageAgent",
+        "titleJudge": "กำลังเรียกใช้ JudgeAgent",
+        "titleRiskScanner": "กำลังเรียกใช้ RiskScanner",
+        "descSearchQuery": "วิเคราะห์พารามิเตอร์ที่ซับซ้อนและวางแผนเส้นทางการวิจัยสำหรับการค้นหาเชิงลึก",
+        "descTriage": "กรองผลลัพธ์ที่เกี่ยวข้องสูงและจัดลำดับความสำคัญของข้อมูล",
+        "descJudge": "สังเคราะห์ผลลัพธ์สุดท้ายและจัดทำรายงานวิเคราะห์",
+        "descRiskScanner": "สแกนผลลัพธ์ที่เกี่ยวข้องสูงเพื่อตรวจหาความเสี่ยงและความผิดปกติ"
+      }
     },
     "classroom": {
       "chalkboard": {
