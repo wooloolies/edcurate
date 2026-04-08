@@ -53,7 +53,7 @@
   },
   "presets": {
     "title": "내 수업 컬렉션",
-    "subtitle": "수업 프리셋과 검색 설정을 관리하세요",
+    "subtitle": "과목, 학년, 교육과정을 설정하여 검색을 맞춤화하세요.",
     "newPreset": "새 컬렉션",
     "editPreset": "컬렉션 편집",
     "createPreset": "프리셋 만들기",
@@ -112,12 +112,12 @@
       "additionalNotes": "학급에 대한 추가 맥락을 입력하세요..."
     },
     "moreActions": "추가 작업",
-    "saving": "저장 중..."
+    "saving": "저장 중...",
+    "count": "{count, plural, one {# 컬렉션} other {# 컬렉션}}"
   },
   "search": {
     "title": "교육 자료 탐색",
     "placeholder": "교육 자료를 검색하세요...",
-    "placeholderNoPreset": "검색하려면 교실 프리셋을 선택하세요",
     "searchButton": "검색",
     "selectPreset": "프리셋 선택",
     "selectCollection": "컬렉션을 선택하세요",
@@ -150,17 +150,17 @@
     "showUnscored": "{count}개의 미평가 결과 더 보기",
     "hideUnscored": "미평가 결과 숨기기",
     "resourcesSelected": "{count}개 자료 선택됨",
-    "saveToLibrary": "라이브러리에 저장",
-    "save": "저장",
-    "saving": "저장 중...",
-    "savedSuccess": "라이브러리에 저장되었습니다!",
+    "saveToLibrary": "내 라이브러리에 추가",
+    "save": "추가",
+    "saving": "추가 중...",
+    "savedSuccess": "라이브러리에 추가되었습니다!",
     "savedError": "자료 저장에 실패했습니다",
     "overview": "개요",
     "changePreset": "프리셋 변경",
     "bookmark": {
-      "save": "저장",
-      "saved": "저장됨",
-      "saveLabel": "라이브러리에 저장",
+      "save": "추가",
+      "saved": "추가됨",
+      "saveLabel": "라이브러리에 추가",
       "removeLabel": "라이브러리에서 제거"
     },
     "clearSelection": "선택 해제",
@@ -302,19 +302,45 @@
         "licensing": "라이선스",
         "reading_level": "읽기 수준",
         "accessibility": "접근성",
-        "cultural_sensitivity": "문화적 민감성"
+        "cultural_sensitivity": "문화적 민감성",
+        "outdated_content": "오래된 콘텐츠",
+        "bias_or_framing": "편향 또는 프레이밍",
+        "factual_concern": "사실 관계 우려",
+        "safety_concern": "안전 우려",
+        "misleading_match": "오해 소지가 있는 매칭"
       }
     },
     "saveCollection": {
-      "title": "라이브러리에 저장",
+      "title": "내 라이브러리에 추가",
       "description": "선택한 리소스를 이름이 지정된 컬렉션으로 그룹화합니다.",
       "nameLabel": "컬렉션 이름",
       "namePlaceholder": "예: 물리학 101",
       "privacyLabel": "공개 설정",
       "private": "비공개",
       "public": "공개",
-      "publicWarning": "정말 공개하시겠습니까? 누구나 추천 컬렉션에서 이 리소스를 발견할 수 있게 됩니다."
-    }
+      "publicWarning": "정말 공개하시겠습니까? 누구나 추천 컬렉션에서 이 리소스를 발견할 수 있게 됩니다.",
+      "descriptionLabel": "설명 (선택)",
+      "descriptionPlaceholder": "이 컬렉션에 대해 간단히 설명해 주세요..."
+    },
+    "back": "뒤로",
+    "renamePreset": "프리셋 이름 변경",
+    "presetRenamed": "프리셋 이름이 변경되었습니다",
+    "presetRenameError": "프리셋 이름 변경에 실패했습니다",
+    "suggestedCollections": {
+      "alreadyInLibrary": "이미 내 라이브러리에 있음",
+      "upToDate": "최신 상태",
+      "cloned": "내 라이브러리에 있음",
+      "cloneCollection": "내 라이브러리에 복사",
+      "syncCollection": "내 컬렉션 업데이트",
+      "syncSuccess": "컬렉션이 업데이트되었습니다!",
+      "title": "추천 컬렉션",
+      "clone": "복제",
+      "clonesCount": "{count, plural, one {# 복제} other {# 복제}}",
+      "empty": "유사한 검색에 대한 공개 컬렉션이 없습니다.",
+      "sourcesCount": "{count, plural, one {# 소스} other {# 소스}}",
+      "previewDescription": "라이브러리에 복사하기 전에 이 컬렉션을 확인하세요."
+    },
+    "cancel": "취소"
   },
   "nav": {
     "presets": "프리셋",
@@ -332,7 +358,11 @@
     "startResearch": "리서치 시작하기",
     "featureTagYear": "7~12학년",
     "featureTagDesigner": "커리큘럼 디자이너",
-    "featureTagGlobal": "전 세계"
+    "featureTagGlobal": "전 세계",
+    "heroHighlight": "지능형",
+    "heroTitleRest": "어댑션 엔진",
+    "heroFor": "",
+    "heroTeachers": "교사를 위한"
   },
   "overview": {
     "defaultTitle": "자료 개요",
@@ -406,7 +436,7 @@
       "resourceCount": "{completed}/{total} 완료"
     },
     "title": "내 라이브러리",
-    "subtitle": "수업 컬렉션의 큐레이션된 리소스",
+    "subtitle": "큐레이션된 리소스를 저장, 평가하고 다른 교육자와 공유하세요.",
     "empty": {
       "title": "라이브러리가 비어 있습니다",
       "description": "검색 결과에서 리소스를 저장하여 나만의 컬렉션을 만들어 보세요.",
@@ -429,11 +459,8 @@
       "rename": "이름 변경",
       "makePrivate": "비공개로 전환",
       "makePublic": "공개로 전환",
-      "statusPublic": "공개",
-      "statusPrivate": "비공개",
       "deleteCollection": "컬렉션 삭제",
-      "generate": "생성",
-      "searchWithPreset": "이 교실로 검색"
+      "generate": "생성"
     },
     "toast": {
       "linkAdded": "링크가 추가되었습니다",
@@ -444,15 +471,8 @@
       "deleteFailed": "컬렉션 삭제에 실패했습니다"
     },
     "confirm": {
-      "makePublicTitle": "공개로 전환",
-      "makePublicDescription": "누구나 이 리소스를 발견하고 볼 수 있게 됩니다. 계속하시겠습니까?",
-      "makePublicButton": "공개로 전환",
-      "makePrivateTitle": "비공개로 전환",
-      "makePrivateDescription": "이 컬렉션은 더 이상 다른 사람에게 표시되지 않습니다.",
-      "makePrivateButton": "비공개로 전환",
-      "deleteTitle": "컬렉션 삭제",
-      "deleteDescription": "이 컬렉션과 모든 리소스가 영구적으로 삭제됩니다. 이 작업은 되돌릴 수 없습니다.",
-      "deleteButton": "삭제"
+      "makePublic": "정말 공개하시겠습니까? 누구나 이 리소스를 발견할 수 있게 됩니다.",
+      "deleteCollection": "이 컬렉션과 모든 리소스를 삭제하시겠습니까?"
     }
   }
 }
