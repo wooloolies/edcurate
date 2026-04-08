@@ -8,10 +8,10 @@ import { hasBackendAccessToken } from "@/lib/auth/auth-client";
 import { Link } from "@/lib/i18n/routing";
 
 const NAV_LINKS = [
-  { href: "/about", label: "About us" },
   { href: "/collections", label: "Classroom" },
   { href: "/library", label: "Library" },
   { href: "/contact", label: "Contact us" },
+  { href: "/about", label: "About us" },
 ] as const;
 
 export function Header() {

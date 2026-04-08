@@ -1,23 +1,33 @@
 "use client";
 
 import { useQueryClient } from "@tanstack/react-query";
-import { Repeat, Search, X } from "lucide-react";
+import { Check, ChevronDown, ChevronUp, Pencil, Repeat, Search, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useQueryState } from "nuqs";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { CompactProgressBar } from "@/features/search/components/compact-progress-bar";
 import { ErrorBanner } from "@/features/search/components/error-banner";
 import { GeneratedQueriesPanel } from "@/features/search/components/generated-queries";
 import { SearchResultsGrid } from "@/features/search/components/search-results-grid";
 import { ResourceCardSkeleton } from "@/features/search/components/skeleton/resource-card-skeleton";
+import { SuggestedCollectionsRail } from "@/features/search/components/suggested-collections-rail";
 import { useSearchStream } from "@/features/search/hooks/use-search-stream";
 import { useSearchApiDiscoverySearchGet } from "@/lib/api/discovery/discovery";
 import type { JudgmentResult, ResourceCard } from "@/lib/api/model";
-import { useListPresetsApiPresetsGet } from "@/lib/api/presets/presets";
+import {
+  getListPresetsApiPresetsGetQueryKey,
+  useListPresetsApiPresetsGet,
+  useUpdatePresetApiPresetsPresetIdPut,
+} from "@/lib/api/presets/presets";
 import {
   getListSavedResourcesEndpointApiSavedGetQueryKey,
   useCreateCollectionEndpointApiSavedCollectionsPost,
@@ -42,6 +52,12 @@ export function SearchPageClient() {
     useCreateCollectionEndpointApiSavedCollectionsPost();
   const [selectedResources, setSelectedResources] = useState<Map<string, ResourceCard>>(new Map());
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
+  const [suggestedOpen, setSuggestedOpen] = useState(true);
+
+  const [isRenaming, setIsRenaming] = useState(false);
+  const [renameDraft, setRenameDraft] = useState("");
+  const renameInputRef = useRef<HTMLInputElement>(null);
+  const { mutateAsync: updatePreset } = useUpdatePresetApiPresetsPresetIdPut();
 
   // Build a set of already-saved URLs for the active preset
   const savedUrls = useMemo(() => {
@@ -72,7 +88,7 @@ export function SearchPageClient() {
     });
   };
 
-  const handleSaveSelected = async (name: string, isPublic: boolean) => {
+  const handleSaveSelected = async (name: string, isPublic: boolean, description?: string) => {
     if (!presetId || selectedResources.size === 0) return;
     try {
       const resourcesList = Array.from(selectedResources.values());
@@ -84,6 +100,7 @@ export function SearchPageClient() {
           preset_id: presetId,
           search_query: searchQuery || "custom",
           name: name,
+          description: description,
           is_public: isPublic,
           resources: resourcesList,
           evaluation_data_list: evaluationDataList,
@@ -102,6 +119,55 @@ export function SearchPageClient() {
 
   const handleClearSelection = () => {
     setSelectedResources(new Map());
+  };
+
+  const handleStartRename = () => {
+    setRenameDraft(activePreset?.name ?? "");
+    setIsRenaming(true);
+    requestAnimationFrame(() => renameInputRef.current?.select());
+  };
+
+  const handleConfirmRename = async () => {
+    const trimmed = renameDraft.trim();
+    if (!trimmed || !activePreset || !presetId) {
+      setIsRenaming(false);
+      return;
+    }
+    if (trimmed === activePreset.name) {
+      setIsRenaming(false);
+      return;
+    }
+    try {
+      await updatePreset({
+        presetId,
+        data: {
+          name: trimmed,
+          subject: activePreset.subject,
+          year_level: activePreset.year_level,
+          country: activePreset.country,
+          is_default: activePreset.is_default,
+          curriculum_framework: activePreset.curriculum_framework,
+          state_region: activePreset.state_region,
+          city: activePreset.city,
+          teaching_language: activePreset.teaching_language,
+          class_size: activePreset.class_size,
+          eal_d_students: activePreset.eal_d_students,
+          reading_support_students: activePreset.reading_support_students,
+          extension_students: activePreset.extension_students,
+          student_interests: activePreset.student_interests as string[],
+          language_backgrounds: activePreset.language_backgrounds as string[],
+          average_reading_level: activePreset.average_reading_level,
+          additional_notes: activePreset.additional_notes,
+        },
+      });
+      queryClient.invalidateQueries({
+        queryKey: getListPresetsApiPresetsGetQueryKey(),
+      });
+      toast.success(t("presetRenamed", { fallback: "Preset renamed" }));
+    } catch (_e) {
+      toast.error(t("presetRenameError", { fallback: "Failed to rename preset" }));
+    }
+    setIsRenaming(false);
   };
 
   const stream = useSearchStream(presetId, searchQuery);
@@ -173,13 +239,54 @@ export function SearchPageClient() {
   const hasContent = results || stream.isStreaming || isFetching || !!stream.partialResults;
 
   return (
-    <div className={`w-full max-w-4xl space-y-6 ${!hasContent ? "my-auto" : ""}`}>
+    <div className={`w-full max-w-6xl space-y-6 ${!hasContent ? "my-auto" : ""}`}>
       {/* Preset Header */}
       <div className="flex flex-col mb-2 pl-2">
         <div className="flex items-center gap-3">
-          <h2 className="text-3xl font-bold text-brand-ink leading-none mb-1">
-            {activePreset?.name ?? t("selectCollection")}
-          </h2>
+          {isRenaming ? (
+            <form
+              className="flex items-center gap-2"
+              onSubmit={(e) => {
+                e.preventDefault();
+                void handleConfirmRename();
+              }}
+            >
+              <input
+                ref={renameInputRef}
+                type="text"
+                value={renameDraft}
+                onChange={(e) => setRenameDraft(e.target.value)}
+                onBlur={() => void handleConfirmRename()}
+                onKeyDown={(e) => {
+                  if (e.key === "Escape") setIsRenaming(false);
+                }}
+                className="text-3xl font-bold text-brand-ink leading-none bg-transparent border-b-2 border-brand-green outline-none w-auto min-w-48"
+              />
+              <button
+                type="submit"
+                aria-label="Confirm rename"
+                className="p-2 rounded-xl hover:bg-green-50 transition-colors cursor-pointer"
+              >
+                <Check className="w-5 h-5 text-green-600" />
+              </button>
+            </form>
+          ) : (
+            <>
+              <h2 className="text-3xl font-bold text-brand-ink leading-none mb-1">
+                {activePreset?.name ?? t("selectCollection")}
+              </h2>
+              {activePreset ? (
+                <button
+                  type="button"
+                  onClick={handleStartRename}
+                  aria-label={t("renamePreset", { fallback: "Rename preset" })}
+                  className="p-2 border-2 border-white/40 rounded-xl bg-white/30 backdrop-blur-md shadow-sm flex items-center justify-center shrink-0 hover:bg-white transition-all transform hover:scale-105 cursor-pointer"
+                >
+                  <Pencil className="w-4 h-4 text-brand-ink" aria-hidden="true" />
+                </button>
+              ) : null}
+            </>
+          )}
           <Popover>
             <PopoverTrigger asChild>
               <button
@@ -282,6 +389,23 @@ export function SearchPageClient() {
 
       {results && results.errors.length > 0 ? <ErrorBanner errors={results.errors} /> : null}
 
+      {/* Suggested Collections — shown once a search is active */}
+      {!!(presetId && searchQuery && hasContent) ? (
+        <Collapsible open={suggestedOpen} onOpenChange={setSuggestedOpen}>
+          <CollapsibleTrigger className="flex w-full items-center gap-2 rounded-md border px-4 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted/50">
+            {suggestedOpen ? (
+              <ChevronUp className="h-4 w-4 shrink-0" />
+            ) : (
+              <ChevronDown className="h-4 w-4 shrink-0" />
+            )}
+            {t("suggestedCollections.title", { fallback: "Suggested Collections" })}
+          </CollapsibleTrigger>
+          <CollapsibleContent className="mt-2">
+            <SuggestedCollectionsRail presetId={presetId} searchQuery={searchQuery} />
+          </CollapsibleContent>
+        </Collapsible>
+      ) : null}
+
       {results?.generated_queries && !isFetching ? (
         <GeneratedQueriesPanel queries={results.generated_queries} />
       ) : null}
@@ -360,7 +484,7 @@ export function SearchPageClient() {
             onOpenChange={setIsSaveModalOpen}
             onSave={handleSaveSelected}
             isSaving={isSaving}
-            defaultName={searchQuery ? `Search: ${searchQuery}` : "New Collection"}
+            defaultName={searchQuery || ""}
           />
         </>
       )}

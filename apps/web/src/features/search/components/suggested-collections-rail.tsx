@@ -1,13 +1,13 @@
 "use client";
 
 import { useQueryClient } from "@tanstack/react-query";
-import { Check, Copy } from "lucide-react";
+import { ArrowLeft, BookOpen, Check, Copy, Info, RefreshCw, Users } from "lucide-react";
+import { DateTime } from "luxon";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -17,6 +17,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { ResourceCardRenderer } from "@/features/search/components/resource-card";
 import {
   getListSavedResourcesEndpointApiSavedGetQueryKey,
@@ -89,106 +90,154 @@ export function SuggestedCollectionsRail({
 
   return (
     <>
-      <Card className="border-dashed bg-muted/30">
-        <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-medium">
-            {t("suggestedCollections.title", { fallback: "Suggested Collections" })}
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ScrollArea className="pr-4 max-h-150">
-            <div className="space-y-4">
-              {suggestions.map((suggestion) => {
-                const item = suggestion.collection;
-                const isCloned = clonedIds.has(item.id) || suggestion.is_cloned_by_user;
+      <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-thin">
+        {suggestions.map((suggestion) => {
+          const item = suggestion.collection;
+          const isCloned = clonedIds.has(item.id) || suggestion.is_cloned_by_user;
 
-                return (
-                  <button
-                    type="button"
-                    key={item.id}
-                    className="flex flex-col gap-2 rounded-lg border bg-card p-3 shadow-sm hover:border-primary/50 cursor-pointer transition-colors text-left w-full"
-                    onClick={() => setSelectedColId(item.id)}
-                  >
-                    <div className="flex items-start justify-between gap-2">
-                      <div className="flex flex-col gap-1">
-                        <span className="font-medium text-sm line-clamp-2">{item.name}</span>
-                        <span className="text-xs text-muted-foreground line-clamp-1">
-                          {item.search_query}
-                        </span>
-                        {suggestion.publisher_name ? (
-                          <span className="text-xs text-muted-foreground">
-                            Published by{" "}
-                            <span className="font-medium">{suggestion.publisher_name}</span>
-                          </span>
-                        ) : null}
-                      </div>
-                    </div>
-                    <div className="flex items-center justify-between mt-1">
-                      <div className="flex items-center gap-3">
-                        <span className="text-xs text-muted-foreground">
-                          {t("suggestedCollections.sourcesCount", {
-                            count: suggestion.resources_count || 0,
-                            fallback: `${suggestion.resources_count || 0} sources`,
-                          })}
-                        </span>
-                        <span className="text-xs text-muted-foreground">
-                          {t("suggestedCollections.clonesCount", {
-                            count: item.clone_count,
-                            fallback: `${item.clone_count} clones`,
-                          })}
-                        </span>
-                      </div>
-                      {isCloned ? (
-                        <div className="flex items-center gap-1 text-xs text-green-600 bg-green-50 px-2 py-0.5 rounded-full font-medium">
-                          <Check className="h-3 w-3" />
-                          {t("suggestedCollections.cloned", { fallback: "Cloned" })}
-                        </div>
-                      ) : null}
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-          </ScrollArea>
-        </CardContent>
-      </Card>
+          return (
+            <button
+              type="button"
+              key={item.id}
+              className="flex flex-col gap-2.5 rounded-lg border bg-card p-3 shadow-sm hover:border-primary/50 cursor-pointer transition-colors text-left shrink-0 w-64"
+              onClick={() => setSelectedColId(item.id)}
+            >
+              <div className="flex items-start justify-between gap-2">
+                <span className="font-semibold text-sm line-clamp-2">{item.name}</span>
+                {isCloned ? (
+                  <span className="inline-flex items-center gap-1 text-xs text-green-600 bg-green-50 px-2 py-0.5 rounded-full font-medium shrink-0">
+                    <Check className="h-3 w-3" />
+                    {t("suggestedCollections.cloned", { fallback: "In my Library" })}
+                  </span>
+                ) : null}
+              </div>
+              {item.description ? (
+                <p className="text-xs text-muted-foreground line-clamp-2">{item.description}</p>
+              ) : null}
+              {suggestion.publisher_name ? (
+                <span className="text-xs text-muted-foreground">
+                  Published by{" "}
+                  <span className="font-medium">{suggestion.publisher_name}</span>
+                </span>
+              ) : null}
+              <div className="flex items-center gap-3 mt-auto text-xs text-muted-foreground">
+                <div className="flex items-center gap-1">
+                  <BookOpen className="h-3 w-3" />
+                  <span className="font-medium">{suggestion.resources_count || 0}</span> sources
+                </div>
+                <div className="flex items-center gap-1">
+                  <Users className="h-3 w-3" />
+                  <span className="font-medium">{item.clone_count}</span> copies
+                </div>
+              </div>
+              {item.created_at ? (
+                <span className="text-xs text-muted-foreground">
+                  {DateTime.fromISO(item.created_at).toRelative()}
+                </span>
+              ) : null}
+            </button>
+          );
+        })}
+      </div>
 
       <Dialog open={!!selectedColId} onOpenChange={(open) => !open && setSelectedColId(null)}>
         {selectedSuggestion &&
           (() => {
             const item = selectedSuggestion.collection;
             const isCloned = clonedIds.has(item.id) || selectedSuggestion.is_cloned_by_user;
+            const needsSync =
+              isCloned && !syncedIds.has(item.id) && selectedSuggestion.needs_sync;
 
             return (
-              <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
+              <DialogContent className="sm:max-w-4xl max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
-                  <DialogTitle>{item.name}</DialogTitle>
-                  <DialogDescription>
-                    {t("suggestedCollections.previewDescription", {
-                      fallback: "Collection Details",
-                    })}
-                  </DialogDescription>
+                  <div className="flex items-center gap-3">
+                    <DialogTitle>{item.name}</DialogTitle>
+                    {isCloned ? (
+                      <span className="inline-flex items-center gap-1 text-xs text-green-600 bg-green-50 px-2.5 py-1 rounded-full font-medium">
+                        <Check className="h-3 w-3" />
+                        Already in my Library
+                      </span>
+                    ) : null}
+                  </div>
+                  {item.description ? (
+                    <p className="text-sm text-muted-foreground mt-1">{item.description}</p>
+                  ) : (
+                    <DialogDescription>
+                      {t("suggestedCollections.previewDescription", {
+                        fallback: "Collection Details",
+                      })}
+                    </DialogDescription>
+                  )}
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
-                  <div className="flex flex-col gap-1">
-                    <span className="font-semibold text-sm">Target Query</span>
-                    <p className="text-sm text-muted-foreground">{item.search_query}</p>
-                  </div>
-                  {selectedSuggestion.publisher_name ? (
+                  <div className="grid grid-cols-3 gap-4">
                     <div className="flex flex-col gap-1">
-                      <span className="font-semibold text-sm">Published by</span>
-                      <p className="text-sm text-muted-foreground">
-                        {selectedSuggestion.publisher_name}
-                      </p>
+                      <span className="font-semibold text-sm flex items-center gap-1.5">
+                        Target Query
+                        <TooltipProvider delayDuration={200}>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Info className="h-3.5 w-3.5 text-muted-foreground cursor-help" />
+                            </TooltipTrigger>
+                            <TooltipContent side="right" className="max-w-56">
+                              <p>The original search query used when this collection was created.</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      </span>
+                      <p className="text-sm text-muted-foreground">{item.search_query}</p>
                     </div>
-                  ) : null}
+                    {selectedSuggestion.publisher_name ? (
+                      <div className="flex flex-col gap-1">
+                        <span className="font-semibold text-sm flex items-center gap-1.5">
+                          Published by
+                          <TooltipProvider delayDuration={200}>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <Info className="h-3.5 w-3.5 text-muted-foreground cursor-help" />
+                              </TooltipTrigger>
+                              <TooltipContent side="right" className="max-w-56">
+                                <p>The educator who created and shared this collection publicly.</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                        </span>
+                        <p className="text-sm text-muted-foreground">
+                          {selectedSuggestion.publisher_name}
+                        </p>
+                      </div>
+                    ) : null}
+                    {item.created_at ? (
+                      <div className="flex flex-col gap-1">
+                        <span className="font-semibold text-sm flex items-center gap-1.5">
+                          Created
+                          <TooltipProvider delayDuration={200}>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <Info className="h-3.5 w-3.5 text-muted-foreground cursor-help" />
+                              </TooltipTrigger>
+                              <TooltipContent side="right" className="max-w-56">
+                                <p>When this collection was first created and saved.</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                        </span>
+                        <p className="text-sm text-muted-foreground">
+                          {DateTime.fromISO(item.created_at).toRelative()}
+                        </p>
+                      </div>
+                    ) : null}
+                  </div>
                   <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                    <div>
+                    <div className="flex items-center gap-1.5">
+                      <BookOpen className="h-3.5 w-3.5" />
                       <span className="font-medium">{selectedSuggestion.resources_count || 0}</span>{" "}
                       sources
                     </div>
-                    <div>
-                      <span className="font-medium">{item.clone_count}</span> clones
+                    <div className="flex items-center gap-1.5">
+                      <Users className="h-3.5 w-3.5" />
+                      <span className="font-medium">{item.clone_count}</span> copies
                     </div>
                   </div>
                   {selectedSuggestion.resources && selectedSuggestion.resources.length > 0 ? (
@@ -211,22 +260,34 @@ export function SuggestedCollectionsRail({
                 </div>
                 <DialogFooter>
                   <Button variant="outline" onClick={() => setSelectedColId(null)}>
-                    {t("cancel", { fallback: "Cancel" })}
+                    <ArrowLeft className="mr-1.5 h-4 w-4" />
+                    {t("back", { fallback: "Back" })}
                   </Button>
                   {isCloned ? (
-                    <Button
-                      onClick={() => handleSync(item.id)}
-                      disabled={syncedIds.has(item.id) || isSyncing}
-                    >
-                      <Check className="mr-1.5 h-4 w-4" />
-                      {syncedIds.has(item.id)
-                        ? t("suggestedCollections.syncSuccess", { fallback: "Synced" })
-                        : t("suggestedCollections.syncCollection", { fallback: "Sync Collection" })}
-                    </Button>
+                    needsSync ? (
+                      <Button
+                        onClick={() => handleSync(item.id)}
+                        disabled={isSyncing}
+                      >
+                        <RefreshCw className="mr-1.5 h-4 w-4" />
+                        {t("suggestedCollections.syncCollection", {
+                          fallback: "Update my collection",
+                        })}
+                      </Button>
+                    ) : (
+                      <Button variant="outline" disabled>
+                        <Check className="mr-1.5 h-4 w-4" />
+                        {t("suggestedCollections.upToDate", {
+                          fallback: "Up to date",
+                        })}
+                      </Button>
+                    )
                   ) : (
                     <Button onClick={() => handleClone(item.id)}>
                       <Copy className="mr-1.5 h-4 w-4" />
-                      {t("suggestedCollections.cloneCollection", { fallback: "Clone Collection" })}
+                      {t("suggestedCollections.cloneCollection", {
+                        fallback: "Copy to my Library",
+                      })}
                     </Button>
                   )}
                 </DialogFooter>

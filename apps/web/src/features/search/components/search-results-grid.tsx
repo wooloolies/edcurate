@@ -7,7 +7,6 @@ import { useEffect, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { ResourceCardRenderer } from "@/features/search/components/resource-card";
-import { SuggestedCollectionsRail } from "@/features/search/components/suggested-collections-rail";
 import type { ResourceAgentProgress } from "@/features/search/types/search-stream";
 import type { JudgmentResult, ResourceCard } from "@/lib/api/model";
 
@@ -123,7 +122,7 @@ export function SearchResultsGrid({
       </aside>
 
       {/* Right Content: Results List */}
-      <section className="lg:col-span-7 min-h-[400px]">
+      <section className="lg:col-span-10 min-h-[400px]">
         {(() => {
           const items = filterBySource(activeCategory === "all" ? undefined : activeCategory);
           const visibleItems = items.slice(0, visibleCount);
@@ -205,12 +204,6 @@ export function SearchResultsGrid({
         })()}
       </section>
 
-      {/* Suggested Collections Rail */}
-      <section className="lg:col-span-3 space-y-4">
-        {!!(presetId && searchQuery) && (
-          <SuggestedCollectionsRail presetId={presetId} searchQuery={searchQuery} />
-        )}
-      </section>
     </div>
   );
 }

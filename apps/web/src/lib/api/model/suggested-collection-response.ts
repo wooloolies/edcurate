@@ -13,5 +13,6 @@ export interface SuggestedCollectionResponse {
   resources_count?: number;
   publisher_name?: string | null;
   is_cloned_by_user?: boolean;
+  needs_sync?: boolean;
   resources?: SavedResourceResponse[];
 }

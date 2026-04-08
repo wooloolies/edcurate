@@ -3,6 +3,7 @@
 import { Globe, Lock } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
+
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -14,6 +15,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 
 export function SaveCollectionDialog({
   isOpen,
@@ -24,18 +26,18 @@ export function SaveCollectionDialog({
 }: {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
-  onSave: (name: string, isPublic: boolean) => void;
+  onSave: (name: string, isPublic: boolean, description?: string) => void;
   isSaving: boolean;
   defaultName?: string;
 }) {
   const t = useTranslations("search");
   const [name, setName] = useState(defaultName);
+  const [description, setDescription] = useState("");
   const [isPublic, setIsPublic] = useState(false);
   const [showPublicWarning, setShowPublicWarning] = useState(false);
 
   const handleTogglePrivacy = () => {
     if (!isPublic) {
-      // Trying to make it public - show warning
       setShowPublicWarning(true);
     } else {
       setIsPublic(false);
@@ -51,6 +53,7 @@ export function SaveCollectionDialog({
   const handleDisplayChange = (open: boolean) => {
     if (open && !isOpen) {
       setName(defaultName);
+      setDescription("");
       setIsPublic(false);
       setShowPublicWarning(false);
     }
@@ -74,6 +77,18 @@ export function SaveCollectionDialog({
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder={t("saveCollection.namePlaceholder")}
+            />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="description">{t("saveCollection.descriptionLabel")}</Label>
+            <Textarea
+              id="description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder={t("saveCollection.descriptionPlaceholder")}
+              rows={3}
+              className="resize-none"
             />
           </div>
 
@@ -127,7 +142,7 @@ export function SaveCollectionDialog({
           </Button>
           <Button
             disabled={!name.trim() || isSaving || showPublicWarning}
-            onClick={() => onSave(name, isPublic)}
+            onClick={() => onSave(name, isPublic, description || undefined)}
           >
             {isSaving ? t("saving") : t("save")}
           </Button>
