@@ -731,6 +731,58 @@ async def evaluate_single_resource(
     return SavedResourceResponse.model_validate(saved)
 
 
+async def evaluate_single_resource_stream(
+    db: DBSession, user_id: uuid.UUID, saved_resource_id: uuid.UUID
+) -> AsyncGenerator[EvalStageEvent, None]:
+    """Stream single resource evaluation progress via SSE."""
+    from src.discovery.service import _prepare_rag_context, _process_one
+
+    result = await db.execute(
+        select(SavedResource, ClassroomPreset)
+        .join(ClassroomPreset, SavedResource.preset_id == ClassroomPreset.id)
+        .where(
+            SavedResource.id == saved_resource_id,
+            SavedResource.user_id == user_id,
+        )
+    )
+    row = result.one_or_none()
+    if row is None:
+        yield EvalStageEvent(stage="complete", status="done", data={"processed": 0})
+        return
+
+    saved, preset = row
+    card = ResourceCard.model_validate(saved.resource_data)
+
+    yield EvalStageEvent(stage="rag_preparation", status="working", data={"total": 1})
+
+    search_id = str(uuid.uuid4())
+    ctx = await _prepare_rag_context(
+        [card], preset, saved.search_query or "Evaluate resource", search_id
+    )
+
+    yield EvalStageEvent(stage="rag_preparation", status="done")
+
+    if ctx is None:
+        yield EvalStageEvent(stage="complete", status="done", data={"processed": 0})
+        return
+
+    yield EvalStageEvent(stage="evaluation", status="working", resource_url=card.url)
+
+    try:
+        judgment = await asyncio.wait_for(_process_one(card, ctx), timeout=120)
+    except (TimeoutError, Exception) as e:
+        logger.warning("Single resource evaluation failed", url=card.url, error=str(e))
+        yield EvalStageEvent(stage="complete", status="done", data={"processed": 0})
+        return
+
+    if judgment:
+        saved.evaluation_data = judgment.model_dump(mode="json")
+        await db.commit()
+        yield EvalStageEvent(stage="evaluation", status="done", resource_url=card.url)
+
+    yield EvalStageEvent(stage="complete", status="done", data={"processed": 1 if judgment else 0})
+
+
 async def evaluate_saved_resources(
     db: DBSession,
     user_id: uuid.UUID,

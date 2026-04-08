@@ -24,11 +24,8 @@ export function useEvaluationStream() {
     });
   }, []);
 
-  const startStream = useCallback(
-    async (presetId: string, searchQuery: string) => {
-      const key = `${presetId}:${searchQuery}`;
-
-      // Abort existing stream for this key if any
+  const consumeSSE = useCallback(
+    async (key: string, path: string, params: Record<string, string>) => {
       abortControllers.current.get(key)?.abort();
 
       const controller = new AbortController();
@@ -43,11 +40,7 @@ export function useEvaluationStream() {
       });
 
       try {
-        const response = await fetchSSE(
-          "/api/saved/evaluate/stream",
-          { preset_id: presetId, search_query: searchQuery },
-          controller.signal
-        );
+        const response = await fetchSSE(path, params, controller.signal);
 
         if (!response.ok || !response.body) {
           updateStream(key, { isStreaming: false, error: "Failed to connect" });
@@ -68,11 +61,8 @@ export function useEvaluationStream() {
 
           for (const event of parsed) {
             if (event.stage === "rag_preparation") {
-              const total = (event.data?.total as number) ?? 0;
-              updateStream(key, {
-                stage: "rag_preparation",
-                totalCount: total || 0,
-              });
+              const total = typeof event.data?.total === "number" ? event.data.total : 0;
+              updateStream(key, { stage: "rag_preparation", totalCount: total });
             } else if (event.stage === "evaluation") {
               if (event.status === "done") {
                 setStreams((prev) => {
@@ -102,7 +92,6 @@ export function useEvaluationStream() {
         }
       } finally {
         abortControllers.current.delete(key);
-        // Mark done and schedule cleanup
         setStreams((prev) => {
           const next = new Map(prev);
           const current = next.get(key);
@@ -111,7 +100,6 @@ export function useEvaluationStream() {
           }
           return next;
         });
-        // Remove stale entry after UI has time to read final state
         setTimeout(() => {
           setStreams((prev) => {
             const next = new Map(prev);
@@ -127,23 +115,47 @@ export function useEvaluationStream() {
     [queryClient, updateStream]
   );
 
-  const stopStream = useCallback((presetId: string, searchQuery: string) => {
-    const key = `${presetId}:${searchQuery}`;
-    abortControllers.current.get(key)?.abort();
-    abortControllers.current.delete(key);
-    setStreams((prev) => {
-      const next = new Map(prev);
-      next.delete(key);
-      return next;
-    });
-  }, []);
+  const startStream = useCallback(
+    (presetId: string, searchQuery: string) => {
+      const key = `batch:${presetId}:${searchQuery}`;
+      void consumeSSE(key, "/api/saved/evaluate/stream", {
+        preset_id: presetId,
+        search_query: searchQuery,
+      });
+    },
+    [consumeSSE]
+  );
+
+  const startSingleStream = useCallback(
+    (resourceId: string) => {
+      const key = `single:${resourceId}`;
+      void consumeSSE(key, "/api/saved/evaluate-single/stream", {
+        saved_resource_id: resourceId,
+      });
+    },
+    [consumeSSE]
+  );
 
   const getStreamState = useCallback(
-    (presetId: string, searchQuery: string): EvalStreamState | null => {
-      return streams.get(`${presetId}:${searchQuery}`) ?? null;
+    (key: string): EvalStreamState | null => {
+      return streams.get(key) ?? null;
     },
     [streams]
   );
 
-  return { startStream, stopStream, getStreamState };
+  const getBatchState = useCallback(
+    (presetId: string, searchQuery: string): EvalStreamState | null => {
+      return streams.get(`batch:${presetId}:${searchQuery}`) ?? null;
+    },
+    [streams]
+  );
+
+  const getSingleState = useCallback(
+    (resourceId: string): EvalStreamState | null => {
+      return streams.get(`single:${resourceId}`) ?? null;
+    },
+    [streams]
+  );
+
+  return { startStream, startSingleStream, getStreamState, getBatchState, getSingleState };
 }

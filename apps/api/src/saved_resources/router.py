@@ -163,6 +163,28 @@ async def add_custom_link_endpoint(
     return await service.add_custom_link(db, user_id, request)
 
 
+@router.get("/evaluate-single/stream")
+@rate_limit(requests=10, window=60, key_func=_saved_rate_limit_key)
+async def evaluate_single_stream_endpoint(
+    request: Request,
+    db: DBSession,
+    current_user: CurrentUser,
+    saved_resource_id: uuid.UUID = Query(...),
+) -> EventSourceResponse:
+    """Stream single resource evaluation progress as SSE events."""
+    user_id = uuid.UUID(current_user.id)
+
+    async def _event_generator():
+        async for event in service.evaluate_single_resource_stream(
+            db, user_id, saved_resource_id
+        ):
+            if await request.is_disconnected():
+                break
+            yield {"event": "stage", "data": event.model_dump_json()}
+
+    return EventSourceResponse(_event_generator())
+
+
 @router.get("/evaluate/stream")
 @rate_limit(requests=5, window=60, key_func=_saved_rate_limit_key)
 async def evaluate_stream_endpoint(

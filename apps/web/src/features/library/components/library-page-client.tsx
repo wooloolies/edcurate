@@ -45,7 +45,6 @@ import {
   useAddCustomLinkEndpointApiSavedLinkPost,
   useDeleteCollectionEndpointApiSavedCollectionsCollectionIdDelete,
   useDeleteSavedResourceEndpointApiSavedIdDelete,
-  useEvaluateSingleResourceEndpointApiSavedEvaluateSinglePost,
   useListSavedResourcesEndpointApiSavedGet,
   useUpdateCollectionEndpointApiSavedCollectionsCollectionIdPatch,
 } from "@/lib/api/saved-resources/saved-resources";
@@ -57,16 +56,13 @@ export function LibraryPageClient() {
 
   const { data: savedData, isFetching: isLoading } = useListSavedResourcesEndpointApiSavedGet();
   const { mutateAsync: addLink, isPending: isAdding } = useAddCustomLinkEndpointApiSavedLinkPost();
-  const { startStream, getStreamState } = useEvaluationStream();
-  const { mutateAsync: evaluateSingle } =
-    useEvaluateSingleResourceEndpointApiSavedEvaluateSinglePost();
+  const { startStream, startSingleStream, getBatchState, getSingleState } = useEvaluationStream();
   const { mutateAsync: deleteResource } = useDeleteSavedResourceEndpointApiSavedIdDelete();
   const { mutateAsync: updateCollection } =
     useUpdateCollectionEndpointApiSavedCollectionsCollectionIdPatch();
   const { mutateAsync: deleteCollection } =
     useDeleteCollectionEndpointApiSavedCollectionsCollectionIdDelete();
 
-  const [evaluatingIds, setEvaluatingIds] = useState<Set<string>>(new Set());
   const [deletingIds, setDeletingIds] = useState<Set<string>>(new Set());
   const [closedGroups, setClosedGroups] = useState<Set<string>>(new Set());
   const [addLinkOpenFor, setAddLinkOpenFor] = useState<string | null>(null);
@@ -133,20 +129,8 @@ export function LibraryPageClient() {
     void startStream(presetId, searchQuery);
   };
 
-  const handleEvaluateSingle = async (resourceId: string) => {
-    setEvaluatingIds((prev) => new Set(prev).add(resourceId));
-    try {
-      await evaluateSingle({ data: { saved_resource_id: resourceId } });
-      invalidateLibrary();
-    } catch {
-      toast.error("Failed to evaluate resource");
-    } finally {
-      setEvaluatingIds((prev) => {
-        const next = new Set(prev);
-        next.delete(resourceId);
-        return next;
-      });
-    }
+  const handleEvaluateSingle = (resourceId: string) => {
+    startSingleStream(resourceId);
   };
 
   const handleDelete = async (resourceId: string) => {
@@ -212,20 +196,28 @@ export function LibraryPageClient() {
   };
 
   const renderCardAction = (item: SavedResourceResponse) => {
-    const isEvaluatingThis = evaluatingIds.has(item.id);
+    const singleState = getSingleState(item.id);
+    const isEvaluatingThis = singleState?.isStreaming ?? false;
+    const singleLabel = isEvaluatingThis
+      ? singleState?.stage === "rag_preparation"
+        ? "Preparing..."
+        : "Evaluating..."
+      : item.evaluation_data
+        ? "Re-evaluate"
+        : "Evaluate";
     return (
       <button
         type="button"
         onClick={(e) => {
           e.preventDefault();
           e.stopPropagation();
-          void handleEvaluateSingle(item.id);
+          handleEvaluateSingle(item.id);
         }}
         disabled={isEvaluatingThis}
         className="inline-flex items-center justify-center rounded-full bg-brand-green px-3.5 py-1.5 text-xs font-medium text-brand-ink transition-all hover:bg-brand-ink hover:text-white disabled:opacity-50"
       >
         <ScanSearch className="mr-1.5 h-3 w-3" />
-        {isEvaluatingThis ? "Evaluating..." : item.evaluation_data ? "Re-evaluate" : "Evaluate"}
+        {singleLabel}
       </button>
     );
   };
@@ -234,7 +226,7 @@ export function LibraryPageClient() {
     const col = colGroup.collection;
     const groupKey = col.id;
     const searchQuery = col.search_query;
-    const streamState = getStreamState(presetId, searchQuery);
+    const streamState = getBatchState(presetId, searchQuery);
     const isEvaluatingGroup = streamState?.isStreaming ?? false;
 
     const _VERDICT_ORDER: Record<string, number> = { use_it: 0, adapt_it: 1, skip_it: 2 };
