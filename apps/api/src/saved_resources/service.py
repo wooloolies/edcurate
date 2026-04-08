@@ -807,7 +807,10 @@ async def evaluate_saved_resources_stream(
             ClassroomPreset.user_id == user_id,
         )
     )
-    preset = preset_exec.scalar_one()
+    preset = preset_exec.scalar_one_or_none()
+    if preset is None:
+        yield EvalStageEvent(stage="complete", status="done", data={"processed": 0})
+        return
     cards = [ResourceCard.model_validate(r.resource_data) for r in unevaluated]
 
     # Stage 1: RAG preparation
@@ -823,40 +826,34 @@ async def evaluate_saved_resources_stream(
         return
 
     # Stage 2: Per-resource evaluation with progress
-    # Create named tasks so we can map results back to resources
-    task_map: dict[asyncio.Task, tuple[ResourceCard, SavedResource]] = {}
+    task_to_resource: dict[asyncio.Task, tuple[ResourceCard, SavedResource]] = {}
     for card, saved in zip(cards, unevaluated):
         task = asyncio.create_task(_process_one(card, ctx))
-        task_map[task] = (card, saved)
+        task_to_resource[task] = (card, saved)
         yield EvalStageEvent(stage="evaluation", status="working", resource_url=card.url)
 
     processed = 0
-    for coro in asyncio.as_completed(list(task_map.keys())):
+    for task in asyncio.as_completed(list(task_to_resource.keys())):
+        card, saved = task_to_resource[task]
         try:
-            judgment = await coro
+            judgment = await asyncio.wait_for(task, timeout=120)
+        except TimeoutError:
+            logger.warning("Resource evaluation timed out", url=card.url)
+            continue
         except Exception as e:
-            logger.warning("Resource evaluation failed", error=str(e))
+            logger.warning("Resource evaluation failed", url=card.url, error=str(e))
             continue
 
         if judgment is None:
             continue
 
-        # Find which task completed and match by identity
-        for task, (card, saved) in task_map.items():
-            if task.done() and not task.cancelled():
-                try:
-                    result = task.result()
-                except Exception:
-                    continue
-                if result is judgment:
-                    saved.evaluation_data = judgment.model_dump(mode="json")
-                    processed += 1
-                    yield EvalStageEvent(
-                        stage="evaluation",
-                        status="done",
-                        resource_url=card.url,
-                    )
-                    break
+        saved.evaluation_data = judgment.model_dump(mode="json")
+        processed += 1
+        yield EvalStageEvent(
+            stage="evaluation",
+            status="done",
+            resource_url=card.url,
+        )
 
     await db.commit()
     yield EvalStageEvent(stage="complete", status="done", data={"processed": processed})

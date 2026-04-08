@@ -4,7 +4,9 @@ from typing import Any
 from fastapi import APIRouter, Query, Request, status
 from sse_starlette.sse import EventSourceResponse
 
+from src.lib.auth import decode_token
 from src.lib.dependencies import CurrentUser, DBSession
+from src.lib.rate_limit import rate_limit
 from src.saved_resources import service
 from src.saved_resources.schemas import (
     AddCustomLinkRequest,
@@ -21,6 +23,18 @@ from src.saved_resources.schemas import (
 )
 
 router = APIRouter()
+
+
+def _saved_rate_limit_key(request: Request) -> str:
+    """Rate limit key scoped to authenticated user id."""
+    auth = request.headers.get("Authorization", "")
+    if auth.startswith("Bearer "):
+        try:
+            payload = decode_token(auth.removeprefix("Bearer ").strip())
+            return f"saved:evaluate:{payload.user_id}"
+        except Exception:
+            pass
+    return f"saved:evaluate:{request.client.host if request.client else 'unknown'}"
 
 
 @router.get("")
@@ -150,6 +164,7 @@ async def add_custom_link_endpoint(
 
 
 @router.get("/evaluate/stream")
+@rate_limit(requests=5, window=60, key_func=_saved_rate_limit_key)
 async def evaluate_stream_endpoint(
     request: Request,
     db: DBSession,

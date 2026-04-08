@@ -102,7 +102,7 @@ export function useEvaluationStream() {
         }
       } finally {
         abortControllers.current.delete(key);
-        // Ensure stream is marked as done
+        // Mark done and schedule cleanup
         setStreams((prev) => {
           const next = new Map(prev);
           const current = next.get(key);
@@ -111,6 +111,17 @@ export function useEvaluationStream() {
           }
           return next;
         });
+        // Remove stale entry after UI has time to read final state
+        setTimeout(() => {
+          setStreams((prev) => {
+            const next = new Map(prev);
+            const entry = next.get(key);
+            if (entry && !entry.isStreaming) {
+              next.delete(key);
+            }
+            return next;
+          });
+        }, 3000);
       }
     },
     [queryClient, updateStream]

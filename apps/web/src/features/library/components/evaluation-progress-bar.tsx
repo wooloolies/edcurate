@@ -35,14 +35,13 @@ export function EvaluationProgressBar({ stage, completedCount, totalCount }: Eva
         <span className="text-xs font-medium text-brand-ink/70">{label}</span>
       </div>
 
-      <div
-        className="h-1.5 flex-1 overflow-hidden rounded-full bg-brand-green/20"
-        role="progressbar"
-        aria-valuenow={percent}
-        aria-valuemin={0}
-        aria-valuemax={100}
-      >
+      <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-brand-green/20">
         <div
+          role="progressbar"
+          aria-valuenow={percent}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-label={label}
           className="h-full rounded-full bg-brand-green transition-all duration-700 ease-out"
           style={{ width: `${percent}%` }}
         />
