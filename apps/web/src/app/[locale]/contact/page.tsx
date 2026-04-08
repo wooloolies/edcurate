@@ -52,7 +52,7 @@ export default function ContactPage() {
       <CanvasBackground />
       <Header />
 
-      <main className="relative z-10 mx-auto max-w-5xl px-4 pt-32 pb-16">
+      <main className="relative z-10 mx-auto max-w-7xl px-4 pt-32 pb-16">
         <div>
           <h1 className="text-4xl font-bold tracking-tight text-brand-ink">{t("title")}</h1>
           <p className="mt-2 text-[15px] text-brand-ink/50">{t("subtitle")}</p>

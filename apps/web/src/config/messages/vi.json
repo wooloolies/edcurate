@@ -397,8 +397,8 @@
       "evaluatingResources": "Đang đánh giá tài nguyên...",
       "resourceCount": "{completed}/{total} hoàn tất"
     },
-    "title": "Thư viện",
-    "subtitle": "Tài nguyên được tuyển chọn từ bộ sưu tập giảng dạy",
+    "title": "Thư viện của tôi",
+    "subtitle": "Tài nguyên được tuyển chọn từ bộ sưu tập giảng dạy của tôi",
     "empty": {
       "title": "Thư viện trống",
       "description": "Lưu tài nguyên từ kết quả tìm kiếm để xây dựng bộ sưu tập.",

@@ -421,11 +421,11 @@
       "evaluatingResources": "Evaluating resources...",
       "resourceCount": "{completed} of {total} evaluated"
     },
-    "title": "Your Library",
-    "subtitle": "Curated resources across your teaching collections",
+    "title": "My Library",
+    "subtitle": "Curated resources across my teaching collections",
     "empty": {
-      "title": "Your library is empty",
-      "description": "Save resources from your search results to build your curated collection.",
+      "title": "My library is empty",
+      "description": "Save resources from search results to build a curated collection.",
       "startSearching": "Start Searching"
     },
     "collection": {
