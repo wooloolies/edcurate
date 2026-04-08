@@ -2,6 +2,7 @@
 
 import asyncio
 import hashlib
+import re
 import uuid
 from collections.abc import AsyncGenerator
 from dataclasses import dataclass
@@ -45,8 +46,6 @@ from src.rag.weaviate_store import (
 )
 
 logger = get_logger(__name__)
-
-import re
 
 _STATUS_CODE_RE = re.compile(r"(\d{3})")
 
@@ -295,7 +294,7 @@ async def _prepare_rag_context(
 
 
 async def _process_one(card: ResourceCard, ctx: _RagContext) -> JudgmentResult | None:
-    """Call 1 (Triage) + Call 2 (Risk Scanner) in parallel, then Call 3 (Final Judge)."""
+    """Triage + Risk Scanner in parallel, then Final Judge."""
     # Retrieve both chunk sets in parallel
     try:
         eval_retrieved, adv_retrieved = await asyncio.gather(
@@ -845,7 +844,8 @@ async def search_resources_stream(
                     )
     else:
         logger.error(
-            "RAG context preparation failed (stream) — returning results without evaluations"
+            "RAG context preparation failed (stream)"
+            " - returning results without evaluations"
         )
 
     # Sort: judged resources first (by verdict proxy), unevaluated at end

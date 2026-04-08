@@ -1,3 +1,4 @@
+import logging
 import uuid
 from typing import Any
 
@@ -33,7 +34,7 @@ def _saved_rate_limit_key(request: Request) -> str:
             payload = decode_token(auth.removeprefix("Bearer ").strip())
             return f"saved:evaluate:{payload.user_id}"
         except Exception:
-            pass
+            logging.debug("Token decode failed for rate-limit key")
     return f"saved:evaluate:{request.client.host if request.client else 'unknown'}"
 
 

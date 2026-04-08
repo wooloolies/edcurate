@@ -11,9 +11,9 @@ from src.agents.schemas import JudgedSearchResponse, JudgmentResult
 from src.discovery import service
 from src.lib.auth import decode_token
 from src.lib.dependencies import CurrentUser, DBSession
+from src.lib.logging import get_logger
 from src.lib.rate_limit import rate_limit
 from src.presets.model import ClassroomPreset
-from src.lib.logging import get_logger
 
 logger = get_logger(__name__)
 

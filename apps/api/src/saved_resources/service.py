@@ -10,6 +10,7 @@ from sqlalchemy.dialects.postgresql import insert
 
 from src.discovery.schemas import ResourceCard
 from src.lib.dependencies import DBSession
+from src.lib.logging import get_logger
 from src.presets.model import ClassroomPreset
 from src.saved_resources.model import LibraryCollection, SavedResource
 from src.saved_resources.schemas import (
@@ -27,6 +28,8 @@ from src.saved_resources.schemas import (
     SuggestedCollectionResponse,
 )
 from src.users.model import User
+
+logger = get_logger(__name__)
 
 
 def _dump_eval_data(evaluation_data: Any) -> dict[str, Any] | None:
@@ -806,7 +809,11 @@ async def evaluate_single_resource_stream(
     try:
         judgment = await asyncio.wait_for(_process_one(card, ctx), timeout=120)
     except (TimeoutError, Exception) as e:
-        logger.warning("Single resource evaluation failed", url=card.url, error=str(e))
+        logger.warning(
+            "Single resource evaluation failed",
+            url=card.url,
+            error=str(e),
+        )
         yield EvalStageEvent(stage="complete", status="done", data={"processed": 0})
         return
 
@@ -815,7 +822,10 @@ async def evaluate_single_resource_stream(
         await db.commit()
         yield EvalStageEvent(stage="evaluation", status="done", resource_url=card.url)
 
-    yield EvalStageEvent(stage="complete", status="done", data={"processed": 1 if judgment else 0})
+    count = 1 if judgment else 0
+    yield EvalStageEvent(
+        stage="complete", status="done", data={"processed": count}
+    )
 
 
 async def evaluate_saved_resources(
@@ -901,7 +911,11 @@ async def evaluate_saved_resources_stream(
     cards = [ResourceCard.model_validate(r.resource_data) for r in unevaluated]
 
     # Stage 1: RAG preparation
-    yield EvalStageEvent(stage="rag_preparation", status="working", data={"total": len(cards)})
+    yield EvalStageEvent(
+        stage="rag_preparation",
+        status="working",
+        data={"total": len(cards)},
+    )
 
     search_id = str(uuid.uuid4())
     ctx = await _prepare_rag_context(cards, preset, search_query, search_id)
@@ -914,10 +928,14 @@ async def evaluate_saved_resources_stream(
 
     # Stage 2: Per-resource evaluation with progress
     task_to_resource: dict[asyncio.Task, tuple[ResourceCard, SavedResource]] = {}
-    for card, saved in zip(cards, unevaluated):
+    for card, saved in zip(cards, unevaluated, strict=False):
         task = asyncio.create_task(_process_one(card, ctx))
         task_to_resource[task] = (card, saved)
-        yield EvalStageEvent(stage="evaluation", status="working", resource_url=card.url)
+        yield EvalStageEvent(
+            stage="evaluation",
+            status="working",
+            resource_url=card.url,
+        )
 
     processed = 0
     for task in asyncio.as_completed(list(task_to_resource.keys())):
@@ -925,10 +943,16 @@ async def evaluate_saved_resources_stream(
         try:
             judgment = await asyncio.wait_for(task, timeout=120)
         except TimeoutError:
-            logger.warning("Resource evaluation timed out", url=card.url)
+            logger.warning(
+                "Resource evaluation timed out", url=card.url
+            )
             continue
         except Exception as e:
-            logger.warning("Resource evaluation failed", url=card.url, error=str(e))
+            logger.warning(
+                "Resource evaluation failed",
+                url=card.url,
+                error=str(e),
+            )
             continue
 
         if judgment is None:

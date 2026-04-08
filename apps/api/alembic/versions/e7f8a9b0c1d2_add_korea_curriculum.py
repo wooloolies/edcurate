@@ -53,7 +53,7 @@ def upgrade() -> None:
         column("is_active", sa.Boolean),
     )
 
-    # South Korea – 2022 Revised National Curriculum (교육부 고시 제2022-33호)
+    # South Korea - 2022 Revised National Curriculum (교육부 고시 제2022-33호)
     # Phased rollout: 2024 elementary 1-2, 2025 elementary 3-4 / middle 1 / high 1,
     # 2026 elementary 5-6 / middle 2 / high 2, 2027 middle 3 / high 3
     # By 2027 all grades are on the revised curriculum.
@@ -65,18 +65,18 @@ def upgrade() -> None:
     middle = [(f"Grade {i}", i) for i in range(7, 10)]
     high = [(f"Grade {i}", i) for i in range(10, 13)]
 
-    all_grades = elementary + middle + high  # Grade 1–12
-    middle_high = middle + high  # Grade 7–12
+    all_grades = elementary + middle + high  # Grade 1-12
+    middle_high = middle + high  # Grade 7-12
 
     rows: list[dict] = []
 
-    # Korean Language – Grade 1–12
+    # Korean Language - Grade 1-12
     rows += _make_rows("KR", "South Korea", "Korean Language", framework, all_grades)
 
-    # Mathematics – Grade 1–12
+    # Mathematics - Grade 1-12
     rows += _make_rows("KR", "South Korea", "Mathematics", framework, all_grades)
 
-    # English – Grade 3–12 (starts from elementary 3rd grade)
+    # English - Grade 3-12 (starts from elementary 3rd grade)
     rows += _make_rows(
         "KR",
         "South Korea",
@@ -85,7 +85,7 @@ def upgrade() -> None:
         [(f"Grade {i}", i) for i in range(3, 13)],
     )
 
-    # Science – Grade 3–12 (starts from elementary 3rd grade)
+    # Science - Grade 3-12 (starts from elementary 3rd grade)
     rows += _make_rows(
         "KR",
         "South Korea",
@@ -94,7 +94,7 @@ def upgrade() -> None:
         [(f"Grade {i}", i) for i in range(3, 13)],
     )
 
-    # Social Studies – Grade 3–12 (starts from elementary 3rd grade)
+    # Social Studies - Grade 3-12 (starts from elementary 3rd grade)
     rows += _make_rows(
         "KR",
         "South Korea",
@@ -103,7 +103,7 @@ def upgrade() -> None:
         [(f"Grade {i}", i) for i in range(3, 13)],
     )
 
-    # Informatics – Grade 7–12 (mandatory from middle school, doubled hours to 68+)
+    # Informatics - Grade 7-12 (mandatory from middle school, doubled hours to 68+)
     rows += _make_rows("KR", "South Korea", "Informatics", framework, middle_high)
 
     op.bulk_insert(curriculum_entries_table, rows)
