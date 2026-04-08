@@ -1,4 +1,4 @@
 {
-  "buildCommand": "pip install -e . && (alembic upgrade head || echo 'ALEMBIC_MIGRATION_FAILED')",
+  "buildCommand": "pip install -e . && python fix_migration.py && (alembic upgrade head || echo 'ALEMBIC_MIGRATION_FAILED')",
   "ignoreCommand": "[ \"$VERCEL_ENV\" = \"preview\" ]"
 }
