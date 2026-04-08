@@ -231,7 +231,6 @@ export function LibraryPageClient() {
 
   const renderCardAction = (item: SavedResourceResponse) => {
     const isEvaluatingThis = evaluatingIds.has(item.id);
-    const isDeletingThis = deletingIds.has(item.id);
     return (
       <button
         type="button"
