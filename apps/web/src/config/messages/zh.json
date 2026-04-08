@@ -52,9 +52,9 @@
     "backToHome": "返回首页"
   },
   "presets": {
-    "title": "我的课堂预设",
-    "newPreset": "新建预设",
-    "editPreset": "编辑预设",
+    "title": "我的课堂收藏集",
+    "newPreset": "新建收藏集",
+    "editPreset": "编辑收藏集",
     "createPreset": "创建预设",
     "savePreset": "保存预设",
     "deletePreset": "删除预设",

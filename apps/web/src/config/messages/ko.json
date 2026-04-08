@@ -52,9 +52,9 @@
     "backToHome": "홈으로 돌아가기"
   },
   "presets": {
-    "title": "내 수업 프리셋",
-    "newPreset": "새 프리셋",
-    "editPreset": "프리셋 편집",
+    "title": "내 수업 컬렉션",
+    "newPreset": "새 컬렉션",
+    "editPreset": "컬렉션 편집",
     "createPreset": "프리셋 만들기",
     "savePreset": "프리셋 저장",
     "deletePreset": "프리셋 삭제",

@@ -52,9 +52,9 @@
     "backToHome": "Back to home"
   },
   "presets": {
-    "title": "My Classroom Presets",
-    "newPreset": "New Preset",
-    "editPreset": "Edit Preset",
+    "title": "My Classroom Collections",
+    "newPreset": "New Collection",
+    "editPreset": "Edit Collection",
     "createPreset": "Create Preset",
     "savePreset": "Save Preset",
     "deletePreset": "Delete Preset",

@@ -152,15 +152,15 @@
   "@team__backToHome": {
     "description": "Link to go back to home page"
   },
-  "presets__title": "Thiết lập lớp học của tôi",
+  "presets__title": "Bộ sưu tập lớp học của tôi",
   "@presets__title": {
     "description": "Presets page heading"
   },
-  "presets__newPreset": "Thiết lập mới",
+  "presets__newPreset": "Bộ sưu tập mới",
   "@presets__newPreset": {
     "description": "Button to create a new preset"
   },
-  "presets__editPreset": "Chỉnh sửa thiết lập",
+  "presets__editPreset": "Chỉnh sửa bộ sưu tập",
   "@presets__editPreset": {
     "description": "Button to edit a preset"
   },

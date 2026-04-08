@@ -152,15 +152,15 @@
   "@team__backToHome": {
     "description": "Link to go back to home page"
   },
-  "presets__title": "我的课堂预设",
+  "presets__title": "我的课堂收藏集",
   "@presets__title": {
     "description": "Presets page heading"
   },
-  "presets__newPreset": "新建预设",
+  "presets__newPreset": "新建收藏集",
   "@presets__newPreset": {
     "description": "Button to create a new preset"
   },
-  "presets__editPreset": "编辑预设",
+  "presets__editPreset": "编辑收藏集",
   "@presets__editPreset": {
     "description": "Button to edit a preset"
   },

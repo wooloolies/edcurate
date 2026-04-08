@@ -152,15 +152,15 @@
   "@team__backToHome": {
     "description": "Link to go back to home page"
   },
-  "presets__title": "พรีเซ็ตห้องเรียนของฉัน",
+  "presets__title": "คอลเลกชันห้องเรียนของฉัน",
   "@presets__title": {
     "description": "Presets page heading"
   },
-  "presets__newPreset": "พรีเซ็ตใหม่",
+  "presets__newPreset": "คอลเลกชันใหม่",
   "@presets__newPreset": {
     "description": "Button to create a new preset"
   },
-  "presets__editPreset": "แก้ไขพรีเซ็ต",
+  "presets__editPreset": "แก้ไขคอลเลกชัน",
   "@presets__editPreset": {
     "description": "Button to edit a preset"
   },

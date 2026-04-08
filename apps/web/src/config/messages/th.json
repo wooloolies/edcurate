@@ -52,9 +52,9 @@
     "backToHome": "กลับหน้าหลัก"
   },
   "presets": {
-    "title": "พรีเซ็ตห้องเรียนของฉัน",
-    "newPreset": "พรีเซ็ตใหม่",
-    "editPreset": "แก้ไขพรีเซ็ต",
+    "title": "คอลเลกชันห้องเรียนของฉัน",
+    "newPreset": "คอลเลกชันใหม่",
+    "editPreset": "แก้ไขคอลเลกชัน",
     "createPreset": "สร้างพรีเซ็ต",
     "savePreset": "บันทึกพรีเซ็ต",
     "deletePreset": "ลบพรีเซ็ต",

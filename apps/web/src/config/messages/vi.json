@@ -52,9 +52,9 @@
     "backToHome": "Quay lại trang chủ"
   },
   "presets": {
-    "title": "Thiết lập lớp học của tôi",
-    "newPreset": "Thiết lập mới",
-    "editPreset": "Chỉnh sửa thiết lập",
+    "title": "Bộ sưu tập lớp học của tôi",
+    "newPreset": "Bộ sưu tập mới",
+    "editPreset": "Chỉnh sửa bộ sưu tập",
     "createPreset": "Tạo thiết lập",
     "savePreset": "Lưu thiết lập",
     "deletePreset": "Xóa thiết lập",

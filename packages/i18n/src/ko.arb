@@ -152,15 +152,15 @@
   "@team__backToHome": {
     "description": "Link to go back to home page"
   },
-  "presets__title": "내 수업 프리셋",
+  "presets__title": "내 수업 컬렉션",
   "@presets__title": {
     "description": "Presets page heading"
   },
-  "presets__newPreset": "새 프리셋",
+  "presets__newPreset": "새 컬렉션",
   "@presets__newPreset": {
     "description": "Button to create a new preset"
   },
-  "presets__editPreset": "프리셋 편집",
+  "presets__editPreset": "컬렉션 편집",
   "@presets__editPreset": {
     "description": "Button to edit a preset"
   },
