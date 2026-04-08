@@ -85,11 +85,19 @@ export function ArtifactList({ artifacts, collectionName }: ArtifactListProps) {
               surface: "bg-brand-ink/[0.03]",
             };
             return (
-              <button
-                type="button"
+              // biome-ignore lint/a11y/useSemanticElements: outer <button> cannot contain inner delete <button>
+              <div
+                role="button"
+                tabIndex={0}
                 key={artifact.id}
                 className="group w-full cursor-pointer overflow-hidden rounded-xl border border-brand-ink/5 bg-brand-surface/80 text-left transition-all hover:border-brand-ink/10 hover:shadow-[0_2px_12px_rgba(0,0,0,0.04)]"
                 onClick={() => setViewingArtifact(artifact)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    setViewingArtifact(artifact);
+                  }
+                }}
                 aria-label={`View ${meta.label}`}
               >
                 <div className="flex items-center justify-between px-3.5 py-2.5">
@@ -116,7 +124,7 @@ export function ArtifactList({ artifacts, collectionName }: ArtifactListProps) {
                     </button>
                   </div>
                 </div>
-              </button>
+              </div>
             );
           })}
         </div>
