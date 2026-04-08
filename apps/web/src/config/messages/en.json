@@ -53,7 +53,8 @@
   },
   "presets": {
     "title": "My Classroom Collections",
-    "subtitle": "Manage your classroom presets and search configurations",
+    "subtitle": "Define your subject, year level, and curriculum to tailor every search.",
+    "count": "{count, plural, one {# collection} other {# collections}}",
     "newPreset": "New Collection",
     "editPreset": "Edit Collection",
     "createPreset": "Create Preset",
@@ -117,7 +118,6 @@
   "search": {
     "title": "Resource Discovery",
     "placeholder": "Search for educational resources...",
-    "placeholderNoPreset": "Select a classroom preset to start searching",
     "searchButton": "Search",
     "selectPreset": "Select a preset",
     "selectCollection": "Select your collection",
@@ -150,18 +150,22 @@
     "showUnscored": "Show {count} more unscored results",
     "hideUnscored": "Hide unscored results",
     "resourcesSelected": "{count, plural, one {# resource} other {# resources}} selected",
-    "saveToLibrary": "Save to Library",
-    "save": "Save",
-    "saving": "Saving...",
-    "savedSuccess": "Resources saved to library!",
+    "saveToLibrary": "Add to my Library",
+    "save": "Add",
+    "saving": "Adding...",
+    "savedSuccess": "Resources added to library!",
     "savedError": "Failed to save resources",
     "cancel": "Cancel",
+    "back": "Back",
+    "renamePreset": "Rename preset",
+    "presetRenamed": "Preset renamed",
+    "presetRenameError": "Failed to rename preset",
     "overview": "Overview",
     "changePreset": "Change preset",
     "bookmark": {
-      "save": "Save",
-      "saved": "Saved",
-      "saveLabel": "Save to Library",
+      "save": "Add",
+      "saved": "Added",
+      "saveLabel": "Add to Library",
       "removeLabel": "Remove from Library"
     },
     "clearSelection": "Clear selection",
@@ -314,23 +318,27 @@
     "suggestedCollections": {
       "title": "Suggested Collections",
       "clone": "Clone",
-      "cloned": "Cloned",
+      "cloned": "In my Library",
+      "alreadyInLibrary": "Already in my Library",
       "clonesCount": "{count, plural, one {# clone} other {# clones}}",
       "empty": "No public collections found for similar queries.",
       "sourcesCount": "{count, plural, one {# source} other {# sources}}",
-      "cloneCollection": "Clone Collection",
+      "cloneCollection": "Copy to my Library",
       "previewDescription": "Review this collection before cloning it to your library.",
-      "syncCollection": "Sync Collection",
-      "syncSuccess": "Collection synced!"
+      "syncCollection": "Update my collection",
+      "syncSuccess": "Collection updated!",
+      "upToDate": "Up to date"
     },
     "saveCollection": {
-      "title": "Save to Library",
+      "title": "Add to my Library",
       "description": "Group your selected resources into a named collection.",
       "nameLabel": "Collection Name",
       "namePlaceholder": "e.g., Physics 101",
       "privacyLabel": "Privacy",
       "private": "Private",
       "public": "Public",
+      "descriptionLabel": "Description (optional)",
+      "descriptionPlaceholder": "Briefly describe what this collection is about...",
       "publicWarning": "Are you sure you want to make this public? Anyone will be able to discover these resources in suggested collections."
     }
   },
@@ -345,6 +353,10 @@
     "team": "Team",
     "login": "Login",
     "tagline": "Context-aware resource discovery and adaptation for teachers",
+    "heroHighlight": "Intelligent",
+    "heroTitleRest": "adaption engine",
+    "heroFor": "for",
+    "heroTeachers": "teachers",
     "heroTitlePart1": "Intelligent adaption engine",
     "heroTitlePart2": "for teachers",
     "startResearch": "Start your research",
@@ -436,7 +448,7 @@
       "resourceCount": "{completed} of {total} evaluated"
     },
     "title": "My Library",
-    "subtitle": "Curated resources across my teaching collections",
+    "subtitle": "Save, evaluate, and share your curated resources with other educators.",
     "empty": {
       "title": "My library is empty",
       "description": "Save resources from search results to build a curated collection.",
@@ -459,11 +471,8 @@
       "rename": "Rename",
       "makePrivate": "Make Private",
       "makePublic": "Make Public",
-      "statusPublic": "Public",
-      "statusPrivate": "Private",
       "deleteCollection": "Delete Collection",
-      "generate": "Generate",
-      "searchWithPreset": "Search with this classroom"
+      "generate": "Generate"
     },
     "toast": {
       "linkAdded": "Custom link added",
@@ -474,15 +483,8 @@
       "deleteFailed": "Failed to delete collection"
     },
     "confirm": {
-      "makePublicTitle": "Make Public",
-      "makePublicDescription": "Anyone will be able to discover and view these resources. Are you sure?",
-      "makePublicButton": "Make Public",
-      "makePrivateTitle": "Make Private",
-      "makePrivateDescription": "This collection will no longer be visible to others.",
-      "makePrivateButton": "Make Private",
-      "deleteTitle": "Delete Collection",
-      "deleteDescription": "This will permanently delete this collection and all its resources. This action cannot be undone.",
-      "deleteButton": "Delete"
+      "makePublic": "Are you sure you want to make this public? Anyone will be able to discover these resources.",
+      "deleteCollection": "Are you sure you want to delete this collection and all its resources?"
     }
   }
 }
