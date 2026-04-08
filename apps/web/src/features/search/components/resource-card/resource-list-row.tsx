@@ -19,7 +19,7 @@ export function ResourceListRow({
     <div className="group border-b border-slate-200 last:border-0 hover:bg-slate-50/50 transition-colors">
       {/* Desktop: horizontal row */}
       <div className="hidden sm:flex items-stretch gap-4 p-4 text-sm">
-        <div className={`shrink-0 flex flex-col items-center min-w-[5rem] pt-0.5 pb-0.5 ${showIndex ? "justify-between" : "justify-center"}`}>
+        <div className={`shrink-0 flex flex-col items-center w-32 pt-0.5 pb-0.5 ${showIndex ? "justify-between" : "justify-center"}`}>
           {showIndex && <span className="text-brand-ink font-bold text-base leading-none">{index}</span>}
           {verdictNode}
         </div>
