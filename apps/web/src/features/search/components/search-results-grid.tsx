@@ -203,7 +203,6 @@ export function SearchResultsGrid({
           );
         })()}
       </section>
-
     </div>
   );
 }

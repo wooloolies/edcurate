@@ -14,17 +14,45 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { useGenerateArtifactEndpointApiLocalizerGeneratePost } from "@/lib/api/localizer/localizer";
-import type { GenerateArtifactRequestArtifactType, SavedResourceResponse } from "@/lib/api/model";
+import type {
+  GenerateArtifactRequestArtifactType,
+  GenerationOptions,
+  SavedResourceResponse,
+} from "@/lib/api/model";
 
 const ARTIFACT_LABEL_KEYS: Record<GenerateArtifactRequestArtifactType, string> = {
   quiz: "artifactQuiz",
   mindmap: "artifactMindmap",
   summary: "artifactSummary",
   flashcards: "artifactFlashcards",
+  study_guide: "artifactStudyGuide",
+  briefing_doc: "artifactBriefingDoc",
 };
 
 const MAX_SELECTED_RESOURCES = 10;
+
+/** Which generation options each artifact type supports. */
+const ARTIFACT_OPTIONS: Record<
+  GenerateArtifactRequestArtifactType,
+  { quantity?: boolean; difficulty?: boolean; instructions?: boolean }
+> = {
+  quiz: { quantity: true, difficulty: true, instructions: true },
+  flashcards: { quantity: true, difficulty: true, instructions: true },
+  mindmap: {},
+  summary: {},
+  study_guide: { instructions: true },
+  briefing_doc: { instructions: true },
+};
 
 interface GenerateArtifactDialogProps {
   open: boolean;
@@ -51,6 +79,8 @@ export function GenerateArtifactDialog({
   const [selectedIds, setSelectedIds] = useState<Set<string>>(
     () => new Set(resources.slice(0, MAX_SELECTED_RESOURCES).map((r) => r.id))
   );
+  const [options, setOptions] = useState<GenerationOptions>({});
+  const supported = ARTIFACT_OPTIONS[artifactType];
 
   const { mutateAsync: generate, isPending } =
     useGenerateArtifactEndpointApiLocalizerGeneratePost();
@@ -80,11 +110,13 @@ export function GenerateArtifactDialog({
       return;
     }
     try {
+      const hasOptions = Object.values(options).some((v) => v != null && v !== "");
       const result = await generate({
         data: {
           preset_id: presetId,
           saved_resource_ids: ids,
           artifact_type: artifactType,
+          ...(hasOptions ? { options } : {}),
         },
       });
       toast.success(t("success", { artifactType: artifactLabel }));
@@ -99,9 +131,7 @@ export function GenerateArtifactDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>
-            {t("title", { artifactType: artifactLabel })}
-          </DialogTitle>
+          <DialogTitle>{t("title", { artifactType: artifactLabel })}</DialogTitle>
           <DialogDescription>
             {t("description", { artifactType: artifactLabel })}
             {resources.length > MAX_SELECTED_RESOURCES
@@ -129,6 +159,81 @@ export function GenerateArtifactDialog({
             );
           })}
         </div>
+
+        {supported.quantity || supported.difficulty || supported.instructions ? (
+          <div className="space-y-3 border-t border-brand-ink/5 pt-3">
+            <p className="text-xs font-medium text-brand-ink/50">{t("optionsHeading")}</p>
+
+            {supported.quantity || supported.difficulty ? (
+              <div className="grid grid-cols-2 gap-3">
+                {supported.quantity ? (
+                  <div className="space-y-1.5">
+                    <Label className="text-xs">{t("quantity")}</Label>
+                    <Select
+                      value={options.quantity ?? ""}
+                      onValueChange={(v) =>
+                        setOptions((prev) => ({
+                          ...prev,
+                          quantity: v as GenerationOptions["quantity"],
+                        }))
+                      }
+                    >
+                      <SelectTrigger className="h-8 text-xs">
+                        <SelectValue placeholder="—" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="fewer">{t("quantityFewer")}</SelectItem>
+                        <SelectItem value="standard">{t("quantityStandard")}</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                ) : null}
+
+                {supported.difficulty ? (
+                  <div className="space-y-1.5">
+                    <Label className="text-xs">{t("difficulty")}</Label>
+                    <Select
+                      value={options.difficulty ?? ""}
+                      onValueChange={(v) =>
+                        setOptions((prev) => ({
+                          ...prev,
+                          difficulty: v as GenerationOptions["difficulty"],
+                        }))
+                      }
+                    >
+                      <SelectTrigger className="h-8 text-xs">
+                        <SelectValue placeholder="—" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="easy">{t("difficultyEasy")}</SelectItem>
+                        <SelectItem value="medium">{t("difficultyMedium")}</SelectItem>
+                        <SelectItem value="hard">{t("difficultyHard")}</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                ) : null}
+              </div>
+            ) : null}
+
+            {supported.instructions ? (
+              <div className="space-y-1.5">
+                <Label className="text-xs">{t("instructions")}</Label>
+                <Textarea
+                  className="min-h-[60px] resize-none text-xs"
+                  placeholder={t("instructionsPlaceholder")}
+                  maxLength={2000}
+                  value={options.instructions ?? ""}
+                  onChange={(e) =>
+                    setOptions((prev) => ({
+                      ...prev,
+                      instructions: e.target.value || undefined,
+                    }))
+                  }
+                />
+              </div>
+            ) : null}
+          </div>
+        ) : null}
 
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)} disabled={isPending}>

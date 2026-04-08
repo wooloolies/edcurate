@@ -19,14 +19,15 @@ function computePercent(stage: EvalStage | null, completed: number, total: numbe
   return Math.round(30 + (70 * completed) / total);
 }
 
-export function EvaluationProgressBar({ stage, completedCount, totalCount }: EvaluationProgressBarProps) {
+export function EvaluationProgressBar({
+  stage,
+  completedCount,
+  totalCount,
+}: EvaluationProgressBarProps) {
   const t = useTranslations("library.progress");
   const percent = computePercent(stage, completedCount, totalCount);
 
-  const label =
-    stage === "rag_preparation"
-      ? t("preparingResources")
-      : t("evaluatingResources");
+  const label = stage === "rag_preparation" ? t("preparingResources") : t("evaluatingResources");
 
   return (
     <div className="mt-3 flex items-center gap-3 rounded-xl border border-brand-green/20 bg-brand-green/5 px-4 py-2.5">

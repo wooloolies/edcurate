@@ -53,7 +53,7 @@
   },
   "presets": {
     "title": "我的课堂收藏集",
-    "subtitle": "设定科目、年级和课程标准，让每次搜索更贴合您的学生。",
+    "subtitle": "管理课堂预设和搜索配置",
     "newPreset": "新建收藏集",
     "editPreset": "编辑收藏集",
     "createPreset": "创建预设",
@@ -323,10 +323,8 @@
     "team": "团队",
     "login": "登录",
     "tagline": "面向教师的情境感知资源发现与适配",
-    "heroHighlight": "智能",
-    "heroTitleRest": "适配引擎",
-    "heroFor": "",
-    "heroTeachers": "助力教师",
+    "heroTitlePart1": "智能适配引擎",
+    "heroTitlePart2": "助力教师",
     "startResearch": "开始您的研究",
     "featureTagYear": "7至12年级",
     "featureTagDesigner": "课程设计师",
@@ -401,7 +399,7 @@
       "resourceCount": "{completed}/{total} 已完成"
     },
     "title": "我的资源库",
-    "subtitle": "保存、评估精选资源，并与其他教育者分享。",
+    "subtitle": "来自教学收藏集的精选资源",
     "empty": {
       "title": "资源库为空",
       "description": "从搜索结果中保存资源以构建您的收藏集。",

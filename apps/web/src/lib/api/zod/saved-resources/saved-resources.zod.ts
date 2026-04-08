@@ -35,6 +35,7 @@ export const ListSavedResourcesEndpointApiSavedGetResponse = zod.object({
   "preset_id": zod.uuid(),
   "search_query": zod.string(),
   "name": zod.string(),
+  "description": zod.union([zod.string(),zod.null()]).optional(),
   "is_public": zod.boolean(),
   "clone_count": zod.number(),
   "created_at": zod.iso.datetime({})
@@ -297,6 +298,7 @@ export const GetSuggestedCollectionsEndpointApiSavedSuggestedGetQueryParams = zo
 
 export const getSuggestedCollectionsEndpointApiSavedSuggestedGetResponseResourcesCountDefault = 0;
 export const getSuggestedCollectionsEndpointApiSavedSuggestedGetResponseIsClonedByUserDefault = false;
+export const getSuggestedCollectionsEndpointApiSavedSuggestedGetResponseNeedsSyncDefault = false;
 export const getSuggestedCollectionsEndpointApiSavedSuggestedGetResponseResourcesItemResourceDataMetadataOneSourceDefault = `ddgs`;
 export const getSuggestedCollectionsEndpointApiSavedSuggestedGetResponseResourcesItemResourceDataMetadataTwoSourceDefault = `youtube`;
 export const getSuggestedCollectionsEndpointApiSavedSuggestedGetResponseResourcesItemResourceDataMetadataTwoDurationDefault = ``;
@@ -311,6 +313,7 @@ export const GetSuggestedCollectionsEndpointApiSavedSuggestedGetResponseItem = z
   "preset_id": zod.uuid(),
   "search_query": zod.string(),
   "name": zod.string(),
+  "description": zod.union([zod.string(),zod.null()]).optional(),
   "is_public": zod.boolean(),
   "clone_count": zod.number(),
   "created_at": zod.iso.datetime({})
@@ -319,6 +322,7 @@ export const GetSuggestedCollectionsEndpointApiSavedSuggestedGetResponseItem = z
   "resources_count": zod.number().default(getSuggestedCollectionsEndpointApiSavedSuggestedGetResponseResourcesCountDefault),
   "publisher_name": zod.union([zod.string(),zod.null()]).optional(),
   "is_cloned_by_user": zod.boolean().default(getSuggestedCollectionsEndpointApiSavedSuggestedGetResponseIsClonedByUserDefault),
+  "needs_sync": zod.boolean().default(getSuggestedCollectionsEndpointApiSavedSuggestedGetResponseNeedsSyncDefault),
   "resources": zod.array(zod.object({
   "id": zod.uuid(),
   "preset_id": zod.uuid(),
@@ -412,6 +416,7 @@ export const CreateCollectionEndpointApiSavedCollectionsPostBody = zod.object({
   "preset_id": zod.uuid(),
   "search_query": zod.string(),
   "name": zod.string(),
+  "description": zod.union([zod.string(),zod.null()]).optional(),
   "is_public": zod.boolean().default(createCollectionEndpointApiSavedCollectionsPostBodyIsPublicDefault),
   "resources": zod.array(zod.object({
   "title": zod.string(),
@@ -489,6 +494,7 @@ export const CreateCollectionEndpointApiSavedCollectionsPostResponse = zod.objec
   "preset_id": zod.uuid(),
   "search_query": zod.string(),
   "name": zod.string(),
+  "description": zod.union([zod.string(),zod.null()]).optional(),
   "is_public": zod.boolean(),
   "clone_count": zod.number(),
   "created_at": zod.iso.datetime({})
@@ -504,6 +510,7 @@ export const UpdateCollectionEndpointApiSavedCollectionsCollectionIdPatchParams 
 
 export const UpdateCollectionEndpointApiSavedCollectionsCollectionIdPatchBody = zod.object({
   "name": zod.union([zod.string(),zod.null()]).optional(),
+  "description": zod.union([zod.string(),zod.null()]).optional(),
   "is_public": zod.union([zod.boolean(),zod.null()]).optional()
 })
 
@@ -513,6 +520,7 @@ export const UpdateCollectionEndpointApiSavedCollectionsCollectionIdPatchRespons
   "preset_id": zod.uuid(),
   "search_query": zod.string(),
   "name": zod.string(),
+  "description": zod.union([zod.string(),zod.null()]).optional(),
   "is_public": zod.boolean(),
   "clone_count": zod.number(),
   "created_at": zod.iso.datetime({})
@@ -540,6 +548,7 @@ export const CloneCollectionEndpointApiSavedCollectionsCollectionIdClonePostResp
   "preset_id": zod.uuid(),
   "search_query": zod.string(),
   "name": zod.string(),
+  "description": zod.union([zod.string(),zod.null()]).optional(),
   "is_public": zod.boolean(),
   "clone_count": zod.number(),
   "created_at": zod.iso.datetime({})
@@ -559,6 +568,7 @@ export const SyncClonedCollectionEndpointApiSavedCollectionsCollectionIdSyncPost
   "preset_id": zod.uuid(),
   "search_query": zod.string(),
   "name": zod.string(),
+  "description": zod.union([zod.string(),zod.null()]).optional(),
   "is_public": zod.boolean(),
   "clone_count": zod.number(),
   "created_at": zod.iso.datetime({})
@@ -832,6 +842,27 @@ export const AddCustomLinkEndpointApiSavedLinkPostResponse = zod.object({
 }).describe('Final judgment combining triage + risk scan, presented to the teacher.'),zod.null()]).optional(),
   "saved_at": zod.iso.datetime({})
 })
+
+/**
+ * Stream single resource evaluation progress as SSE events.
+ * @summary Evaluate Single Stream Endpoint
+ */
+export const EvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetQueryParams = zod.object({
+  "saved_resource_id": zod.uuid()
+})
+
+export const EvaluateSingleStreamEndpointApiSavedEvaluateSingleStreamGetResponse = zod.unknown()
+
+/**
+ * Stream evaluation progress as SSE events.
+ * @summary Evaluate Stream Endpoint
+ */
+export const EvaluateStreamEndpointApiSavedEvaluateStreamGetQueryParams = zod.object({
+  "preset_id": zod.uuid(),
+  "search_query": zod.string()
+})
+
+export const EvaluateStreamEndpointApiSavedEvaluateStreamGetResponse = zod.unknown()
 
 /**
  * Batch evaluate unevaluated library resources within a preset+query group.

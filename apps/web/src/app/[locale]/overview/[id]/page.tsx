@@ -4,10 +4,9 @@ import { useQuery } from "@tanstack/react-query";
 import { BookOpen, ExternalLink, Globe, Play } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useTranslations } from "next-intl";
-
+import { BackButton } from "@/app/[locale]/overview/back-button";
 import { Header } from "@/components/layout/header";
 import { CanvasBackground } from "@/components/ui/canvas-background";
-import { BackButton } from "@/app/[locale]/overview/back-button";
 import {
   RelevanceDetails,
   VerdictBadge,

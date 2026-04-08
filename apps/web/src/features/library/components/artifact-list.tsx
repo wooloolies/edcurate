@@ -8,9 +8,11 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { useDeleteArtifactEndpointApiLocalizerArtifactIdDelete } from "@/lib/api/localizer/localizer";
 import type { GeneratedArtifactResponse } from "@/lib/api/model";
 
+import { BriefingDocViewer } from "./briefing-doc-viewer";
 import { FlashcardsViewer } from "./flashcards-viewer";
 import { MindmapViewer } from "./mindmap-viewer";
 import { QuizViewer } from "./quiz-viewer";
+import { StudyGuideViewer } from "./study-guide-viewer";
 import { SummaryViewer } from "./summary-viewer";
 
 const TYPE_META: Record<string, { label: string; icon: React.ReactNode; surface: string }> = {
@@ -33,6 +35,16 @@ const TYPE_META: Record<string, { label: string; icon: React.ReactNode; surface:
     label: "Flashcards",
     icon: <Layers className="h-4 w-4" />,
     surface: "bg-brand-ink/[0.03]",
+  },
+  study_guide: {
+    label: "Study Guide",
+    icon: <FileText className="h-4 w-4" />,
+    surface: "bg-brand-green/8",
+  },
+  briefing_doc: {
+    label: "Briefing Doc",
+    icon: <FileText className="h-4 w-4" />,
+    surface: "bg-brand-ink/5",
   },
 };
 
@@ -153,6 +165,12 @@ function ArtifactContentViewer({ artifact }: { artifact: GeneratedArtifactRespon
       return <SummaryViewer data={content as Parameters<typeof SummaryViewer>[0]["data"]} />;
     case "flashcards":
       return <FlashcardsViewer data={content as Parameters<typeof FlashcardsViewer>[0]["data"]} />;
+    case "study_guide":
+      return <StudyGuideViewer data={content as Parameters<typeof StudyGuideViewer>[0]["data"]} />;
+    case "briefing_doc":
+      return (
+        <BriefingDocViewer data={content as Parameters<typeof BriefingDocViewer>[0]["data"]} />
+      );
     default:
       return (
         <pre className="rounded-xl bg-brand-surface p-4 text-xs overflow-auto max-h-96">

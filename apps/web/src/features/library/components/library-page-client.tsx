@@ -71,6 +71,15 @@ import {
 } from "@/lib/api/saved-resources/saved-resources";
 import { Link } from "@/lib/i18n/routing";
 
+const ARTIFACT_I18N_KEY: Record<GenerateArtifactRequestArtifactType, string> = {
+  quiz: "generate.artifactQuiz",
+  mindmap: "generate.artifactMindmap",
+  summary: "generate.artifactSummary",
+  flashcards: "generate.artifactFlashcards",
+  study_guide: "generate.artifactStudyGuide",
+  briefing_doc: "generate.artifactBriefingDoc",
+};
+
 export function LibraryPageClient() {
   const t = useTranslations("library");
   const tSearch = useTranslations("search");
@@ -479,7 +488,16 @@ export function LibraryPageClient() {
                     <DrawerContent>
                       <DrawerTitle className="sr-only">{t("action.generate")}</DrawerTitle>
                       <div className="flex flex-col gap-1 p-4 pb-8">
-                        {(["quiz", "mindmap", "summary", "flashcards"] as const).map((type) => (
+                        {(
+                          [
+                            "quiz",
+                            "mindmap",
+                            "summary",
+                            "flashcards",
+                            "study_guide",
+                            "briefing_doc",
+                          ] as const
+                        ).map((type) => (
                           <DrawerClose key={type} asChild>
                             <button
                               type="button"
@@ -493,9 +511,7 @@ export function LibraryPageClient() {
                                 })
                               }
                             >
-                              {t(
-                                `generate.artifact${type.charAt(0).toUpperCase()}${type.slice(1)}` as "generate.artifactQuiz"
-                              )}
+                              {t(ARTIFACT_I18N_KEY[type] as "generate.artifactQuiz")}
                             </button>
                           </DrawerClose>
                         ))}
@@ -515,7 +531,16 @@ export function LibraryPageClient() {
                       </button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="rounded-xl">
-                      {(["quiz", "mindmap", "summary", "flashcards"] as const).map((type) => (
+                      {(
+                        [
+                          "quiz",
+                          "mindmap",
+                          "summary",
+                          "flashcards",
+                          "study_guide",
+                          "briefing_doc",
+                        ] as const
+                      ).map((type) => (
                         <DropdownMenuItem
                           key={type}
                           onClick={() =>
@@ -527,9 +552,7 @@ export function LibraryPageClient() {
                             })
                           }
                         >
-                          {t(
-                            `generate.artifact${type.charAt(0).toUpperCase()}${type.slice(1)}` as "generate.artifactQuiz"
-                          )}
+                          {t(ARTIFACT_I18N_KEY[type] as "generate.artifactQuiz")}
                         </DropdownMenuItem>
                       ))}
                     </DropdownMenuContent>
