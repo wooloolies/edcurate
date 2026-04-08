@@ -46,6 +46,17 @@ from src.rag.weaviate_store import (
 
 logger = get_logger(__name__)
 
+import re
+
+_SENSITIVE_PATTERN = re.compile(r"(key|token|secret|password|apikey)=[^&\s'\"]+", re.IGNORECASE)
+
+
+def _sanitize_error(error: Exception) -> str:
+    """Strip API keys and secrets from error messages before sending to client."""
+    msg = str(error)
+    msg = _SENSITIVE_PATTERN.sub(r"\1=***", msg)
+    return msg
+
 
 @dataclass
 class _RagContext:
@@ -524,7 +535,7 @@ async def search_resources(
 
     for source, result in zip(_SOURCE_KEYS, raw_results, strict=True):
         if isinstance(result, Exception):
-            errors.append(SourceError(source=source, message=str(result)))
+            errors.append(SourceError(source=source, message=_sanitize_error(result)))
             results_by_source[source] = []
         elif isinstance(result, list):
             results_by_source[source] = result
@@ -705,7 +716,7 @@ async def search_resources_stream(
 
     for source, result in zip(_SOURCE_KEYS, raw_results, strict=True):
         if isinstance(result, Exception):
-            errors.append(SourceError(source=source, message=str(result)))
+            errors.append(SourceError(source=source, message=_sanitize_error(result)))
             results_by_source[source] = []
         elif isinstance(result, list):
             results_by_source[source] = result

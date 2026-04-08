@@ -6,6 +6,7 @@ import { useParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 
 import { Header } from "@/components/layout/header";
+import { CanvasBackground } from "@/components/ui/canvas-background";
 import {
   RelevanceDetails,
   VerdictBadge,
@@ -48,10 +49,11 @@ export default function OverviewDetailPage() {
       : "ddgs";
 
   return (
-    <div className="min-h-dvh bg-background text-foreground font-sans flex flex-col">
+    <div className="relative min-h-dvh bg-brand-surface overflow-hidden text-brand-ink font-sans flex flex-col">
+      <CanvasBackground />
       <Header />
 
-      <main className="flex-1 mt-36 max-w-4xl mx-auto w-full px-8 pb-20">
+      <main className="relative z-10 flex-1 mt-36 max-w-4xl mx-auto w-full px-8 pb-20">
         {isLoading ? (
           <div className="bg-white/60 backdrop-blur-xl rounded-3xl p-10 shadow-sm border border-white/80">
             <div className="animate-pulse space-y-4">

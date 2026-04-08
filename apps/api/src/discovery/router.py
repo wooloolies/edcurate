@@ -108,6 +108,7 @@ async def search_stream(
         )
 
     async def _event_generator() -> AsyncGenerator[dict, None]:
+        from src.evaluations.model import ResourceEvaluation
         from src.evaluations.service import save_evaluation
         from src.lib.database import async_session_factory
 
@@ -122,8 +123,6 @@ async def search_stream(
             ):
                 try:
                     judgment = JudgmentResult(**event.data["judgment"])
-                    # Use a fresh DB session — the injected `db` may be
-                    # closed by the time the SSE generator reaches this point.
                     async with async_session_factory() as session:
                         eval_id = await save_evaluation(
                             session,
@@ -141,6 +140,46 @@ async def search_stream(
                         resource_url=event.resource_url,
                         error=str(e),
                     )
+
+            # On complete event (including cache hits), attach evaluation IDs
+            # from DB so the frontend can build /overview/{id} links.
+            if (
+                event.stage == "complete"
+                and event.status == "done"
+                and event.data
+            ):
+                judgments_data = event.data.get("judgments", [])
+                if judgments_data:
+                    try:
+                        urls = [
+                            j["resource_url"]
+                            for j in judgments_data
+                            if isinstance(j, dict) and "resource_url" in j
+                        ]
+                        async with async_session_factory() as session:
+                            from sqlalchemy import select
+
+                            rows = await session.execute(
+                                select(
+                                    ResourceEvaluation.resource_url,
+                                    ResourceEvaluation.id,
+                                ).where(
+                                    ResourceEvaluation.preset_id == preset_id,
+                                    ResourceEvaluation.search_query == query,
+                                    ResourceEvaluation.resource_url.in_(urls),
+                                )
+                            )
+                            eval_ids = {
+                                row.resource_url: str(row.id)
+                                for row in rows.all()
+                            }
+                        if eval_ids:
+                            event.data["evaluation_ids"] = eval_ids
+                    except Exception as e:
+                        logger.warning(
+                            "Failed to look up evaluation IDs",
+                            error=str(e),
+                        )
 
             yield {"event": "stage", "data": event.model_dump_json()}
 

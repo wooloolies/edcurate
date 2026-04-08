@@ -96,6 +96,14 @@ function reduce(state: SearchStreamState, action: Action): SearchStreamState {
         }
       }
 
+      // 3) complete event may carry evaluation_ids map (cache hits + fresh results)
+      if (isComplete && data && "evaluation_ids" in data) {
+        const ids = data.evaluation_ids as Record<string, string>;
+        for (const [url, id] of Object.entries(ids)) {
+          nextEvaluationIds.set(url, id);
+        }
+      }
+
       return {
         ...state,
         stages: nextStages,
