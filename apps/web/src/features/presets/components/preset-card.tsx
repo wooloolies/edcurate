@@ -32,8 +32,6 @@ export function PresetCard({ preset }: PresetCardProps) {
     queryClient.invalidateQueries({ queryKey: ["listPresetsApiPresetsGet"] });
   };
 
-  const weights = preset.source_weights as Record<string, number>;
-
   return (
     <div className="overflow-hidden rounded-2xl border border-white/80 bg-white/70 shadow-[0_2px_20px_rgba(0,0,0,0.04)] backdrop-blur-sm transition-shadow hover:shadow-[0_4px_28px_rgba(0,0,0,0.06)]">
       <div className="px-5 pt-5 pb-3">
@@ -44,24 +42,47 @@ export function PresetCard({ preset }: PresetCardProps) {
               {preset.subject} &middot; {preset.year_level} &middot; {preset.country}
             </p>
           </div>
-          {!!preset.is_default && (
-            <Badge variant="secondary">
-              <Star className="mr-1 h-3 w-3" />
-              {t("default")}
-            </Badge>
-          )}
+          <div className="flex items-center gap-1.5">
+            {!!preset.is_default && (
+              <Badge variant="secondary">
+                <Star className="mr-1 h-3 w-3" />
+                {t("default")}
+              </Badge>
+            )}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button
+                  type="button"
+                  className="rounded-full p-1.5 text-brand-ink/40 transition-colors hover:bg-brand-ink/5 hover:text-brand-ink"
+                  aria-label={t("moreActions")}
+                >
+                  <MoreHorizontal className="h-4 w-4" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="rounded-xl">
+                {!preset.is_default && (
+                  <DropdownMenuItem
+                    onClick={() =>
+                      setDefaultMutation.mutate({ presetId: preset.id }, { onSuccess: invalidate })
+                    }
+                  >
+                    {t("setDefault")}
+                  </DropdownMenuItem>
+                )}
+                <DropdownMenuItem
+                  className="text-destructive"
+                  onClick={() =>
+                    deleteMutation.mutate({ presetId: preset.id }, { onSuccess: invalidate })
+                  }
+                >
+                  {t("deletePreset")}
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </div>
       </div>
       <div className="px-5 pb-5">
-        <div className="mb-3 text-xs text-brand-ink/40">
-          {weights.ddgs != null && `${t("sources.ddgs")} ${Math.round(weights.ddgs * 100)}%`}{" "}
-          &middot;{" "}
-          {weights.youtube != null &&
-            `${t("sources.youtube")} ${Math.round(weights.youtube * 100)}%`}{" "}
-          &middot;{" "}
-          {weights.openalex != null &&
-            `${t("sources.openalex")} ${Math.round(weights.openalex * 100)}%`}
-        </div>
         <div className="flex items-center gap-2">
           <Link
             href={`/collections/${preset.id}/edit`}
@@ -77,36 +98,6 @@ export function PresetCard({ preset }: PresetCardProps) {
             <Search className="mr-1.5 h-3 w-3" />
             {t("searchWithPreset")}
           </Link>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <button
-                type="button"
-                className="ml-auto rounded-full p-2 text-brand-ink/40 transition-colors hover:bg-brand-ink/5 hover:text-brand-ink"
-                aria-label={t("moreActions")}
-              >
-                <MoreHorizontal className="h-4 w-4" />
-              </button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="rounded-xl">
-              {!preset.is_default && (
-                <DropdownMenuItem
-                  onClick={() =>
-                    setDefaultMutation.mutate({ presetId: preset.id }, { onSuccess: invalidate })
-                  }
-                >
-                  {t("setDefault")}
-                </DropdownMenuItem>
-              )}
-              <DropdownMenuItem
-                className="text-destructive"
-                onClick={() =>
-                  deleteMutation.mutate({ presetId: preset.id }, { onSuccess: invalidate })
-                }
-              >
-                {t("deletePreset")}
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
         </div>
       </div>
     </div>
