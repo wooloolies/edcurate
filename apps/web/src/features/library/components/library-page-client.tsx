@@ -266,18 +266,16 @@ export function LibraryPageClient() {
 
     const resourceWithVerdict = item.evaluation_data
       ? { ...item.resource_data, verdict: item.evaluation_data.verdict }
-      : null;
+      : item.resource_data;
 
     return (
       <div className="flex flex-wrap items-center gap-2">
-        {resourceWithVerdict ? (
-          <Link
-            href={buildOverviewHref(resourceWithVerdict)}
-            className="rounded-full px-5 py-2 text-sm font-bold shadow-sm transition-transform hover:scale-105 active:scale-95 bg-slate-100 text-slate-800 hover:bg-slate-200 border border-slate-200 whitespace-nowrap"
-          >
-            {tSearch("overview")}
-          </Link>
-        ) : null}
+        <Link
+          href={buildOverviewHref(resourceWithVerdict)}
+          className="rounded-full px-5 py-2 text-sm font-bold shadow-sm transition-transform hover:scale-105 active:scale-95 bg-slate-100 text-slate-800 hover:bg-slate-200 border border-slate-200 whitespace-nowrap"
+        >
+          {tSearch("overview")}
+        </Link>
         <button
           type="button"
           onClick={(e) => {
