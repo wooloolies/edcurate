@@ -453,40 +453,72 @@ export function LibraryPageClient() {
                   </>
                 )}
 
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <button
-                      type="button"
-                      className="inline-flex items-center rounded-full border border-brand-ink/10 bg-white px-3 py-1.5 text-xs font-medium text-brand-ink/70 shadow-sm transition-all hover:border-brand-green hover:shadow-[0_0_0_1px_rgba(183,255,112,0.3)]"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <Wand2 className="mr-1 h-3.5 w-3.5 text-brand-green" /> {t("action.generate")}
-                    </button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="rounded-xl">
-                    {(["quiz", "mindmap", "summary", "flashcards"] as const).map((type) => (
-                      <DropdownMenuItem
-                        key={type}
-                        onClick={() =>
-                          setGenerateDialog({
-                            open: true,
-                            artifactType: type,
-                            presetId,
-                            resources: colGroup.items,
-                          })
-                        }
+                {isMobile ? (
+                  <Drawer>
+                    <DrawerTrigger asChild>
+                      <button
+                        type="button"
+                        className="inline-flex items-center rounded-full border border-brand-ink/10 bg-white px-3 py-1.5 text-xs font-medium text-brand-ink/70 shadow-sm transition-all hover:border-brand-green hover:shadow-[0_0_0_1px_rgba(183,255,112,0.3)]"
+                        onClick={(e) => e.stopPropagation()}
                       >
-                        {type === "quiz"
-                          ? "Quiz"
-                          : type === "mindmap"
-                            ? "Mind Map"
-                            : type === "summary"
-                              ? "Summary"
-                              : "Flashcards"}
-                      </DropdownMenuItem>
-                    ))}
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                        <Wand2 className="mr-1 h-3.5 w-3.5 text-brand-green" /> {t("action.generate")}
+                      </button>
+                    </DrawerTrigger>
+                    <DrawerContent>
+                      <DrawerTitle className="sr-only">{t("action.generate")}</DrawerTitle>
+                      <div className="flex flex-col gap-1 p-4 pb-8">
+                        {(["quiz", "mindmap", "summary", "flashcards"] as const).map((type) => (
+                          <DrawerClose key={type} asChild>
+                            <button
+                              type="button"
+                              className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-brand-ink transition-colors hover:bg-brand-ink/5"
+                              onClick={() =>
+                                setGenerateDialog({
+                                  open: true,
+                                  artifactType: type,
+                                  presetId,
+                                  resources: colGroup.items,
+                                })
+                              }
+                            >
+                              <Wand2 className="h-4 w-4 text-brand-green" />
+                              {t(`generate.artifact${type.charAt(0).toUpperCase()}${type.slice(1)}` as "generate.artifactQuiz")}
+                            </button>
+                          </DrawerClose>
+                        ))}
+                      </div>
+                    </DrawerContent>
+                  </Drawer>
+                ) : (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <button
+                        type="button"
+                        className="inline-flex items-center rounded-full border border-brand-ink/10 bg-white px-3 py-1.5 text-xs font-medium text-brand-ink/70 shadow-sm transition-all hover:border-brand-green hover:shadow-[0_0_0_1px_rgba(183,255,112,0.3)]"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <Wand2 className="mr-1 h-3.5 w-3.5 text-brand-green" /> {t("action.generate")}
+                      </button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="rounded-xl">
+                      {(["quiz", "mindmap", "summary", "flashcards"] as const).map((type) => (
+                        <DropdownMenuItem
+                          key={type}
+                          onClick={() =>
+                            setGenerateDialog({
+                              open: true,
+                              artifactType: type,
+                              presetId,
+                              resources: colGroup.items,
+                            })
+                          }
+                        >
+                          {t(`generate.artifact${type.charAt(0).toUpperCase()}${type.slice(1)}` as "generate.artifactQuiz")}
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                )}
               </div>
             </div>
 
