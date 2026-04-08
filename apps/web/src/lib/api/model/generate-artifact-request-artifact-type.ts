@@ -13,4 +13,6 @@ export const GenerateArtifactRequestArtifactType = {
   mindmap: 'mindmap',
   summary: 'summary',
   flashcards: 'flashcards',
+  study_guide: 'study_guide',
+  briefing_doc: 'briefing_doc',
 } as const;

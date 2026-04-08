@@ -13,12 +13,21 @@ import * as zod from 'zod';
  */
 export const generateArtifactEndpointApiLocalizerGeneratePostBodySavedResourceIdsMax = 10;
 
+export const generateArtifactEndpointApiLocalizerGeneratePostBodyOptionsOneInstructionsOneMax = 2000;
+
+export const generateArtifactEndpointApiLocalizerGeneratePostBodyOptionsOneLanguageOneRegExp = new RegExp('^[a-z]{2}(-[A-Z]{2})?$');
 
 
 export const GenerateArtifactEndpointApiLocalizerGeneratePostBody = zod.object({
   "preset_id": zod.uuid(),
   "saved_resource_ids": zod.array(zod.uuid()).min(1).max(generateArtifactEndpointApiLocalizerGeneratePostBodySavedResourceIdsMax),
-  "artifact_type": zod.enum(['quiz', 'mindmap', 'summary', 'flashcards'])
+  "artifact_type": zod.enum(['quiz', 'mindmap', 'summary', 'flashcards', 'study_guide', 'briefing_doc']),
+  "options": zod.union([zod.object({
+  "quantity": zod.union([zod.enum(['fewer', 'standard']),zod.null()]).optional(),
+  "difficulty": zod.union([zod.enum(['easy', 'medium', 'hard']),zod.null()]).optional(),
+  "instructions": zod.union([zod.string().max(generateArtifactEndpointApiLocalizerGeneratePostBodyOptionsOneInstructionsOneMax),zod.null()]).optional(),
+  "language": zod.union([zod.string().regex(generateArtifactEndpointApiLocalizerGeneratePostBodyOptionsOneLanguageOneRegExp),zod.null()]).optional()
+}).describe('Optional parameters for artifact generation.'),zod.null()]).optional()
 })
 
 export const GenerateArtifactEndpointApiLocalizerGeneratePostResponse = zod.object({

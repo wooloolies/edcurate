@@ -161,10 +161,14 @@ export function AudienceStatements() {
                 Placeholder
               </span>
             ) : null}
-            <h3 className={`text-3xl md:text-[2.5rem] font-bold tracking-tight leading-[1.1] ${item.placeholder ? "text-slate-300" : "text-[#111827]"}`}>
+            <h3
+              className={`text-3xl md:text-[2.5rem] font-bold tracking-tight leading-[1.1] ${item.placeholder ? "text-slate-300" : "text-[#111827]"}`}
+            >
               {item.heading}
             </h3>
-            <p className={`mt-5 text-base md:text-lg leading-relaxed max-w-xl mx-auto ${item.placeholder ? "text-slate-300" : "text-slate-500"}`}>
+            <p
+              className={`mt-5 text-base md:text-lg leading-relaxed max-w-xl mx-auto ${item.placeholder ? "text-slate-300" : "text-slate-500"}`}
+            >
               {item.body}
             </p>
           </div>
@@ -197,7 +201,10 @@ function SubjectColumn({ category }: { category: SubjectCategory }) {
       {expanded ? (
         <div className="mt-2 space-y-1">
           {category.topics.map((topic) => (
-            <p key={topic} className="text-[13px] md:text-sm text-[#111827]/60 font-medium leading-snug">
+            <p
+              key={topic}
+              className="text-[13px] md:text-sm text-[#111827]/60 font-medium leading-snug"
+            >
               {topic}
             </p>
           ))}
@@ -218,9 +225,7 @@ export function SubjectBanner() {
         <span className="text-xl md:text-2xl font-bold tracking-tight text-[#111827]">
           <span className="text-blue-600">Ed</span>curate
         </span>
-        <span className="text-base md:text-lg font-bold text-[#111827]">
-          {country}
-        </span>
+        <span className="text-base md:text-lg font-bold text-[#111827]">{country}</span>
       </div>
 
       {/* Subject categories — horizontal row */}

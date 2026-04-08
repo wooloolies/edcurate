@@ -53,7 +53,7 @@
   },
   "presets": {
     "title": "Bộ sưu tập lớp học của tôi",
-    "subtitle": "Thiết lập môn học, khối lớp và chương trình để mỗi tìm kiếm phù hợp với học sinh.",
+    "subtitle": "Quản lý thiết lập lớp học và cấu hình tìm kiếm",
     "newPreset": "Bộ sưu tập mới",
     "editPreset": "Chỉnh sửa bộ sưu tập",
     "createPreset": "Tạo thiết lập",
@@ -323,10 +323,8 @@
     "team": "Đội ngũ",
     "login": "Đăng nhập",
     "tagline": "Khám phá và điều chỉnh tài nguyên theo ngữ cảnh dành cho giáo viên",
-    "heroHighlight": "Thông minh",
-    "heroTitleRest": "Công cụ thích ứng",
-    "heroFor": "cho",
-    "heroTeachers": "giáo viên",
+    "heroTitlePart1": "Công cụ thích ứng thông minh",
+    "heroTitlePart2": "cho giáo viên",
     "startResearch": "Bắt đầu nghiên cứu",
     "featureTagYear": "Lớp 7 đến 12",
     "featureTagDesigner": "Nhà thiết kế chương trình",
@@ -401,7 +399,7 @@
       "resourceCount": "{completed}/{total} hoàn tất"
     },
     "title": "Thư viện của tôi",
-    "subtitle": "Lưu, đánh giá và chia sẻ tài nguyên đã tuyển chọn với giáo viên khác.",
+    "subtitle": "Tài nguyên được tuyển chọn từ bộ sưu tập giảng dạy của tôi",
     "empty": {
       "title": "Thư viện trống",
       "description": "Lưu tài nguyên từ kết quả tìm kiếm để xây dựng bộ sưu tập.",

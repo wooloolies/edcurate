@@ -35,7 +35,13 @@ async def create_artifact(
     resource_infos = [_to_resource_info(r) for r in resources]
 
     try:
-        content = await generate_artifact(resource_infos, request.artifact_type)
+        content = await generate_artifact(
+            resource_infos,
+            request.artifact_type,
+            options=request.options.model_dump(exclude_none=True)
+            if request.options
+            else None,
+        )
     except NotebookLMConfigurationError as exc:
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,

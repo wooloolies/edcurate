@@ -13,7 +13,9 @@ const NEWLINE_RE = /\r?\n/;
  *
  * Returns parsed events and the unconsumed remainder (incomplete event at end).
  */
-export function parseSSEBuffer<T = SearchStageEvent>(buffer: string): {
+export function parseSSEBuffer<T = SearchStageEvent>(
+  buffer: string
+): {
   parsed: T[];
   remainder: string;
 } {

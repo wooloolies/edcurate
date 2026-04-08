@@ -65,9 +65,7 @@ export function SaveCollectionDialog({
       <DialogContent className="sm:max-w-106.25">
         <DialogHeader>
           <DialogTitle>{t("saveCollection.title")}</DialogTitle>
-          <DialogDescription>
-            {t("saveCollection.description")}
-          </DialogDescription>
+          <DialogDescription>{t("saveCollection.description")}</DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="flex flex-col gap-2">
@@ -121,9 +119,7 @@ export function SaveCollectionDialog({
 
             {showPublicWarning ? (
               <div className="mt-2 rounded-md border border-amber-500/50 bg-amber-500/10 p-3 text-sm text-amber-600 dark:text-amber-500 flex flex-col gap-2">
-                <p>
-                  {t("saveCollection.publicWarning")}
-                </p>
+                <p>{t("saveCollection.publicWarning")}</p>
                 <div className="flex gap-2 justify-end mt-1">
                   <Button size="sm" variant="outline" onClick={() => setShowPublicWarning(false)}>
                     Cancel
