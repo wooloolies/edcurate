@@ -11,7 +11,6 @@ import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { CompactProgressBar } from "@/features/search/components/compact-progress-bar";
 import { ErrorBanner } from "@/features/search/components/error-banner";
-import { EvaluationProgress } from "@/features/search/components/evaluation-progress";
 import { GeneratedQueriesPanel } from "@/features/search/components/generated-queries";
 import { SearchResultsGrid } from "@/features/search/components/search-results-grid";
 import { ResourceCardSkeleton } from "@/features/search/components/skeleton/resource-card-skeleton";
@@ -305,15 +304,15 @@ export function SearchPageClient() {
             <ResourceCardSkeleton key={i} />
           ))}
         </div>
-      ) : isFetching ? (
-        <div className="space-y-4">
-          <EvaluationProgress />
-          <div className="space-y-3">
-            {Array.from({ length: 5 }).map((_, i) => (
-              // biome-ignore lint/suspicious/noArrayIndexKey: skeleton list is static
-              <ResourceCardSkeleton key={i} />
-            ))}
-          </div>
+      ) : null}
+
+      {/* REST fallback loading (only when SSE failed) */}
+      {!stream.isStreaming && isFetching ? (
+        <div className="space-y-3">
+          {Array.from({ length: 5 }).map((_, i) => (
+            // biome-ignore lint/suspicious/noArrayIndexKey: skeleton list is static
+            <ResourceCardSkeleton key={i} />
+          ))}
         </div>
       ) : null}
 
