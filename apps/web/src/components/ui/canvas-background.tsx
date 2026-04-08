@@ -251,8 +251,7 @@ export function CanvasBackground() {
   return (
     <div
       ref={containerRef}
-      className="absolute inset-0 z-0 pointer-events-none overflow-hidden"
-      style={{ width: "100dvw", height: "100dvh" }}
+      className="fixed inset-0 z-0 pointer-events-none overflow-hidden"
     >
       {/* SVG gooey & glitch filter */}
       <svg

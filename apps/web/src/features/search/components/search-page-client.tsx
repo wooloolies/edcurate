@@ -9,7 +9,7 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { CompactProgressBar } from "@/features/search/components/compact-progress-bar";
+import { AgentMorphScene } from "@/features/search/components/agent-morph/agent-morph-scene";
 import { ErrorBanner } from "@/features/search/components/error-banner";
 import { GeneratedQueriesPanel } from "@/features/search/components/generated-queries";
 import { SearchResultsGrid } from "@/features/search/components/search-results-grid";
@@ -422,7 +422,7 @@ export function SearchPageClient() {
 
       {/* Progress bar — shown during all streaming phases */}
       {stream.isStreaming ? (
-        <CompactProgressBar
+        <AgentMorphScene
           stages={stream.stages}
           activeStage={stream.activeStage}
           completedEvaluations={stream.partialJudgments.size}
