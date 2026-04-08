@@ -27,6 +27,7 @@ class NotebookLMConfigurationError(RuntimeError):
 async def generate_artifact(
     resources: list[ResourceInfo],
     artifact_type: str,
+    options: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Create a temporary NotebookLM notebook, add sources, generate
     artifact, and return JSON.
@@ -59,7 +60,9 @@ async def generate_artifact(
                     "notebooklm.source_added", url=res.url, type=res.source_type
                 )
 
-            content = await _generate_and_download(client, nb_id, artifact_type)
+            content = await _generate_and_download(
+                client, nb_id, artifact_type, options
+            )
             logger.info("notebooklm.artifact_generated", type=artifact_type)
             return content
 
@@ -80,13 +83,15 @@ async def _generate_and_download(
     client: Any,
     notebook_id: str,
     artifact_type: str,
+    options: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Dispatch generation + download by artifact type."""
     with tempfile.TemporaryDirectory() as tmpdir:
         out_path = Path(tmpdir) / "artifact.json"
 
         if artifact_type == "quiz":
-            status = await client.artifacts.generate_quiz(notebook_id)
+            kwargs = _build_quiz_kwargs(options)
+            status = await client.artifacts.generate_quiz(notebook_id, **kwargs)
             await client.artifacts.wait_for_completion(notebook_id, status.task_id)
             await client.artifacts.download_quiz(
                 notebook_id, str(out_path), output_format="json"
@@ -97,7 +102,8 @@ async def _generate_and_download(
             await client.artifacts.download_mind_map(notebook_id, str(out_path))
 
         elif artifact_type == "flashcards":
-            status = await client.artifacts.generate_flashcards(notebook_id)
+            kwargs = _build_quiz_kwargs(options)
+            status = await client.artifacts.generate_flashcards(notebook_id, **kwargs)
             await client.artifacts.wait_for_completion(notebook_id, status.task_id)
             await client.artifacts.download_flashcards(
                 notebook_id, str(out_path), output_format="json"
@@ -106,6 +112,28 @@ async def _generate_and_download(
         elif artifact_type == "summary":
             summary_text = await client.notebooks.get_summary(notebook_id)
             return {"summary": summary_text}
+
+        elif artifact_type == "study_guide":
+            kwargs = _build_report_kwargs(options)
+            status = await client.artifacts.generate_study_guide(
+                notebook_id, **kwargs
+            )
+            await client.artifacts.wait_for_completion(notebook_id, status.task_id)
+            out_path = Path(tmpdir) / "artifact.md"
+            await client.artifacts.download_report(notebook_id, str(out_path))
+            return {"study_guide": out_path.read_text(encoding="utf-8")}
+
+        elif artifact_type == "briefing_doc":
+            from notebooklm import ReportFormat
+
+            kwargs = _build_report_kwargs(options)
+            status = await client.artifacts.generate_report(
+                notebook_id, report_format=ReportFormat.BRIEFING_DOC, **kwargs
+            )
+            await client.artifacts.wait_for_completion(notebook_id, status.task_id)
+            out_path = Path(tmpdir) / "artifact.md"
+            await client.artifacts.download_report(notebook_id, str(out_path))
+            return {"briefing_doc": out_path.read_text(encoding="utf-8")}
 
         else:
             raise ValueError(f"Unsupported artifact type: {artifact_type}")
@@ -116,3 +144,33 @@ async def _generate_and_download(
                 "NotebookLM artifact download did not return a JSON object"
             )
         return cast(dict[str, Any], content)
+
+
+def _build_quiz_kwargs(options: dict[str, Any] | None) -> dict[str, Any]:
+    """Map generation options to generate_quiz / generate_flashcards kwargs."""
+    if not options:
+        return {}
+
+    from notebooklm import QuizDifficulty, QuizQuantity
+
+    kwargs: dict[str, Any] = {}
+    if q := options.get("quantity"):
+        kwargs["quantity"] = QuizQuantity[q.upper()]
+    if d := options.get("difficulty"):
+        kwargs["difficulty"] = QuizDifficulty[d.upper()]
+    if inst := options.get("instructions"):
+        kwargs["instructions"] = inst
+    return kwargs
+
+
+def _build_report_kwargs(options: dict[str, Any] | None) -> dict[str, Any]:
+    """Map generation options to generate_study_guide / generate_report kwargs."""
+    if not options:
+        return {}
+
+    kwargs: dict[str, Any] = {}
+    if lang := options.get("language"):
+        kwargs["language"] = lang
+    if inst := options.get("instructions"):
+        kwargs["extra_instructions"] = inst
+    return kwargs

@@ -1567,6 +1567,54 @@
   "@library__generate__artifactFlashcards": {
     "description": "Artifact type label for flashcards"
   },
+  "library__generate__artifactStudyGuide": "Study Guide",
+  "@library__generate__artifactStudyGuide": {
+    "description": "Artifact type label for study guide"
+  },
+  "library__generate__artifactBriefingDoc": "Briefing Doc",
+  "@library__generate__artifactBriefingDoc": {
+    "description": "Artifact type label for briefing document"
+  },
+  "library__generate__optionsHeading": "Options",
+  "@library__generate__optionsHeading": {
+    "description": "Heading for generation options section"
+  },
+  "library__generate__quantity": "Quantity",
+  "@library__generate__quantity": {
+    "description": "Label for quantity option"
+  },
+  "library__generate__quantityFewer": "Fewer",
+  "@library__generate__quantityFewer": {
+    "description": "Fewer quantity option"
+  },
+  "library__generate__quantityStandard": "Standard",
+  "@library__generate__quantityStandard": {
+    "description": "Standard quantity option"
+  },
+  "library__generate__difficulty": "Difficulty",
+  "@library__generate__difficulty": {
+    "description": "Label for difficulty option"
+  },
+  "library__generate__difficultyEasy": "Easy",
+  "@library__generate__difficultyEasy": {
+    "description": "Easy difficulty option"
+  },
+  "library__generate__difficultyMedium": "Medium",
+  "@library__generate__difficultyMedium": {
+    "description": "Medium difficulty option"
+  },
+  "library__generate__difficultyHard": "Hard",
+  "@library__generate__difficultyHard": {
+    "description": "Hard difficulty option"
+  },
+  "library__generate__instructions": "Instructions",
+  "@library__generate__instructions": {
+    "description": "Label for instructions textarea"
+  },
+  "library__generate__instructionsPlaceholder": "Add custom instructions for generation...",
+  "@library__generate__instructionsPlaceholder": {
+    "description": "Placeholder for instructions textarea"
+  },
   "library__progress__preparingResources": "Preparing resources...",
   "@library__progress__preparingResources": {
     "description": "Progress label during RAG preparation stage"
