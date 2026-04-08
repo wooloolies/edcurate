@@ -15,14 +15,12 @@ const LOCALE_COUNTRY: Record<string, string> = {
 interface SourceEngine {
   id: string;
   label: string;
-  color: string;
 }
 
 const ALL_ENGINES: SourceEngine[] = [
-  { id: "ddgs", label: "DuckDuckGo", color: "bg-orange-100 text-orange-700 border-orange-200" },
-  { id: "youtube", label: "YouTube", color: "bg-red-100 text-red-700 border-red-200" },
-  { id: "openalex", label: "OpenAlex", color: "bg-blue-100 text-blue-700 border-blue-200" },
-  { id: "google", label: "Google", color: "bg-emerald-100 text-emerald-700 border-emerald-200" },
+  { id: "ddgs", label: "DuckDuckGo" },
+  { id: "youtube", label: "YouTube" },
+  { id: "openalex", label: "OpenAlex" },
 ];
 
 const DEFAULT_ACTIVE = ["ddgs", "youtube", "openalex"];
@@ -45,7 +43,6 @@ export function SourceSelector() {
 
   const activeEngines = ALL_ENGINES.filter((e) => active.includes(e.id));
   const inactiveEngines = ALL_ENGINES.filter((e) => !active.includes(e.id));
-  const pct = active.length > 0 ? Math.round(100 / active.length) : 0;
 
   function remove(id: string) {
     setActive((prev) => (prev.length <= 1 ? prev : prev.filter((eid) => eid !== id)));
@@ -62,11 +59,10 @@ export function SourceSelector() {
           key={engine.id}
           type="button"
           onClick={() => remove(engine.id)}
-          className={`group flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition-all hover:scale-105 active:scale-95 ${engine.color}`}
+          className="group flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition-all hover:scale-105 active:scale-95"
         >
           <Search className="size-3.5" />
           {engine.label}
-          <span className="text-[11px] font-bold opacity-60">{pct}%</span>
           <X className="size-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
         </button>
       ))}
@@ -216,7 +212,7 @@ export function SubjectBanner() {
   const country = LOCALE_COUNTRY[locale] ?? "Australia";
 
   return (
-    <section className="relative w-full rounded-[2rem] bg-[#B7FF70] px-8 py-8 md:px-12 md:py-10 shadow-lg overflow-hidden">
+    <section className="relative w-full rounded-[2rem] bg-blue-50 px-8 py-8 md:px-12 md:py-10 shadow-lg overflow-hidden">
       {/* Header row with divider */}
       <div className="flex items-baseline justify-between pb-4 border-b-2 border-[#111827]">
         <span className="text-xl md:text-2xl font-bold tracking-tight text-[#111827]">
@@ -237,7 +233,7 @@ export function SubjectBanner() {
       {/* Copyright footer */}
       <div className="mt-10 flex items-center justify-center gap-2 text-sm font-semibold text-[#111827]">
         <Copyright className="size-4" />
-        <span>Copyright . 2026</span>
+        <span>Copyright Wooloolies 2026</span>
       </div>
     </section>
   );
