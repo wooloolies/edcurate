@@ -1,7 +1,7 @@
 import uuid
 
 from fastapi import HTTPException, status
-from sqlalchemy import select
+from sqlalchemy import and_, or_, select
 
 from src.discovery.schemas import ResourceCard
 from src.lib.dependencies import DBSession
@@ -17,7 +17,7 @@ from src.localizer.schemas import (
     GeneratedArtifactResponse,
 )
 from src.presets.model import ClassroomPreset
-from src.saved_resources.model import SavedResource
+from src.saved_resources.model import LibraryCollection, SavedResource
 
 
 async def create_artifact(
@@ -150,12 +150,33 @@ async def _fetch_resources(
     preset_id: uuid.UUID,
     resource_ids: list[uuid.UUID],
 ) -> list[SavedResource]:
-    """Fetch saved resources and verify ownership."""
+    """Fetch saved resources scoped to this preset, matching library list semantics.
+
+    The library list joins ``SavedResource`` to ``LibraryCollection`` and groups by
+    the collection's ``preset_id``. We use the same rule: if ``collection_id`` is
+    set, the parent collection's preset must match; legacy rows without a
+    collection fall back to ``SavedResource.preset_id``.
+    """
     result = await db.execute(
-        select(SavedResource).where(
+        select(SavedResource)
+        .outerjoin(
+            LibraryCollection,
+            SavedResource.collection_id == LibraryCollection.id,
+        )
+        .where(
             SavedResource.id.in_(resource_ids),
             SavedResource.user_id == user_id,
-            SavedResource.preset_id == preset_id,
+            or_(
+                and_(
+                    SavedResource.collection_id.isnot(None),
+                    LibraryCollection.user_id == user_id,
+                    LibraryCollection.preset_id == preset_id,
+                ),
+                and_(
+                    SavedResource.collection_id.is_(None),
+                    SavedResource.preset_id == preset_id,
+                ),
+            ),
         )
     )
     resources = list(result.scalars().all())
@@ -166,6 +187,7 @@ async def _fetch_resources(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Resources not found: {', '.join(missing)}",
         )
+
     return resources
 
 

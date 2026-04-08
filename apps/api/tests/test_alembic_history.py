@@ -44,7 +44,9 @@ def test_migration_history_has_single_merged_head() -> None:
     assert script.get_current_head() == "a2b3c4d5e6f7"
 
 
-def test_password_hash_migration_checks_column_presence(monkeypatch: MonkeyPatch) -> None:
+def test_password_hash_migration_checks_column_presence(
+    monkeypatch: MonkeyPatch,
+) -> None:
     module = _load_revision_module("b2c3d4e5f6a7_add_password_hash.py")
 
     class FakeResult:
