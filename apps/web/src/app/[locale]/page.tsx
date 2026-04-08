@@ -15,13 +15,13 @@ export default async function HomePage({ params }: HomePageProps) {
   const t = await getTranslations("home");
 
   return (
-    <div className="relative h-dvh bg-brand-surface overflow-hidden text-brand-ink font-sans flex flex-col">
+    <div className="relative min-h-dvh bg-brand-surface text-brand-ink font-sans flex flex-col">
       {/* Interactive clustering canvas background */}
       <CanvasBackground />
 
       <Header />
 
-      <main className="relative z-10 flex flex-1 flex-col items-center justify-center px-4">
+      <main className="relative z-10 flex flex-1 flex-col items-center justify-center px-4 pt-24 pb-12">
         {/* Main hero typography matches the ultra-clean flat aesthetic */}
         <h1 className="text-5xl md:text-[4.5rem] font-bold tracking-tight text-center max-w-4xl leading-[1.05] text-brand-ink">
           {t("heroTitlePart1")} <br /> {t("heroTitlePart2")}

@@ -471,7 +471,7 @@ export function LibraryPageClient() {
 
           <CollapsibleContent>
             <div className="border-t border-brand-ink/5 px-5 py-5">
-              <div className="grid gap-4 grid-cols-1 xl:grid-cols-2">
+              <div className="grid gap-4 grid-cols-1">
                 {sortedItems.map((item: SavedResourceResponse, idx: number) => (
                   <ResourceCardRenderer
                     key={item.id}
