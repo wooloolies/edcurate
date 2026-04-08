@@ -481,7 +481,6 @@ export function LibraryPageClient() {
                                 })
                               }
                             >
-                              <Wand2 className="h-4 w-4 text-brand-green" />
                               {t(`generate.artifact${type.charAt(0).toUpperCase()}${type.slice(1)}` as "generate.artifactQuiz")}
                             </button>
                           </DrawerClose>
