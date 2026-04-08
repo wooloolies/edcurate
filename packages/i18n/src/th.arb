@@ -156,6 +156,10 @@
   "@presets__title": {
     "description": "Presets page heading"
   },
+  "presets__subtitle": "จัดการพรีเซ็ตห้องเรียนและการตั้งค่าการค้นหา",
+  "@presets__subtitle": {
+    "description": "Subtitle on collections page"
+  },
   "presets__newPreset": "คอลเลกชันใหม่",
   "@presets__newPreset": {
     "description": "Button to create a new preset"

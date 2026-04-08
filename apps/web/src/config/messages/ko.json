@@ -53,6 +53,7 @@
   },
   "presets": {
     "title": "내 수업 컬렉션",
+    "subtitle": "수업 프리셋과 검색 설정을 관리하세요",
     "newPreset": "새 컬렉션",
     "editPreset": "컬렉션 편집",
     "createPreset": "프리셋 만들기",

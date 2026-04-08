@@ -18,9 +18,7 @@ export default async function PresetsPage({ params }: Props) {
       <CanvasBackground />
       <Header />
       <main className="relative z-10 mx-auto max-w-7xl px-4 pt-32 pb-16">
-        <div className="mx-auto w-full max-w-7xl">
-          <PresetListClient />
-        </div>
+        <PresetListClient />
       </main>
     </div>
   );

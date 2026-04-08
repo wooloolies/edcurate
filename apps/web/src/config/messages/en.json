@@ -53,6 +53,7 @@
   },
   "presets": {
     "title": "My Classroom Collections",
+    "subtitle": "Manage your classroom presets and search configurations",
     "newPreset": "New Collection",
     "editPreset": "Edit Collection",
     "createPreset": "Create Preset",

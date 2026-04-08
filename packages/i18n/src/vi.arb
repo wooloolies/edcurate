@@ -156,6 +156,10 @@
   "@presets__title": {
     "description": "Presets page heading"
   },
+  "presets__subtitle": "Quản lý thiết lập lớp học và cấu hình tìm kiếm",
+  "@presets__subtitle": {
+    "description": "Subtitle on collections page"
+  },
   "presets__newPreset": "Bộ sưu tập mới",
   "@presets__newPreset": {
     "description": "Button to create a new preset"

@@ -53,6 +53,7 @@
   },
   "presets": {
     "title": "我的课堂收藏集",
+    "subtitle": "管理课堂预设和搜索配置",
     "newPreset": "新建收藏集",
     "editPreset": "编辑收藏集",
     "createPreset": "创建预设",

@@ -53,6 +53,7 @@
   },
   "presets": {
     "title": "Bộ sưu tập lớp học của tôi",
+    "subtitle": "Quản lý thiết lập lớp học và cấu hình tìm kiếm",
     "newPreset": "Bộ sưu tập mới",
     "editPreset": "Chỉnh sửa bộ sưu tập",
     "createPreset": "Tạo thiết lập",
