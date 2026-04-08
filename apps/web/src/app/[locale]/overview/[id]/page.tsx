@@ -7,6 +7,7 @@ import { useTranslations } from "next-intl";
 
 import { Header } from "@/components/layout/header";
 import { CanvasBackground } from "@/components/ui/canvas-background";
+import { BackButton } from "@/app/[locale]/overview/back-button";
 import {
   RelevanceDetails,
   VerdictBadge,
@@ -52,6 +53,10 @@ export default function OverviewDetailPage() {
     <div className="relative min-h-dvh bg-brand-surface overflow-hidden text-brand-ink font-sans flex flex-col">
       <CanvasBackground />
       <Header />
+
+      <div className="absolute top-8 left-4 md:left-8 z-50 flex items-center h-[56px]">
+        <BackButton />
+      </div>
 
       <main className="relative z-10 flex-1 mt-36 max-w-4xl mx-auto w-full px-8 pb-20">
         {isLoading ? (

@@ -47,24 +47,25 @@ export default async function OverviewPage({ searchParams }: OverviewPageProps) 
     <div className="min-h-dvh bg-background text-foreground font-sans flex flex-col">
       <Header />
 
+      <div className="absolute top-8 left-4 md:left-8 z-50 flex items-center h-[56px]">
+        <BackButton />
+      </div>
+
       <main className="flex-1 mt-32 max-w-[90rem] mx-auto w-full px-6 md:px-10 pb-20">
 
         {/* Top Bar */}
         <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-4">
-            <BackButton />
-            <div className="flex items-center gap-3">
-              <h1 className="text-3xl font-bold tracking-tight">Overview</h1>
-              <a
-                href="https://github.com/wooloolies/edcurate"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex h-8 w-8 items-center justify-center rounded-full bg-white border border-slate-200 shadow-sm hover:bg-slate-50 hover:scale-105 transition-all"
-                title="Open original resource"
-              >
-                <ExternalLink className="h-4 w-4 text-slate-500" />
-              </a>
-            </div>
+          <div className="flex items-center gap-3">
+            <h1 className="text-3xl font-bold tracking-tight">Overview</h1>
+            <a
+              href="https://github.com/wooloolies/edcurate"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex h-8 w-8 items-center justify-center rounded-full bg-white border border-slate-200 shadow-sm hover:bg-slate-50 hover:scale-105 transition-all"
+              title="Open original resource"
+            >
+              <ExternalLink className="h-4 w-4 text-slate-500" />
+            </a>
           </div>
           <div className="flex items-center gap-3">
             <button
