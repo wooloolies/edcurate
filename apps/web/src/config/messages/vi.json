@@ -396,6 +396,45 @@
       "preparingResources": "Đang chuẩn bị tài nguyên...",
       "evaluatingResources": "Đang đánh giá tài nguyên...",
       "resourceCount": "{completed}/{total} hoàn tất"
+    },
+    "title": "Thư viện",
+    "subtitle": "Tài nguyên được tuyển chọn từ bộ sưu tập giảng dạy",
+    "empty": {
+      "title": "Thư viện trống",
+      "description": "Lưu tài nguyên từ kết quả tìm kiếm để xây dựng bộ sưu tập.",
+      "startSearching": "Bắt đầu tìm kiếm"
+    },
+    "collection": {
+      "resources": "{count} tài nguyên",
+      "unevaluated": "{count} chưa đánh giá"
+    },
+    "action": {
+      "addLink": "Thêm liên kết",
+      "cancel": "Hủy",
+      "add": "Thêm",
+      "save": "Lưu",
+      "evaluateAll": "Đánh giá tất cả ({count})",
+      "evaluate": "Đánh giá",
+      "reEvaluate": "Đánh giá lại",
+      "preparing": "Đang chuẩn bị...",
+      "evaluating": "Đang đánh giá...",
+      "rename": "Đổi tên",
+      "makePrivate": "Đặt riêng tư",
+      "makePublic": "Đặt công khai",
+      "deleteCollection": "Xóa bộ sưu tập",
+      "generate": "Tạo"
+    },
+    "toast": {
+      "linkAdded": "Đã thêm liên kết",
+      "linkFailed": "Không thể thêm liên kết",
+      "removeFailed": "Không thể xóa tài nguyên",
+      "updateFailed": "Không thể cập nhật bộ sưu tập",
+      "deleted": "Đã xóa bộ sưu tập",
+      "deleteFailed": "Không thể xóa bộ sưu tập"
+    },
+    "confirm": {
+      "makePublic": "Bạn có chắc muốn công khai? Mọi người sẽ có thể tìm thấy tài nguyên này.",
+      "deleteCollection": "Bạn có chắc muốn xóa bộ sưu tập này và tất cả tài nguyên?"
     }
   }
 }

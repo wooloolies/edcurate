@@ -399,6 +399,45 @@
       "preparingResources": "กำลังเตรียมทรัพยากร...",
       "evaluatingResources": "กำลังประเมินทรัพยากร...",
       "resourceCount": "{completed}/{total} เสร็จแล้ว"
+    },
+    "title": "ห้องสมุดของคุณ",
+    "subtitle": "สื่อที่คัดสรรจากคอลเลกชันการสอน",
+    "empty": {
+      "title": "ห้องสมุดว่างเปล่า",
+      "description": "บันทึกสื่อจากผลการค้นหาเพื่อสร้างคอลเลกชันของคุณ",
+      "startSearching": "เริ่มค้นหา"
+    },
+    "collection": {
+      "resources": "{count} รายการ",
+      "unevaluated": "{count} ยังไม่ประเมิน"
+    },
+    "action": {
+      "addLink": "เพิ่มลิงก์",
+      "cancel": "ยกเลิก",
+      "add": "เพิ่ม",
+      "save": "บันทึก",
+      "evaluateAll": "ประเมินทั้งหมด ({count})",
+      "evaluate": "ประเมิน",
+      "reEvaluate": "ประเมินอีกครั้ง",
+      "preparing": "กำลังเตรียม...",
+      "evaluating": "กำลังประเมิน...",
+      "rename": "เปลี่ยนชื่อ",
+      "makePrivate": "ตั้งเป็นส่วนตัว",
+      "makePublic": "ตั้งเป็นสาธารณะ",
+      "deleteCollection": "ลบคอลเลกชัน",
+      "generate": "สร้าง"
+    },
+    "toast": {
+      "linkAdded": "เพิ่มลิงก์แล้ว",
+      "linkFailed": "ไม่สามารถเพิ่มลิงก์ได้",
+      "removeFailed": "ไม่สามารถลบสื่อได้",
+      "updateFailed": "ไม่สามารถอัปเดตคอลเลกชันได้",
+      "deleted": "ลบคอลเลกชันแล้ว",
+      "deleteFailed": "ไม่สามารถลบคอลเลกชันได้"
+    },
+    "confirm": {
+      "makePublic": "คุณแน่ใจหรือไม่ว่าต้องการเผยแพร่สาธารณะ? ทุกคนจะสามารถค้นพบทรัพยากรเหล่านี้ได้",
+      "deleteCollection": "คุณแน่ใจหรือไม่ว่าต้องการลบคอลเลกชันนี้และสื่อทั้งหมด?"
     }
   }
 }

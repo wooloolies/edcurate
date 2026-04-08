@@ -16,6 +16,7 @@ import {
   Wand2,
   X,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useQueryState } from "nuqs";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -51,6 +52,7 @@ import {
 import { Link } from "@/lib/i18n/routing";
 
 export function LibraryPageClient() {
+  const t = useTranslations("library");
   const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useQueryState("preset");
 
@@ -116,12 +118,12 @@ export function LibraryPageClient() {
     if (!linkUrl) return;
     try {
       await addLink({ data: { preset_id: presetId, search_query: searchQuery, url: linkUrl } });
-      toast.success("Custom link added");
+      toast.success(t("toast.linkAdded"));
       setLinkUrl("");
       setAddLinkOpenFor(null);
       invalidateLibrary();
     } catch {
-      toast.error("Failed to add link");
+      toast.error(t("toast.linkFailed"));
     }
   };
 
@@ -139,7 +141,7 @@ export function LibraryPageClient() {
       await deleteResource({ id: resourceId });
       invalidateLibrary();
     } catch {
-      toast.error("Failed to remove resource");
+      toast.error(t("toast.removeFailed"));
     } finally {
       setDeletingIds((prev) => {
         const next = new Set(prev);
@@ -158,7 +160,7 @@ export function LibraryPageClient() {
       toast.success("Collection updated");
       invalidateLibrary();
     } catch {
-      toast.error("Failed to update collection");
+      toast.error(t("toast.updateFailed"));
     }
   };
 
@@ -167,7 +169,7 @@ export function LibraryPageClient() {
     if (nextPrivacy) {
       if (
         !window.confirm(
-          "Are you sure you want to make this public? Anyone will be able to discover these resources."
+          t("confirm.makePublic")
         )
       ) {
         return;
@@ -177,14 +179,14 @@ export function LibraryPageClient() {
   };
 
   const handleDeleteCollection = async (collectionId: string) => {
-    if (!window.confirm("Are you sure you want to delete this collection and all its resources?"))
+    if (!window.confirm(t("confirm.deleteCollection")))
       return;
     try {
       await deleteCollection({ collectionId });
-      toast.success("Collection deleted");
+      toast.success(t("toast.deleted"));
       invalidateLibrary();
     } catch {
-      toast.error("Failed to delete collection");
+      toast.error(t("toast.deleteFailed"));
     }
   };
 
@@ -200,11 +202,11 @@ export function LibraryPageClient() {
     const isEvaluatingThis = singleState?.isStreaming ?? false;
     const singleLabel = isEvaluatingThis
       ? singleState?.stage === "rag_preparation"
-        ? "Preparing..."
-        : "Evaluating..."
+        ? t("action.preparing")
+        : t("action.evaluating")
       : item.evaluation_data
-        ? "Re-evaluate"
-        : "Evaluate";
+        ? t("action.reEvaluate")
+        : t("action.evaluate");
     return (
       <button
         type="button"
@@ -248,8 +250,8 @@ export function LibraryPageClient() {
       <Collapsible key={groupKey} open={isOpen} onOpenChange={() => toggleGroup(groupKey)}>
         <div className="overflow-hidden rounded-2xl border border-white/80 bg-white/70 shadow-[0_2px_20px_rgba(0,0,0,0.04)] backdrop-blur-sm transition-shadow hover:shadow-[0_4px_28px_rgba(0,0,0,0.06)]">
           {/* Collection header */}
-          <div className="select-none px-5 py-4">
-            <div className="flex items-center justify-between gap-3">
+          <div className="select-none px-4 py-3 sm:px-5 sm:py-4">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
               <CollapsibleTrigger asChild>
                 <button
                   type="button"
@@ -273,10 +275,10 @@ export function LibraryPageClient() {
                       )}
                     </div>
                     <p className="mt-0.5 text-xs text-brand-ink/45">
-                      {colGroup.items.length} resource{colGroup.items.length === 1 ? "" : "s"}
+                      {t("collection.resources", { count: colGroup.items.length })}
                       {unevaluatedCount > 0 && (
                         <span className="ml-1.5 rounded-full bg-brand-green/30 px-2 py-0.5 text-[11px] font-medium text-brand-ink/70">
-                          {unevaluatedCount} unevaluated
+                          {t("collection.unevaluated", { count: unevaluatedCount })}
                         </span>
                       )}
                     </p>
@@ -284,7 +286,7 @@ export function LibraryPageClient() {
                 </button>
               </CollapsibleTrigger>
 
-              <div role="toolbar" className="flex items-center gap-1.5">
+              <div role="toolbar" className="flex flex-wrap items-center gap-1.5">
                 {renamingCollectionId === groupKey ? (
                   <form
                     onSubmit={(e) => handleRenameSubmit(e, groupKey)}
@@ -300,21 +302,21 @@ export function LibraryPageClient() {
                       type="submit"
                       className="rounded-full bg-brand-green px-3.5 py-1.5 text-xs font-medium text-brand-ink transition-colors hover:bg-brand-ink hover:text-white"
                     >
-                      Save
+                      {t("action.save")}
                     </button>
                     <button
                       type="button"
                       className="rounded-full px-3 py-1.5 text-xs text-brand-ink/50 transition-colors hover:bg-brand-ink/5 hover:text-brand-ink"
                       onClick={() => setRenamingCollectionId(null)}
                     >
-                      Cancel
+                      {t("action.cancel")}
                     </button>
                   </form>
                 ) : (
                   <>
                     <button
                       type="button"
-                      className="inline-flex items-center rounded-full px-3 py-1.5 text-xs font-medium text-brand-ink/60 transition-colors hover:bg-brand-ink/5 hover:text-brand-ink"
+                      className="hidden sm:inline-flex items-center rounded-full px-3 py-1.5 text-xs font-medium text-brand-ink/60 transition-colors hover:bg-brand-ink/5 hover:text-brand-ink"
                       onClick={(e) => {
                         e.stopPropagation();
                         if (isAddLinkOpen) {
@@ -330,7 +332,7 @@ export function LibraryPageClient() {
                       ) : (
                         <LinkIcon className="mr-1 h-3.5 w-3.5" />
                       )}
-                      {isAddLinkOpen ? "Cancel" : "Add Link"}
+                      {isAddLinkOpen ? t("action.cancel") : t("action.addLink")}
                     </button>
 
                     {unevaluatedCount > 0 && (
@@ -341,7 +343,7 @@ export function LibraryPageClient() {
                         disabled={isEvaluatingGroup}
                       >
                         <ScanSearch className="mr-1.5 h-3 w-3" />
-                        Evaluate All ({unevaluatedCount})
+                        {t("action.evaluateAll", { count: unevaluatedCount })}
                       </button>
                     )}
 
@@ -356,12 +358,20 @@ export function LibraryPageClient() {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end" className="rounded-xl">
                         <DropdownMenuItem
+                          className="sm:hidden"
+                          onClick={() => {
+                            setAddLinkOpenFor(groupKey);
+                          }}
+                        >
+                          <LinkIcon className="mr-2 h-4 w-4" /> {t("action.addLink")}
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
                           onClick={() => {
                             setRenamingValue(col.name);
                             setRenamingCollectionId(groupKey);
                           }}
                         >
-                          <Pencil className="mr-2 h-4 w-4" /> Rename
+                          <Pencil className="mr-2 h-4 w-4" /> {t("action.rename")}
                         </DropdownMenuItem>
                         <DropdownMenuItem onClick={() => handleUpdatePrivacy(col)}>
                           {col.is_public ? (
@@ -369,14 +379,14 @@ export function LibraryPageClient() {
                           ) : (
                             <Globe className="mr-2 h-4 w-4" />
                           )}
-                          {col.is_public ? "Make Private" : "Make Public"}
+                          {col.is_public ? t("action.makePrivate") : t("action.makePublic")}
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem
                           className="text-red-500 focus:text-red-600"
                           onClick={() => handleDeleteCollection(groupKey)}
                         >
-                          <Trash2 className="mr-2 h-4 w-4" /> Delete Collection
+                          <Trash2 className="mr-2 h-4 w-4" /> {t("action.deleteCollection")}
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -390,7 +400,7 @@ export function LibraryPageClient() {
                       className="inline-flex items-center rounded-full border border-brand-ink/10 bg-white px-3 py-1.5 text-xs font-medium text-brand-ink/70 shadow-sm transition-all hover:border-brand-green hover:shadow-[0_0_0_1px_rgba(183,255,112,0.3)]"
                       onClick={(e) => e.stopPropagation()}
                     >
-                      <Wand2 className="mr-1 h-3.5 w-3.5 text-brand-green" /> Generate
+                      <Wand2 className="mr-1 h-3.5 w-3.5 text-brand-green" /> {t("action.generate")}
                     </button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="rounded-xl">
@@ -438,7 +448,7 @@ export function LibraryPageClient() {
                   disabled={!linkUrl || isAdding}
                   className="inline-flex shrink-0 items-center rounded-full bg-brand-green px-4 py-2 text-xs font-medium text-brand-ink transition-all hover:bg-brand-ink hover:text-white disabled:opacity-50"
                 >
-                  <Plus className="mr-1 h-3.5 w-3.5" /> Add
+                  <Plus className="mr-1 h-3.5 w-3.5" /> {t("action.add")}
                 </button>
               </form>
             )}
@@ -481,11 +491,11 @@ export function LibraryPageClient() {
       <div className="w-full">
         {/* Hero header */}
         <div className="mb-10">
-          <h1 className="text-4xl font-bold tracking-tight text-brand-ink md:text-5xl">
-            Your Library
+          <h1 className="text-4xl font-bold tracking-tight text-brand-ink">
+            {t("title")}
           </h1>
           <p className="mt-2 text-[15px] text-brand-ink/50">
-            Curated resources across your teaching collections
+            {t("subtitle")}
           </p>
         </div>
 
@@ -494,16 +504,16 @@ export function LibraryPageClient() {
             <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-brand-green/20">
               <Bookmark className="h-8 w-8 text-brand-ink/30" />
             </div>
-            <p className="text-xl font-semibold text-brand-ink">Your library is empty</p>
+            <p className="text-xl font-semibold text-brand-ink">{t("empty.title")}</p>
             <p className="mt-2 max-w-sm text-sm text-brand-ink/50">
-              Save resources from your search results to build your curated collection.
+              {t("empty.description")}
             </p>
             <Link
               href="/search"
               className="mt-8 inline-flex items-center rounded-full bg-brand-green px-8 py-3 text-sm font-semibold text-brand-ink shadow-sm transition-all hover:bg-brand-ink hover:text-white hover:shadow-[0_8px_32px_rgba(183,255,112,0.3)]"
             >
               <Search className="mr-2 h-4 w-4" />
-              Start Searching
+              {t("empty.startSearching")}
             </Link>
           </div>
         ) : (

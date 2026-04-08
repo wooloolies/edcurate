@@ -396,6 +396,45 @@
       "preparingResources": "正在准备资源...",
       "evaluatingResources": "正在评估资源...",
       "resourceCount": "{completed}/{total} 已完成"
+    },
+    "title": "我的资源库",
+    "subtitle": "来自教学收藏集的精选资源",
+    "empty": {
+      "title": "资源库为空",
+      "description": "从搜索结果中保存资源以构建您的收藏集。",
+      "startSearching": "开始搜索"
+    },
+    "collection": {
+      "resources": "{count} 个资源",
+      "unevaluated": "{count} 个未评估"
+    },
+    "action": {
+      "addLink": "添加链接",
+      "cancel": "取消",
+      "add": "添加",
+      "save": "保存",
+      "evaluateAll": "全部评估 ({count})",
+      "evaluate": "评估",
+      "reEvaluate": "重新评估",
+      "preparing": "准备中...",
+      "evaluating": "评估中...",
+      "rename": "重命名",
+      "makePrivate": "设为私密",
+      "makePublic": "设为公开",
+      "deleteCollection": "删除收藏集",
+      "generate": "生成"
+    },
+    "toast": {
+      "linkAdded": "链接已添加",
+      "linkFailed": "添加链接失败",
+      "removeFailed": "移除资源失败",
+      "updateFailed": "更新收藏集失败",
+      "deleted": "收藏集已删除",
+      "deleteFailed": "删除收藏集失败"
+    },
+    "confirm": {
+      "makePublic": "确定要公开吗？所有人都可以发现这些资源。",
+      "deleteCollection": "确定要删除此收藏集及其所有资源吗？"
     }
   }
 }

@@ -402,6 +402,45 @@
       "preparingResources": "리소스 준비 중...",
       "evaluatingResources": "리소스 평가 중...",
       "resourceCount": "{completed}/{total} 완료"
+    },
+    "title": "내 라이브러리",
+    "subtitle": "수업 컬렉션의 큐레이션된 리소스",
+    "empty": {
+      "title": "라이브러리가 비어 있습니다",
+      "description": "검색 결과에서 리소스를 저장하여 나만의 컬렉션을 만들어 보세요.",
+      "startSearching": "검색 시작"
+    },
+    "collection": {
+      "resources": "{count}개 리소스",
+      "unevaluated": "{count}개 미평가"
+    },
+    "action": {
+      "addLink": "링크 추가",
+      "cancel": "취소",
+      "add": "추가",
+      "save": "저장",
+      "evaluateAll": "전체 평가 ({count})",
+      "evaluate": "평가",
+      "reEvaluate": "재평가",
+      "preparing": "준비 중...",
+      "evaluating": "평가 중...",
+      "rename": "이름 변경",
+      "makePrivate": "비공개로 전환",
+      "makePublic": "공개로 전환",
+      "deleteCollection": "컬렉션 삭제",
+      "generate": "생성"
+    },
+    "toast": {
+      "linkAdded": "링크가 추가되었습니다",
+      "linkFailed": "링크 추가에 실패했습니다",
+      "removeFailed": "리소스 제거에 실패했습니다",
+      "updateFailed": "컬렉션 업데이트에 실패했습니다",
+      "deleted": "컬렉션이 삭제되었습니다",
+      "deleteFailed": "컬렉션 삭제에 실패했습니다"
+    },
+    "confirm": {
+      "makePublic": "정말 공개하시겠습니까? 누구나 이 리소스를 발견할 수 있게 됩니다.",
+      "deleteCollection": "이 컬렉션과 모든 리소스를 삭제하시겠습니까?"
     }
   }
 }

@@ -420,6 +420,45 @@
       "preparingResources": "Preparing resources...",
       "evaluatingResources": "Evaluating resources...",
       "resourceCount": "{completed} of {total} evaluated"
+    },
+    "title": "Your Library",
+    "subtitle": "Curated resources across your teaching collections",
+    "empty": {
+      "title": "Your library is empty",
+      "description": "Save resources from your search results to build your curated collection.",
+      "startSearching": "Start Searching"
+    },
+    "collection": {
+      "resources": "{count, plural, one {# resource} other {# resources}}",
+      "unevaluated": "{count} unevaluated"
+    },
+    "action": {
+      "addLink": "Add Link",
+      "cancel": "Cancel",
+      "add": "Add",
+      "save": "Save",
+      "evaluateAll": "Evaluate All ({count})",
+      "evaluate": "Evaluate",
+      "reEvaluate": "Re-evaluate",
+      "preparing": "Preparing...",
+      "evaluating": "Evaluating...",
+      "rename": "Rename",
+      "makePrivate": "Make Private",
+      "makePublic": "Make Public",
+      "deleteCollection": "Delete Collection",
+      "generate": "Generate"
+    },
+    "toast": {
+      "linkAdded": "Custom link added",
+      "linkFailed": "Failed to add link",
+      "removeFailed": "Failed to remove resource",
+      "updateFailed": "Failed to update collection",
+      "deleted": "Collection deleted",
+      "deleteFailed": "Failed to delete collection"
+    },
+    "confirm": {
+      "makePublic": "Are you sure you want to make this public? Anyone will be able to discover these resources.",
+      "deleteCollection": "Are you sure you want to delete this collection and all its resources?"
     }
   }
 }
