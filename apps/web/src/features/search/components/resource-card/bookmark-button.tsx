@@ -96,8 +96,8 @@ export function BookmarkButton({
       onClick={handleToggle}
       disabled={isPending}
       aria-label={isSaved ? t("bookmark.removeLabel") : t("bookmark.saveLabel")}
-      className={`rounded-full px-5 py-2 text-sm font-bold shadow-sm transition-all duration-300 hover:scale-105 active:scale-95 text-white border-0 ${
-        isSaved ? "bg-slate-900" : "bg-brand-ink btn-brand-hover"
+      className={`rounded-full px-5 py-2 text-sm font-bold shadow-sm transition-all duration-300 hover:scale-105 active:scale-95 !text-white border-0 ${
+        isSaved ? "!bg-slate-900" : "!bg-black btn-rainbow-hover"
       }`}
     >
       {isSaved ? t("bookmark.saved") : t("bookmark.save")}
