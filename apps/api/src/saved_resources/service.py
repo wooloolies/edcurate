@@ -117,6 +117,7 @@ async def create_collection(
         preset_id=request.preset_id,
         search_query=request.search_query,
         name=request.name,
+        description=request.description,
         is_public=request.is_public,
     )
     db.add(collection)
@@ -170,6 +171,8 @@ async def update_collection(
 
     if request.name is not None:
         col.name = request.name
+    if request.description is not None:
+        col.description = request.description
     if request.is_public is not None:
         col.is_public = request.is_public
 
@@ -408,17 +411,48 @@ async def get_suggested_collections(
 
     # Check which ones the user has already cloned
     cloned_result = await db.execute(
-        select(LibraryCollection.cloned_from_id).where(
+        select(LibraryCollection.id, LibraryCollection.cloned_from_id).where(
             LibraryCollection.user_id == user_id,
             LibraryCollection.cloned_from_id.in_(collection_ids),
         )
     )
-    cloned_by_user_ids = {row[0] for row in cloned_result.all() if row[0]}
+    cloned_rows = cloned_result.all()
+    cloned_by_user_ids = {row[1] for row in cloned_rows if row[1]}
+    clone_id_by_original: dict[uuid.UUID, uuid.UUID] = {
+        row[1]: row[0] for row in cloned_rows if row[1]
+    }
+
+    # For cloned collections, fetch clone resource URLs to detect drift
+    clone_urls_by_original: dict[uuid.UUID, set[str]] = {}
+    clone_col_ids = list(clone_id_by_original.values())
+    if clone_col_ids:
+        clone_res_result = await db.execute(
+            select(SavedResource.collection_id, SavedResource.resource_url).where(
+                SavedResource.collection_id.in_(clone_col_ids)
+            )
+        )
+        clone_id_to_original = {v: k for k, v in clone_id_by_original.items()}
+        for clone_col_id, url in clone_res_result.all():
+            orig_id = clone_id_to_original.get(clone_col_id)
+            if orig_id:
+                clone_urls_by_original.setdefault(orig_id, set()).add(url)
 
     # Group resources by collection_id
     resources_by_col: dict[uuid.UUID, list[SavedResource]] = defaultdict(list)
     for r in all_resources:
         resources_by_col[r.collection_id].append(r)
+
+    # Build original URL sets for needs_sync comparison
+    original_urls_by_col: dict[uuid.UUID, set[str]] = {}
+    for col_id, resources in resources_by_col.items():
+        original_urls_by_col[col_id] = {r.resource_url for r in resources}
+
+    def _needs_sync(col_id: uuid.UUID) -> bool:
+        if col_id not in cloned_by_user_ids:
+            return False
+        orig_urls = original_urls_by_col.get(col_id, set())
+        clone_urls = clone_urls_by_original.get(col_id, set())
+        return not orig_urls.issubset(clone_urls)
 
     return [
         SuggestedCollectionResponse(
@@ -427,6 +461,7 @@ async def get_suggested_collections(
             resources_count=count or 0,
             publisher_name=name,
             is_cloned_by_user=c.id in cloned_by_user_ids,
+            needs_sync=_needs_sync(c.id),
             resources=[
                 SavedResourceResponse.model_validate(r)
                 for r in resources_by_col.get(c.id, [])
