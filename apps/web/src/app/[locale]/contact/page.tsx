@@ -53,9 +53,9 @@ export default function ContactPage() {
       <Header />
 
       <main className="relative z-10 mx-auto max-w-5xl px-4 pt-32 pb-16">
-        <div className="text-center">
-          <h1 className="text-4xl font-bold">{t("title")}</h1>
-          <p className="mt-2 text-lg text-gray-500">{t("subtitle")}</p>
+        <div>
+          <h1 className="text-4xl font-bold tracking-tight text-brand-ink">{t("title")}</h1>
+          <p className="mt-2 text-[15px] text-brand-ink/50">{t("subtitle")}</p>
         </div>
 
         <div className="mt-16 grid gap-12 lg:grid-cols-2">

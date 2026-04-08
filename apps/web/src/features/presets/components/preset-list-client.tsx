@@ -17,7 +17,7 @@ export function PresetListClient() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">{t("title")}</h1>
+        <h1 className="text-4xl font-bold tracking-tight text-brand-ink">{t("title")}</h1>
         <Button asChild>
           <Link href="/collections/new">
             <Plus className="mr-1 h-4 w-4" />

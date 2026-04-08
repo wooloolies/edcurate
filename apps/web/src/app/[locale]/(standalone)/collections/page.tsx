@@ -14,7 +14,7 @@ export default async function PresetsPage({ params }: Props) {
   setRequestLocale(locale as Locale);
 
   return (
-    <div className="relative min-h-screen bg-[#F8F9FA] overflow-hidden text-[#111827] font-sans">
+    <div className="relative min-h-screen bg-brand-surface overflow-hidden text-brand-ink font-sans">
       <CanvasBackground />
       <Header />
       <main className="relative z-10 flex min-h-screen flex-col px-4 pt-32 pb-16">
