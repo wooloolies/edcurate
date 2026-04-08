@@ -24,6 +24,25 @@ class NotebookLMConfigurationError(RuntimeError):
     """NotebookLM authentication is not available in this runtime."""
 
 
+def _resolve_storage_state_path() -> str:
+    """Return a file path to the Playwright storage state JSON.
+
+    Priority: NOTEBOOKLM_STORAGE_STATE_PATH (file on disk)
+              > NOTEBOOKLM_STATE (inline JSON, written to a temp file).
+    """
+    if settings.NOTEBOOKLM_STORAGE_STATE_PATH:
+        return settings.NOTEBOOKLM_STORAGE_STATE_PATH
+
+    if settings.NOTEBOOKLM_STATE:
+        tmp = Path(tempfile.gettempdir()) / "notebooklm_state.json"
+        tmp.write_text(settings.NOTEBOOKLM_STATE, encoding="utf-8")
+        return str(tmp)
+
+    raise NotebookLMConfigurationError(
+        "Neither NOTEBOOKLM_STORAGE_STATE_PATH nor NOTEBOOKLM_STATE is set"
+    )
+
+
 async def generate_artifact(
     resources: list[ResourceInfo],
     artifact_type: str,
@@ -40,9 +59,8 @@ async def generate_artifact(
     nb_id: str | None = None
 
     try:
-        client_context = await NotebookLMClient.from_storage(
-            path=settings.NOTEBOOKLM_STORAGE_STATE_PATH
-        )
+        storage_path = _resolve_storage_state_path()
+        client_context = await NotebookLMClient.from_storage(path=storage_path)
     except FileNotFoundError as exc:
         raise NotebookLMConfigurationError(
             "NotebookLM storage state is not configured"

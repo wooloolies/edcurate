@@ -54,7 +54,10 @@ import {
   ResourceCardRenderer,
 } from "@/features/search/components/resource-card";
 import { useIsMobile } from "@/hooks/use-is-mobile";
-import { useListArtifactsEndpointApiLocalizerGet } from "@/lib/api/localizer/localizer";
+import {
+  getListArtifactsEndpointApiLocalizerGetQueryKey,
+  useListArtifactsEndpointApiLocalizerGet,
+} from "@/lib/api/localizer/localizer";
 import type {
   CollectionGroup,
   GenerateArtifactRequestArtifactType,
@@ -704,7 +707,12 @@ export function LibraryPageClient() {
             artifactType={generateDialog.artifactType}
             presetId={generateDialog.presetId}
             resources={generateDialog.resources}
-            onSuccess={() => setGenerateDialog(null)}
+            onSuccess={() => {
+              void queryClient.invalidateQueries({
+                queryKey: getListArtifactsEndpointApiLocalizerGetQueryKey(),
+              });
+              setGenerateDialog(null);
+            }}
           />
         ) : null}
 

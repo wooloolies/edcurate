@@ -78,6 +78,7 @@ class Settings(BaseSettings):
 
     # NotebookLM (optional)
     NOTEBOOKLM_STORAGE_STATE_PATH: str | None = None
+    NOTEBOOKLM_STATE: str | None = None  # JSON content (for serverless)
 
     # Storage (optional)
     STORAGE_BACKEND: Literal["gcs", "s3", "minio"] = "minio"
