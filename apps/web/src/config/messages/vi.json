@@ -374,5 +374,23 @@
     "sendAnother": "Gửi thêm phản hồi",
     "location": "Địa điểm",
     "teamEmails": "Email nhóm"
+  },
+  "library": {
+    "generate": {
+      "title": "Tạo {artifactType}",
+      "description": "Chọn tài nguyên để tạo {artifactType}.",
+      "descriptionMax": "Có thể chọn tối đa {max} tài nguyên.",
+      "selectAtLeast": "Chọn ít nhất một tài nguyên",
+      "selectUpTo": "Chọn tối đa {max} tài nguyên",
+      "success": "Đã tạo {artifactType} thành công",
+      "error": "Không thể tạo {artifactType}",
+      "generating": "Đang tạo từ {count} tài nguyên...",
+      "button": "Tạo ({count})",
+      "cancel": "Hủy",
+      "artifactQuiz": "Bài kiểm tra",
+      "artifactMindmap": "Sơ đồ tư duy",
+      "artifactSummary": "Tóm tắt",
+      "artifactFlashcards": "Thẻ ghi nhớ"
+    }
   }
 }

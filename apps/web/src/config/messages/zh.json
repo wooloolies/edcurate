@@ -374,5 +374,23 @@
     "sendAnother": "发送更多反馈",
     "location": "位置",
     "teamEmails": "团队邮箱"
+  },
+  "library": {
+    "generate": {
+      "title": "生成{artifactType}",
+      "description": "选择要生成{artifactType}的资源。",
+      "descriptionMax": "最多可选择 {max} 个资源。",
+      "selectAtLeast": "请至少选择一个资源",
+      "selectUpTo": "最多可选择 {max} 个资源",
+      "success": "{artifactType}生成成功",
+      "error": "生成{artifactType}失败",
+      "generating": "正在从 {count} 个资源生成...",
+      "button": "生成 ({count})",
+      "cancel": "取消",
+      "artifactQuiz": "测验",
+      "artifactMindmap": "思维导图",
+      "artifactSummary": "摘要",
+      "artifactFlashcards": "闪卡"
+    }
   }
 }

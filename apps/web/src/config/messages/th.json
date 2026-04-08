@@ -377,5 +377,23 @@
     "sendAnother": "ส่งความคิดเห็นเพิ่มเติม",
     "location": "สถานที่",
     "teamEmails": "อีเมลทีม"
+  },
+  "library": {
+    "generate": {
+      "title": "สร้าง{artifactType}",
+      "description": "เลือกทรัพยากรเพื่อสร้าง{artifactType}",
+      "descriptionMax": "เลือกได้สูงสุด {max} รายการ",
+      "selectAtLeast": "เลือกอย่างน้อย 1 รายการ",
+      "selectUpTo": "เลือกได้สูงสุด {max} รายการ",
+      "success": "สร้าง{artifactType}สำเร็จ",
+      "error": "ไม่สามารถสร้าง{artifactType}ได้",
+      "generating": "กำลังสร้างจาก {count} รายการ...",
+      "button": "สร้าง ({count})",
+      "cancel": "ยกเลิก",
+      "artifactQuiz": "แบบทดสอบ",
+      "artifactMindmap": "แผนผังความคิด",
+      "artifactSummary": "สรุป",
+      "artifactFlashcards": "บัตรคำ"
+    }
   }
 }

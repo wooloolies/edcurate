@@ -1,6 +1,7 @@
 "use client";
 
-import { Loader2, Sparkles } from "lucide-react";
+import { Loader2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -16,11 +17,11 @@ import {
 import { useGenerateArtifactEndpointApiLocalizerGeneratePost } from "@/lib/api/localizer/localizer";
 import type { GenerateArtifactRequestArtifactType, SavedResourceResponse } from "@/lib/api/model";
 
-const ARTIFACT_LABELS: Record<GenerateArtifactRequestArtifactType, string> = {
-  quiz: "Quiz",
-  mindmap: "Mind Map",
-  summary: "Summary",
-  flashcards: "Flashcards",
+const ARTIFACT_LABEL_KEYS: Record<GenerateArtifactRequestArtifactType, string> = {
+  quiz: "artifactQuiz",
+  mindmap: "artifactMindmap",
+  summary: "artifactSummary",
+  flashcards: "artifactFlashcards",
 };
 
 const MAX_SELECTED_RESOURCES = 10;
@@ -46,12 +47,15 @@ export function GenerateArtifactDialog({
   resources,
   onSuccess,
 }: GenerateArtifactDialogProps) {
+  const t = useTranslations("library.generate");
   const [selectedIds, setSelectedIds] = useState<Set<string>>(
     () => new Set(resources.slice(0, MAX_SELECTED_RESOURCES).map((r) => r.id))
   );
 
   const { mutateAsync: generate, isPending } =
     useGenerateArtifactEndpointApiLocalizerGeneratePost();
+
+  const artifactLabel = t(ARTIFACT_LABEL_KEYS[artifactType]);
 
   const toggleResource = (id: string) => {
     setSelectedIds((prev) => {
@@ -60,7 +64,7 @@ export function GenerateArtifactDialog({
         next.delete(id);
       } else {
         if (next.size >= MAX_SELECTED_RESOURCES) {
-          toast.error(`Select up to ${MAX_SELECTED_RESOURCES} resources`);
+          toast.error(t("selectUpTo", { max: MAX_SELECTED_RESOURCES }));
           return next;
         }
         next.add(id);
@@ -72,7 +76,7 @@ export function GenerateArtifactDialog({
   const handleGenerate = async () => {
     const ids = Array.from(selectedIds);
     if (ids.length === 0) {
-      toast.error("Select at least one resource");
+      toast.error(t("selectAtLeast"));
       return;
     }
     try {
@@ -83,11 +87,11 @@ export function GenerateArtifactDialog({
           artifact_type: artifactType,
         },
       });
-      toast.success(`${ARTIFACT_LABELS[artifactType]} generated successfully`);
+      toast.success(t("success", { artifactType: artifactLabel }));
       onSuccess(result);
       onOpenChange(false);
     } catch {
-      toast.error(`Failed to generate ${ARTIFACT_LABELS[artifactType].toLowerCase()}`);
+      toast.error(t("error", { artifactType: artifactLabel }));
     }
   };
 
@@ -95,14 +99,13 @@ export function GenerateArtifactDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            <Sparkles className="h-5 w-5" />
-            Generate {ARTIFACT_LABELS[artifactType]}
+          <DialogTitle>
+            {t("title", { artifactType: artifactLabel })}
           </DialogTitle>
           <DialogDescription>
-            Select resources to generate a {ARTIFACT_LABELS[artifactType].toLowerCase()} from.
+            {t("description", { artifactType: artifactLabel })}
             {resources.length > MAX_SELECTED_RESOURCES
-              ? ` Up to ${MAX_SELECTED_RESOURCES} resources can be selected.`
+              ? ` ${t("descriptionMax", { max: MAX_SELECTED_RESOURCES })}`
               : ""}
           </DialogDescription>
         </DialogHeader>
@@ -129,19 +132,16 @@ export function GenerateArtifactDialog({
 
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)} disabled={isPending}>
-            Cancel
+            {t("cancel")}
           </Button>
           <Button onClick={handleGenerate} disabled={isPending || selectedIds.size === 0}>
             {isPending ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Generating from {selectedIds.size} resource{selectedIds.size !== 1 ? "s" : ""}...
+                {t("generating", { count: selectedIds.size })}
               </>
             ) : (
-              <>
-                <Sparkles className="mr-2 h-4 w-4" />
-                Generate ({selectedIds.size})
-              </>
+              t("button", { count: selectedIds.size })
             )}
           </Button>
         </DialogFooter>

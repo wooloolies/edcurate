@@ -398,5 +398,23 @@
     "sendAnother": "Send more feedback",
     "location": "Location",
     "teamEmails": "Team Emails"
+  },
+  "library": {
+    "generate": {
+      "title": "Generate {artifactType}",
+      "description": "Select resources to generate a {artifactType} from.",
+      "descriptionMax": "Up to {max} resources can be selected.",
+      "selectAtLeast": "Select at least one resource",
+      "selectUpTo": "Select up to {max} resources",
+      "success": "{artifactType} generated successfully",
+      "error": "Failed to generate {artifactType}",
+      "generating": "Generating from {count} resource...",
+      "button": "Generate ({count})",
+      "cancel": "Cancel",
+      "artifactQuiz": "Quiz",
+      "artifactMindmap": "Mind Map",
+      "artifactSummary": "Summary",
+      "artifactFlashcards": "Flashcards"
+    }
   }
 }
