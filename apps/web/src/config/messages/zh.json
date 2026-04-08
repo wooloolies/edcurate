@@ -437,6 +437,10 @@
     },
     "title": "我的资源库",
     "subtitle": "保存、评估精选资源，并与其他教育者分享。",
+    "removeResourceDialogTitle": "移除资源",
+    "removeResourceDialogDescription": "从该收藏集中移除「{title}」？仅从收藏集中移除，您仍可在搜索中再次添加。",
+    "removeResourceDialogButton": "移除",
+    "removeResourceDialogUntitled": "无标题资源",
     "empty": {
       "title": "资源库为空",
       "description": "从搜索结果中保存资源以构建您的收藏集。",
@@ -460,6 +464,7 @@
       "makePrivate": "设为私密",
       "makePublic": "设为公开",
       "deleteCollection": "删除收藏集",
+      "removeResource": "从收藏集移除",
       "generate": "生成",
       "searchWithPreset": "使用此课堂搜索",
       "statusPublic": "公开",
@@ -469,6 +474,7 @@
       "linkAdded": "链接已添加",
       "linkFailed": "添加链接失败",
       "removeFailed": "移除资源失败",
+      "resourceRemoved": "已从收藏集移除资源",
       "updateFailed": "更新收藏集失败",
       "deleted": "收藏集已删除",
       "deleteFailed": "删除收藏集失败"

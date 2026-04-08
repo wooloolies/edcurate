@@ -99,7 +99,7 @@ export function LibraryPageClient() {
   const { mutateAsync: deleteCollection } =
     useDeleteCollectionEndpointApiSavedCollectionsCollectionIdDelete();
 
-  const [_deletingIds, setDeletingIds] = useState<Set<string>>(new Set());
+  const [deletingIds, setDeletingIds] = useState<Set<string>>(new Set());
   const [closedGroups, setClosedGroups] = useState<Set<string>>(new Set());
   const [addLinkOpenFor, setAddLinkOpenFor] = useState<string | null>(null);
   const [linkUrl, setLinkUrl] = useState("");
@@ -113,6 +113,11 @@ export function LibraryPageClient() {
   const [renamingCollectionId, setRenamingCollectionId] = useState<string | null>(null);
   const [renamingValue, setRenamingValue] = useState("");
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
+  const [removeResourceConfirm, setRemoveResourceConfirm] = useState<{
+    resourceId: string;
+    presetId: string;
+    title: string;
+  } | null>(null);
   const [privacyConfirm, setPrivacyConfirm] = useState<{
     collectionId: string;
     currentlyPublic: boolean;
@@ -174,13 +179,19 @@ export function LibraryPageClient() {
     startSingleStream(resourceId);
   };
 
-  const _handleDelete = async (resourceId: string) => {
+  const handleRemoveResource = async (resourceId: string, presetId: string): Promise<boolean> => {
     setDeletingIds((prev) => new Set(prev).add(resourceId));
     try {
       await deleteResource({ id: resourceId });
+      toast.success(t("toast.resourceRemoved"));
       invalidateLibrary();
+      await queryClient.invalidateQueries({
+        queryKey: getListArtifactsEndpointApiLocalizerGetQueryKey({ preset_id: presetId }),
+      });
+      return true;
     } catch {
       toast.error(t("toast.removeFailed"));
+      return false;
     } finally {
       setDeletingIds((prev) => {
         const next = new Set(prev);
@@ -188,6 +199,13 @@ export function LibraryPageClient() {
         return next;
       });
     }
+  };
+
+  const handleConfirmRemoveResource = async () => {
+    if (!removeResourceConfirm) return;
+    const { resourceId, presetId } = removeResourceConfirm;
+    const ok = await handleRemoveResource(resourceId, presetId);
+    if (ok) setRemoveResourceConfirm(null);
   };
 
   const handleUpdateCollection = async (
@@ -234,9 +252,10 @@ export function LibraryPageClient() {
     setRenamingCollectionId(null);
   };
 
-  const renderCardAction = (item: SavedResourceResponse) => {
+  const renderCardAction = (item: SavedResourceResponse, presetId: string) => {
     const singleState = getSingleState(item.id);
     const isEvaluatingThis = singleState?.isStreaming ?? false;
+    const isRemoving = deletingIds.has(item.id);
     const singleLabel = isEvaluatingThis
       ? singleState?.stage === "rag_preparation"
         ? t("action.preparing")
@@ -250,7 +269,7 @@ export function LibraryPageClient() {
       : item.resource_data;
 
     return (
-      <div className="flex items-center gap-2">
+      <div className="flex flex-wrap items-center gap-2">
         <Link
           href={buildOverviewHref(resourceWithVerdict)}
           className="rounded-full px-5 py-2 text-sm font-bold shadow-sm transition-transform hover:scale-105 active:scale-95 bg-slate-100 text-slate-800 hover:bg-slate-200 border border-slate-200 whitespace-nowrap"
@@ -269,6 +288,23 @@ export function LibraryPageClient() {
         >
           <ScanSearch className="mr-1.5 h-3 w-3" />
           {singleLabel}
+        </button>
+        <button
+          type="button"
+          aria-label={t("action.removeResource")}
+          disabled={isRemoving}
+          className="inline-flex shrink-0 items-center justify-center rounded-full p-2 text-brand-ink/40 transition-colors hover:bg-red-50 hover:text-red-500 disabled:opacity-50"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setRemoveResourceConfirm({
+              resourceId: item.id,
+              presetId,
+              title: item.resource_data.title?.trim() || t("removeResourceDialogUntitled"),
+            });
+          }}
+        >
+          <Trash2 className="h-4 w-4" />
         </button>
       </div>
     );
@@ -604,7 +640,7 @@ export function LibraryPageClient() {
                     key={item.id}
                     resource={item.resource_data}
                     presetId={presetId}
-                    customAction={renderCardAction(item)}
+                    customAction={renderCardAction(item, presetId)}
                   />
                 ))}
               </div>
@@ -783,6 +819,44 @@ export function LibraryPageClient() {
                 onClick={() => void handleConfirmDelete()}
               >
                 {t("confirm.deleteButton")}
+              </button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        <Dialog
+          open={!!removeResourceConfirm}
+          onOpenChange={(open) => {
+            if (!open) setRemoveResourceConfirm(null);
+          }}
+        >
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle>{t("removeResourceDialogTitle")}</DialogTitle>
+              <DialogDescription>
+                {removeResourceConfirm
+                  ? t("removeResourceDialogDescription", { title: removeResourceConfirm.title })
+                  : null}
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter className="gap-2 sm:gap-0">
+              <DialogClose asChild>
+                <button
+                  type="button"
+                  className="rounded-full px-5 py-2 text-sm font-medium text-brand-ink/60 transition-colors hover:bg-brand-ink/5 hover:text-brand-ink"
+                >
+                  {t("action.cancel")}
+                </button>
+              </DialogClose>
+              <button
+                type="button"
+                disabled={
+                  !!removeResourceConfirm && deletingIds.has(removeResourceConfirm.resourceId)
+                }
+                className="rounded-full bg-red-500 px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-red-600 disabled:opacity-50"
+                onClick={() => void handleConfirmRemoveResource()}
+              >
+                {t("removeResourceDialogButton")}
               </button>
             </DialogFooter>
           </DialogContent>

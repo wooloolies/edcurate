@@ -437,6 +437,10 @@
     },
     "title": "내 라이브러리",
     "subtitle": "큐레이션된 리소스를 저장, 평가하고 다른 교육자와 공유하세요.",
+    "removeResourceDialogTitle": "리소스 제거",
+    "removeResourceDialogDescription": "“{title}”을(를) 이 컬렉션에서 제거할까요? 컬렉션에서만 제거되며, 검색에서 다시 추가할 수 있습니다.",
+    "removeResourceDialogButton": "제거",
+    "removeResourceDialogUntitled": "제목 없는 리소스",
     "empty": {
       "title": "라이브러리가 비어 있습니다",
       "description": "검색 결과에서 리소스를 저장하여 나만의 컬렉션을 만들어 보세요.",
@@ -460,6 +464,7 @@
       "makePrivate": "비공개로 전환",
       "makePublic": "공개로 전환",
       "deleteCollection": "컬렉션 삭제",
+      "removeResource": "컬렉션에서 제거",
       "generate": "생성",
       "searchWithPreset": "이 수업으로 검색",
       "statusPublic": "공개",
@@ -469,6 +474,7 @@
       "linkAdded": "링크가 추가되었습니다",
       "linkFailed": "링크 추가에 실패했습니다",
       "removeFailed": "리소스 제거에 실패했습니다",
+      "resourceRemoved": "컬렉션에서 제거되었습니다",
       "updateFailed": "컬렉션 업데이트에 실패했습니다",
       "deleted": "컬렉션이 삭제되었습니다",
       "deleteFailed": "컬렉션 삭제에 실패했습니다"

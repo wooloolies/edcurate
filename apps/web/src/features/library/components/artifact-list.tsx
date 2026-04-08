@@ -87,42 +87,39 @@ export function ArtifactList({ artifacts, collectionName }: ArtifactListProps) {
             return (
               <div
                 key={artifact.id}
-                role="button"
-                tabIndex={0}
-                className="group w-full cursor-pointer overflow-hidden rounded-xl border border-brand-ink/5 bg-brand-surface/80 text-left transition-all hover:border-brand-ink/10 hover:shadow-[0_2px_12px_rgba(0,0,0,0.04)]"
-                onClick={() => setViewingArtifact(artifact)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    e.preventDefault();
-                    setViewingArtifact(artifact);
-                  }
-                }}
-                aria-label={`View ${meta.label}`}
+                className="group relative w-full overflow-hidden rounded-xl border border-brand-ink/5 bg-brand-surface/80 transition-all hover:border-brand-ink/10 hover:shadow-[0_2px_12px_rgba(0,0,0,0.04)]"
               >
-                <div className="flex items-center justify-between px-3.5 py-2.5">
-                  <div className="flex items-center gap-2">
-                    <span className="text-brand-ink/50">{meta.icon}</span>
-                    <span className="text-[13px] font-semibold text-brand-ink">{meta.label}</span>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-[10px] text-brand-ink/30">
+                <button
+                  type="button"
+                  className="w-full cursor-pointer px-3.5 py-2.5 pr-10 text-left bg-transparent"
+                  onClick={() => setViewingArtifact(artifact)}
+                  aria-label={`View ${meta.label}`}
+                >
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex min-w-0 items-center gap-2">
+                      <span className="shrink-0 text-brand-ink/50">{meta.icon}</span>
+                      <span className="truncate text-[13px] font-semibold text-brand-ink">
+                        {meta.label}
+                      </span>
+                    </div>
+                    <span className="shrink-0 text-[10px] text-brand-ink/30">
                       {new Date(artifact.created_at).toLocaleDateString()}
                     </span>
-                    <button
-                      type="button"
-                      className="rounded-full p-1 text-brand-ink/15 opacity-0 transition-all hover:bg-red-50 hover:text-red-500 group-hover:opacity-100"
-                      onClick={(e) => handleDelete(e, artifact.id)}
-                      disabled={deletingId === artifact.id}
-                      aria-label={`Delete ${meta.label}`}
-                    >
-                      {deletingId === artifact.id ? (
-                        <Loader2 className="h-3 w-3 animate-spin" />
-                      ) : (
-                        <Trash2 className="h-3 w-3" />
-                      )}
-                    </button>
                   </div>
-                </div>
+                </button>
+                <button
+                  type="button"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full p-1 text-brand-ink/15 opacity-0 transition-all hover:bg-red-50 hover:text-red-500 group-hover:opacity-100"
+                  onClick={(e) => handleDelete(e, artifact.id)}
+                  disabled={deletingId === artifact.id}
+                  aria-label={`Delete ${meta.label}`}
+                >
+                  {deletingId === artifact.id ? (
+                    <Loader2 className="h-3 w-3 animate-spin" />
+                  ) : (
+                    <Trash2 className="h-3 w-3" />
+                  )}
+                </button>
               </div>
             );
           })}

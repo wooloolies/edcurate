@@ -1358,6 +1358,27 @@
   "@library__subtitle": {
     "description": "Library page subtitle"
   },
+  "library__removeResourceDialogTitle": "리소스 제거",
+  "@library__removeResourceDialogTitle": {
+    "description": "Confirm dialog title for removing a resource from a collection"
+  },
+  "library__removeResourceDialogDescription": "“{title}”을(를) 이 컬렉션에서 제거할까요? 컬렉션에서만 제거되며, 검색에서 다시 추가할 수 있습니다.",
+  "@library__removeResourceDialogDescription": {
+    "description": "Confirm dialog description for removing a resource from a collection",
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "library__removeResourceDialogButton": "제거",
+  "@library__removeResourceDialogButton": {
+    "description": "Confirm dialog button for removing a resource"
+  },
+  "library__removeResourceDialogUntitled": "제목 없는 리소스",
+  "@library__removeResourceDialogUntitled": {
+    "description": "Fallback title for a resource without a title"
+  },
   "library__empty__title": "라이브러리가 비어 있습니다",
   "@library__empty__title": {
     "description": "Empty state heading"
@@ -1445,6 +1466,10 @@
   "@library__action__deleteCollection": {
     "description": "Delete collection menu item"
   },
+  "library__action__removeResource": "컬렉션에서 제거",
+  "@library__action__removeResource": {
+    "description": "Remove a saved resource from its collection"
+  },
   "library__action__generate": "생성",
   "@library__action__generate": {
     "description": "Generate artifact button"
@@ -1466,6 +1491,10 @@
   "library__toast__removeFailed": "리소스 제거에 실패했습니다",
   "@library__toast__removeFailed": {
     "description": "Toast on resource remove failure"
+  },
+  "library__toast__resourceRemoved": "컬렉션에서 제거되었습니다",
+  "@library__toast__resourceRemoved": {
+    "description": "Toast on resource remove success"
   },
   "library__toast__updateFailed": "컬렉션 업데이트에 실패했습니다",
   "@library__toast__updateFailed": {

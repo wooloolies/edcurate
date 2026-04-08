@@ -1,5 +1,6 @@
 "use client";
 
+import { useQueryClient } from "@tanstack/react-query";
 import { ChevronDown, Loader2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
@@ -18,6 +19,7 @@ import {
 } from "@/lib/api/curriculum/curriculum";
 import type { PresetCreate } from "@/lib/api/model";
 import {
+  getListPresetsApiPresetsGetQueryKey,
   useCreatePresetApiPresetsPost,
   useGetPresetApiPresetsPresetIdGet,
   useUpdatePresetApiPresetsPresetIdPut,
@@ -42,6 +44,7 @@ interface PresetFormClientProps {
 
 export function PresetFormClient({ presetId }: PresetFormClientProps) {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const tRoot = useTranslations();
   const t = useTranslations("presets");
   const isEdit = !!presetId;
@@ -154,15 +157,16 @@ export function PresetFormClient({ presetId }: PresetFormClientProps) {
     set(key, raw === "" ? null : Number.isNaN(n) ? null : n);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (isEdit && presetId) {
-      updateMutation.mutate(
-        { presetId, data: form },
-        { onSuccess: () => router.push("/collections") }
-      );
+      await updateMutation.mutateAsync({ presetId, data: form });
+      await queryClient.invalidateQueries({ queryKey: getListPresetsApiPresetsGetQueryKey() });
+      router.push("/collections");
     } else {
-      createMutation.mutate({ data: form }, { onSuccess: () => router.push("/collections") });
+      await createMutation.mutateAsync({ data: form });
+      await queryClient.invalidateQueries({ queryKey: getListPresetsApiPresetsGetQueryKey() });
+      router.push("/collections");
     }
   };
 
