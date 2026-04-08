@@ -26,7 +26,7 @@ async def create_artifact(
     request: GenerateArtifactRequest,
 ) -> GeneratedArtifactResponse:
     """Generate a learning artifact from saved resources via NotebookLM."""
-    await _verify_preset_ownership(db, user_id, request.preset_id)
+    await _verify_preset_access(db, user_id, request.preset_id)
 
     resources = await _fetch_resources(
         db, user_id, request.preset_id, request.saved_resource_ids
@@ -123,17 +123,14 @@ async def delete_artifact(
     await db.delete(artifact)
 
 
-async def _verify_preset_ownership(
+async def _verify_preset_access(
     db: DBSession,
     user_id: uuid.UUID,
     preset_id: uuid.UUID,
 ) -> ClassroomPreset:
-    """Verify the preset belongs to the user."""
+    """Verify the user can access the preset (owns it or has collections under it)."""
     result = await db.execute(
-        select(ClassroomPreset).where(
-            ClassroomPreset.id == preset_id,
-            ClassroomPreset.user_id == user_id,
-        )
+        select(ClassroomPreset).where(ClassroomPreset.id == preset_id)
     )
     preset = result.scalar_one_or_none()
     if preset is None:
@@ -141,7 +138,26 @@ async def _verify_preset_ownership(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Preset not found",
         )
-    return preset
+
+    if preset.user_id == user_id:
+        return preset
+
+    # Allow access when the user has cloned collections under this preset
+    col_result = await db.execute(
+        select(LibraryCollection.id)
+        .where(
+            LibraryCollection.preset_id == preset_id,
+            LibraryCollection.user_id == user_id,
+        )
+        .limit(1)
+    )
+    if col_result.scalar_one_or_none() is not None:
+        return preset
+
+    raise HTTPException(
+        status_code=status.HTTP_404_NOT_FOUND,
+        detail="Preset not found",
+    )
 
 
 async def _fetch_resources(
