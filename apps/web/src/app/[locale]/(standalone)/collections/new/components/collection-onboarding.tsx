@@ -1,5 +1,6 @@
 "use client";
 
+import { useQueryClient } from "@tanstack/react-query";
 import { AlertCircle, ChevronDown, Loader2, Pen } from "lucide-react";
 import { useQueryState } from "nuqs";
 import { useEffect, useRef, useState } from "react";
@@ -10,11 +11,15 @@ import {
   useGetSubjectsApiCurriculumSubjectsGet,
 } from "@/lib/api/curriculum/curriculum";
 import type { PresetCreate } from "@/lib/api/model";
-import { useCreatePresetApiPresetsPost } from "@/lib/api/presets/presets";
+import {
+  getListPresetsApiPresetsGetQueryKey,
+  useCreatePresetApiPresetsPost,
+} from "@/lib/api/presets/presets";
 import { Link, useRouter } from "@/lib/i18n/routing";
 
 export function CollectionOnboarding() {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const createMutation = useCreatePresetApiPresetsPost();
 
   // --- URL-Synchronized State ---
@@ -137,7 +142,14 @@ export function CollectionOnboarding() {
       };
       createMutation.mutate(
         { data: payload },
-        { onSuccess: (data) => router.push(`/search?preset_id=${data.id}`) }
+        {
+          onSuccess: async (data) => {
+            await queryClient.invalidateQueries({
+              queryKey: getListPresetsApiPresetsGetQueryKey(),
+            });
+            router.push(`/search?preset_id=${data.id}`);
+          },
+        }
       );
     }
   };
