@@ -70,7 +70,7 @@ def _sanitize_error(error: Exception) -> str:
         return "Provider is temporarily unavailable. Try again later."
     if "timeout" in msg.lower() or "timed out" in msg.lower():
         return "Request timed out. Try again later."
-    return "Search failed. Try again later."
+    return f"Search failed: [{type(error).__name__}] {msg[:120]}"
 
 
 @dataclass
