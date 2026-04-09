@@ -512,25 +512,39 @@ async def evaluate_single_resource(
     from src.rag.readability import compute_readability
 
     ctx_data = await _load_eval_context(search_id)
-    if ctx_data is None:
+    if ctx_data is not None:
+        # Reject URLs that were not in the Phase 1 result set
+        top_urls: list[str] = ctx_data.get("top_urls", [])
+        if top_urls and url not in top_urls:
+            logger.warning(
+                "URL not in stored result set",
+                url=url,
+                search_id=search_id,
+            )
+            return None
+        eval_vector = ctx_data["eval_vector"]
+        adv_vector = ctx_data["adv_vector"]
+    else:
+        # Fallback: re-compute vectors (Redis unavailable or expired)
         logger.warning(
-            "Eval context expired or unavailable",
+            "Eval context unavailable — recomputing vectors",
             search_id=search_id,
         )
-        return None
-
-    # Reject URLs that were not in the Phase 1 result set
-    top_urls: list[str] = ctx_data.get("top_urls", [])
-    if top_urls and url not in top_urls:
-        logger.warning(
-            "URL not in stored result set",
-            url=url,
-            search_id=search_id,
+        eval_query_text = _build_eval_query(preset, query)
+        hybrid_text = build_adversarial_hybrid_query_text(
+            preset, query
         )
-        return None
-
-    eval_vector = ctx_data["eval_vector"]
-    adv_vector = ctx_data["adv_vector"]
+        try:
+            eval_vector, adv_vector = await asyncio.gather(
+                embed_single(eval_query_text),
+                embed_single(hybrid_text),
+            )
+        except Exception as e:
+            logger.error(
+                "Fallback vector embedding failed",
+                error=str(e),
+            )
+            return None
 
     # --- Per-resource RAG preparation ---
     domain = url.split("/")[2] if "/" in url else url
