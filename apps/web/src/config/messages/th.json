@@ -447,7 +447,9 @@
       "artifactQuiz": "แบบทดสอบ",
       "artifactMindmap": "แผนผังความคิด",
       "artifactSummary": "สรุป",
-      "artifactFlashcards": "บัตรคำ"
+      "artifactFlashcards": "บัตรคำ",
+      "artifactStudyGuide": "คู่มือการเรียน",
+      "artifactBriefingDoc": "เอกสารสรุป"
     },
     "progress": {
       "preparingResources": "กำลังเตรียมทรัพยากร...",

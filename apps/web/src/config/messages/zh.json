@@ -447,7 +447,9 @@
       "artifactQuiz": "测验",
       "artifactMindmap": "思维导图",
       "artifactSummary": "摘要",
-      "artifactFlashcards": "闪卡"
+      "artifactFlashcards": "闪卡",
+      "artifactStudyGuide": "学习指南",
+      "artifactBriefingDoc": "简报文件"
     },
     "progress": {
       "preparingResources": "正在准备资源...",

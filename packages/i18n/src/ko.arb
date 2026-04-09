@@ -1398,6 +1398,14 @@
   "@library__generate__artifactFlashcards": {
     "description": "Artifact type label for flashcards"
   },
+  "library__generate__artifactStudyGuide": "학습 가이드",
+  "@library__generate__artifactStudyGuide": {
+    "description": "Artifact type label for study guide"
+  },
+  "library__generate__artifactBriefingDoc": "브리핑 문서",
+  "@library__generate__artifactBriefingDoc": {
+    "description": "Artifact type label for briefing doc"
+  },
   "library__progress__preparingResources": "리소스 준비 중...",
   "@library__progress__preparingResources": {
     "description": "Progress label during RAG preparation stage"

@@ -447,7 +447,9 @@
       "artifactQuiz": "퀴즈",
       "artifactMindmap": "마인드맵",
       "artifactSummary": "요약",
-      "artifactFlashcards": "플래시카드"
+      "artifactFlashcards": "플래시카드",
+      "artifactStudyGuide": "학습 가이드",
+      "artifactBriefingDoc": "브리핑 문서"
     },
     "progress": {
       "preparingResources": "리소스 준비 중...",

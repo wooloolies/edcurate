@@ -1366,6 +1366,14 @@
   "@library__generate__artifactFlashcards": {
     "description": "Artifact type label for flashcards"
   },
+  "library__generate__artifactStudyGuide": "学习指南",
+  "@library__generate__artifactStudyGuide": {
+    "description": "Artifact type label for study guide"
+  },
+  "library__generate__artifactBriefingDoc": "简报文件",
+  "@library__generate__artifactBriefingDoc": {
+    "description": "Artifact type label for briefing doc"
+  },
   "library__progress__preparingResources": "正在准备资源...",
   "@library__progress__preparingResources": {
     "description": "Progress label during RAG preparation stage"

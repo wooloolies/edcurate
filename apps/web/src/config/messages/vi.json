@@ -447,7 +447,9 @@
       "artifactQuiz": "Bài kiểm tra",
       "artifactMindmap": "Sơ đồ tư duy",
       "artifactSummary": "Tóm tắt",
-      "artifactFlashcards": "Thẻ ghi nhớ"
+      "artifactFlashcards": "Thẻ ghi nhớ",
+      "artifactStudyGuide": "Hướng dẫn học tập",
+      "artifactBriefingDoc": "Tài liệu tóm tắt"
     },
     "progress": {
       "preparingResources": "Đang chuẩn bị tài nguyên...",
