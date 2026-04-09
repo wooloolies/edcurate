@@ -20,21 +20,25 @@ def _get_client() -> weaviate.WeaviateClient:
     url = settings.WEAVIATE_URL or "http://localhost:8080"
     api_key = settings.WEAVIATE_API_KEY
 
-    if api_key:
-        logger.info(
-            "Connecting to Weaviate with custom credentials", url=url, api_key=api_key
+    if api_key and "weaviate.cloud" in url:
+        logger.info("Connecting to Weaviate Cloud", url=url)
+        return weaviate.connect_to_weaviate_cloud(
+            cluster_url=url,
+            auth_credentials=weaviate.auth.AuthApiKey(api_key),
         )
+    if api_key:
+        host = url.replace("http://", "").replace("https://", "").split(":")[0]
+        logger.info("Connecting to Weaviate with custom credentials", url=url)
         return weaviate.connect_to_custom(
-            http_host=url.replace("http://", "").replace("https://", "").split(":")[0],
-            http_port=int(url.split(":")[-1]) if ":" in url.split("//")[-1] else 8080,
+            http_host=host,
+            http_port=443 if url.startswith("https") else 8080,
             http_secure=url.startswith("https"),
-            grpc_host=url.replace("http://", "").replace("https://", "").split(":")[0],
+            grpc_host=host,
             grpc_port=50051,
             grpc_secure=url.startswith("https"),
             auth_credentials=weaviate.auth.AuthApiKey(api_key),
         )
-    else:
-        logger.info("Connecting to Weaviate with local credentials", url=url)
+    logger.info("Connecting to Weaviate locally", url=url)
     return weaviate.connect_to_local(
         host=url.replace("http://", "").replace("https://", "").split(":")[0],
         port=int(url.split(":")[-1]) if ":" in url.split("//")[-1] else 8080,
