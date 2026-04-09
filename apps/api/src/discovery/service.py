@@ -503,10 +503,14 @@ async def evaluate_single_resource(
     snippet: str,
     query: str,
 ) -> JudgmentResult | None:
-    """Phase 2: evaluate one resource using stored RAG context.
+    """Phase 2: evaluate one resource.
 
+    Performs per-resource RAG prep (fetch → chunk → embed → Weaviate)
+    then runs the 3-call evaluation pipeline.
     Returns None when context has expired or evaluation fails.
     """
+    from src.rag.readability import compute_readability
+
     ctx_data = await _load_eval_context(search_id)
     if ctx_data is None:
         logger.warning(
@@ -527,16 +531,8 @@ async def evaluate_single_resource(
 
     eval_vector = ctx_data["eval_vector"]
     adv_vector = ctx_data["adv_vector"]
-    readability_map = ctx_data.get("readability_map", {})
 
-    ctx = _RagContext(
-        eval_vector=eval_vector,
-        adv_vector=adv_vector,
-        readability_map=readability_map,
-        search_id=search_id,
-        preset=preset,
-    )
-
+    # --- Per-resource RAG preparation ---
     domain = url.split("/")[2] if "/" in url else url
     metadata: dict = {"source": source}
     if source == "youtube":
@@ -559,6 +555,53 @@ async def evaluate_single_resource(
         ),
         snippet=snippet,
         metadata=metadata,
+    )
+
+    # 1. Ensure Weaviate collection
+    try:
+        await asyncio.to_thread(ensure_collection)
+    except Exception as e:
+        logger.error(
+            "Weaviate collection setup failed",
+            error=str(e),
+        )
+        return None
+
+    # 2. Fetch content + readability
+    readability_map: dict[str, dict[str, float]] = {}
+    try:
+        content = await fetch_content(card)
+        if isinstance(content, str) and content:
+            metrics = compute_readability(content)
+            if metrics:
+                readability_map[url] = metrics
+
+            chunks = chunk_text(content, heading=title)
+            if chunks:
+                chunk_texts = [c.text for c in chunks]
+                vectors = await embed_texts(chunk_texts)
+                await asyncio.to_thread(
+                    upsert_chunks,
+                    chunks=chunks,
+                    resource_url=url,
+                    source_type=source,
+                    search_id=search_id,
+                    vectors=vectors,
+                )
+    except Exception as e:
+        logger.warning(
+            "Per-resource RAG prep failed",
+            url=url,
+            error=str(e),
+        )
+
+    # 3. Build context and evaluate
+    ctx = _RagContext(
+        eval_vector=eval_vector,
+        adv_vector=adv_vector,
+        readability_map=readability_map,
+        search_id=search_id,
+        preset=preset,
     )
 
     return await _process_one(card, ctx)
@@ -910,16 +953,29 @@ async def search_resources_stream(
         },
     )
 
-    # RAG context preparation (fetch, chunk, embed, store in Weaviate)
-    # Runs inside Phase 1 so Phase 2 can just retrieve chunks.
-    ctx = await _prepare_rag_context(
-        top_cards, preset, query, search_id, eval_vector=eval_vector
-    )
-
-    if ctx is not None:
-        await _store_eval_context(
-            search_id, ctx, [card.url for card in top_cards]
+    # Store only vectors for Phase 2 — NO content fetching here.
+    # Phase 2 does per-resource fetch/chunk/embed/evaluate.
+    if eval_vector is not None:
+        hybrid_text = build_adversarial_hybrid_query_text(
+            preset, query
         )
+        try:
+            adv_vector = await embed_single(hybrid_text)
+        except Exception:
+            adv_vector = None
+
+        if adv_vector is not None:
+            await _store_eval_context(
+                search_id,
+                _RagContext(
+                    eval_vector=eval_vector,
+                    adv_vector=adv_vector,
+                    readability_map={},
+                    search_id=search_id,
+                    preset=preset,
+                ),
+                [card.url for card in top_cards],
+            )
 
     yield SearchStageEvent(stage="rag_preparation", status="done")
 
