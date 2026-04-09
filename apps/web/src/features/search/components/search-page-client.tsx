@@ -7,6 +7,7 @@ import { useQueryState } from "nuqs";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 
+import { useRouter } from "@/lib/i18n/routing";
 import { AgentMorphScene } from "@/features/search/components/agent-morph/agent-morph-scene";
 import { ErrorBanner } from "@/features/search/components/error-banner";
 import { GeneratedQueriesPanel } from "@/features/search/components/generated-queries";
@@ -33,8 +34,9 @@ import {
 
 export function SearchPageClient() {
   const t = useTranslations("search");
+  const router = useRouter();
   const queryClient = useQueryClient();
-  const [presetId, setPresetId] = useQueryState("preset_id");
+  const [presetId, setPresetId] = useQueryState("collection_id");
   const [searchQuery, setSearchQuery] = useQueryState("q");
   const [draft, setDraft] = useState(searchQuery ?? "");
 
@@ -95,9 +97,10 @@ export function SearchPageClient() {
       clearSelection();
       setIsSaveModalOpen(false);
       toast.success(t("savedSuccess"));
-      queryClient.invalidateQueries({
+      await queryClient.invalidateQueries({
         queryKey: getListSavedResourcesEndpointApiSavedGetQueryKey(),
       });
+      router.push(`/library?collection=${presetId}`);
     } catch (_e) {
       toast.error(t("savedError"));
     }

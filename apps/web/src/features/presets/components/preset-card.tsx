@@ -92,7 +92,7 @@ export function PresetCard({ preset }: PresetCardProps) {
             {t("editPreset")}
           </Link>
           <Link
-            href={`/search?preset_id=${preset.id}`}
+            href={`/search?collection_id=${preset.id}`}
             className="inline-flex items-center rounded-full bg-brand-green px-3.5 py-1.5 text-xs font-medium text-brand-ink transition-all hover:bg-brand-ink hover:text-white"
           >
             <Search className="mr-1.5 h-3 w-3" />

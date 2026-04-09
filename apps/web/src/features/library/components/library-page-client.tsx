@@ -88,7 +88,7 @@ export function LibraryPageClient() {
   const tSearch = useTranslations("search");
   const isMobile = useIsMobile();
   const queryClient = useQueryClient();
-  const [activeTab, setActiveTab] = useQueryState("preset");
+  const [activeTab, setActiveTab] = useQueryState("collection");
 
   const { data: savedData, isFetching: isLoading } = useListSavedResourcesEndpointApiSavedGet();
   const { mutateAsync: addLink, isPending: isAdding } = useAddCustomLinkEndpointApiSavedLinkPost();
@@ -709,7 +709,7 @@ export function LibraryPageClient() {
 
               {activePresetId ? (
                 <Link
-                  href={`/search?preset_id=${activePresetId}`}
+                  href={`/search?collection_id=${activePresetId}`}
                   aria-label={t("action.searchWithPreset")}
                   className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/60 bg-white/60 shadow-[0_4px_32px_rgba(0,0,0,0.04)] backdrop-blur-xl transition-all hover:bg-brand-green hover:shadow-[0_4px_16px_rgba(183,255,112,0.3)]"
                 >

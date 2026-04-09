@@ -147,7 +147,7 @@ export function CollectionOnboarding() {
             await queryClient.invalidateQueries({
               queryKey: getListPresetsApiPresetsGetQueryKey(),
             });
-            router.push(`/search?preset_id=${data.id}`);
+            router.push(`/search?collection_id=${data.id}`);
           },
         }
       );
