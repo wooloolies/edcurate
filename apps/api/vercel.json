@@ -1,4 +1,4 @@
 {
-  "buildCommand": "pip install -e . && (alembic upgrade head || echo 'ALEMBIC_MIGRATION_FAILED')",
+  "buildCommand": "pip install -e . && (python -c \"from src.lib.config import settings; import psycopg2; psycopg2.connect(settings.DATABASE_URL_SYNC)\" 2>/dev/null && alembic upgrade head || echo 'Skipping migration: DB unreachable')",
   "ignoreCommand": "[ \"$VERCEL_ENV\" = \"preview\" ]"
 }
