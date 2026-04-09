@@ -271,7 +271,7 @@ export function LibraryPageClient() {
     return (
       <div className="flex flex-wrap items-center gap-2">
         <Link
-          href={buildOverviewHref(resourceWithVerdict)}
+          href={buildOverviewHref(resourceWithVerdict, item.evaluation_id ?? undefined)}
           className="rounded-full px-5 py-2 text-sm font-bold shadow-sm transition-transform hover:scale-105 active:scale-95 bg-slate-100 text-slate-800 hover:bg-slate-200 border border-slate-200 whitespace-nowrap"
         >
           {tSearch("overview")}

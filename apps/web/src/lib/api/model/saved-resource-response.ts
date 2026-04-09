@@ -14,5 +14,6 @@ export interface SavedResourceResponse {
   resource_url: string;
   resource_data: ResourceCard;
   evaluation_data?: JudgmentResult | null;
+  evaluation_id?: string | null;
   saved_at: string;
 }

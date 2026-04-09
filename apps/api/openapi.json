@@ -3965,6 +3965,18 @@
               }
             ]
           },
+          "evaluation_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Evaluation Id"
+          },
           "saved_at": {
             "type": "string",
             "format": "date-time",

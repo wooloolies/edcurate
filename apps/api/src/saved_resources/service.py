@@ -4,6 +4,7 @@ from collections import defaultdict
 from collections.abc import AsyncGenerator
 from typing import Any
 
+import sqlalchemy as sa
 from fastapi import HTTPException, status
 from sqlalchemy import func, select
 from sqlalchemy.dialects.postgresql import insert
@@ -612,6 +613,45 @@ async def list_saved_resources(
             total_resources += 1
             item = SavedResourceResponse.model_validate(saved)
             grouped[pid][cid]["items"].append(item)
+
+    # Batch-lookup evaluation IDs for all saved resources
+    all_items: list[SavedResourceResponse] = []
+    for cols in grouped.values():
+        for col_data in cols.values():
+            all_items.extend(col_data["items"])
+
+    if all_items:
+        from src.evaluations.model import ResourceEvaluation
+
+        lookup_keys = [
+            (i.preset_id, i.resource_url, i.search_query)
+            for i in all_items
+            if i.evaluation_data is not None
+        ]
+        if lookup_keys:
+            eval_rows = await db.execute(
+                select(
+                    ResourceEvaluation.preset_id,
+                    ResourceEvaluation.resource_url,
+                    ResourceEvaluation.search_query,
+                    ResourceEvaluation.id,
+                ).where(
+                    ResourceEvaluation.user_id == user_id,
+                    sa.tuple_(
+                        ResourceEvaluation.preset_id,
+                        ResourceEvaluation.resource_url,
+                        ResourceEvaluation.search_query,
+                    ).in_(lookup_keys),
+                )
+            )
+            eval_id_map = {
+                (r.preset_id, r.resource_url, r.search_query): r.id
+                for r in eval_rows.all()
+            }
+            for item in all_items:
+                key = (item.preset_id, item.resource_url, item.search_query)
+                if key in eval_id_map:
+                    item.evaluation_id = eval_id_map[key]
 
     groups = []
     for pid, cols in grouped.items():

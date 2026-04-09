@@ -113,6 +113,7 @@ export const ListSavedResourcesEndpointApiSavedGetResponse = zod.object({
 }).describe('A concrete adaptation the teacher can apply.')).optional(),
   "override_notes": zod.union([zod.string(),zod.null()]).optional()
 }).describe('Final judgment combining triage + risk scan, presented to the teacher.'),zod.null()]).optional(),
+  "evaluation_id": zod.union([zod.uuid(),zod.null()]).optional(),
   "saved_at": zod.iso.datetime({})
 }))
 }).describe('A collection of saved resources.'))
@@ -281,6 +282,7 @@ export const SaveResourceEndpointApiSavedPostResponse = zod.object({
 }).describe('A concrete adaptation the teacher can apply.')).optional(),
   "override_notes": zod.union([zod.string(),zod.null()]).optional()
 }).describe('Final judgment combining triage + risk scan, presented to the teacher.'),zod.null()]).optional(),
+  "evaluation_id": zod.union([zod.uuid(),zod.null()]).optional(),
   "saved_at": zod.iso.datetime({})
 })
 
@@ -396,6 +398,7 @@ export const GetSuggestedCollectionsEndpointApiSavedSuggestedGetResponseItem = z
 }).describe('A concrete adaptation the teacher can apply.')).optional(),
   "override_notes": zod.union([zod.string(),zod.null()]).optional()
 }).describe('Final judgment combining triage + risk scan, presented to the teacher.'),zod.null()]).optional(),
+  "evaluation_id": zod.union([zod.uuid(),zod.null()]).optional(),
   "saved_at": zod.iso.datetime({})
 })).default(getSuggestedCollectionsEndpointApiSavedSuggestedGetResponseResourcesDefault)
 })
@@ -735,6 +738,7 @@ export const SaveResourceToCollectionEndpointApiSavedCollectionItemPostResponse 
 }).describe('A concrete adaptation the teacher can apply.')).optional(),
   "override_notes": zod.union([zod.string(),zod.null()]).optional()
 }).describe('Final judgment combining triage + risk scan, presented to the teacher.'),zod.null()]).optional(),
+  "evaluation_id": zod.union([zod.uuid(),zod.null()]).optional(),
   "saved_at": zod.iso.datetime({})
 })
 
@@ -840,6 +844,7 @@ export const AddCustomLinkEndpointApiSavedLinkPostResponse = zod.object({
 }).describe('A concrete adaptation the teacher can apply.')).optional(),
   "override_notes": zod.union([zod.string(),zod.null()]).optional()
 }).describe('Final judgment combining triage + risk scan, presented to the teacher.'),zod.null()]).optional(),
+  "evaluation_id": zod.union([zod.uuid(),zod.null()]).optional(),
   "saved_at": zod.iso.datetime({})
 })
 
@@ -962,6 +967,7 @@ export const EvaluateSingleResourceEndpointApiSavedEvaluateSinglePostResponse = 
 }).describe('A concrete adaptation the teacher can apply.')).optional(),
   "override_notes": zod.union([zod.string(),zod.null()]).optional()
 }).describe('Final judgment combining triage + risk scan, presented to the teacher.'),zod.null()]).optional(),
+  "evaluation_id": zod.union([zod.uuid(),zod.null()]).optional(),
   "saved_at": zod.iso.datetime({})
 })
 

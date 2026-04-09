@@ -78,6 +78,7 @@ class SavedResourceResponse(BaseModel):
     resource_url: str
     resource_data: ResourceCard
     evaluation_data: JudgmentResult | None = None
+    evaluation_id: uuid.UUID | None = None
     saved_at: datetime
 
     @model_validator(mode="before")
