@@ -6,6 +6,7 @@
  */
 import {
   useInfiniteQuery,
+  useMutation,
   useQuery,
   useSuspenseQuery
 } from '@tanstack/react-query';
@@ -15,12 +16,15 @@ import type {
   DefinedUseInfiniteQueryResult,
   DefinedUseQueryResult,
   InfiniteData,
+  MutationFunction,
   QueryClient,
   QueryFunction,
   QueryKey,
   UndefinedInitialDataOptions,
   UseInfiniteQueryOptions,
   UseInfiniteQueryResult,
+  UseMutationOptions,
+  UseMutationResult,
   UseQueryOptions,
   UseQueryResult,
   UseSuspenseQueryOptions,
@@ -32,6 +36,8 @@ import {
 } from 'react';
 
 import type {
+  EvaluateRequest,
+  EvaluateResourceApiDiscoveryEvaluatePost200,
   GetEvaluationEndpointApiDiscoveryEvaluationEvaluationIdGet200,
   HTTPValidationError,
   JudgedSearchResponse,
@@ -491,6 +497,75 @@ export function useSearchStreamApiDiscoverySearchStreamGetSuspense<TData = Await
 
 
 /**
+ * Phase 2: evaluate a single resource using stored RAG context.
+
+Called per-resource after the SSE stream (Phase 1) completes.
+Each call runs Triage + Risk Scanner + Final Judge for one resource.
+ * @summary Evaluate Resource
+ */
+export const useEvaluateResourceApiDiscoveryEvaluatePostHook = () => {
+        const evaluateResourceApiDiscoveryEvaluatePost = useCustomInstance<EvaluateResourceApiDiscoveryEvaluatePost200>();
+
+        return useCallback((
+    evaluateRequest: EvaluateRequest,
+ signal?: AbortSignal
+) => {
+        return evaluateResourceApiDiscoveryEvaluatePost(
+          {url: `/api/discovery/evaluate`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: evaluateRequest, signal
+    },
+          );
+        }, [evaluateResourceApiDiscoveryEvaluatePost])
+      }
+
+
+
+export const useEvaluateResourceApiDiscoveryEvaluatePostMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useEvaluateResourceApiDiscoveryEvaluatePostHook>>>, TError,{data: EvaluateRequest}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useEvaluateResourceApiDiscoveryEvaluatePostHook>>>, TError,{data: EvaluateRequest}, TContext> => {
+
+const mutationKey = ['evaluateResourceApiDiscoveryEvaluatePost'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      const evaluateResourceApiDiscoveryEvaluatePost =  useEvaluateResourceApiDiscoveryEvaluatePostHook()
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<ReturnType<typeof useEvaluateResourceApiDiscoveryEvaluatePostHook>>>, {data: EvaluateRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  evaluateResourceApiDiscoveryEvaluatePost(data,)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type EvaluateResourceApiDiscoveryEvaluatePostMutationResult = NonNullable<Awaited<ReturnType<ReturnType<typeof useEvaluateResourceApiDiscoveryEvaluatePostHook>>>>
+    export type EvaluateResourceApiDiscoveryEvaluatePostMutationBody = EvaluateRequest
+    export type EvaluateResourceApiDiscoveryEvaluatePostMutationError = HTTPValidationError
+
+    /**
+ * @summary Evaluate Resource
+ */
+export const useEvaluateResourceApiDiscoveryEvaluatePost = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useEvaluateResourceApiDiscoveryEvaluatePostHook>>>, TError,{data: EvaluateRequest}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<ReturnType<typeof useEvaluateResourceApiDiscoveryEvaluatePostHook>>>,
+        TError,
+        {data: EvaluateRequest},
+        TContext
+      > => {
+      return useMutation(useEvaluateResourceApiDiscoveryEvaluatePostMutationOptions(options), queryClient);
+    }
+    /**
  * Fetch evaluation data by ID.
  * @summary Get Evaluation Endpoint
  */

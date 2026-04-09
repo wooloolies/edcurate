@@ -2,6 +2,7 @@
 
 import asyncio
 import hashlib
+import json
 import re
 import uuid
 from collections.abc import AsyncGenerator
@@ -83,6 +84,7 @@ class _RagContext:
 
 
 _CACHE_TTL = 3600  # 1 hour
+_EVAL_CTX_TTL = 600  # 10 minutes — Phase 2 must start within this window
 _TOTAL_RESULTS = 15
 _TOP_K_EVALUATE = 4
 _SOURCE_KEYS: list[Literal["ddgs", "youtube", "openalex"]] = [
@@ -90,6 +92,62 @@ _SOURCE_KEYS: list[Literal["ddgs", "youtube", "openalex"]] = [
     "youtube",
     "openalex",
 ]
+
+
+# ---------------------------------------------------------------------------
+# Phase 2 context persistence (Redis)
+# ---------------------------------------------------------------------------
+
+
+async def _store_eval_context(
+    search_id: str,
+    ctx: _RagContext,
+    top_urls: list[str],
+) -> None:
+    """Persist vectors + readability so Phase 2 can evaluate without re-fetching."""
+    if not settings.REDIS_URL:
+        return
+    try:
+        import redis.asyncio as aioredis
+
+        data = json.dumps(
+            {
+                "eval_vector": ctx.eval_vector,
+                "adv_vector": ctx.adv_vector,
+                "readability_map": ctx.readability_map,
+                "top_urls": top_urls,
+            }
+        )
+        r = aioredis.from_url(settings.REDIS_URL)
+        try:
+            await r.set(f"eval_ctx:{search_id}", data, ex=_EVAL_CTX_TTL)
+        finally:
+            await r.aclose()
+    except Exception as e:
+        logger.warning(
+            "Failed to store eval context",
+            search_id=search_id,
+            error=str(e),
+        )
+
+
+async def _load_eval_context(search_id: str) -> dict | None:
+    """Load Phase 2 evaluation context from Redis."""
+    if not settings.REDIS_URL:
+        return None
+    try:
+        import redis.asyncio as aioredis
+
+        r = aioredis.from_url(settings.REDIS_URL)
+        try:
+            raw = await r.get(f"eval_ctx:{search_id}")
+        finally:
+            await r.aclose()
+        if raw:
+            return json.loads(raw)
+    except Exception as e:
+        logger.warning("Failed to load eval context", search_id=search_id, error=str(e))
+    return None
 
 
 def _calculate_limits(
@@ -434,6 +492,76 @@ async def _run_rag_pipeline(
     judgments.sort(key=lambda j: _VERDICT_ORDER.get(j.verdict, 3))
 
     return judgments
+
+
+async def evaluate_single_resource(
+    search_id: str,
+    preset: ClassroomPreset,
+    title: str,
+    url: str,
+    source: str,
+    snippet: str,
+    query: str,
+) -> JudgmentResult | None:
+    """Phase 2: evaluate one resource using stored RAG context.
+
+    Returns None when context has expired or evaluation fails.
+    """
+    ctx_data = await _load_eval_context(search_id)
+    if ctx_data is None:
+        logger.warning(
+            "Eval context expired or unavailable",
+            search_id=search_id,
+        )
+        return None
+
+    # Reject URLs that were not in the Phase 1 result set
+    top_urls: list[str] = ctx_data.get("top_urls", [])
+    if top_urls and url not in top_urls:
+        logger.warning(
+            "URL not in stored result set",
+            url=url,
+            search_id=search_id,
+        )
+        return None
+
+    eval_vector = ctx_data["eval_vector"]
+    adv_vector = ctx_data["adv_vector"]
+    readability_map = ctx_data.get("readability_map", {})
+
+    ctx = _RagContext(
+        eval_vector=eval_vector,
+        adv_vector=adv_vector,
+        readability_map=readability_map,
+        search_id=search_id,
+        preset=preset,
+    )
+
+    domain = url.split("/")[2] if "/" in url else url
+    metadata: dict = {"source": source}
+    if source == "youtube":
+        metadata["channel"] = ""
+    elif source == "openalex":
+        pass  # all fields have defaults
+    else:
+        metadata["domain"] = domain
+
+    card = ResourceCard(
+        title=title,
+        url=url,
+        source=source,
+        type=(
+            "video"
+            if source == "youtube"
+            else (
+                "paper" if source == "openalex" else "webpage"
+            )
+        ),
+        snippet=snippet,
+        metadata=metadata,
+    )
+
+    return await _process_one(card, ctx)
 
 
 def _cache_key(preset_id: str, query: str) -> str:
@@ -782,86 +910,21 @@ async def search_resources_stream(
         },
     )
 
-    yield SearchStageEvent(stage="rag_preparation", status="done")
-
-    # Stage 4 & 5: Shared RAG context preparation
-    _VERDICT_SCORE: dict[str, float] = {"use_it": 1.0, "adapt_it": 0.5, "skip_it": 0.0}
-    judgments: list[JudgmentResult] = []
-
+    # RAG context preparation (fetch, chunk, embed, store in Weaviate)
+    # Runs inside Phase 1 so Phase 2 can just retrieve chunks.
     ctx = await _prepare_rag_context(
         top_cards, preset, query, search_id, eval_vector=eval_vector
     )
 
     if ctx is not None:
-        # Emit working events per resource
-        for card in top_cards:
-            yield SearchStageEvent(
-                stage="evaluation", status="working", resource_url=card.url
-            )
-            yield SearchStageEvent(
-                stage="adversarial", status="working", resource_url=card.url
-            )
-
-        # Per-resource evaluation with FIRST_COMPLETED
-        pending: set[asyncio.Task[JudgmentResult | None]] = set()
-        task_to_card: dict[asyncio.Task[JudgmentResult | None], ResourceCard] = {}
-        for card in top_cards:
-            task = asyncio.create_task(_process_one(card, ctx))
-            pending.add(task)
-            task_to_card[task] = card
-
-        while pending:
-            done, pending = await asyncio.wait(
-                pending, return_when=asyncio.FIRST_COMPLETED, timeout=180.0
-            )
-            if not done:
-                # Timeout — cancel remaining tasks
-                for t in pending:
-                    t.cancel()
-                logger.warning("RAG evaluation timed out, cancelling remaining tasks")
-                break
-            for task in done:
-                card = task_to_card[task]
-                try:
-                    result = task.result()
-                    if isinstance(result, JudgmentResult):
-                        judgments.append(result)
-                        card.verdict = result.verdict
-                        card.relevance_score = _VERDICT_SCORE.get(
-                            result.verdict, 0.5
-                        )
-                        card.relevance_reason = result.reasoning_chain
-                        yield SearchStageEvent(
-                            stage="evaluation",
-                            status="done",
-                            resource_url=card.url,
-                            data={"judgment": result.model_dump()},
-                        )
-                        yield SearchStageEvent(
-                            stage="adversarial",
-                            status="done",
-                            resource_url=card.url,
-                        )
-                except Exception as e:
-                    logger.warning(
-                        "Resource processing failed",
-                        url=card.url,
-                        error=str(e),
-                    )
-    else:
-        logger.error(
-            "RAG context preparation failed (stream)"
-            " - returning results without evaluations"
+        await _store_eval_context(
+            search_id, ctx, [card.url for card in top_cards]
         )
 
-    # Sort: judged resources first (by verdict proxy), unevaluated at end
-    all_results.sort(
-        key=lambda card: (
-            card.relevance_score if card.relevance_score is not None else -1.0
-        ),
-        reverse=True,
-    )
+    yield SearchStageEvent(stage="rag_preparation", status="done")
 
+    # Phase 1 complete — return results without judgments.
+    # The frontend will call GET /evaluate per resource (Phase 2).
     response = JudgedSearchResponse(
         query=query,
         preset_id=uuid.UUID(str(preset.id)),
@@ -869,8 +932,9 @@ async def search_resources_stream(
         counts_by_source=counts_by_source,
         results=all_results,
         errors=errors,
-        judgments=judgments,
+        judgments=[],
         generated_queries=generated_queries,
+        search_id=search_id,
     )
 
     yield SearchStageEvent(
@@ -879,4 +943,7 @@ async def search_resources_stream(
         data=response.model_dump(),
     )
 
-    await _set_cached(cache_key, response)
+    # NOTE: Phase 1 does NOT write to the shared cache because it has no
+    # judgments.  Only the non-streaming search_resources() (REST fallback)
+    # caches the full response.  This avoids poisoning the cache that both
+    # /search and /search/stream share.

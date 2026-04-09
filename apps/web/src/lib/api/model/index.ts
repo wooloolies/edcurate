@@ -14,6 +14,8 @@ export * from './country-option';
 export * from './custom-metadata';
 export * from './ddgs-metadata';
 export * from './email-login-request';
+export * from './evaluate-request';
+export * from './evaluate-resource-api-discovery-evaluate-post200';
 export * from './evaluate-saved-resources-endpoint-api-saved-evaluate-post200';
 export * from './evaluate-single-request';
 export * from './evaluate-single-stream-endpoint-api-saved-evaluate-single-stream-get-params';

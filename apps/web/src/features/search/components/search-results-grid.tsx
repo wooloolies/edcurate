@@ -8,6 +8,7 @@ import { useEffect, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { ResourceCardRenderer } from "@/features/search/components/resource-card";
+import type { ResourceAgentProgress } from "@/features/search/types/search-stream";
 import type { JudgmentResult, ResourceCard } from "@/lib/api/model";
 import { selectedResourcesAtom } from "@/stores/search-context-atoms";
 
@@ -19,6 +20,8 @@ interface SearchResultsGridProps {
   savedUrls: Set<string>;
   evaluationIds?: Map<string, string>;
   isNewResults?: boolean;
+  resourceProgress?: Map<string, ResourceAgentProgress>;
+  isEvaluating?: boolean;
 }
 
 export function SearchResultsGrid({
@@ -29,6 +32,8 @@ export function SearchResultsGrid({
   savedUrls,
   evaluationIds,
   isNewResults,
+  resourceProgress,
+  isEvaluating,
 }: SearchResultsGridProps) {
   const t = useTranslations("search");
   const [activeCategory, setActiveCategory] = useState<string>("all");
@@ -155,6 +160,11 @@ export function SearchResultsGrid({
                         resource={displayResource}
                         evaluationId={evaluationIds?.get(resource.url)}
                         checked={isChecked(resource.url)}
+                        isEvaluating={
+                          isEvaluating &&
+                          resourceProgress?.has(resource.url) &&
+                          resourceProgress.get(resource.url)?.evaluationStatus !== "done"
+                        }
                       />
                     </motion.div>
                   );

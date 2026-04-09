@@ -253,7 +253,7 @@
           "authentication"
         ],
         "summary": "Oauth Login",
-        "description": "OAuth login — verify provider token, create/update user.",
+        "description": "OAuth login \u2014 verify provider token, create/update user.",
         "operationId": "oauth_login_api_auth_login_post",
         "requestBody": {
           "content": {
@@ -337,7 +337,7 @@
           "authentication"
         ],
         "summary": "Logout",
-        "description": "Logout — client should remove tokens from localStorage.",
+        "description": "Logout \u2014 client should remove tokens from localStorage.",
         "operationId": "logout_api_auth_logout_post",
         "responses": {
           "204": {
@@ -936,6 +936,50 @@
             "content": {
               "application/json": {
                 "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/discovery/evaluate": {
+      "post": {
+        "tags": [
+          "discovery"
+        ],
+        "summary": "Evaluate Resource",
+        "description": "Phase 2: evaluate a single resource using stored RAG context.\n\nCalled per-resource after the SSE stream (Phase 1) completes.\nEach call runs Triage + Risk Scanner + Final Judge for one resource.",
+        "operationId": "evaluate_resource_api_discovery_evaluate_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EvaluateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response Evaluate Resource Api Discovery Evaluate Post"
+                }
               }
             }
           },
@@ -2107,6 +2151,56 @@
         "title": "EmailLoginRequest",
         "description": "Email/password login."
       },
+      "EvaluateRequest": {
+        "properties": {
+          "search_id": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Search Id"
+          },
+          "preset_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Preset Id"
+          },
+          "resource_url": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Resource Url"
+          },
+          "resource_title": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Resource Title"
+          },
+          "resource_source": {
+            "type": "string",
+            "title": "Resource Source"
+          },
+          "resource_snippet": {
+            "type": "string",
+            "title": "Resource Snippet",
+            "default": ""
+          },
+          "query": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 1,
+            "title": "Query"
+          }
+        },
+        "type": "object",
+        "required": [
+          "search_id",
+          "preset_id",
+          "resource_url",
+          "resource_title",
+          "resource_source",
+          "query"
+        ],
+        "title": "EvaluateRequest",
+        "description": "Phase 2: evaluate a single resource."
+      },
       "EvaluateSingleRequest": {
         "properties": {
           "saved_resource_id": {
@@ -2425,6 +2519,18 @@
             },
             "type": "array",
             "title": "Judgments"
+          },
+          "search_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Search Id",
+            "description": "Opaque ID for Phase 2 per-resource evaluation requests."
           }
         },
         "type": "object",
@@ -3560,7 +3666,7 @@
           "message"
         ],
         "title": "RegisterResponse",
-        "description": "Registration response — tokens if no verification needed."
+        "description": "Registration response \u2014 tokens if no verification needed."
       },
       "ResendVerificationRequest": {
         "properties": {

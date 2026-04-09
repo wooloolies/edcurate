@@ -9,10 +9,12 @@ export const INITIAL_STREAM_STATE: SearchStreamState = {
   result: null,
   isCached: false,
   isStreaming: false,
+  isEvaluating: false,
   error: null,
   partialResults: null,
   partialJudgments: new Map(),
   evaluationIds: new Map(),
+  searchId: null,
 };
 
 export const searchStreamAtom = atom<SearchStreamState>(INITIAL_STREAM_STATE);

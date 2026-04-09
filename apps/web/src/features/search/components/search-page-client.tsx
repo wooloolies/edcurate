@@ -140,16 +140,20 @@ export function SearchPageClient() {
     }
   }, [searchQuery, stream.startStream]);
 
-  const judgmentByUrl = useMemo(() => {
+  // Merge final results judgments with Phase 2 partial judgments.
+  // Phase 2 partialJudgments take precedence (they arrive after the result).
+  const displayJudgments = useMemo(() => {
     const m = new Map<string, JudgmentResult>();
     for (const j of results?.judgments ?? []) {
       m.set(j.resource_url, j);
     }
+    for (const [url, j] of stream.partialJudgments) {
+      m.set(url, j);
+    }
     return m;
-  }, [results?.judgments]);
+  }, [results?.judgments, stream.partialJudgments]);
 
   const displayResults = results?.results ?? stream.partialResults;
-  const displayJudgments = results ? judgmentByUrl : stream.partialJudgments;
 
   const displayCounts = useMemo(() => {
     if (results) return results.counts_by_source ?? { ddgs: 0, youtube: 0, openalex: 0 };
@@ -162,7 +166,8 @@ export function SearchPageClient() {
 
   const displayTotalCount = results?.total_results ?? stream.partialResults?.length ?? 0;
 
-  const hasContent = results || stream.isStreaming || isFetching || !!stream.partialResults;
+  const hasContent =
+    results || stream.isStreaming || stream.isEvaluating || isFetching || !!stream.partialResults;
 
   return (
     <div className={`w-full max-w-6xl space-y-6 ${!hasContent ? "my-auto" : ""}`}>
@@ -181,7 +186,7 @@ export function SearchPageClient() {
         draft={draft}
         onDraftChange={setDraft}
         onSubmit={handleSearch}
-        isSearching={stream.isStreaming || isFetching}
+        isSearching={stream.isStreaming || stream.isEvaluating || isFetching}
       />
 
       {results && results.errors.length > 0 ? <ErrorBanner errors={results.errors} /> : null}
@@ -218,7 +223,7 @@ export function SearchPageClient() {
         </div>
       ) : null}
 
-      {/* Results grid: shown only after streaming completes */}
+      {/* Results grid: shown after Phase 1 SSE completes (also during Phase 2 evaluation) */}
       {displayResults && !isFetching && !stream.isStreaming ? (
         <SearchResultsGrid
           results={displayResults}
@@ -228,6 +233,8 @@ export function SearchPageClient() {
           savedUrls={savedUrls}
           evaluationIds={stream.evaluationIds}
           isNewResults={!results}
+          resourceProgress={stream.resourceProgress}
+          isEvaluating={stream.isEvaluating}
         />
       ) : null}
 

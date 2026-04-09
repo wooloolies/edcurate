@@ -7,8 +7,8 @@ from fastapi import APIRouter, HTTPException, Query, Request, status
 from sqlalchemy import select
 from sse_starlette.sse import EventSourceResponse
 
-from src.agents.schemas import JudgedSearchResponse, JudgmentResult
-from src.discovery import service
+from src.agents.schemas import JudgedSearchResponse
+from src.discovery import schemas, service
 from src.lib.auth import decode_token
 from src.lib.dependencies import CurrentUser, DBSession
 from src.lib.logging import get_logger
@@ -108,82 +108,83 @@ async def search_stream(
         )
 
     async def _event_generator() -> AsyncGenerator[dict, None]:
-        from src.evaluations.model import ResourceEvaluation
-        from src.evaluations.service import save_evaluation
-        from src.lib.database import async_session_factory
-
         async for event in service.search_resources_stream(preset, query):
-            # Persist evaluation results when each resource finishes evaluation
-            if (
-                event.stage == "evaluation"
-                and event.status == "done"
-                and event.resource_url
-                and event.data
-                and "judgment" in event.data
-            ):
-                try:
-                    judgment = JudgmentResult(**event.data["judgment"])
-                    async with async_session_factory() as session:
-                        eval_id = await save_evaluation(
-                            session,
-                            user_id,
-                            preset_id,
-                            event.resource_url,
-                            query,
-                            judgment,
-                        )
-                        await session.commit()
-                    event.data["evaluation_id"] = str(eval_id)
-                except Exception as e:
-                    logger.warning(
-                        "Failed to persist evaluation",
-                        resource_url=event.resource_url,
-                        error=str(e),
-                    )
-
-            # On complete event (including cache hits), attach evaluation IDs
-            # from DB so the frontend can build /overview/{id} links.
-            if (
-                event.stage == "complete"
-                and event.status == "done"
-                and event.data
-            ):
-                judgments_data = event.data.get("judgments", [])
-                if judgments_data:
-                    try:
-                        urls = [
-                            j["resource_url"]
-                            for j in judgments_data
-                            if isinstance(j, dict) and "resource_url" in j
-                        ]
-                        async with async_session_factory() as session:
-                            from sqlalchemy import select
-
-                            rows = await session.execute(
-                                select(
-                                    ResourceEvaluation.resource_url,
-                                    ResourceEvaluation.id,
-                                ).where(
-                                    ResourceEvaluation.preset_id == preset_id,
-                                    ResourceEvaluation.search_query == query,
-                                    ResourceEvaluation.resource_url.in_(urls),
-                                )
-                            )
-                            eval_ids = {
-                                row.resource_url: str(row.id)
-                                for row in rows.all()
-                            }
-                        if eval_ids:
-                            event.data["evaluation_ids"] = eval_ids
-                    except Exception as e:
-                        logger.warning(
-                            "Failed to look up evaluation IDs",
-                            error=str(e),
-                        )
-
             yield {"event": "stage", "data": event.model_dump_json()}
 
     return EventSourceResponse(_event_generator())
+
+
+@router.post("/evaluate")
+@rate_limit(requests=40, window=60, key_func=_user_rate_limit_key)
+async def evaluate_resource(
+    request: Request,
+    db: DBSession,
+    current_user: CurrentUser,
+    body: schemas.EvaluateRequest,
+) -> dict:
+    """Phase 2: evaluate a single resource using stored RAG context.
+
+    Called per-resource after the SSE stream (Phase 1) completes.
+    Each call runs Triage + Risk Scanner + Final Judge for one resource.
+    """
+    user_id = uuid.UUID(current_user.id)
+
+    result = await db.execute(
+        select(ClassroomPreset).where(
+            ClassroomPreset.id == body.preset_id,
+            ClassroomPreset.user_id == user_id,
+        )
+    )
+    preset = result.scalar_one_or_none()
+    if preset is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Preset not found",
+        )
+
+    judgment = await service.evaluate_single_resource(
+        search_id=body.search_id,
+        preset=preset,
+        title=body.resource_title,
+        url=body.resource_url,
+        source=body.resource_source,
+        snippet=body.resource_snippet,
+        query=body.query,
+    )
+
+    if judgment is None:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="Evaluation failed for this resource",
+        )
+
+    # Persist evaluation
+    from src.evaluations.service import save_evaluation
+    from src.lib.database import async_session_factory
+
+    try:
+        async with async_session_factory() as session:
+            eval_id = await save_evaluation(
+                session,
+                user_id,
+                body.preset_id,
+                body.resource_url,
+                body.query,
+                judgment,
+            )
+            await session.commit()
+    except Exception as e:
+        logger.warning(
+            "Failed to persist evaluation",
+            resource_url=body.resource_url,
+            error=str(e),
+        )
+        eval_id = None
+
+    return {
+        "judgment": judgment.model_dump(),
+        "evaluation_id": str(eval_id) if eval_id else None,
+    }
 
 
 @router.get("/evaluation/{evaluation_id}")

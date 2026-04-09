@@ -35,6 +35,8 @@ export interface SearchStreamState {
   result: JudgedSearchResponse | null;
   isCached: boolean;
   isStreaming: boolean;
+  /** Phase 2 per-resource evaluation in progress */
+  isEvaluating: boolean;
   error: string | null;
   /** Set on federated_search/done — resource cards before evaluation */
   partialResults: ResourceCard[] | null;
@@ -42,4 +44,6 @@ export interface SearchStreamState {
   partialJudgments: Map<string, JudgmentResult>;
   /** evaluation_id per resource_url (for Overview page link) */
   evaluationIds: Map<string, string>;
+  /** Opaque ID from Phase 1 for Phase 2 evaluate calls */
+  searchId: string | null;
 }

@@ -113,6 +113,18 @@ class GeneratedSearchQueries(BaseModel):
         return [str(q) for q in v if q][:_MAX_QUERIES_PER_PROVIDER]
 
 
+class EvaluateRequest(BaseModel):
+    """Phase 2: evaluate a single resource."""
+
+    search_id: str = Field(..., min_length=1)
+    preset_id: uuid.UUID
+    resource_url: str = Field(..., min_length=1)
+    resource_title: str = Field(..., min_length=1)
+    resource_source: str
+    resource_snippet: str = ""
+    query: str = Field(..., min_length=1, max_length=500)
+
+
 class SearchResponse(BaseModel):
     """Unified federated search response."""
 

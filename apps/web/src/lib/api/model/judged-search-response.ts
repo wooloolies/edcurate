@@ -22,4 +22,6 @@ export interface JudgedSearchResponse {
   errors: SourceError[];
   generated_queries?: GeneratedSearchQueries | null;
   judgments?: JudgmentResult[];
+  /** Opaque ID for Phase 2 per-resource evaluation requests. */
+  search_id?: string | null;
 }

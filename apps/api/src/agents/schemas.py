@@ -86,3 +86,7 @@ class JudgedSearchResponse(SearchResponse):
     """Extends SearchResponse with judgment data for the top results."""
 
     judgments: list[JudgmentResult] = Field(default_factory=list)
+    search_id: str | None = Field(
+        default=None,
+        description="Opaque ID for Phase 2 per-resource evaluation requests.",
+    )

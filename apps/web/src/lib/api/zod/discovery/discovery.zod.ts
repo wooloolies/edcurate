@@ -110,7 +110,8 @@ export const SearchApiDiscoverySearchGetResponse = zod.object({
   "rationale": zod.string()
 }).describe('A concrete adaptation the teacher can apply.')).optional(),
   "override_notes": zod.union([zod.string(),zod.null()]).optional()
-}).describe('Final judgment combining triage + risk scan, presented to the teacher.')).optional()
+}).describe('Final judgment combining triage + risk scan, presented to the teacher.')).optional(),
+  "search_id": zod.union([zod.string(),zod.null()]).optional().describe('Opaque ID for Phase 2 per-resource evaluation requests.')
 }).describe('Extends SearchResponse with judgment data for the top results.')
 
 /**
@@ -134,6 +135,33 @@ export const SearchStreamApiDiscoverySearchStreamGetQueryParams = zod.object({
 })
 
 export const SearchStreamApiDiscoverySearchStreamGetResponse = zod.unknown()
+
+/**
+ * Phase 2: evaluate a single resource using stored RAG context.
+
+Called per-resource after the SSE stream (Phase 1) completes.
+Each call runs Triage + Risk Scanner + Final Judge for one resource.
+ * @summary Evaluate Resource
+ */
+
+
+
+export const evaluateResourceApiDiscoveryEvaluatePostBodyResourceSnippetDefault = ``;
+export const evaluateResourceApiDiscoveryEvaluatePostBodyQueryMax = 500;
+
+
+
+export const EvaluateResourceApiDiscoveryEvaluatePostBody = zod.object({
+  "search_id": zod.string().min(1),
+  "preset_id": zod.uuid(),
+  "resource_url": zod.string().min(1),
+  "resource_title": zod.string().min(1),
+  "resource_source": zod.string(),
+  "resource_snippet": zod.string().default(evaluateResourceApiDiscoveryEvaluatePostBodyResourceSnippetDefault),
+  "query": zod.string().min(1).max(evaluateResourceApiDiscoveryEvaluatePostBodyQueryMax)
+}).describe('Phase 2: evaluate a single resource.')
+
+export const EvaluateResourceApiDiscoveryEvaluatePostResponse = zod.record(zod.string(), zod.unknown())
 
 /**
  * Fetch evaluation data by ID.
