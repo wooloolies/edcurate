@@ -571,19 +571,11 @@ async def evaluate_single_resource(
         metadata=metadata,
     )
 
-    # 1. Ensure Weaviate collection
-    try:
-        await asyncio.to_thread(ensure_collection)
-    except Exception as e:
-        logger.error(
-            "Weaviate collection setup failed",
-            error=str(e),
-        )
-        return None
-
-    # 2. Fetch content + readability
+    # Per-resource RAG: fetch → chunk → embed → Weaviate (all non-fatal)
     readability_map: dict[str, dict[str, float]] = {}
     try:
+        await asyncio.to_thread(ensure_collection)
+
         content = await fetch_content(card)
         if isinstance(content, str) and content:
             metrics = compute_readability(content)
@@ -604,7 +596,7 @@ async def evaluate_single_resource(
                 )
     except Exception as e:
         logger.warning(
-            "Per-resource RAG prep failed",
+            "Per-resource RAG prep failed — using snippet",
             url=url,
             error=str(e),
         )
@@ -618,7 +610,15 @@ async def evaluate_single_resource(
         preset=preset,
     )
 
-    return await _process_one(card, ctx)
+    try:
+        return await _process_one(card, ctx)
+    except Exception as e:
+        logger.error(
+            "Evaluation pipeline failed",
+            url=url,
+            error=str(e),
+        )
+        return None
 
 
 def _cache_key(preset_id: str, query: str) -> str:
