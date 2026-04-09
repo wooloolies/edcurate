@@ -353,11 +353,23 @@ async def get_suggested_collections(
         )
         user_preset = preset_exec.scalar_one_or_none()
 
-    # TFIDF equivalent using PostgreSQL Full Text Search
+    # Full Text Search with soft matching — use "simple" config for language-agnostic
+    # matching, and make FTS a ranking signal rather than a hard filter so that
+    # preset-based (subject/year) matches are still surfaced.
+
     doc_col = LibraryCollection.name + " " + LibraryCollection.search_query
-    document = func.to_tsvector("english", doc_col)
-    query = func.plainto_tsquery("english", search_query)
-    rank = func.ts_rank_cd(document, query)
+    document = func.to_tsvector("simple", doc_col)
+    query = func.plainto_tsquery("simple", search_query)
+    fts_match = document.bool_op("@@")(query)
+    fts_rank = func.ts_rank_cd(document, query)
+
+    # ILIKE fallback for partial / substring matches
+    escaped_query = (
+        search_query.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
+    )
+    ilike_pattern = f"%{escaped_query}%"
+    ilike_match = doc_col.ilike(ilike_pattern)
+    ilike_score = case((ilike_match, 0.3), else_=0.0)
 
     count_subq = (
         select(func.count(SavedResource.id))
@@ -366,19 +378,19 @@ async def get_suggested_collections(
         .scalar_subquery()
     )
 
-    stmt = (
-        select(LibraryCollection, count_subq, User.name)
-        .join(User, LibraryCollection.user_id == User.id, isouter=True)
-        .where(
-            LibraryCollection.is_public.is_(True),
-            LibraryCollection.user_id != user_id,
-            document.bool_op("@@")(query),
-        )
-    )
+    base_rank = fts_rank + ilike_score
 
     if user_preset:
-        stmt = stmt.join(
-            ClassroomPreset, LibraryCollection.preset_id == ClassroomPreset.id
+        stmt = (
+            select(LibraryCollection, count_subq, User.name)
+            .join(User, LibraryCollection.user_id == User.id, isouter=True)
+            .join(
+                ClassroomPreset, LibraryCollection.preset_id == ClassroomPreset.id
+            )
+            .where(
+                LibraryCollection.is_public.is_(True),
+                LibraryCollection.user_id != user_id,
+            )
         )
         subject_match = case(
             (ClassroomPreset.subject == user_preset.subject, 1.0), else_=0.0
@@ -386,9 +398,24 @@ async def get_suggested_collections(
         year_match = case(
             (ClassroomPreset.year_level == user_preset.year_level, 0.5), else_=0.0
         )
-        final_rank = rank + subject_match + year_match
+        # At least one signal must be present: FTS, ILIKE, or same subject
+        stmt = stmt.where(
+            fts_match
+            | ilike_match
+            | (ClassroomPreset.subject == user_preset.subject)
+        )
+        final_rank = base_rank + subject_match + year_match
     else:
-        final_rank = rank
+        stmt = (
+            select(LibraryCollection, count_subq, User.name)
+            .join(User, LibraryCollection.user_id == User.id, isouter=True)
+            .where(
+                LibraryCollection.is_public.is_(True),
+                LibraryCollection.user_id != user_id,
+                fts_match | ilike_match,
+            )
+        )
+        final_rank = base_rank
 
     stmt = stmt.order_by(
         final_rank.desc(),
