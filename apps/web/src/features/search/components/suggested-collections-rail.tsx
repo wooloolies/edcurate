@@ -289,12 +289,14 @@ export function SuggestedCollectionsRail({
                                   index={i + 1}
                                   resource={resWithVerdict}
                                   customAction={
-                                    <Link
-                                      href={buildOverviewHref(resWithVerdict)}
-                                      className="rounded-full px-5 py-2 text-sm font-bold shadow-sm transition-transform hover:scale-105 active:scale-95 bg-slate-100 text-slate-800 hover:bg-slate-200 border border-slate-200 whitespace-nowrap"
-                                    >
-                                      {t("overview")}
-                                    </Link>
+                                    savedResource.evaluation_id ? (
+                                      <Link
+                                        href={buildOverviewHref(savedResource.evaluation_id)}
+                                        className="rounded-full px-5 py-2 text-sm font-bold shadow-sm transition-transform hover:scale-105 active:scale-95 bg-slate-100 text-slate-800 hover:bg-slate-200 border border-slate-200 whitespace-nowrap"
+                                      >
+                                        {t("overview")}
+                                      </Link>
+                                    ) : undefined
                                   }
                                 />
                               );

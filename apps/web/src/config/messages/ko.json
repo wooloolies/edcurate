@@ -390,7 +390,16 @@
     "comingSoonDescription": "이 페이지에서 AI 기반 분석 결과를 확인할 수 있습니다. 교육과정 정합성, 교수법적 근거, 근거 추출 등을 포함합니다.",
     "confidence": "신뢰도",
     "evaluationNotFound": "평가 데이터가 만료되었습니다. 다시 검색해주세요.",
-    "evaluationUnavailable": "이 리소스의 평가 데이터가 없습니다."
+    "evaluationUnavailable": "이 리소스의 평가 데이터가 없습니다.",
+    "reasoning": "추론",
+    "evaluation": "평가",
+    "adaptationAdvice": "수정 제안",
+    "riskScan": "위험 검사",
+    "noIssuesFound": "발견된 문제 없음",
+    "evidenceQuote": "근거",
+    "suggestedAction": "권장 조치",
+    "evaluatingTitle": "평가 진행 중",
+    "evaluatingDescription": "이 리소스를 평가하고 있습니다. 잠시 후 다시 확인해주세요."
   },
   "errors": {
     "title": "오류",

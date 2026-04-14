@@ -463,6 +463,54 @@
   "@overview__comingSoonDescription": {
     "description": "Coming soon description on overview page"
   },
+  "overview__confidence": "Độ tin cậy",
+  "@overview__confidence": {
+    "description": "Label for evaluation confidence level"
+  },
+  "overview__evaluationNotFound": "Dữ liệu đánh giá đã hết hạn. Vui lòng tìm kiếm lại.",
+  "@overview__evaluationNotFound": {
+    "description": "Message when evaluation cache has expired"
+  },
+  "overview__evaluationUnavailable": "Chưa có dữ liệu đánh giá cho tài liệu này.",
+  "@overview__evaluationUnavailable": {
+    "description": "Message when evaluation params are missing"
+  },
+  "overview__reasoning": "Lập luận",
+  "@overview__reasoning": {
+    "description": "Section heading for AI reasoning chain"
+  },
+  "overview__evaluation": "Đánh giá",
+  "@overview__evaluation": {
+    "description": "Section heading for evaluation metrics"
+  },
+  "overview__adaptationAdvice": "Đề xuất điều chỉnh",
+  "@overview__adaptationAdvice": {
+    "description": "Section heading for adaptation suggestions"
+  },
+  "overview__riskScan": "Quét rủi ro",
+  "@overview__riskScan": {
+    "description": "Section heading for risk flag scan"
+  },
+  "overview__noIssuesFound": "Không phát hiện vấn đề",
+  "@overview__noIssuesFound": {
+    "description": "Message when no risk flags are detected"
+  },
+  "overview__evidenceQuote": "Bằng chứng",
+  "@overview__evidenceQuote": {
+    "description": "Label for evidence quote in flag card"
+  },
+  "overview__suggestedAction": "Hành động đề xuất",
+  "@overview__suggestedAction": {
+    "description": "Label for suggested action in flag card"
+  },
+  "overview__evaluatingTitle": "Đang đánh giá",
+  "@overview__evaluatingTitle": {
+    "description": "Title when evaluation is still running"
+  },
+  "overview__evaluatingDescription": "Tài liệu này đang được đánh giá. Vui lòng quay lại sau giây lát.",
+  "@overview__evaluatingDescription": {
+    "description": "Description when evaluation is still running"
+  },
   "errors__title": "Lỗi",
   "@errors__title": {
     "description": "Generic error page title"

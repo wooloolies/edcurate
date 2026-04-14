@@ -475,6 +475,42 @@
   "@overview__evaluationUnavailable": {
     "description": "Message when evaluation params are missing"
   },
+  "overview__reasoning": "추론",
+  "@overview__reasoning": {
+    "description": "Section heading for AI reasoning chain"
+  },
+  "overview__evaluation": "평가",
+  "@overview__evaluation": {
+    "description": "Section heading for evaluation metrics"
+  },
+  "overview__adaptationAdvice": "수정 제안",
+  "@overview__adaptationAdvice": {
+    "description": "Section heading for adaptation suggestions"
+  },
+  "overview__riskScan": "위험 검사",
+  "@overview__riskScan": {
+    "description": "Section heading for risk flag scan"
+  },
+  "overview__noIssuesFound": "발견된 문제 없음",
+  "@overview__noIssuesFound": {
+    "description": "Message when no risk flags are detected"
+  },
+  "overview__evidenceQuote": "근거",
+  "@overview__evidenceQuote": {
+    "description": "Label for evidence quote in flag card"
+  },
+  "overview__suggestedAction": "권장 조치",
+  "@overview__suggestedAction": {
+    "description": "Label for suggested action in flag card"
+  },
+  "overview__evaluatingTitle": "평가 진행 중",
+  "@overview__evaluatingTitle": {
+    "description": "Title when evaluation is still running"
+  },
+  "overview__evaluatingDescription": "이 리소스를 평가하고 있습니다. 잠시 후 다시 확인해주세요.",
+  "@overview__evaluatingDescription": {
+    "description": "Description when evaluation is still running"
+  },
   "errors__title": "오류",
   "@errors__title": {
     "description": "Generic error page title"

@@ -390,7 +390,16 @@
     "comingSoonDescription": "Trang này sẽ hiển thị phân tích do AI tạo ra về tài liệu, bao gồm sự phù hợp với chương trình giảng dạy, lý luận sư phạm và trích xuất bằng chứng.",
     "confidence": "Độ tin cậy",
     "evaluationNotFound": "Dữ liệu đánh giá đã hết hạn. Hãy tìm kiếm lại.",
-    "evaluationUnavailable": "Không có dữ liệu đánh giá cho tài nguyên này."
+    "evaluationUnavailable": "Không có dữ liệu đánh giá cho tài nguyên này.",
+    "reasoning": "Lập luận",
+    "evaluation": "Đánh giá",
+    "adaptationAdvice": "Đề xuất điều chỉnh",
+    "riskScan": "Quét rủi ro",
+    "noIssuesFound": "Không phát hiện vấn đề",
+    "evidenceQuote": "Bằng chứng",
+    "suggestedAction": "Hành động đề xuất",
+    "evaluatingTitle": "Đang đánh giá",
+    "evaluatingDescription": "Tài liệu này đang được đánh giá. Vui lòng quay lại sau giây lát."
   },
   "errors": {
     "title": "Lỗi",

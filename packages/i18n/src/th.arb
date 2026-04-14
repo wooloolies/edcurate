@@ -463,6 +463,54 @@
   "@overview__comingSoonDescription": {
     "description": "Coming soon description on overview page"
   },
+  "overview__confidence": "ความเชื่อมั่น",
+  "@overview__confidence": {
+    "description": "Label for evaluation confidence level"
+  },
+  "overview__evaluationNotFound": "ข้อมูลการประเมินหมดอายุแล้ว กรุณาค้นหาใหม่อีกครั้ง",
+  "@overview__evaluationNotFound": {
+    "description": "Message when evaluation cache has expired"
+  },
+  "overview__evaluationUnavailable": "ไม่มีข้อมูลการประเมินสำหรับสื่อการสอนนี้",
+  "@overview__evaluationUnavailable": {
+    "description": "Message when evaluation params are missing"
+  },
+  "overview__reasoning": "การให้เหตุผล",
+  "@overview__reasoning": {
+    "description": "Section heading for AI reasoning chain"
+  },
+  "overview__evaluation": "การประเมิน",
+  "@overview__evaluation": {
+    "description": "Section heading for evaluation metrics"
+  },
+  "overview__adaptationAdvice": "คำแนะนำการปรับใช้",
+  "@overview__adaptationAdvice": {
+    "description": "Section heading for adaptation suggestions"
+  },
+  "overview__riskScan": "สแกนความเสี่ยง",
+  "@overview__riskScan": {
+    "description": "Section heading for risk flag scan"
+  },
+  "overview__noIssuesFound": "ไม่พบปัญหา",
+  "@overview__noIssuesFound": {
+    "description": "Message when no risk flags are detected"
+  },
+  "overview__evidenceQuote": "หลักฐาน",
+  "@overview__evidenceQuote": {
+    "description": "Label for evidence quote in flag card"
+  },
+  "overview__suggestedAction": "การดำเนินการที่แนะนำ",
+  "@overview__suggestedAction": {
+    "description": "Label for suggested action in flag card"
+  },
+  "overview__evaluatingTitle": "กำลังประเมิน",
+  "@overview__evaluatingTitle": {
+    "description": "Title when evaluation is still running"
+  },
+  "overview__evaluatingDescription": "สื่อการสอนนี้กำลังอยู่ระหว่างการประเมิน กรุณาตรวจสอบอีกครั้งในอีกสักครู่",
+  "@overview__evaluatingDescription": {
+    "description": "Description when evaluation is still running"
+  },
   "errors__title": "ข้อผิดพลาด",
   "@errors__title": {
     "description": "Generic error page title"

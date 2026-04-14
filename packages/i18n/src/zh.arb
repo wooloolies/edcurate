@@ -463,6 +463,54 @@
   "@overview__comingSoonDescription": {
     "description": "Coming soon description on overview page"
   },
+  "overview__confidence": "置信度",
+  "@overview__confidence": {
+    "description": "Label for evaluation confidence level"
+  },
+  "overview__evaluationNotFound": "评估数据已过期，请重新搜索。",
+  "@overview__evaluationNotFound": {
+    "description": "Message when evaluation cache has expired"
+  },
+  "overview__evaluationUnavailable": "该资源暂无评估数据。",
+  "@overview__evaluationUnavailable": {
+    "description": "Message when evaluation params are missing"
+  },
+  "overview__reasoning": "推理过程",
+  "@overview__reasoning": {
+    "description": "Section heading for AI reasoning chain"
+  },
+  "overview__evaluation": "评估",
+  "@overview__evaluation": {
+    "description": "Section heading for evaluation metrics"
+  },
+  "overview__adaptationAdvice": "改编建议",
+  "@overview__adaptationAdvice": {
+    "description": "Section heading for adaptation suggestions"
+  },
+  "overview__riskScan": "风险扫描",
+  "@overview__riskScan": {
+    "description": "Section heading for risk flag scan"
+  },
+  "overview__noIssuesFound": "未发现问题",
+  "@overview__noIssuesFound": {
+    "description": "Message when no risk flags are detected"
+  },
+  "overview__evidenceQuote": "依据",
+  "@overview__evidenceQuote": {
+    "description": "Label for evidence quote in flag card"
+  },
+  "overview__suggestedAction": "建议操作",
+  "@overview__suggestedAction": {
+    "description": "Label for suggested action in flag card"
+  },
+  "overview__evaluatingTitle": "评估进行中",
+  "@overview__evaluatingTitle": {
+    "description": "Title when evaluation is still running"
+  },
+  "overview__evaluatingDescription": "该资源正在评估中，请稍后再来查看。",
+  "@overview__evaluatingDescription": {
+    "description": "Description when evaluation is still running"
+  },
   "errors__title": "错误",
   "@errors__title": {
     "description": "Generic error page title"

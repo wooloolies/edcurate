@@ -390,7 +390,16 @@
     "comingSoonDescription": "此页面将展示 AI 生成的资源分析，包括课程匹配度、教学法论证和证据提取。",
     "confidence": "置信度",
     "evaluationNotFound": "评估数据已过期，请重新搜索。",
-    "evaluationUnavailable": "暂无该资源的评估数据。"
+    "evaluationUnavailable": "暂无该资源的评估数据。",
+    "reasoning": "推理过程",
+    "evaluation": "评估",
+    "adaptationAdvice": "改编建议",
+    "riskScan": "风险扫描",
+    "noIssuesFound": "未发现问题",
+    "evidenceQuote": "依据",
+    "suggestedAction": "建议操作",
+    "evaluatingTitle": "评估进行中",
+    "evaluatingDescription": "该资源正在评估中，请稍后再来查看。"
   },
   "errors": {
     "title": "错误",

@@ -390,7 +390,16 @@
     "comingSoonDescription": "This page will display AI-generated analysis of the resource, including curriculum alignment, pedagogical reasoning, and evidence extraction.",
     "confidence": "Confidence",
     "evaluationNotFound": "Evaluation data is no longer available. Try searching again.",
-    "evaluationUnavailable": "No evaluation data available for this resource."
+    "evaluationUnavailable": "No evaluation data available for this resource.",
+    "reasoning": "Reasoning",
+    "evaluation": "Evaluation",
+    "adaptationAdvice": "Adaptation Advice",
+    "riskScan": "Risk Scan",
+    "noIssuesFound": "No issues found",
+    "evidenceQuote": "Evidence",
+    "suggestedAction": "Suggested Action",
+    "evaluatingTitle": "Evaluation In Progress",
+    "evaluatingDescription": "This resource is currently being evaluated. Please check back shortly."
   },
   "errors": {
     "title": "Error",

@@ -16,17 +16,10 @@ interface ResourceCardRendererProps {
 }
 
 import { BookmarkButton } from "./bookmark-button";
+import { VerdictBadge } from "./relevance-indicator";
 
-export function buildOverviewHref(resource: ResourceCard, evaluationId?: string) {
-  if (evaluationId) {
-    return `/overview/${evaluationId}`;
-  }
-  const params = new URLSearchParams({
-    title: resource.title || "Resource Overview",
-    type: resource.source || "general",
-    ...(resource.verdict && { verdict: resource.verdict }),
-  });
-  return `/overview?${params.toString()}`;
+export function buildOverviewHref(evaluationId: string) {
+  return `/overview/${evaluationId}`;
 }
 
 export function ResourceCardRenderer({
@@ -47,12 +40,16 @@ export function ResourceCardRenderer({
   } else if (!hideAction) {
     action = (
       <div className="flex items-center gap-3">
-        <Link
-          href={buildOverviewHref(resource, evaluationId)}
-          className="rounded-full px-5 py-2 text-sm font-bold shadow-sm transition-transform hover:scale-105 active:scale-95 bg-slate-100 text-slate-800 hover:bg-slate-200 border border-slate-200 whitespace-nowrap"
-        >
-          {t("overview")}
-        </Link>
+        {evaluationId ? (
+          <Link
+            href={buildOverviewHref(evaluationId)}
+            className="rounded-full px-5 py-2 text-sm font-bold shadow-sm transition-transform hover:scale-105 active:scale-95 bg-slate-100 text-slate-800 hover:bg-slate-200 border border-slate-200 whitespace-nowrap"
+          >
+            {t("overview")}
+          </Link>
+        ) : isEvaluating ? (
+          <VerdictBadge isEvaluating={true} />
+        ) : null}
         <BookmarkButton resource={resource} checked={checked} />
       </div>
     );
