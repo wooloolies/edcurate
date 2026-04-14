@@ -1,194 +1,97 @@
 {
-  "id": "progressive-search-results",
-  "title": "Progressive Search Results Streaming",
-  "created_at": "2026-04-08",
+  "id": "overview-page-redesign",
+  "title": "Unify Overview Routes with Mockup Design",
+  "created_at": "2026-04-14",
   "difficulty": "medium",
-  "design_doc": "docs/plans/progressive-search-results-design.md",
   "tasks": [
     {
       "id": "T1",
-      "agent": "backend",
-      "title": "Extract _RagContext and _prepare_rag_context from _run_rag_pipeline",
+      "agent": "frontend",
+      "title": "Redesign /overview/[id] page with mockup glassmorphism design",
       "priority": "P0",
       "dependencies": [],
       "status": "pending",
+      "description": "목업 페이지의 디자인을 /overview/[id]에 적용. StatusDot, glassmorphism 카드, wide 레이아웃. API 데이터 기반 섹션: Reasoning(reasoning_chain), Evaluation(3 metrics + StatusDot), Adaptation(adaptations[]), Flags/Evidence(flags[]). prefers-reduced-motion 지원, 색상+텍스트 레이블 병행.",
+      "files": [
+        "apps/web/src/app/[locale]/overview/[id]/page.tsx"
+      ],
       "acceptance_criteria": [
-        "_RagContext dataclass with eval_vector, adv_vector, readability_map, search_id, preset",
-        "_prepare_rag_context extracts steps 1-4 from _run_rag_pipeline",
-        "_process_one becomes standalone function accepting (card, ctx: _RagContext)",
-        "_run_rag_pipeline delegates to _prepare_rag_context + _process_one (REST endpoint unchanged)",
-        "Existing tests pass without modification"
+        "glassmorphism 카드 스타일 적용 (bg-white/60 backdrop-blur-xl rounded-[2rem])",
+        "StatusDot 컴포넌트 (animated rainbow for strong, amber for adequate, red for weak)",
+        "StatusDot prefers-reduced-motion 지원",
+        "Evaluation 섹션: 3 metrics with StatusDot + 텍스트 rating 레이블",
+        "Reasoning 섹션: reasoning_chain 표시",
+        "Adaptation 섹션: adaptations[] 다크 카드 스타일",
+        "Flags/Evidence 섹션: flags[] severity별 정렬, evidence_quote 표시",
+        "wide 레이아웃 (max-w-[90rem]), 모바일 single column 반응형",
+        "로딩 스켈레톤 동일 레이아웃 유지",
+        "에러 상태 처리"
       ]
     },
     {
       "id": "T2",
-      "agent": "backend",
-      "title": "Apply asyncio.wait(FIRST_COMPLETED) in search_resources_stream",
+      "agent": "frontend",
+      "title": "Update buildOverviewHref and disable overview link for unevaluated resources",
       "priority": "P0",
-      "dependencies": ["T1"],
+      "dependencies": [],
       "status": "pending",
+      "description": "evaluationId 없을 때 overview 링크 대신 '평가 중' 인라인 인디케이터 표시. buildOverviewHref는 evaluationId 필수로 변경.",
+      "files": [
+        "apps/web/src/features/search/components/resource-card/index.tsx"
+      ],
       "acceptance_criteria": [
-        "search_resources_stream uses _prepare_rag_context + inline _process_one tasks",
-        "asyncio.wait(FIRST_COMPLETED) loop yields evaluation/done per-resource as each completes",
-        "evaluation/done event includes data.judgment (JudgmentResult.model_dump())",
-        "adversarial/done event emitted alongside evaluation/done per resource",
-        "Timeout cancels remaining tasks",
-        "complete event still assembles full JudgedSearchResponse with final sorting"
+        "evaluationId 없을 때 overview 링크 대신 '평가 중' Badge 표시",
+        "buildOverviewHref에서 query-param fallback 제거",
+        "기존 evaluationId 있는 경우 동작 유지"
       ]
     },
     {
       "id": "T3",
-      "agent": "backend",
-      "title": "Add results field to federated_search/done SSE event",
+      "agent": "frontend",
+      "title": "Delete /overview/page.tsx (query-param mockup route)",
       "priority": "P0",
-      "dependencies": [],
+      "dependencies": ["T1", "T2"],
       "status": "pending",
+      "description": "목업 라우트 삭제. T1, T2 완료 후 진행.",
+      "files": [
+        "apps/web/src/app/[locale]/overview/page.tsx"
+      ],
       "acceptance_criteria": [
-        "federated_search/done data includes results: [card.model_dump() for card in all_results]",
-        "Cards sorted by embedding relevance score",
-        "Payload validated with existing ResourceCard schema"
+        "/overview/page.tsx 삭제됨",
+        "/overview?title=... URL 접근 시 404",
+        "/overview/[id] 정상 동작"
       ]
     },
     {
       "id": "T4",
       "agent": "frontend",
-      "title": "Extend SearchStreamState type and atom initial state",
-      "priority": "P0",
-      "dependencies": [],
-      "status": "pending",
-      "acceptance_criteria": [
-        "partialResults: ResourceCard[] | null added to SearchStreamState",
-        "partialJudgments: Map<string, JudgmentResult> added to SearchStreamState",
-        "INITIAL_STREAM_STATE updated with null and new Map()",
-        "START action creates fresh partialResults: null, partialJudgments: new Map()",
-        "RESET action creates fresh Maps"
-      ]
-    },
-    {
-      "id": "T5",
-      "agent": "frontend",
-      "title": "Parse federated_search/done and evaluation/done data in reducer",
-      "priority": "P0",
-      "dependencies": ["T4"],
-      "status": "pending",
-      "acceptance_criteria": [
-        "federated_search/done with data.results sets partialResults as ResourceCard[]",
-        "evaluation/done with data.judgment accumulates into partialJudgments Map",
-        "Existing stages/resourceProgress/result logic unchanged",
-        "Type casting consistent with existing complete event pattern"
-      ]
-    },
-    {
-      "id": "T6",
-      "agent": "frontend",
-      "title": "Extract SearchResultsGrid component from search-page-client",
+      "title": "Add i18n keys for new overview sections",
       "priority": "P1",
-      "dependencies": [],
+      "dependencies": ["T1"],
       "status": "pending",
+      "description": "새 overview 섹션에 필요한 i18n 키 추가 (reasoning, evaluation metrics, adaptation, flags 등)",
+      "files": [
+        "apps/web/src/messages/*.json"
+      ],
       "acceptance_criteria": [
-        "Results grid (sidebar + cards + pagination + suggested collections) extracted to SearchResultsGrid",
-        "Props: results, judgments, resourceProgress, isEvaluationPhase, presetId, searchQuery, category/pagination/bookmark state",
-        "Existing rendering behavior pixel-identical",
-        "search-page-client.tsx line count reduced"
-      ]
-    },
-    {
-      "id": "T7",
-      "agent": "frontend",
-      "title": "Add isEvaluating state to VerdictBadge",
-      "priority": "P1",
-      "dependencies": [],
-      "status": "pending",
-      "acceptance_criteria": [
-        "VerdictBadge accepts isEvaluating?: boolean prop",
-        "isEvaluating=true renders blue pulse badge with 'Evaluating...' text",
-        "Verdict arrival renders badge with scale-in animation (animate-[scale-in_0.3s_ease-out])",
-        "Unevaluated state unchanged",
-        "ResourceCardRenderer threads isEvaluating prop to source-specific cards"
-      ]
-    },
-    {
-      "id": "T8",
-      "agent": "frontend",
-      "title": "Create CompactProgressBar component",
-      "priority": "P1",
-      "dependencies": ["T4"],
-      "status": "pending",
-      "acceptance_criteria": [
-        "File: src/features/search/components/compact-progress-bar.tsx",
-        "Shows Bear icon + 'Evaluating resources...' + count (partialJudgments.size / 4)",
-        "Progress bar with smooth CSS transition on width",
-        "Fades out when all evaluations complete",
-        "Uses i18n keys for labels"
-      ]
-    },
-    {
-      "id": "T9",
-      "agent": "frontend",
-      "title": "Integrate progressive rendering in search-page-client",
-      "priority": "P0",
-      "dependencies": ["T5", "T6", "T7", "T8"],
-      "status": "pending",
-      "acceptance_criteria": [
-        "Single displayResults = results?.results ?? stream.partialResults",
-        "Single displayJudgments = results ? judgmentByUrl : stream.partialJudgments",
-        "isEvaluationPhase = stream.isStreaming && !!stream.partialResults",
-        "ClassroomScene only when stream.isStreaming && !stream.partialResults",
-        "CompactProgressBar + SearchResultsGrid when isEvaluationPhase",
-        "SearchResultsGrid only when !stream.isStreaming && displayResults",
-        "Category sidebar counts from displayResults (not just results.counts_by_source)",
-        "Bookmark/save works with partialResults data source",
-        "Cache hit path unchanged (partialResults stays null)"
-      ]
-    },
-    {
-      "id": "T10",
-      "agent": "frontend",
-      "title": "Add i18n keys for progressive UI",
-      "priority": "P1",
-      "dependencies": [],
-      "status": "pending",
-      "acceptance_criteria": [
-        "search.evaluation.evaluating key in all ARB files",
-        "search.progress.compactTitle key in all ARB files",
-        "search.progress.compactCount key with {count}/{total} interpolation in all ARB files"
-      ]
-    },
-    {
-      "id": "T11",
-      "agent": "qa",
-      "title": "E2E verification of progressive search results",
-      "priority": "P2",
-      "dependencies": ["T2", "T3", "T9"],
-      "status": "pending",
-      "acceptance_criteria": [
-        "Cards appear after federated_search/done (~3-5s from search start)",
-        "Top-4 cards show 'Evaluating...' pulse badge",
-        "Verdicts pop in individually as evaluation completes",
-        "CompactProgressBar count increments correctly",
-        "Cards 5-15 show static 'Unevaluated' badge",
-        "Cache hit renders all results instantly without progressive phase",
-        "REST fallback still works when SSE fails",
-        "Bookmark/save functional during evaluation phase"
+        "overview 섹션 제목 i18n 키 추가",
+        "StatusDot rating 텍스트 레이블 i18n 키 추가",
+        "모든 지원 locale에 추가"
       ]
     }
   ],
   "parallel_groups": {
-    "A_backend": {
-      "tasks": ["T1", "T2", "T3"],
-      "note": "T1->T2 sequential, T3 independent"
+    "A_core": {
+      "tasks": ["T1", "T2"],
+      "note": "T1과 T2는 독립적으로 병렬 실행 가능"
     },
-    "B_frontend_prep": {
-      "tasks": ["T4", "T5", "T6", "T7", "T8", "T10"],
-      "note": "T4->T5, T4->T8 sequential. T6, T7, T10 independent"
+    "B_cleanup": {
+      "tasks": ["T3"],
+      "note": "T1, T2 완료 후 실행"
     },
-    "C_integration": {
-      "tasks": ["T9"],
-      "note": "After Group A + B complete"
-    },
-    "D_qa": {
-      "tasks": ["T11"],
-      "note": "After Group C complete"
+    "C_polish": {
+      "tasks": ["T4"],
+      "note": "T1 완료 후 실행"
     }
   }
 }
