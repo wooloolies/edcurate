@@ -1,4 +1,6 @@
+import json
 import os
+import tempfile
 from functools import lru_cache
 from typing import Literal
 
@@ -64,6 +66,7 @@ class Settings(BaseSettings):
     AI_PROVIDER: Literal["gemini", "openai"] = "gemini"
     GOOGLE_CLOUD_PROJECT: str | None = None
     GOOGLE_APPLICATION_CREDENTIALS: str | None = None
+    GOOGLE_CREDENTIALS_JSON: str | None = None  # JSON string for serverless
     GEMINI_API_KEY: str | None = None
     OPENAI_API_KEY: str | None = None
 
@@ -89,6 +92,23 @@ class Settings(BaseSettings):
 
     @model_validator(mode="after")
     def _check_secrets(self) -> "Settings":
+        # Serverless: GOOGLE_CREDENTIALS_JSON contains the service account
+        # key as a JSON string.  Write it to a temp file so Google SDKs
+        # (which expect a file path) can pick it up via ADC.
+        if self.GOOGLE_CREDENTIALS_JSON and not self.GOOGLE_APPLICATION_CREDENTIALS:
+            try:
+                creds = json.loads(self.GOOGLE_CREDENTIALS_JSON)
+                tmp = tempfile.NamedTemporaryFile(
+                    mode="w", suffix=".json", delete=False
+                )
+                json.dump(creds, tmp)
+                tmp.close()
+                self.GOOGLE_APPLICATION_CREDENTIALS = tmp.name
+                if not self.GOOGLE_CLOUD_PROJECT and creds.get("project_id"):
+                    self.GOOGLE_CLOUD_PROJECT = creds["project_id"]
+            except (json.JSONDecodeError, OSError):
+                pass  # fall through — Gemini calls will fail with a clear error
+
         if self.GOOGLE_APPLICATION_CREDENTIALS:
             # Set environment variable for Google SDKs
             os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = (
