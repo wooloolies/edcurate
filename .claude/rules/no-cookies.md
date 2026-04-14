@@ -1,3 +1,8 @@
+---
+description: Cookies are strictly prohibited in this project
+---
+
+
 # No Cookies Policy
 
 This project does NOT use cookies for any purpose. This is a hard rule.

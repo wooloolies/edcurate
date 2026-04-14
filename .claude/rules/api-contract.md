@@ -1,3 +1,8 @@
+---
+description: Backend-Frontend communication must go through gen:api (orval) generated code
+---
+
+
 # API Contract Rule
 
 Backend and Frontend communicate exclusively through auto-generated API client code. Never write manual API calls.

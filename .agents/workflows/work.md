@@ -20,7 +20,7 @@ description: Coordinate multiple agents for a complex multi-domain project using
 ## Vendor Detection
 
 Before starting, determine your runtime environment by following `.agents/skills/_shared/core/vendor-detection.md`.
-The detected vendor determines how agents are spawned (Step 4) and monitored (Step 5).
+The detected runtime vendor and each agent's target vendor determine how agents are spawned (Step 4) and monitored (Step 5).
 
 ---
 
@@ -54,7 +54,7 @@ Activate PM Agent to:
 1. Analyze requirements.
 2. Define API contracts.
 3. Create a prioritized task breakdown.
-4. Save plan to `.agents/plan.json`.
+4. Save plan to `.agents/results/plan-{sessionId}.json`.
 5. Use memory write tool to record plan completion.
 
 ---
@@ -76,21 +76,32 @@ Present the PM Agent's task breakdown to the user:
 Spawn agents for each task by priority tier (P0 first, then P1, etc.).
 Spawn all same-priority tasks in parallel. Assign separate workspaces to avoid file conflicts.
 
-### If Claude Code
+### Per-Agent Dispatch
+Resolve the target vendor for each agent from `.agents/oma-config.yaml`.
+Use native subagents only when `target_vendor === current_runtime_vendor` and that runtime supports the vendor's role-subagent path.
+Otherwise use `oma agent:spawn` for that agent.
+
+### If Claude Code and target vendor is Claude
 Use the Agent tool to spawn subagents:
 - `Agent(subagent_type="backend-engineer", prompt="Implement backend tasks per plan.", run_in_background=true)`
 - `Agent(subagent_type="frontend-engineer", prompt="Implement frontend tasks per plan.", run_in_background=true)`
 - Multiple Agent tool calls in the same message = true parallel execution
 - Agent definitions: `.claude/agents/{agent}.md`
 
-### If Codex CLI
-Request parallel subagent execution with the specific tasks.
+### If Codex CLI and target vendor is Codex
+Spawn native Codex custom agents using `.codex/agents/{agent}.toml` when available.
+Native CLI executor path: `codex exec "@{agent} ..."` using the generated agent file.
 Pass each agent its task description, API contracts, and relevant context.
+If native dispatch is not verified in the current runtime, fall back to `oma agent:spawn`.
 
-### If Gemini CLI or Antigravity or CLI Fallback
+### If Gemini CLI and target vendor is Gemini
+Use native Gemini subagents when available, otherwise fall back to `oma agent:spawn`.
+Native CLI executor path: `gemini -p "@{agent} ..."` using `.gemini/agents/{agent}.md`.
+
+### If target vendor differs from current runtime, or native dispatch is unavailable
 ```bash
-oh-my-ag agent:spawn backend "task description" session-id -w ./backend &
-oh-my-ag agent:spawn frontend "task description" session-id -w ./frontend &
+oma agent:spawn backend "task description" session-id -w ./backend &
+oma agent:spawn frontend "task description" session-id -w ./frontend &
 wait
 ```
 

@@ -1,0 +1,29 @@
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "name": "keyword-detector",
+            "type": "command",
+            "command": "\"/Users/gracefullight/.local/share/mise/installs/bun/1.3.11/bin/bun\" .cursor/hooks/keyword-detector.ts",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "beforeSubmitPrompt": [
+      {
+        "hooks": [
+          {
+            "name": "keyword-detector",
+            "type": "command",
+            "command": "\"/Users/gracefullight/.local/share/mise/installs/bun/1.3.11/bin/bun\" .cursor/hooks/keyword-detector.ts",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  },
+  "version": 1
+}
