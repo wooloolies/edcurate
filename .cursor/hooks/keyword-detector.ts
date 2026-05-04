@@ -12,9 +12,153 @@
  * exit 0 = always (allow)
  */
 
-import { readFileSync, writeFileSync, mkdirSync, existsSync, unlinkSync, readdirSync } from "node:fs";
-import { join, dirname } from "node:path";
-import { type Vendor, type ModeState, makePromptOutput, resolveGitRoot } from "./types.ts";
+import {
+  existsSync,
+  mkdirSync,
+  readdirSync,
+  readFileSync,
+  unlinkSync,
+  writeFileSync,
+} from "node:fs";
+import { dirname, join } from "node:path";
+import {
+  type ModeState,
+  makePromptOutput,
+  resolveGitRoot,
+  type Vendor,
+} from "./types.ts";
+
+// ── Guard 1: UserPromptSubmit-only trigger ────────────────────
+// Hook event names that represent genuine user input (not agent responses)
+const VALID_USER_EVENTS = new Set([
+  "UserPromptSubmit",
+  "beforeSubmitPrompt", // Cursor
+  "BeforeAgent", // Gemini (fires before agent processes user prompt)
+]);
+
+/**
+ * Returns true if the hook input indicates this is a genuine user prompt,
+ * not an agent-generated response. Prevents re-trigger loops.
+ */
+export function isGenuineUserPrompt(input: Record<string, unknown>): boolean {
+  const event = input.hook_event_name as string | undefined;
+  // If event is explicitly provided, validate it
+  if (event !== undefined) {
+    return VALID_USER_EVENTS.has(event);
+  }
+  // No event field — assume genuine (backward compat with vendors that omit it)
+  return true;
+}
+
+// ── Guard 3: Reinforcement suppression ───────────────────────
+
+const REINFORCEMENT_WINDOW_MS = 60_000; // 60 seconds
+const REINFORCEMENT_MAX_COUNT = 2; // allow up to 2, suppress 3rd+
+
+export interface KeywordDetectorState {
+  triggers: Record<
+    string,
+    {
+      lastTriggeredAt: string; // ISO timestamp
+      count: number;
+    }
+  >;
+}
+
+function getKwStateFilePath(projectDir: string): string {
+  const dir = join(projectDir, ".agents", "state");
+  if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
+  return join(dir, "keyword-detector-state.json");
+}
+
+/**
+ * Load the keyword-detector reinforcement state from disk.
+ * Resets gracefully if the file is missing or corrupt.
+ */
+export function loadKwState(projectDir: string): KeywordDetectorState {
+  const filePath = getKwStateFilePath(projectDir);
+  if (!existsSync(filePath)) return { triggers: {} };
+  try {
+    const raw = readFileSync(filePath, "utf-8");
+    const parsed = JSON.parse(raw) as unknown;
+    if (
+      typeof parsed === "object" &&
+      parsed !== null &&
+      "triggers" in parsed &&
+      typeof (parsed as Record<string, unknown>).triggers === "object"
+    ) {
+      return parsed as KeywordDetectorState;
+    }
+    return { triggers: {} };
+  } catch {
+    // Corrupt file — reset
+    return { triggers: {} };
+  }
+}
+
+/**
+ * Save reinforcement state to disk.
+ */
+export function saveKwState(
+  projectDir: string,
+  state: KeywordDetectorState,
+): void {
+  try {
+    const filePath = getKwStateFilePath(projectDir);
+    writeFileSync(filePath, JSON.stringify(state, null, 2));
+  } catch {
+    // Non-fatal — reinforcement suppression is best-effort
+  }
+}
+
+/**
+ * Returns true if the keyword should be suppressed due to reinforcement loop.
+ * A keyword is suppressed if it was triggered >= REINFORCEMENT_MAX_COUNT times
+ * within the last REINFORCEMENT_WINDOW_MS milliseconds.
+ */
+export function isReinforcementSuppressed(
+  state: KeywordDetectorState,
+  keyword: string,
+  nowMs?: number,
+): boolean {
+  const now = nowMs ?? Date.now();
+  const entry = state.triggers[keyword];
+  if (!entry) return false;
+  const lastMs = new Date(entry.lastTriggeredAt).getTime();
+  if (Number.isNaN(lastMs)) return false;
+  const withinWindow = now - lastMs < REINFORCEMENT_WINDOW_MS;
+  return withinWindow && entry.count >= REINFORCEMENT_MAX_COUNT;
+}
+
+/**
+ * Record a keyword trigger in the reinforcement state.
+ * Resets count if the previous trigger was outside the window.
+ */
+export function recordKwTrigger(
+  state: KeywordDetectorState,
+  keyword: string,
+  nowMs?: number,
+): KeywordDetectorState {
+  const now = nowMs ?? Date.now();
+  const entry = state.triggers[keyword];
+  let count = 1;
+  if (entry) {
+    const lastMs = new Date(entry.lastTriggeredAt).getTime();
+    const withinWindow =
+      !Number.isNaN(lastMs) && now - lastMs < REINFORCEMENT_WINDOW_MS;
+    count = withinWindow ? entry.count + 1 : 1;
+  }
+  return {
+    ...state,
+    triggers: {
+      ...state.triggers,
+      [keyword]: {
+        lastTriggeredAt: new Date(now).toISOString(),
+        count,
+      },
+    },
+  };
+}
 
 // ── Vendor Detection ──────────────────────────────────────────
 
@@ -43,10 +187,7 @@ function detectVendor(input: Record<string, unknown>): Vendor {
   return "claude";
 }
 
-function getProjectDir(
-  vendor: Vendor,
-  input: Record<string, unknown>,
-): string {
+function getProjectDir(vendor: Vendor, input: Record<string, unknown>): string {
   let dir: string;
   switch (vendor) {
     case "codex":
@@ -68,9 +209,7 @@ function getProjectDir(
 
 function getSessionId(input: Record<string, unknown>): string {
   return (
-    (input.sessionId as string) ||
-    (input.session_id as string) ||
-    "unknown"
+    (input.sessionId as string) || (input.session_id as string) || "unknown"
   );
 }
 
@@ -120,13 +259,13 @@ export function buildPatterns(
 ): RegExp[] {
   const allKeywords = [
     ...(keywords["*"] ?? []),
-    ...(keywords["en"] ?? []),
+    ...(keywords.en ?? []),
     ...(lang !== "en" ? (keywords[lang] ?? []) : []),
   ];
 
   return allKeywords.map((kw) => {
     const escaped = escapeRegex(kw).replace(/\s+/g, "\\s+");
-    if (cjkScripts.includes(lang) || /[^\x00-\x7F]/.test(kw)) {
+    if (cjkScripts.includes(lang) || /[^\p{ASCII}]/u.test(kw)) {
       return new RegExp(escaped, "i");
     }
     return new RegExp(`\\b${escaped}\\b`, "i");
@@ -137,12 +276,12 @@ function buildInformationalPatterns(
   config: TriggerConfig,
   lang: string,
 ): RegExp[] {
-  const patterns = [...(config.informationalPatterns["en"] ?? [])];
+  const patterns = [...(config.informationalPatterns.en ?? [])];
   if (lang !== "en") {
     patterns.push(...(config.informationalPatterns[lang] ?? []));
   }
   return patterns.map((p) => {
-    if (/[^\x00-\x7F]/.test(p)) return new RegExp(escapeRegex(p), "i");
+    if (/[^\p{ASCII}]/u.test(p)) return new RegExp(escapeRegex(p), "i");
     return new RegExp(`\\b${escapeRegex(p)}\\b`, "i");
   });
 }
@@ -209,11 +348,11 @@ export function isAnalyticalQuestion(prompt: string): boolean {
 
 export function stripCodeBlocks(text: string): string {
   return text
-    .replace(/(`{3,})[^\n]*\n[\s\S]*?\1/g, "")  // multiline fenced blocks (3+ backticks, matched closing)
-    .replace(/(`{3,})[^\n]*\n[\s\S]*/g, "")      // unclosed fenced blocks (strip to end)
-    .replace(/`{3,}[^`]*`{3,}/g, "")             // single-line fenced blocks (```...```)
-    .replace(/`[^`\n]+`/g, "")                    // inline code (no newlines allowed)
-    .replace(/"[^"\n]*"/g, "");                    // quoted strings
+    .replace(/(`{3,})[^\n]*\n[\s\S]*?\1/g, "") // multiline fenced blocks (3+ backticks, matched closing)
+    .replace(/(`{3,})[^\n]*\n[\s\S]*/g, "") // unclosed fenced blocks (strip to end)
+    .replace(/`{3,}[^`]*`{3,}/g, "") // single-line fenced blocks (```...```)
+    .replace(/`[^`\n]+`/g, "") // inline code (no newlines allowed)
+    .replace(/"[^"\n]*"/g, ""); // quoted strings
 }
 
 export function startsWithSlashCommand(prompt: string): boolean {
@@ -223,18 +362,37 @@ export function startsWithSlashCommand(prompt: string): boolean {
 // ── Extension Detection ──────────────────────────────────────
 
 const EXCLUDE_EXTS = new Set([
-  "md", "json", "yaml", "yml", "txt", "env", "git",
-  "lock", "log", "toml", "cfg", "ini", "conf",
-  "png", "jpg", "jpeg", "gif", "ico", "webp",
-  "woff", "woff2", "ttf", "eot",
-  "map", "d",
+  "md",
+  "json",
+  "yaml",
+  "yml",
+  "txt",
+  "env",
+  "git",
+  "lock",
+  "log",
+  "toml",
+  "cfg",
+  "ini",
+  "conf",
+  "png",
+  "jpg",
+  "jpeg",
+  "gif",
+  "ico",
+  "webp",
+  "woff",
+  "woff2",
+  "ttf",
+  "eot",
+  "map",
+  "d",
 ]);
 
 export function detectExtensions(prompt: string): string[] {
   const extPattern = /\.([a-zA-Z]{1,12})\b/g;
   const extensions = new Set<string>();
-  let match: RegExpExecArray | null;
-  while ((match = extPattern.exec(prompt)) !== null) {
+  for (const match of prompt.matchAll(extPattern)) {
     const ext = match[1].toLowerCase();
     if (!EXCLUDE_EXTS.has(ext)) {
       extensions.add(ext);
@@ -313,14 +471,17 @@ export const DEACTIVATION_PHRASES: Record<string, string[]> = {
 
 export function isDeactivationRequest(prompt: string, lang: string): boolean {
   const phrases = [
-    ...(DEACTIVATION_PHRASES["en"] ?? []),
+    ...(DEACTIVATION_PHRASES.en ?? []),
     ...(lang !== "en" ? (DEACTIVATION_PHRASES[lang] ?? []) : []),
   ];
   const lower = prompt.toLowerCase();
   return phrases.some((phrase) => lower.includes(phrase.toLowerCase()));
 }
 
-export function deactivateAllPersistentModes(projectDir: string, sessionId?: string): void {
+export function deactivateAllPersistentModes(
+  projectDir: string,
+  sessionId?: string,
+): void {
   const stateDir = join(projectDir, ".agents", "state");
   if (!existsSync(stateDir)) return;
   try {
@@ -343,13 +504,16 @@ export function deactivateAllPersistentModes(projectDir: string, sessionId?: str
 // ── Main ──────────────────────────────────────────────────────
 
 async function main() {
-  const raw = readFileSync("/dev/stdin", "utf-8");
+  const raw = readFileSync(0, "utf-8");
   let input: Record<string, unknown>;
   try {
     input = JSON.parse(raw);
   } catch {
     process.exit(0);
   }
+
+  // Guard 1: Only process genuine user prompts — skip agent-generated content
+  if (!isGenuineUserPrompt(input)) process.exit(0);
 
   const vendor = detectVendor(input);
   const projectDir = getProjectDir(vendor, input);
@@ -368,8 +532,12 @@ async function main() {
     process.exit(0);
   }
   const infoPatterns = buildInformationalPatterns(config, lang);
+  // Guard 2: Strip code blocks and inline code before scanning for keywords
   const cleaned = stripCodeBlocks(prompt);
   const excluded = new Set(config.excludedWorkflows);
+
+  // Guard 3: Load reinforcement suppression state
+  const kwState = loadKwState(projectDir);
 
   // Skip persistent workflows entirely if the prompt is an analytical question
   const analytical = isAnalyticalQuestion(cleaned);
@@ -387,11 +555,18 @@ async function main() {
       if (!match) continue;
       if (isInformationalContext(cleaned, match.index, infoPatterns)) continue;
       // Keywords deep in long prompts are likely pasted content, not user intent
-      if (isPastedContent(match.index, def.persistent, cleaned.length)) continue;
+      if (isPastedContent(match.index, def.persistent, cleaned.length))
+        continue;
+
+      // Guard 3: Suppress if same workflow triggered too many times in 60s
+      if (isReinforcementSuppressed(kwState, workflow)) continue;
 
       if (def.persistent) {
         activateMode(projectDir, workflow, sessionId);
       }
+      // Record this trigger for reinforcement tracking
+      const updatedState = recordKwTrigger(kwState, workflow);
+      saveKwState(projectDir, updatedState);
 
       const contextLines = [
         `[OMA WORKFLOW: ${workflow.toUpperCase()}]`,
@@ -403,7 +578,10 @@ async function main() {
 
       if (config.extensionRouting) {
         const extensions = detectExtensions(prompt);
-        const agent = resolveAgentFromExtensions(extensions, config.extensionRouting);
+        const agent = resolveAgentFromExtensions(
+          extensions,
+          config.extensionRouting,
+        );
         if (agent) {
           contextLines.push(`[OMA AGENT HINT: ${agent}]`);
         }
