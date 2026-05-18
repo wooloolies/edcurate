@@ -13,10 +13,18 @@
  * exit 2 = block stop
  */
 
-import { readFileSync, writeFileSync, unlinkSync, existsSync, readdirSync } from "node:fs";
-import { join, dirname } from "node:path";
-import { type Vendor, type ModeState, makeBlockOutput, resolveGitRoot } from "./types.ts";
-import { DEACTIVATION_PHRASES, isDeactivationRequest } from "./keyword-detector.ts";
+import {
+  existsSync,
+  readdirSync,
+  readFileSync,
+  unlinkSync,
+  writeFileSync,
+} from "node:fs";
+import { join } from "node:path";
+import { resolveGitRoot } from "./fs-utils.ts";
+import { makeBlockOutput } from "./hook-output.ts";
+import { isDeactivationRequest } from "./keyword-detector.ts";
+import type { ModeState, Vendor } from "./types.ts";
 
 const MAX_REINFORCEMENTS = 5;
 const STALE_HOURS = 2;
@@ -40,7 +48,7 @@ interface TriggerConfig {
 }
 
 function loadPersistentWorkflows(): string[] {
-  const configPath = join(dirname(import.meta.path), "triggers.json");
+  const configPath = join(import.meta.dirname, "triggers.json");
   try {
     const config: TriggerConfig = JSON.parse(readFileSync(configPath, "utf-8"));
     return Object.entries(config.workflows)
@@ -54,7 +62,7 @@ function loadPersistentWorkflows(): string[] {
 // ── Vendor Detection ──────────────────────────────────────────
 
 function inferVendorFromScriptPath(): Vendor | null {
-  const path = import.meta.path;
+  const path = import.meta.filename;
   if (path.includes(`${join(".cursor", "hooks")}`)) return "cursor";
   if (path.includes(`${join(".qwen", "hooks")}`)) return "qwen";
   if (path.includes(`${join(".claude", "hooks")}`)) return "claude";
@@ -73,10 +81,7 @@ function detectVendor(input: Record<string, unknown>): Vendor {
   return "claude";
 }
 
-function getProjectDir(
-  vendor: Vendor,
-  input: Record<string, unknown>,
-): string {
+function getProjectDir(vendor: Vendor, input: Record<string, unknown>): string {
   let dir: string;
   switch (vendor) {
     case "codex":
@@ -97,9 +102,7 @@ function getProjectDir(
 
 function getSessionId(input: Record<string, unknown>): string {
   return (
-    (input.sessionId as string) ||
-    (input.session_id as string) ||
-    "unknown"
+    (input.sessionId as string) || (input.session_id as string) || "unknown"
   );
 }
 
@@ -114,7 +117,10 @@ function readModeState(
   workflow: string,
   sessionId: string,
 ): ModeState | null {
-  const path = join(getStateDir(projectDir), `${workflow}-state-${sessionId}.json`);
+  const path = join(
+    getStateDir(projectDir),
+    `${workflow}-state-${sessionId}.json`,
+  );
   if (!existsSync(path)) return null;
   try {
     return JSON.parse(readFileSync(path, "utf-8")) as ModeState;
@@ -128,8 +134,15 @@ export function isStale(state: ModeState): boolean {
   return elapsed > STALE_HOURS * 60 * 60 * 1000;
 }
 
-export function deactivate(projectDir: string, workflow: string, sessionId: string): void {
-  const path = join(getStateDir(projectDir), `${workflow}-state-${sessionId}.json`);
+export function deactivate(
+  projectDir: string,
+  workflow: string,
+  sessionId: string,
+): void {
+  const path = join(
+    getStateDir(projectDir),
+    `${workflow}-state-${sessionId}.json`,
+  );
   if (existsSync(path)) unlinkSync(path);
 }
 
@@ -149,7 +162,7 @@ function incrementReinforcement(
 // ── Main ──────────────────────────────────────────────────────
 
 async function main() {
-  const raw = readFileSync("/dev/stdin", "utf-8");
+  const raw = readFileSync(0, "utf-8");
   let input: Record<string, unknown>;
   try {
     input = JSON.parse(raw);
@@ -166,7 +179,7 @@ async function main() {
   // The assistant may have included "workflow done" in its response,
   // or it may appear in transcript/content fields depending on vendor.
   const textToCheck = [
-    input.prompt_response,  // Gemini AfterAgent
+    input.prompt_response, // Gemini AfterAgent
     input.response,
     input.content,
     input.message,
@@ -186,7 +199,9 @@ async function main() {
             unlinkSync(join(stateDir, file));
           }
         }
-      } catch { /* ignore */ }
+      } catch {
+        /* ignore */
+      }
     }
     process.exit(0);
   }
@@ -213,11 +228,16 @@ async function main() {
       `  2. Or ask the user to say "워크플로우 완료" / "workflow done"`,
     ].join("\n");
 
-    process.stdout.write(makeBlockOutput(vendor, reason));
-    process.exit(2);
+    writeBlockAndExit(vendor, reason);
   }
 
   process.exit(0);
+}
+
+export function writeBlockAndExit(vendor: Vendor, reason: string): never {
+  process.stderr.write(reason);
+  process.stdout.write(makeBlockOutput(vendor, reason));
+  process.exit(2);
 }
 
 if (import.meta.main) {
